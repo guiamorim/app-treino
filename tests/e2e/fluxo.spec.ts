@@ -1,0 +1,109 @@
+import { expect, test, type Page } from '@playwright/test'
+
+async function preencherAnamnese(page: Page) {
+  await page.goto('./')
+  await expect(page.getByRole('heading', { name: 'Bem-vindo' })).toBeVisible()
+  await page.getByLabel('Idade').fill('45')
+  await page.getByLabel('Altura (cm)').fill('175')
+  await page.getByLabel('Peso (kg)').fill('85')
+  await page.getByLabel('Cintura (cm)').fill('92')
+  await page.getByLabel('Dias por semana').selectOption('4')
+  await page.getByLabel('Ombro').check()
+  for (let i = 0; i < 7; i++) await page.locator(`input[name="parq-${i}"]`).nth(1).check()
+  await page.getByRole('button', { name: 'Gerar o meu plano' }).click()
+}
+
+test('F1–F4: anamnese gera o plano e registo um exercício', async ({ page }) => {
+  const erros: string[] = []
+  page.on('console', (m) => m.type() === 'error' && erros.push(m.text()))
+  page.on('pageerror', (e) => erros.push(e.message))
+
+  await preencherAnamnese(page)
+
+  // F3: treino de hoje com síntese, grupos e aviso do ombro.
+  await expect(page.getByRole('heading', { name: 'Superior A' })).toBeVisible()
+  await expect(page.getByText('foco em peito e costas')).toBeVisible()
+  await expect(page.getByText('Supino com halteres, pega neutra')).toBeVisible()
+  await expect(page.getByText('Supino reto com barra')).toHaveCount(0)
+  await page.getByText(/aviso.* sobre o teu plano/).click()
+  await expect(page.getByText(/ombro nunca foi avaliada/)).toBeVisible()
+
+  // F4: registo de séries com sugestão e temporizador.
+  await page.getByText('Supino com halteres, pega neutra').click()
+  await expect(page.getByRole('heading', { name: 'Supino com halteres, pega neutra' })).toBeVisible()
+  await expect(page.getByText(/Hoje: 2 × 6–10 reps · RIR 3–4/)).toBeVisible()
+  await expect(page.getByText('Primeira vez')).toBeVisible()
+  await page.getByLabel('Carga (kg)').fill('16')
+  await page.getByLabel('Repetições').fill('10')
+  await page.getByRole('radio', { name: '3' }).click()
+  await page.getByRole('button', { name: 'Concluir série' }).click()
+  await expect(page.getByRole('timer')).toBeVisible()
+  await page.getByRole('button', { name: 'Saltar', exact: true }).first().click()
+  await page.getByRole('button', { name: 'Concluir série' }).click()
+  await expect(page.getByText('Exercício feito ✓')).toBeVisible()
+
+  // F4.4: dor registada.
+  const dor = page.getByLabel(/Dor ou desconforto/)
+  await dor.focus()
+  for (let i = 0; i < 5; i++) await dor.press('ArrowRight')
+  await expect(page.getByText(/Dor moderada/)).toBeVisible()
+
+  // F3.5: estado guardado e visível ao voltar (mesmo depois de recarregar).
+  await page.reload()
+  await page.getByRole('button', { name: 'Próximo exercício' }).click()
+  await expect(page.getByRole('heading', { name: 'Remada sentada no cabo (triângulo)' })).toBeVisible()
+  await page.getByRole('link', { name: 'Hoje' }).click()
+  await expect(page.getByLabel('feito')).toHaveCount(1)
+
+  // F3.4: saltar o resto completa o treino.
+  for (const nome of ['Remada sentada no cabo (triângulo)', 'Puxada à frente na polia alta', 'Elevação lateral com halteres', 'Rosca alternada com halteres', 'Extensão de tríceps na polia com corda']) {
+    await page.getByText(nome, { exact: true }).click()
+    await page.getByRole('button', { name: 'Saltar', exact: true }).click()
+    await page.getByRole('button', { name: /‹ Superior A/ }).click()
+  }
+  await expect(page.getByText('Treino completo 🎉')).toBeVisible()
+  await page.getByRole('button', { name: 'Terminar treino' }).click()
+  await expect(page.getByRole('heading', { name: 'Inferior A' })).toBeVisible()
+
+  // F7: relatório de progressão.
+  await page.getByRole('link', { name: 'Relatórios' }).click()
+  await expect(page.getByLabel('Exercício')).toHaveValue('supino-halteres-neutro')
+  await expect(page.getByText('🏆')).toBeVisible()
+  await page.getByRole('tab', { name: 'Semana' }).click()
+  await expect(page.getByText(/1 de 16 treinos/)).toBeVisible()
+
+  expect(erros).toEqual([])
+})
+
+test('F5: vídeo abre num leitor dentro da app, com o domínio sem cookies', async ({ page }) => {
+  await page.route('https://www.youtube-nocookie.com/**', (r) => r.fulfill({ body: '<html>vídeo</html>', contentType: 'text/html' }))
+  await preencherAnamnese(page)
+  await page.getByText('Supino com halteres, pega neutra').click()
+  await page.getByRole('button', { name: '▶ Ver vídeo' }).click()
+  const iframe = page.locator('.modal iframe')
+  await expect(iframe).toHaveAttribute('src', /^https:\/\/www\.youtube-nocookie\.com\/embed\/3m7-E2Bcotk/)
+  await expect(iframe).toHaveAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation')
+  await expect(page.getByRole('link', { name: 'Abrir no YouTube' })).toHaveAttribute('href', 'https://www.youtube.com/watch?v=3m7-E2Bcotk')
+  await page.getByRole('button', { name: 'Fechar' }).click()
+  await expect(page.locator('.modal')).toHaveCount(0)
+})
+
+test('F9 e F10: medições, exportação e importação inválida', async ({ page }) => {
+  await preencherAnamnese(page)
+  await page.getByRole('link', { name: 'Medições' }).click()
+  await page.getByLabel('Peso (kg)').fill('92,4')
+  await page.getByLabel('Cintura (cm)').fill('95')
+  await page.getByRole('button', { name: 'Guardar medição' }).click()
+  await expect(page.getByText('92,4 kg')).toBeVisible()
+
+  await page.getByRole('link', { name: 'Mais' }).click()
+  const descarga = page.waitForEvent('download')
+  await page.getByRole('button', { name: 'Exportar cópia (JSON)' }).click()
+  expect((await descarga).suggestedFilename()).toMatch(/^treino-\d{4}-\d{2}-\d{2}\.json$/)
+
+  page.on('dialog', (d) => d.accept())
+  await page.locator('input[type=file]').setInputFiles({ name: 'x.json', mimeType: 'application/json', buffer: Buffer.from('{"formato":"outra"}') })
+  await expect(page.getByText('Ficheiro inválido. Nenhum dado foi alterado.')).toBeVisible()
+  await page.getByRole('link', { name: 'Medições' }).click()
+  await expect(page.getByText('92,4 kg')).toBeVisible()
+})

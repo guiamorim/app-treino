@@ -1,0 +1,152 @@
+// Linguagem do domínio (especificação, secção 1). Os nomes aqui são os mesmos da interface.
+
+export const GRUPOS_MUSCULARES = [
+  'peito',
+  'costas',
+  'ombros',
+  'biceps',
+  'triceps',
+  'quadriceps',
+  'posteriores',
+  'gluteos',
+  'gemeos',
+  'core',
+] as const
+export type GrupoMuscular = (typeof GRUPOS_MUSCULARES)[number]
+
+export const GRUPOS_GRANDES: readonly GrupoMuscular[] = ['peito', 'costas', 'quadriceps', 'posteriores', 'gluteos']
+
+export const NOMES_GRUPOS: Record<GrupoMuscular, string> = {
+  peito: 'Peito',
+  costas: 'Costas',
+  ombros: 'Ombros',
+  biceps: 'Bíceps',
+  triceps: 'Tríceps',
+  quadriceps: 'Quadríceps',
+  posteriores: 'Posteriores da coxa',
+  gluteos: 'Glúteos',
+  gemeos: 'Gémeos',
+  core: 'Core',
+}
+
+export const AREAS = ['ombro', 'joelho', 'lombar', 'punho', 'anca', 'cotovelo'] as const
+export type Area = (typeof AREAS)[number]
+
+export const EQUIPAMENTOS = ['barra', 'halteres', 'maquina', 'cabo', 'peso-corporal'] as const
+export type Equipamento = (typeof EQUIPAMENTOS)[number]
+
+export type TipoExercicio = 'composto' | 'isolado'
+export type Medida = 'reps' | 'segundos'
+
+export interface Exercicio {
+  id: string
+  nome: string
+  grupoPrincipal: GrupoMuscular
+  gruposSecundarios: GrupoMuscular[]
+  tipo: TipoExercicio
+  /** Basta ter um destes equipamentos para fazer o exercício. */
+  equipamento: Equipamento[]
+  medida: Medida
+  /** Faixa própria (ex.: prancha em segundos). Sobrepõe-se à faixa do objetivo. */
+  faixaFixa?: [number, number]
+  incrementoKg: number
+  objetivo: string
+  pontosChave: string[]
+  contraindicacoes: Area[]
+  /** Por ordem de preferência. */
+  substitutos: string[]
+  video?: string
+}
+
+export type Objetivo = 'recomposicao' | 'hipertrofia' | 'forca' | 'saude'
+export type Experiencia = 'iniciante' | 'regresso' | 'intermedio'
+export type AcessoEquipamento = 'ginasio' | 'halteres' | 'casa'
+export type Sexo = 'masculino' | 'feminino' | 'outro'
+
+export interface Restricao {
+  area: Area
+  /** Dor habitual 0–10. */
+  intensidade: number
+  avaliadaPorProfissional: boolean
+}
+
+export interface Anamnese {
+  idade: number
+  alturaCm: number
+  pesoKg: number
+  cinturaCm?: number
+  sexo: Sexo
+  objetivo: Objetivo
+  diasPorSemana: 2 | 3 | 4 | 5
+  duracaoMin: 45 | 60 | 75
+  experiencia: Experiencia
+  equipamento: AcessoEquipamento
+  restricoes: Restricao[]
+  aceitaCardio: boolean
+  /** Respostas às perguntas gerais do PAR-Q+ (true = "sim"). */
+  parq: boolean[]
+}
+
+export interface Prescricao {
+  /** Identifica a posição no treino, estável entre substituições. */
+  id: string
+  exercicioId: string
+  series: number
+  faixa: [number, number]
+  rir: [number, number]
+  descansoSeg: number
+  nota?: string
+}
+
+export interface TreinoModelo {
+  id: string
+  nome: string
+  sintese: string
+  prescricoes: Prescricao[]
+  cardioMin?: number
+  duracaoEstimadaMin: number
+}
+
+export interface Plano {
+  id: string
+  criadoEm: string
+  versaoRegras: number
+  conservador: boolean
+  readaptacao: boolean
+  treinos: TreinoModelo[]
+  avisos: string[]
+}
+
+export interface Serie {
+  carga: number
+  reps: number
+  rir?: number
+}
+
+export interface RegistoExercicio {
+  prescricaoId: string
+  /** Pode diferir da prescrição quando o exercício foi substituído. */
+  exercicioId: string
+  series: Serie[]
+  dor?: number
+  concluido?: boolean
+  saltado?: boolean
+}
+
+export interface Sessao {
+  id: string
+  planoId: string
+  treinoId: string
+  inicio: string
+  fim?: string
+  exercicios: RegistoExercicio[]
+}
+
+export interface Medicao {
+  id: string
+  data: string
+  pesoKg?: number
+  cinturaCm?: number
+}
+
+export type EstadoExercicio = 'por-fazer' | 'em-curso' | 'feito' | 'saltado'

@@ -1,0 +1,107 @@
+import { z } from 'zod'
+import type { Catalogo } from './catalogo'
+import { AREAS } from './types'
+import type { Anamnese, Medicao, Plano, Sessao } from './types'
+import { lerVideo } from './video'
+
+const inteiro = (min: number, max: number) => z.number().int().min(min).max(max)
+const data = z.string().min(10).max(40)
+const id = z.string().min(1).max(100)
+
+const serie = z.strictObject({ carga: z.number().min(0).max(1000), reps: inteiro(0, 1000), rir: inteiro(0, 10).optional() })
+const registo = z.strictObject({
+  prescricaoId: id,
+  exercicioId: id,
+  series: z.array(serie).max(50),
+  dor: inteiro(0, 10).optional(),
+  concluido: z.boolean().optional(),
+  saltado: z.boolean().optional(),
+})
+const sessao = z.strictObject({ id, planoId: id, treinoId: id, inicio: data, fim: data.optional(), exercicios: z.array(registo).max(50) })
+const medicao = z.strictObject({ id, data, pesoKg: z.number().min(20).max(400).optional(), cinturaCm: z.number().min(30).max(250).optional() })
+
+const anamnese = z.strictObject({
+  idade: inteiro(14, 110),
+  alturaCm: z.number().min(100).max(250),
+  pesoKg: z.number().min(20).max(400),
+  cinturaCm: z.number().min(30).max(250).optional(),
+  sexo: z.enum(['masculino', 'feminino', 'outro']),
+  objetivo: z.enum(['recomposicao', 'hipertrofia', 'forca', 'saude']),
+  diasPorSemana: z.union([z.literal(2), z.literal(3), z.literal(4), z.literal(5)]),
+  duracaoMin: z.union([z.literal(45), z.literal(60), z.literal(75)]),
+  experiencia: z.enum(['iniciante', 'regresso', 'intermedio']),
+  equipamento: z.enum(['ginasio', 'halteres', 'casa']),
+  restricoes: z.array(z.strictObject({ area: z.enum(AREAS), intensidade: inteiro(0, 10), avaliadaPorProfissional: z.boolean() })).max(AREAS.length),
+  aceitaCardio: z.boolean(),
+  parq: z.array(z.boolean()).length(7),
+})
+
+const faixa = z.tuple([z.number().int().min(0), z.number().int().min(0)])
+const plano = z.strictObject({
+  id,
+  criadoEm: data,
+  versaoRegras: z.number().int(),
+  conservador: z.boolean(),
+  readaptacao: z.boolean(),
+  avisos: z.array(z.string().max(500)).max(50),
+  treinos: z.array(z.strictObject({
+    id,
+    nome: z.string().max(100),
+    sintese: z.string().max(500),
+    cardioMin: z.number().int().min(0).max(120).optional(),
+    duracaoEstimadaMin: z.number().int().min(0).max(300),
+    prescricoes: z.array(z.strictObject({
+      id,
+      exercicioId: id,
+      series: inteiro(1, 10),
+      faixa,
+      rir: faixa,
+      descansoSeg: inteiro(0, 600),
+      nota: z.string().max(500).optional(),
+    })).max(20),
+  })).max(7),
+})
+
+const esquemaCopia = z.strictObject({
+  formato: z.literal('app-treino'),
+  versao: z.literal(1),
+  exportadoEm: data,
+  anamnese: anamnese.nullable(),
+  plano: plano.nullable(),
+  sessoes: z.array(sessao).max(10_000),
+  medicoes: z.array(medicao).max(10_000),
+  videos: z.record(id, z.string().refine((u) => lerVideo(u) !== null, 'Link de vídeo não permitido')),
+})
+
+export interface Copia {
+  formato: 'app-treino'
+  versao: 1
+  exportadoEm: string
+  anamnese: Anamnese | null
+  plano: Plano | null
+  sessoes: Sessao[]
+  medicoes: Medicao[]
+  /** Links de vídeo escolhidos por ti, por id de exercício. */
+  videos: Record<string, string>
+}
+
+/** F10.2: valida um ficheiro importado; lança erro se não for uma cópia válida. */
+export function lerCopia(dados: unknown): Copia {
+  return esquemaCopia.parse(dados) as Copia
+}
+
+const csvCampo = (v: string | number | undefined) => {
+  const s = v === undefined ? '' : String(v)
+  return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s
+}
+
+export function paraCsv(sessoes: Sessao[], catalogo: Catalogo): string {
+  const linhas = ['data,treino,exercicio,serie,carga_kg,reps,rir,dor']
+  for (const s of [...sessoes].sort((a, b) => a.inicio.localeCompare(b.inicio)))
+    for (const e of s.exercicios)
+      e.series.forEach((x, i) => {
+        const nome = catalogo.get(e.exercicioId)?.nome ?? e.exercicioId
+        linhas.push([s.inicio, s.treinoId, nome, i + 1, x.carga, x.reps, x.rir, e.dor].map(csvCampo).join(','))
+      })
+  return linhas.join('\n')
+}
