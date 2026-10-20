@@ -155,6 +155,66 @@ describe('F2 geração do plano', () => {
   })
 })
 
+describe('3.4.1 sexo, gravidez e pós-parto', () => {
+  it('o plano base é igual para homens e mulheres', () => {
+    expect(gerar({ sexo: 'feminino' }).treinos).toEqual(gerar({ sexo: 'masculino' }).treinos)
+  })
+
+  it('2.º/3.º trimestre: sem exercícios deitado, plano conservador e aviso', () => {
+    for (const dias of [2, 3, 4, 5, 6, 7] as const) {
+      const p = gerar({ sexo: 'feminino', gravidez: 'gravida-2t3t', diasPorSemana: dias, restricoes: [] })
+      expect(exercicios(p).filter((e) => e.deitado), `${dias} dias`).toEqual([])
+      expect(p.conservador).toBe(true)
+      expect(p.treinos.flatMap((t) => t.prescricoes).every((x) => x.rir[0] >= 3)).toBe(true)
+      for (const t of p.treinos) for (const x of t.prescricoes) for (const id of x.alternativas ?? []) expect(catalogo.get(id)!.deitado, id).toBeUndefined()
+    }
+    const p = gerar({ sexo: 'feminino', gravidez: 'gravida-2t3t', restricoes: [] })
+    expect(p.avisos.join(' ')).toMatch(/obstetra/)
+    expect(p.treinos[0]!.prescricoes[0]!.nota).toMatch(/gravidez/)
+  })
+
+  it('1.º trimestre e pós-parto: conservador e aviso, sem trocas por posição', () => {
+    const t1 = gerar({ sexo: 'feminino', gravidez: 'gravida-1t', restricoes: [] })
+    expect(t1.conservador).toBe(true)
+    expect(t1.treinos[0]!.prescricoes[0]!.exercicioId).toBe('supino-barra')
+    const pp = gerar({ sexo: 'feminino', gravidez: 'pos-parto', restricoes: [] })
+    expect(pp.conservador).toBe(true)
+    expect(pp.avisos.join(' ')).toMatch(/pavimento pélvico/)
+  })
+
+  it('«não» não altera o plano', () => {
+    expect(gerar({ sexo: 'feminino', gravidez: 'nao' })).toEqual(gerar({ sexo: 'feminino' }))
+  })
+})
+
+describe('3.8 ênfase', () => {
+  const INFERIORES: GrupoMuscular[] = ['quadriceps', 'posteriores', 'gluteos', 'gemeos']
+  const SUPERIORES: GrupoMuscular[] = ['peito', 'costas', 'ombros', 'biceps', 'triceps']
+  const soma = (v: Record<string, number>, gs: GrupoMuscular[]) => gs.reduce((t, g) => t + (v[g] ?? 0), 0)
+
+  it.each([2, 3, 4, 5, 6] as const)('%i dias: «mais pernas» dá mais volume de pernas; «mais tronco» mais de tronco', (dias) => {
+    const eq = volumeSemanal(gerar({ diasPorSemana: dias, experiencia: 'intermedio' }))
+    const inf = volumeSemanal(gerar({ diasPorSemana: dias, experiencia: 'intermedio', enfase: 'inferior' }))
+    const sup = volumeSemanal(gerar({ diasPorSemana: dias, experiencia: 'intermedio', enfase: 'superior' }))
+    expect(soma(inf, INFERIORES) - soma(inf, SUPERIORES)).toBeGreaterThan(soma(eq, INFERIORES) - soma(eq, SUPERIORES))
+    expect(soma(sup, SUPERIORES) - soma(sup, INFERIORES)).toBeGreaterThan(soma(eq, SUPERIORES) - soma(eq, INFERIORES))
+  })
+
+  it('a ênfase respeita a duração e os limites de séries', () => {
+    for (const enfase of ['inferior', 'superior'] as const)
+      for (const duracaoMin of [45, 60, 75] as const)
+        for (const t of gerar({ enfase, duracaoMin }).treinos) {
+          expect(t.duracaoEstimadaMin).toBeLessThanOrEqual(duracaoMin)
+          for (const x of t.prescricoes) expect(x.series).toBeGreaterThanOrEqual(2)
+          for (const x of t.prescricoes) expect(x.series).toBeLessThanOrEqual(5)
+        }
+  })
+
+  it('«equilibrado» é igual a não indicar ênfase', () => {
+    expect(gerar({ enfase: 'equilibrado' })).toEqual(gerar())
+  })
+})
+
 describe('3.3 fase de readaptação', () => {
   const p = gerar()
   const pr = p.treinos[0]!.prescricoes[0]!

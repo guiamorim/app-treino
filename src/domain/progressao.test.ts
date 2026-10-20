@@ -87,4 +87,16 @@ describe('F6 progressão (dupla progressão, secção 4)', () => {
     expect(r).toMatchObject({ carga: 20, subiu: false })
     expect(r.motivo).toMatch(/descarga/)
   })
+
+  it('4.1 v1.3: incremento acima de 10% da carga sobe metade (mínimo 1 kg)', () => {
+    const topo = (carga: number) => reg([s(carga, 12, 2), s(carga, 12, 2)])
+    expect(sugerir({ ...base, historico: [topo(6)] })).toMatchObject({ carga: 7, subiu: true })
+    expect(sugerir({ ...base, historico: [topo(6)] }).motivo).toMatch(/carga ainda é leve/)
+    expect(sugerir({ ...base, historico: [topo(20)] })).toMatchObject({ carga: 22, subiu: true })
+    const legPress = catalogo.get('leg-press')!
+    const p: Prescricao = { ...pr, exercicioId: 'leg-press' }
+    const lp = (carga: number) => [{ prescricaoId: p.id, exercicioId: 'leg-press', series: [s(carga, 12, 2), s(carga, 12, 2)] }]
+    expect(sugerir({ prescricao: p, exercicio: legPress, readaptacao: false, historico: lp(30) }).carga).toBe(32.5)
+    expect(sugerir({ prescricao: p, exercicio: legPress, readaptacao: false, historico: lp(60) }).carga).toBe(65)
+  })
 })

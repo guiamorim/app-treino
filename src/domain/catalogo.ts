@@ -18,6 +18,7 @@ export const esquemaExercicio = z.object({
   contraindicacoes: z.array(z.enum(AREAS)),
   substitutos: z.array(z.string()),
   video: z.string().url().optional(),
+  deitado: z.enum(['costas', 'barriga']).optional(),
 })
 
 export type Catalogo = ReadonlyMap<string, Exercicio>

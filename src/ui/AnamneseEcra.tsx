@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { db } from '../data/db'
 import { gerarPlano } from '../domain/plano'
-import { AREAS, DIAS_POR_SEMANA, type Anamnese, type Area, type Restricao } from '../domain/types'
+import { AREAS, DIAS_POR_SEMANA, type Anamnese, type Enfase, type Gravidez, type Area, type Restricao } from '../domain/types'
 import { agoraIso, catalogo, novoId, type Dados } from './dados'
 import { ir } from './rota'
 
@@ -41,6 +41,8 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
     experiencia: a?.experiencia ?? 'regresso',
     equipamento: a?.equipamento ?? 'ginasio',
     aceitaCardio: a?.aceitaCardio ?? true,
+    enfase: a?.enfase ?? 'equilibrado',
+    gravidez: a?.gravidez ?? 'nao',
   })
   const [restricoes, setRestricoes] = useState<Restricao[]>(a?.restricoes ?? [])
   // F1 (v1.2): «Nenhuma» é uma resposta explícita, para não confundir com «esqueci-me de responder».
@@ -86,6 +88,8 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
       restricoes,
       aceitaCardio: f.aceitaCardio,
       parq: parq as boolean[],
+      enfase: f.enfase as Enfase,
+      ...(f.sexo === 'feminino' ? { gravidez: f.gravidez as Gravidez } : {}),
     }
     await db.gravar('anamnese', nova)
     // F1.3: alterar a anamnese pergunta antes de substituir o plano; o histórico mantém-se.
@@ -112,6 +116,18 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
         <div><label htmlFor="cintura">Cintura (cm)</label><input id="cintura" inputMode="decimal" placeholder="opcional" {...campo('cinturaCm')} /></div>
       </div>
 
+      {f.sexo === 'feminino' && (
+        <>
+          <label htmlFor="gravidez">Gravidez ou pós-parto</label>
+          <select id="gravidez" {...campo('gravidez')}>
+            <option value="nao">Não</option>
+            <option value="gravida-1t">Grávida, 1.º trimestre</option>
+            <option value="gravida-2t3t">Grávida, 2.º ou 3.º trimestre</option>
+            <option value="pos-parto">Pós-parto (menos de 12 meses)</option>
+          </select>
+        </>
+      )}
+
       <h2>Objetivo e disponibilidade</h2>
       <label htmlFor="objetivo">Objetivo</label>
       <select id="objetivo" {...campo('objetivo')}>
@@ -119,6 +135,12 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
         <option value="hipertrofia">Ganhar massa muscular</option>
         <option value="forca">Ganhar força</option>
         <option value="saude">Saúde geral</option>
+      </select>
+      <label htmlFor="enfase">Ênfase</label>
+      <select id="enfase" {...campo('enfase')}>
+        <option value="equilibrado">Equilibrado</option>
+        <option value="inferior">Mais pernas e glúteos</option>
+        <option value="superior">Mais tronco (peito, costas, ombros, braços)</option>
       </select>
       <div className="linha">
         <div><label htmlFor="dias">Dias por semana</label>
