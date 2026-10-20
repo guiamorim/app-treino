@@ -2,7 +2,7 @@
 
 [English](specification-v1.en.md) · **Português**
 
-Data: 2026-10-20 · Versão 1.1 (ajustes feitos durante a implementação, marcados com v1.1)
+Data: 2026-10-20 · Versão 1.2 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2)
 
 ## 0. Decisões fechadas
 
@@ -33,14 +33,18 @@ Estes nomes são usados iguais na especificação, no código e na interface.
 | **Dor** | Avaliação 0–10 de um Exercício numa Sessão |
 | **Medição** | Peso e cintura numa data |
 | **Sugestão** | Carga e repetições propostas para a próxima Sessão (calculada, não guardada) |
+| **Bloco** (v1.2) | Ciclo de semanas de progressão terminado por uma semana de descarga; a duração depende do objetivo |
+| **Descarga** | Semana com metade das séries e RIR 3–4, para recuperar antes do bloco seguinte |
+| **Conquista** (v1.2) | Marco calculado a partir do histórico (ex.: 10 treinos, 4 semanas seguidas cumpridas) |
 
 ## 2. Funcionalidades e critérios de aceitação
 
 ### F1. Anamnese
-- Campos: idade, altura, peso, cintura, sexo, objetivo (recomposição, hipertrofia, força, saúde geral), dias por semana (2–5), duração da sessão (45/60/75 min), experiência (iniciante, regresso após paragem, intermédio), equipamento (ginásio completo, halteres, casa), restrições, aceita cardio (sim/não), PAR-Q+ (7 perguntas gerais).
+- Campos: idade, altura, peso, cintura, sexo, objetivo (recomposição, hipertrofia, força, saúde geral), dias por semana (2–7), duração da sessão (45/60/75 min), experiência (iniciante, regresso após paragem, intermédio), equipamento (ginásio completo, halteres, casa), restrições (zonas com dor, ou «Nenhuma»), aceita cardio (sim/não), PAR-Q+ (7 perguntas gerais).
 - **Dado** que respondo "sim" a alguma pergunta do PAR-Q+, **quando** guardo, **então** vejo um aviso a recomendar avaliação médica antes de treinar, e o plano é gerado com intensidade conservadora e marcado como tal.
 - **Dado** que indico uma restrição sem avaliação profissional, **então** a app mostra uma recomendação para avaliação, sem bloquear.
 - **Quando** altero a anamnese, **então** a app pergunta se quero gerar um novo plano; o histórico mantém-se.
+- (v1.2) **Dado** que marco «Nenhuma» nas dores ou limitações, **então** as zonas ficam desmarcadas, o plano usa os exercícios base e não há avisos de avaliação. Para guardar é preciso marcar «Nenhuma» ou pelo menos uma zona.
 
 ### F2. Geração do plano (regras, ver secção 3)
 - **Dado** uma anamnese, **quando** gero o plano, **então** o resultado é sempre o mesmo para os mesmos dados (determinístico).
@@ -67,6 +71,7 @@ Estes nomes são usados iguais na especificação, no código e na interface.
 - Grupo principal e secundários, objetivo do exercício em 1–2 frases, pontos-chave de execução, contraindicações.
 - **Quando** toco no vídeo, **então** abre um leitor sobreposto dentro da app.
 - **Dado** que o vídeo não permite incorporação ou o link não é de um domínio permitido, **então** aparece o botão "abrir no YouTube/Vimeo".
+- (v1.2) Anúncios: a app não bloqueia anúncios do YouTube. O leitor é do YouTube, noutra origem, e a app não o pode alterar; contornar anúncios viola os termos do YouTube. Sem anúncios: links do Vimeo, ou abrir no YouTube com YouTube Premium.
 
 ### F6. Progressão (regras, ver secção 4)
 - **Dado** o histórico, **quando** abro um exercício, **então** vejo a Sugestão e o motivo (ex.: "fizeste 12 reps em todas as séries: sobe para 22 kg").
@@ -88,6 +93,26 @@ Estes nomes são usados iguais na especificação, no código e na interface.
 - Exportar tudo em JSON (e histórico em CSV). Importar JSON com validação de esquema; ficheiro inválido é rejeitado sem alterar dados.
 - Lembrete visual se passaram mais de 14 dias desde a última exportação.
 
+### F11. Início (v1.2)
+- Primeiro separador da barra inferior e ecrã de abertura da app. Painel minimalista, só leitura.
+- Mostra: treinos na semana vs meta (dias por semana), horas de treino na semana e no mês, sequência de semanas cumpridas, próximo treino, fase do bloco e próxima mudança (F14), volume da semana vs semana anterior (carga × reps), recordes no mês, aderência das últimas 4 semanas, tendência de peso (média de 7 dias, variação em 4 semanas), frase do dia.
+- Horas de treino: soma de fim − início das sessões terminadas; cada sessão conta no máximo 3 h (uma sessão esquecida aberta não distorce o total). Semana de segunda a domingo; mês civil.
+- **Dado** que não há sessões, **então** o painel mostra zeros e o próximo treino, sem erros.
+
+### F12. Conquistas e sequência (v1.2)
+- Calculadas a partir do histórico, nunca guardadas; importar uma cópia recalcula-as.
+- Semana cumprida: treinos terminados na semana (segunda a domingo) ≥ dias por semana do plano. Sequência: semanas cumpridas seguidas até à semana atual; a semana atual só conta quando já está cumprida e não quebra a sequência enquanto decorre.
+- Semana com recorde de volume: volume (soma de carga × reps) maior do que o de todas as semanas anteriores, a partir da segunda semana com treinos.
+- Conquistas: primeiro treino; 10, 25, 50 e 100 treinos; primeira semana cumprida; 4 e 12 semanas seguidas; primeiro recorde pessoal; 10 recordes pessoais; primeira semana com recorde de volume; um bloco completo (pelo menos um treino terminado em cada semana de um bloco, descarga incluída).
+- A sequência é semanal e não diária, porque os dias de descanso fazem parte do plano.
+
+### F13. Frase do dia e lembretes (v1.2)
+- O Início mostra uma frase curta de motivação, escolhida de forma determinística a partir da data numa lista fixa de frases em português.
+- Lembretes: decisão do utilizador (2026-10-20): **sem lembretes**. Motivo técnico: no iPhone uma app web não consegue agendar notificações locais, e notificações push exigem um servidor, o que contraria «dados só no dispositivo». Alternativa avaliada e não adotada: ficheiro de calendário (.ics) com um lembrete diário, a uma hora fixa ou 15 a 20 min antes do horário habitual.
+
+### F14. Blocos e próxima mudança (v1.2, regras na secção 3.7)
+- No Início e no Treino de hoje: fase atual (readaptação, semana N de M do bloco, ou descarga) e a próxima mudança com data: fim da readaptação (séries completas), semana de descarga (metade das séries), ou novo bloco (troca dos exercícios isolados, com a lista do que muda).
+
 ## 3. Regras de geração do plano (v1)
 
 ### 3.1 Divisão
@@ -96,6 +121,10 @@ Estes nomes são usados iguais na especificação, no código e na interface.
 | 2–3 | Corpo inteiro A/B(/C) |
 | 4 | Superior A, Inferior A, Superior B, Inferior B |
 | 5 | Superior/Inferior + Corpo inteiro |
+| 6 (v1.2) | Empurrar A, Puxar A, Pernas A, Empurrar B, Puxar B, Pernas B (A/B/C duas vezes) |
+| 7 (v1.2) | Os 6 dias + Recuperação ativa (caminhada leve 20 min e core leve, 2 séries com RIR 3–4) |
+
+Com 3 dias usa-se Corpo inteiro A/B/C e não Empurrar/Puxar/Pernas, porque com essa divisão cada músculo seria treinado só 1 vez por semana. Com 7 dias, o sétimo é sempre de recuperação: treinar força 7 dias seguidos não é recomendável, sobretudo a regressar após paragem.
 
 Frequência alvo: cada grupo principal 2×/semana.
 
@@ -124,6 +153,12 @@ Frequência alvo: cada grupo principal 2×/semana.
 ### 3.6 Cardio
 - Se aceite: 10–15 min de intensidade moderada (consegue falar frases curtas) no fim de 2 sessões por semana.
 
+### 3.7 Blocos, descarga e rotação de exercícios (v1.2)
+- Duração do bloco por objetivo: força 4 semanas (3 + descarga); recomposição e hipertrofia 5 semanas (4 + descarga); saúde geral 6 semanas (5 + descarga). Fica guardada no plano (`semanasBloco`).
+- As semanas contam a partir da criação do plano. Se houver readaptação, as semanas 1–2 são de readaptação e o primeiro bloco começa na semana 3.
+- Descarga (última semana de cada bloco): séries = metade arredondada para cima, RIR 3–4, a carga mantém-se (não sobe).
+- Rotação: no início de cada bloco, os exercícios isolados passam para a alternativa seguinte compatível (substitutos do catálogo, mesmas regras de restrição e equipamento, sem repetir exercícios no treino). Os compostos mantêm-se, para se ver a progressão. As alternativas ficam guardadas na prescrição (`alternativas`), e o bloco n usa a alternativa n módulo o número de alternativas.
+
 ## 4. Regras de progressão (dupla progressão)
 
 Para cada Prescrição com faixa [mín, máx]:
@@ -132,6 +167,7 @@ Para cada Prescrição com faixa [mín, máx]:
 3. Se ficou abaixo de mín reps em 2 sessões seguidas: baixa a carga 10%.
 4. Dor ≥ 4: não sobe a carga e sugere substituto. Dor ≥ 7: recomenda parar o exercício hoje e mostra aviso para avaliação.
 5. Fase de readaptação: sem subida de carga nas primeiras 2 sessões de cada exercício.
+6. (v1.2) Semana de descarga: mantém a carga da última sessão, sem subida.
 
 ## 5. Requisitos não funcionais
 - Funciona offline depois da primeira abertura.
@@ -149,7 +185,7 @@ Para cada Prescrição com faixa [mín, máx]:
 - Dados pessoais nunca entram no repositório: a anamnese é preenchida no telemóvel e os testes usam um perfil fictício. Por isso o repositório pode ser público.
 
 ## 7. Fora da v1
-Sincronização entre dispositivos, notificações push, Apple Health, vários utilizadores, IA, social, calculadora de discos, deload automático.
+Sincronização entre dispositivos, notificações e lembretes (no iPhone exigem servidor; sem lembretes por decisão do utilizador), bloqueio de anúncios, Apple Health, vários utilizadores, IA, social, calculadora de discos.
 
 ## 8. Estrutura técnica
 ```
@@ -173,5 +209,6 @@ Perfil fictício usado nos testes: recomposição, 4 dias, 60 min, ginásio comp
 - **Superior B:** supino em máquina convergente, remada unilateral com halter, puxada pega neutra, face pull, curl martelo, tríceps na polia.
 - **Inferior B:** agachamento goblet, hip thrust, agachamento búlgaro, cadeira flexora, dead bug; cardio 10 min. (v1.1: a cadeira flexora substituiu a extensora para treinar os posteriores 2×/semana.)
 - Semanas 1–2: 2 séries por exercício, RIR 3–4. Depois: 3 séries, RIR 1–3.
+- (v1.2) Blocos de 5 semanas a partir da semana 3: semanas 3–6 de progressão, semana 7 de descarga; na semana 8 começa o bloco 2 e, por exemplo, o curl com halteres passa a curl martelo e a extensão na corda passa a tríceps na polia.
 
 Os links de vídeo do catálogo podem ser substituídos na app por outros do YouTube ou Vimeo.

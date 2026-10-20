@@ -2,12 +2,14 @@ import { useDados } from './dados'
 import { useRota } from './rota'
 import { AnamneseEcra } from './AnamneseEcra'
 import { Hoje } from './Hoje'
+import { Inicio } from './Inicio'
 import { ExercicioEcra } from './ExercicioEcra'
 import { Relatorios } from './Relatorios'
 import { Medicoes } from './Medicoes'
 import { Mais } from './Mais'
 
 const SEPARADORES = [
+  { rota: 'inicio', nome: 'Início', icone: '🏠' },
   { rota: 'hoje', nome: 'Hoje', icone: '🏋️' },
   { rota: 'relatorios', nome: 'Relatórios', icone: '📈' },
   { rota: 'medicoes', nome: 'Medições', icone: '⚖️' },
@@ -24,6 +26,7 @@ export function App() {
   return (
     <>
       <main>
+        {rota.ecra === 'inicio' && <Inicio dados={dados} plano={dados.plano} anamnese={dados.anamnese} />}
         {rota.ecra === 'hoje' && <Hoje dados={dados} plano={dados.plano} />}
         {rota.ecra === 'exercicio' && <ExercicioEcra dados={dados} plano={dados.plano} prescricaoId={rota.prescricaoId} />}
         {rota.ecra === 'relatorios' && <Relatorios dados={dados} />}

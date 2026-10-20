@@ -1,3 +1,5 @@
+import type { DiasPorSemana } from './types'
+
 // Treinos-modelo base (especificação, secção 3.1). Cada posição indica o exercício preferido;
 // a geração troca-o por um substituto quando há restrições ou falta equipamento.
 
@@ -12,7 +14,7 @@ export interface Modelo {
   nome: string
   sintese: string
   posicoes: Posicao[]
-  tipo: 'superior' | 'inferior' | 'corpo'
+  tipo: 'superior' | 'inferior' | 'corpo' | 'recuperacao'
 }
 
 export const MODELOS: Record<string, Modelo> = {
@@ -112,11 +114,94 @@ export const MODELOS: Record<string, Modelo> = {
       { exercicioId: 'dead-bug' },
     ],
   },
+  'empurrar-a': {
+    id: 'empurrar-a',
+    nome: 'Empurrar A',
+    tipo: 'superior',
+    sintese: 'Treino A: empurrar. Peito, ombros e tríceps.',
+    posicoes: [
+      { exercicioId: 'supino-barra', principal: true },
+      { exercicioId: 'supino-inclinado-halteres' },
+      { exercicioId: 'elevacao-lateral' },
+      { exercicioId: 'triceps-corda' },
+    ],
+  },
+  'puxar-a': {
+    id: 'puxar-a',
+    nome: 'Puxar A',
+    tipo: 'superior',
+    sintese: 'Treino B: puxar. Costas, ombro posterior e bíceps.',
+    posicoes: [
+      { exercicioId: 'remada-cabo-sentado', principal: true },
+      { exercicioId: 'puxada-frente' },
+      { exercicioId: 'face-pull' },
+      { exercicioId: 'curl-halteres' },
+    ],
+  },
+  'pernas-a': {
+    id: 'pernas-a',
+    nome: 'Pernas A',
+    tipo: 'inferior',
+    sintese: 'Treino C: pernas. Quadríceps e posteriores da coxa; core no fim.',
+    posicoes: [
+      { exercicioId: 'leg-press', principal: true },
+      { exercicioId: 'peso-morto-romeno', principal: true },
+      { exercicioId: 'leg-curl-deitado' },
+      { exercicioId: 'gemeos-pe' },
+      { exercicioId: 'prancha' },
+    ],
+  },
+  'empurrar-b': {
+    id: 'empurrar-b',
+    nome: 'Empurrar B',
+    tipo: 'superior',
+    sintese: 'Treino A: empurrar. Peito superior, ombros e tríceps.',
+    posicoes: [
+      { exercicioId: 'supino-inclinado-barra', principal: true },
+      { exercicioId: 'supino-maquina' },
+      { exercicioId: 'elevacao-lateral' },
+      { exercicioId: 'triceps-polia' },
+    ],
+  },
+  'puxar-b': {
+    id: 'puxar-b',
+    nome: 'Puxar B',
+    tipo: 'superior',
+    sintese: 'Treino B: puxar. Costas em puxada vertical, ombro posterior e bíceps.',
+    posicoes: [
+      { exercicioId: 'puxada-neutra', principal: true },
+      { exercicioId: 'remada-halter-unilateral' },
+      { exercicioId: 'crucifixo-invertido' },
+      { exercicioId: 'curl-martelo' },
+    ],
+  },
+  'pernas-b': {
+    id: 'pernas-b',
+    nome: 'Pernas B',
+    tipo: 'inferior',
+    sintese: 'Treino C: pernas. Glúteos e quadríceps; posteriores sentado, unilateral e core.',
+    posicoes: [
+      { exercicioId: 'agachamento-goblet', principal: true },
+      { exercicioId: 'hip-thrust', principal: true },
+      { exercicioId: 'agachamento-bulgaro' },
+      { exercicioId: 'leg-curl-sentado' },
+      { exercicioId: 'dead-bug' },
+    ],
+  },
+  recuperacao: {
+    id: 'recuperacao',
+    nome: 'Recuperação ativa',
+    tipo: 'recuperacao',
+    sintese: 'Dia leve para recuperar: caminhada tranquila e core sem esforço. Não é para cansar.',
+    posicoes: [{ exercicioId: 'dead-bug' }, { exercicioId: 'prancha' }],
+  },
 }
 
-export const DIVISOES: Record<2 | 3 | 4 | 5, string[]> = {
+export const DIVISOES: Record<DiasPorSemana, string[]> = {
   2: ['corpo-a', 'corpo-b'],
   3: ['corpo-a', 'corpo-b', 'corpo-c'],
   4: ['superior-a', 'inferior-a', 'superior-b', 'inferior-b'],
   5: ['superior-a', 'inferior-a', 'superior-b', 'inferior-b', 'corpo-a'],
+  6: ['empurrar-a', 'puxar-a', 'pernas-a', 'empurrar-b', 'puxar-b', 'pernas-b'],
+  7: ['empurrar-a', 'puxar-a', 'pernas-a', 'empurrar-b', 'puxar-b', 'pernas-b', 'recuperacao'],
 }

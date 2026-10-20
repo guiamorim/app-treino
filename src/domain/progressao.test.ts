@@ -80,4 +80,11 @@ describe('F6 progressão (dupla progressão, secção 4)', () => {
     expect(r).toMatchObject({ carga: 0, reps: 12, subiu: false })
     expect(r.motivo).toMatch(/dificuldade/)
   })
+
+  it('4.6 semana de descarga: mantém a carga mesmo no topo da faixa', () => {
+    const topo = reg([s(20, 12, 2), s(20, 12, 2)])
+    const r = sugerir({ ...base, descarga: true, historico: [topo, topo] })
+    expect(r).toMatchObject({ carga: 20, subiu: false })
+    expect(r.motivo).toMatch(/descarga/)
+  })
 })

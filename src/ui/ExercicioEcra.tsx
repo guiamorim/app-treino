@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { db } from '../data/db'
+import { estadoBloco } from '../domain/blocos'
 import { motivoIncompatibilidade, prescricaoEfetiva, semanaDoPlano } from '../domain/plano'
 import { sugerir } from '../domain/progressao'
 import { estadoExercicio, historicoExercicio, registoDe } from '../domain/sessao'
@@ -21,7 +22,7 @@ export function ExercicioEcra({ dados, plano, prescricaoId }: { dados: Dados; pl
   }
   const sessao = sessaoAberta(dados.sessoes, plano, treino.id)
   const reg = sessao ? registoDe(sessao, p.id) : undefined
-  const ex = catalogo.get(reg?.exercicioId ?? p.exercicioId)!
+  const ex = catalogo.get(reg?.exercicioId ?? prescricaoEfetiva(p, plano, semanaDoPlano(plano, agoraIso())).exercicioId)!
   return <Registo key={`${p.id}-${ex.id}`} dados={dados} plano={plano} treinoId={treino.id} prescricaoId={p.id} exercicioId={ex.id} />
 }
 
@@ -29,14 +30,16 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
   const treino = plano.treinos.find((t) => t.id === treinoId)!
   const p = treino.prescricoes.find((x) => x.id === prescricaoId)!
   const ex = catalogo.get(exercicioId)!
-  const base = catalogo.get(p.exercicioId)!
+  const semanaAtual = semanaDoPlano(plano, agoraIso())
+  const ef = prescricaoEfetiva(p, plano, semanaAtual)
+  const base = catalogo.get(ef.exercicioId)!
   const sessao = sessaoAberta(dados.sessoes, plano, treino.id)
   const reg = sessao ? registoDe(sessao, p.id) : undefined
   const series = reg?.series ?? []
-  const ef = prescricaoEfetiva(p, plano, semanaDoPlano(plano, agoraIso()))
   const estado = estadoExercicio(reg, ef)
   const historico = historicoExercicio(dados.sessoes, ex.id, sessao?.id)
-  const sugestao = sugerir({ prescricao: ef, exercicio: ex, historico, readaptacao: plano.readaptacao })
+  const descarga = estadoBloco(plano, semanaAtual).fase === 'descarga'
+  const sugestao = sugerir({ prescricao: ef, exercicio: ex, historico, readaptacao: plano.readaptacao, descarga })
   const ultima = historico.at(-1)
   const emSegundos = ex.medida === 'segundos'
   const semCarga = ex.incrementoKg === 0
@@ -114,7 +117,7 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
         {ex.gruposSecundarios.map((g) => <span key={g} className="secundario">{NOMES_GRUPOS[g]} · </span>)}
       </p>
       <p>{ex.objetivo}</p>
-      {p.nota && ex.id === p.exercicioId && <p className="secundario">{p.nota}</p>}
+      {ef.nota && ex.id === ef.exercicioId && <p className="secundario">{ef.nota}</p>}
 
       <div className="linha">
         {video ? (

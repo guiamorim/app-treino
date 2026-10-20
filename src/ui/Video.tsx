@@ -28,6 +28,9 @@ export function VideoModal({ video, titulo, fechar }: { video: Video; titulo: st
         <button ref={botao} className="primario" onClick={fechar}>Fechar</button>
       </div>
       <p className="secundario" style={{ textAlign: 'center', color: '#cbd5e1' }}>Se o vídeo não tocar aqui, o autor bloqueou a incorporação: usa «Abrir no YouTube».</p>
+      {video.plataforma === 'youtube' && (
+        <p className="secundario" style={{ textAlign: 'center', color: '#cbd5e1' }}>Os anúncios são do YouTube e a app não os pode remover. Sem anúncios: YouTube Premium (em «Abrir no YouTube») ou um link do Vimeo.</p>
+      )}
     </div>
   )
 }

@@ -40,7 +40,7 @@ Data: 2026-10-20. Análise feita antes da especificação; as decisões finais e
 | Substituição por restrição | ✗ | ✗ | parcial | ✗ | ✗ | parcial | ✔ (diferenciador) |
 | Funciona offline | ✔ | ✔ | parcial | ✔ | ✔ | ✔ | ✔ |
 | Exportar dados | ✔ (CSV) | ✔ | parcial | parcial | ✗ | parcial | ✔ (JSON/CSV) |
-| Social/gamificação | ✗ | ✔ | ✗ | ✔ | ✔ | ✗ | ✗ (de propósito) |
+| Social/gamificação | ✗ | ✔ | ✗ | ✔ | ✔ | ✗ | gamificação pequena (v1.2), sem social |
 
 Nota: a tabela reflete o conhecimento destas apps em outubro de 2026; funcionalidades mudam com frequência e algumas podem estar só nas versões pagas.
 
@@ -61,6 +61,7 @@ Nota: a tabela reflete o conhecimento destas apps em outubro de 2026; funcionali
 **Ficam para depois (ou nunca)**
 - Semana de deload automática, calculadora de discos, integração com Apple Health / Health Connect (difícil numa app web), notificações (limitadas em iPhone), sincronização entre dispositivos.
 - Não recomendo: social, gamificação, chat com IA. Acrescentam complexidade sem melhorar o treino.
+- Atualização (v1.2): a pedido do utilizador, foi acrescentada uma gamificação pequena (sequência semanal, conquistas, recordes pessoais e de volume), calculada a partir do histórico e sem componente social. A sequência é semanal para não premiar treinar nos dias de descanso. Também foi acrescentada a descarga automática, em blocos de treino (especificação, secção 3.7).
 
 ## 3. Metodologia: SDD, TDD ou DDD
 

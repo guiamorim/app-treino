@@ -1,13 +1,15 @@
+import { estadoBloco, exercicioNoBloco, SEMANAS_BLOCO } from './blocos'
 import { obter, type Catalogo } from './catalogo'
 import { DIVISOES, MODELOS, type Modelo } from './modelos'
 import type { AcessoEquipamento, Anamnese, Equipamento, Exercicio, Objetivo, Plano, Prescricao, TipoExercicio, TreinoModelo } from './types'
 import { NOMES_GRUPOS } from './types'
 
-export const VERSAO_REGRAS = 1
+export const VERSAO_REGRAS = 2
 
 const SEG_EXECUCAO = 45
 const MIN_AQUECIMENTO = 8
 const MIN_CARDIO = 10
+const MIN_CAMINHADA = 20
 
 interface Parametros {
   faixa: [number, number]
@@ -93,6 +95,22 @@ function ajustarDuracao(prescricoes: Prescricao[], tipos: Map<string, TipoExerci
   return lista
 }
 
+/** Secção 3.7: alternativas de rotação para os isolados, sem repetir exercícios no treino. */
+function juntarAlternativas(prescricoes: Prescricao[], a: Anamnese, catalogo: Catalogo): Prescricao[] {
+  const ocupados = new Set(prescricoes.map((p) => p.exercicioId))
+  return prescricoes.map((p) => {
+    const ex = obter(catalogo, p.exercicioId)
+    if (ex.tipo !== 'isolado') return p
+    const alternativas = [ex.id]
+    for (const id of ex.substitutos) {
+      if (ocupados.has(id) || motivoIncompatibilidade(obter(catalogo, id), a)) continue
+      alternativas.push(id)
+      ocupados.add(id)
+    }
+    return alternativas.length > 1 ? { ...p, alternativas } : p
+  })
+}
+
 function gerarTreino(m: Modelo, a: Anamnese, catalogo: Catalogo, conservador: boolean, avisos: string[]): TreinoModelo {
   const usados = new Set<string>()
   const prescricoes: Prescricao[] = []
@@ -110,13 +128,14 @@ function gerarTreino(m: Modelo, a: Anamnese, catalogo: Catalogo, conservador: bo
     usados.add(ex.id)
     const param = PARAMETROS[a.objetivo][ex.tipo]
     const id = `${m.id}-${i + 1}`
+    const leve = m.tipo === 'recuperacao'
     tipos.set(id, ex.tipo)
     prescricoes.push({
       id,
       exercicioId: ex.id,
-      series: pos.principal && ex.tipo === 'composto' ? 4 : 3,
+      series: leve ? 2 : pos.principal && ex.tipo === 'composto' ? 4 : 3,
       faixa: ex.faixaFixa ?? param.faixa,
-      rir: conservador ? [3, 4] : param.rir,
+      rir: conservador || leve ? [3, 4] : param.rir,
       descansoSeg: param.descansoSeg,
       ...(nota ? { nota } : {}),
     })
@@ -129,8 +148,8 @@ function gerarTreino(m: Modelo, a: Anamnese, catalogo: Catalogo, conservador: bo
     else avisos.push(`${m.nome}: sem exercício compatível para ${NOMES_GRUPOS[base.grupoPrincipal]} («${base.nome}» foi removido).`)
   }
 
-  const cardioMin = a.aceitaCardio && m.tipo === 'inferior' ? MIN_CARDIO : undefined
-  const ajustadas = ajustarDuracao(prescricoes, tipos, a.duracaoMin, cardioMin ?? 0)
+  const cardioMin = m.tipo === 'recuperacao' ? MIN_CAMINHADA : a.aceitaCardio && m.tipo === 'inferior' ? MIN_CARDIO : undefined
+  const ajustadas = juntarAlternativas(ajustarDuracao(prescricoes, tipos, a.duracaoMin, cardioMin ?? 0), a, catalogo)
   return {
     id: m.id,
     nome: m.nome,
@@ -159,6 +178,7 @@ export function gerarPlano(a: Anamnese, catalogo: Catalogo, opts: { id: string; 
     versaoRegras: VERSAO_REGRAS,
     conservador,
     readaptacao: a.experiencia !== 'intermedio',
+    semanasBloco: SEMANAS_BLOCO[a.objetivo],
     treinos,
     avisos,
   }
@@ -169,13 +189,22 @@ export function semanaDoPlano(plano: Plano, data: string): number {
   return Math.max(1, Math.floor(dias / 7) + 1)
 }
 
-/** Secção 3.3: nas semanas 1–2 de readaptação, 2 séries e RIR 3–4. */
+/** A prescrição tal como deve ser feita nesta semana: readaptação (3.3), descarga e rotação (3.7). */
 export function prescricaoEfetiva(p: Prescricao, plano: Plano, semana: number): Prescricao {
-  if (!plano.readaptacao || semana > 2) return p
-  return { ...p, series: Math.min(p.series, 2), rir: [3, 4] }
+  const e = estadoBloco(plano, semana)
+  let r = p
+  const exercicioId = exercicioNoBloco(p.alternativas, p.exercicioId, e.bloco)
+  if (exercicioId !== p.exercicioId) {
+    const { nota: _, ...resto } = r
+    r = { ...resto, exercicioId, nota: `Bloco ${e.bloco}: exercício isolado trocado para variar o estímulo.` }
+  }
+  if (e.fase === 'readaptacao') return { ...r, series: Math.min(r.series, 2), rir: [3, 4] }
+  if (e.fase === 'descarga') return { ...r, series: Math.ceil(r.series / 2), rir: [3, 4] }
+  return r
 }
 
-/** O treino tal como deve ser feito nesta semana (com a readaptação aplicada). */
+/** O treino tal como deve ser feito nesta semana. */
 export function treinoEfetivo(t: TreinoModelo, plano: Plano, semana: number): TreinoModelo {
-  return { ...t, prescricoes: t.prescricoes.map((p) => prescricaoEfetiva(p, plano, semana)) }
+  const prescricoes = t.prescricoes.map((p) => prescricaoEfetiva(p, plano, semana))
+  return { ...t, prescricoes, duracaoEstimadaMin: duracaoEstimadaMin(prescricoes, t.cardioMin ?? 0) }
 }

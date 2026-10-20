@@ -40,7 +40,7 @@ Date: 2026-10-20. Analysis written before the specification; final decisions are
 | Restriction-based substitution | ✗ | ✗ | partial | ✗ | ✗ | partial | ✔ (differentiator) |
 | Works offline | ✔ | ✔ | partial | ✔ | ✔ | ✔ | ✔ |
 | Data export | ✔ (CSV) | ✔ | partial | partial | ✗ | partial | ✔ (JSON/CSV) |
-| Social/gamification | ✗ | ✔ | ✗ | ✔ | ✔ | ✗ | ✗ (on purpose) |
+| Social/gamification | ✗ | ✔ | ✗ | ✔ | ✔ | ✗ | small gamification (v1.2), no social |
 
 Note: the table reflects knowledge of these apps as of October 2026; features change often and some may be paid-only.
 
@@ -61,6 +61,7 @@ Note: the table reflects knowledge of these apps as of October 2026; features ch
 **Later (or never)**
 - Automatic deload week, plate calculator, Apple Health / Health Connect integration (hard in a web app), notifications (limited on iPhone), cross-device sync.
 - Not recommended: social, gamification, AI chat. They add complexity without improving training.
+- Update (v1.2): at the user's request, a small gamification layer was added (weekly streak, achievements, personal and volume records), computed from history with no social features. The weekly streak avoids rewarding training on rest days. Automatic deload was also added as training blocks (specification, section 3.7).
 
 ## 3. Methodology: SDD, TDD or DDD
 
