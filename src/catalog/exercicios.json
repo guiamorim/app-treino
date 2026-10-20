@@ -12,6 +12,7 @@
     "pontosChave": ["Omoplatas juntas e para baixo", "Pega pouco mais larga que os ombros, não exagerar", "Barra desce até à parte baixa do peito, cotovelos a ~45° do tronco"],
     "contraindicacoes": ["ombro"],
     "substitutos": ["supino-halteres-neutro", "supino-maquina", "flexoes"],
+    "deitado": "costas",
     "video": "https://www.youtube.com/watch?v=GN3dEe4F4Uw"
   },
   {
@@ -27,6 +28,7 @@
     "pontosChave": ["Palmas viradas uma para a outra", "Cotovelos a ~30–45° do tronco", "Descer até sentir alongamento no peito, sem dor"],
     "contraindicacoes": [],
     "substitutos": ["supino-maquina", "flexoes"],
+    "deitado": "costas",
     "video": "https://www.youtube.com/watch?v=3m7-E2Bcotk"
   },
   {
@@ -267,6 +269,7 @@
     "pontosChave": ["Braços na vertical", "Dobrar só os cotovelos, halteres ao lado da cabeça", "Carga moderada"],
     "contraindicacoes": ["cotovelo"],
     "substitutos": [],
+    "deitado": "costas",
     "video": "https://www.youtube.com/watch?v=emY8deCFVRo"
   },
   {
@@ -372,6 +375,7 @@
     "pontosChave": ["Anca colada ao banco", "Fletir os joelhos até ao fim", "Descida lenta"],
     "contraindicacoes": [],
     "substitutos": ["leg-curl-sentado"],
+    "deitado": "barriga",
     "video": "https://www.youtube.com/watch?v=8Nat6GRiEoc"
   },
   {
@@ -417,6 +421,7 @@
     "pontosChave": ["Pés perto dos glúteos", "Subir a anca contraindo os glúteos", "Não arquear a lombar"],
     "contraindicacoes": [],
     "substitutos": [],
+    "deitado": "costas",
     "video": "https://www.youtube.com/watch?v=6jS6aH-78w4"
   },
   {
@@ -464,6 +469,7 @@
     "pontosChave": ["Lombar colada ao chão", "Estender braço e perna opostos devagar", "Expirar ao estender"],
     "contraindicacoes": [],
     "substitutos": ["prancha"],
+    "deitado": "costas",
     "video": "https://www.youtube.com/watch?v=0loS0bRNqfs"
   }
 ]

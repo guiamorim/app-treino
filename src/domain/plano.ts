@@ -1,7 +1,7 @@
 import { estadoBloco, exercicioNoBloco, SEMANAS_BLOCO } from './blocos'
 import { obter, type Catalogo } from './catalogo'
 import { DIVISOES, MODELOS, type Modelo } from './modelos'
-import type { AcessoEquipamento, Anamnese, Equipamento, Exercicio, Objetivo, Plano, Prescricao, TipoExercicio, TreinoModelo } from './types'
+import type { AcessoEquipamento, Anamnese, Enfase, Equipamento, Exercicio, GrupoMuscular, Objetivo, Plano, Prescricao, TipoExercicio, TreinoModelo } from './types'
 import { NOMES_GRUPOS } from './types'
 
 export const VERSAO_REGRAS = 2
@@ -52,9 +52,26 @@ const NOMES_AREAS: Record<string, string> = {
   cotovelo: 'cotovelo',
 }
 
+/** A resposta de gravidez só conta com sexo feminino (secção 3.4.1). */
+const gravidezAtiva = (a: Anamnese) => (a.sexo === 'feminino' ? a.gravidez ?? 'nao' : 'nao')
+
+const INFERIORES: readonly GrupoMuscular[] = ['quadriceps', 'posteriores', 'gluteos', 'gemeos']
+
+/** Secção 3.8: +1 série nos compostos da metade escolhida, −1 nos isolados da outra. */
+function aplicarEnfase(p: Prescricao, ex: Exercicio, enfase: Enfase): Prescricao {
+  if (enfase === 'equilibrado') return p
+  const inferior = INFERIORES.includes(ex.grupoPrincipal)
+  const daEnfase = (enfase === 'inferior') === inferior
+  if (ex.grupoPrincipal === 'core') return p
+  if (daEnfase && ex.tipo === 'composto') return { ...p, series: Math.min(5, p.series + 1) }
+  if (!daEnfase && ex.tipo === 'isolado') return { ...p, series: Math.max(2, p.series - 1) }
+  return p
+}
+
 export function motivoIncompatibilidade(ex: Exercicio, a: Anamnese): string | null {
   const area = ex.contraindicacoes.find((c) => a.restricoes.some((r) => r.area === c))
   if (area) return `por causa do ${NOMES_AREAS[area]}`
+  if (ex.deitado && gravidezAtiva(a) === 'gravida-2t3t') return 'por causa da gravidez'
   const disponivel = EQUIPAMENTO_DISPONIVEL[a.equipamento]
   if (!ex.equipamento.some((q) => disponivel.includes(q))) return 'por falta de equipamento'
   return null
@@ -130,7 +147,7 @@ function gerarTreino(m: Modelo, a: Anamnese, catalogo: Catalogo, conservador: bo
     const id = `${m.id}-${i + 1}`
     const leve = m.tipo === 'recuperacao'
     tipos.set(id, ex.tipo)
-    prescricoes.push({
+    prescricoes.push(aplicarEnfase({
       id,
       exercicioId: ex.id,
       series: leve ? 2 : pos.principal && ex.tipo === 'composto' ? 4 : 3,
@@ -138,7 +155,7 @@ function gerarTreino(m: Modelo, a: Anamnese, catalogo: Catalogo, conservador: bo
       rir: conservador || leve ? [3, 4] : param.rir,
       descansoSeg: param.descansoSeg,
       ...(nota ? { nota } : {}),
-    })
+    }, ex, a.enfase ?? 'equilibrado'))
   })
 
   // Secção 3.4: o volume de um exercício removido passa para outro do mesmo grupo.
@@ -162,9 +179,18 @@ function gerarTreino(m: Modelo, a: Anamnese, catalogo: Catalogo, conservador: bo
 
 export function gerarPlano(a: Anamnese, catalogo: Catalogo, opts: { id: string; agora: string }): Plano {
   const avisos: string[] = []
-  const conservador = a.parq.some(Boolean)
-  if (conservador) {
+  const gravidez = gravidezAtiva(a)
+  const parq = a.parq.some(Boolean)
+  const conservador = parq || gravidez !== 'nao'
+  if (parq) {
     avisos.push('Respondeste «sim» a pelo menos uma pergunta do PAR-Q+. Consulta um médico antes de aumentar a intensidade. O plano foi gerado em modo conservador.')
+  }
+  if (gravidez === 'gravida-1t' || gravidez === 'gravida-2t3t') {
+    avisos.push('Gravidez: treina com acompanhamento do teu médico ou obstetra. Plano conservador; para se sentires dor, tonturas, falta de ar invulgar, contrações ou perdas de sangue ou líquido.'
+      + (gravidez === 'gravida-2t3t' ? ' A partir do 2.º trimestre, os exercícios deitado de costas ou de barriga para baixo foram trocados.' : ''))
+  }
+  if (gravidez === 'pos-parto') {
+    avisos.push('Pós-parto: retoma com autorização do teu médico ou obstetra e, idealmente, avaliação do pavimento pélvico e da diástase por fisioterapeuta. Plano conservador.')
   }
   for (const r of a.restricoes) {
     if (!r.avaliadaPorProfissional) {

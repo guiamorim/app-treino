@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import type { Catalogo } from './catalogo'
-import { AREAS, DIAS_POR_SEMANA } from './types'
+import { AREAS, DIAS_POR_SEMANA, ENFASES, GRAVIDEZ } from './types'
 import type { Anamnese, Medicao, Plano, Sessao } from './types'
 import { lerVideo } from './video'
 
@@ -34,6 +34,8 @@ const anamnese = z.strictObject({
   restricoes: z.array(z.strictObject({ area: z.enum(AREAS), intensidade: inteiro(0, 10), avaliadaPorProfissional: z.boolean() })).max(AREAS.length),
   aceitaCardio: z.boolean(),
   parq: z.array(z.boolean()).length(7),
+  enfase: z.enum(ENFASES).optional(),
+  gravidez: z.enum(GRAVIDEZ).optional(),
 })
 
 const faixa = z.tuple([z.number().int().min(0), z.number().int().min(0)])

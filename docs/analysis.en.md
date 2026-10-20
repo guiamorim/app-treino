@@ -105,6 +105,8 @@ Honest iPhone limitation: for a PWA, iOS may delete data from sites that were no
 - Baseline parameters for adults aged 40–50 aiming at body recomposition: each muscle group 2×/week (Schoenfeld et al., 2016), around 10+ weekly sets per group (Schoenfeld et al., 2017; v1.1 uses 8+ because of time limits), most sets at 1–3 RIR (Helms et al., 2016), gradual progression (ACSM, 2009), protein ~1.6 g/kg/day as a reference (Morton et al., 2018).
 - Shoulder and bench press: a grip narrower than twice shoulder width and a controlled range of motion reduce shoulder load (Green & Comfort, 2007). Alternatives: neutral-grip dumbbells, floor press, converging machine.
 
+- Sex (v1.3): the base plan is the same for men and women, because with the same training relative gains are similar (Roberts et al., 2020). The emphasis (legs and glutes, or upper body) is chosen by each person. Pregnancy and postpartum make the plan conservative and, from the 2nd trimester, avoid lying exercises (ACOG, 2020).
+
 The app does not replace medical or physiotherapy assessment, and must say so.
 
 ## References
@@ -112,7 +114,9 @@ The app does not replace medical or physiotherapy assessment, and must say so.
 - ACSM (2009). Progression models in resistance training for healthy adults. *Med Sci Sports Exerc*, 41(3), 687–708.
 - Green, C. M., & Comfort, P. (2007). The affect of grip width on bench press performance and risk of injury. *Strength Cond J*, 29(5), 10–14.
 - Helms, E. R., et al. (2016). Application of the repetitions in reserve-based RPE scale for resistance training. *Strength Cond J*, 38(4), 42–49.
+- ACOG (2020). Physical activity and exercise during pregnancy and the postpartum period. Committee Opinion No. 804. *Obstet Gynecol*, 135(4), e178–e188.
 - Morton, R. W., et al. (2018). A systematic review, meta-analysis and meta-regression of the effect of protein supplementation on resistance training-induced gains. *Br J Sports Med*, 52(6), 376–384.
+- Roberts, B. M., Nuckols, G., & Krieger, J. W. (2020). Sex differences in resistance training: a systematic review and meta-analysis. *J Strength Cond Res*, 34(5), 1448–1460.
 - Schoenfeld, B. J., Ogborn, D., & Krieger, J. W. (2016). Effects of resistance training frequency on measures of muscle hypertrophy. *Sports Med*, 46(11), 1689–1697.
 - Schoenfeld, B. J., Ogborn, D., & Krieger, J. W. (2017). Dose-response relationship between weekly resistance training volume and increases in muscle mass. *J Sports Sci*, 35(11), 1073–1082.
 - Warburton, D. E. R., et al. (2011). The PAR-Q+ and ePARmed-X+. *Health Fit J Can*, 4(2), 3–23.

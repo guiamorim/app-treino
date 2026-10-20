@@ -22,6 +22,8 @@ export interface Entrada {
 const PASSO_SEGUNDOS = 5
 const DOR_SEM_SUBIDA = 4
 const DOR_PARAR = 7
+const INCREMENTO_RELATIVO_MAX = 0.1
+const INCREMENTO_MINIMO = 1
 
 const arredondar = (kg: number) => Math.floor(kg * 2) / 2
 const fmt = (kg: number) => kg.toLocaleString('pt-PT')
@@ -94,8 +96,16 @@ export function sugerir({ prescricao, exercicio, historico, readaptacao, descarg
     if (exercicio.incrementoKg === 0) {
       return { carga, reps: max, subiu: false, motivo: `Chegaste a ${max} reps em todas as séries: aumenta a dificuldade (ex.: variação mais difícil ou mochila com peso).` }
     }
-    const nova = carga + exercicio.incrementoKg
-    return { carga: nova, reps: min, subiu: true, motivo: `Fizeste ${max} reps em todas as séries: sobe para ${fmt(nova)} kg e volta a ${min} reps.` }
+    // v1.3: com cargas leves, o incremento normal seria um salto grande demais.
+    const leve = exercicio.incrementoKg > carga * INCREMENTO_RELATIVO_MAX
+    const incremento = leve ? Math.max(INCREMENTO_MINIMO, Math.round((exercicio.incrementoKg / 2) * 4) / 4) : exercicio.incrementoKg
+    const nova = carga + incremento
+    return {
+      carga: nova,
+      reps: min,
+      subiu: true,
+      motivo: `Fizeste ${max} reps em todas as séries: sobe para ${fmt(nova)} kg e volta a ${min} reps.${leve ? ` Subida de ${fmt(incremento)} kg porque a carga ainda é leve.` : ''}`,
+    }
   }
 
   if (noTopo) {

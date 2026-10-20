@@ -2,7 +2,7 @@
 
 [English](specification-v1.en.md) · **Português**
 
-Data: 2026-10-20 · Versão 1.2 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2)
+Data: 2026-10-20 · Versão 1.3 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 e v1.3)
 
 ## 0. Decisões fechadas
 
@@ -10,7 +10,7 @@ Data: 2026-10-20 · Versão 1.2 (ajustes feitos durante a implementação marcad
 |---|---|
 | Plataforma | PWA instalada no ecrã inicial do iPhone; também abre em qualquer navegador |
 | Dados | Só no dispositivo (IndexedDB), com exportação e importação de cópia de segurança. Sincronização fica fora da v1 |
-| Utilizadores | Um só, sem login |
+| Utilizadores | Um por dispositivo, sem login. Outras pessoas (homens ou mulheres) usam a app no seu próprio telemóvel; os dados não são partilhados (v1.3) |
 | Plano | Gerado por regras determinísticas a partir da anamnese, sem IA |
 | Restrições | Uma dor nunca avaliada gera recomendação de avaliação; exercícios contraindicados são substituídos |
 | Língua | Português de Portugal |
@@ -40,9 +40,11 @@ Estes nomes são usados iguais na especificação, no código e na interface.
 ## 2. Funcionalidades e critérios de aceitação
 
 ### F1. Anamnese
-- Campos: idade, altura, peso, cintura, sexo, objetivo (recomposição, hipertrofia, força, saúde geral), dias por semana (2–7), duração da sessão (45/60/75 min), experiência (iniciante, regresso após paragem, intermédio), equipamento (ginásio completo, halteres, casa), restrições (zonas com dor, ou «Nenhuma»), aceita cardio (sim/não), PAR-Q+ (7 perguntas gerais).
+- Campos: idade, altura, peso, cintura, sexo, objetivo (recomposição, hipertrofia, força, saúde geral), dias por semana (2–7), duração da sessão (45/60/75 min), experiência (iniciante, regresso após paragem, intermédio), equipamento (ginásio completo, halteres, casa), restrições (zonas com dor, ou «Nenhuma»), aceita cardio (sim/não), PAR-Q+ (7 perguntas gerais). (v1.3) Ênfase do plano (equilibrado, mais pernas e glúteos, mais tronco), para qualquer sexo. Se o sexo for feminino: gravidez ou pós-parto (não; grávida no 1.º trimestre; grávida no 2.º ou 3.º trimestre; pós-parto há menos de 12 meses).
 - **Dado** que respondo "sim" a alguma pergunta do PAR-Q+, **quando** guardo, **então** vejo um aviso a recomendar avaliação médica antes de treinar, e o plano é gerado com intensidade conservadora e marcado como tal.
 - **Dado** que indico uma restrição sem avaliação profissional, **então** a app mostra uma recomendação para avaliação, sem bloquear.
+- (v1.3) **Dado** que indico gravidez ou pós-parto, **então** o plano é conservador e aparece um aviso a recomendar acompanhamento do médico ou obstetra (e, no pós-parto, avaliação do pavimento pélvico por fisioterapeuta). No 2.º e 3.º trimestres não aparecem exercícios deitado de costas ou de barriga para baixo.
+- (v1.3) A pergunta de gravidez só aparece com sexo feminino; mudar o sexo para outro valor apaga a resposta.
 - **Quando** altero a anamnese, **então** a app pergunta se quero gerar um novo plano; o histórico mantém-se.
 - (v1.2) **Dado** que marco «Nenhuma» nas dores ou limitações, **então** as zonas ficam desmarcadas, o plano usa os exercícios base e não há avisos de avaliação. Para guardar é preciso marcar «Nenhuma» ou pelo menos uma zona.
 
@@ -146,6 +148,10 @@ Frequência alvo: cada grupo principal 2×/semana.
 - Exercício contraindicado é trocado pelo primeiro substituto sem a mesma contraindicação; se não houver, o exercício é removido e o volume do grupo é redistribuído.
 - Reintrodução (**por implementar**): um exercício evitado só é sugerido de novo depois de 4 sessões seguidas com dor ≤ 2 no substituto, e sempre como opção, nunca automaticamente. Na v1 pode ser trocado à mão em «Substituir exercício».
 
+### 3.4.1 Sexo, gravidez e pós-parto (v1.3)
+- O plano base não muda com o sexo. Com o mesmo treino, homens e mulheres ganham força e massa muscular em proporção semelhante (Roberts et al., 2020); dar automaticamente mais pernas a mulheres e mais tronco a homens não tem base sólida. A diferença fica na ênfase, escolhida por cada pessoa (secção 3.8).
+- Gravidez ou pós-parto: plano conservador (RIR 3–4) e aviso (ACOG, 2020). No 2.º e 3.º trimestres, os exercícios marcados no catálogo como deitado de costas ou de barriga para baixo (`deitado`) são trocados pelo primeiro substituto compatível, com a nota «por causa da gravidez».
+
 ### 3.5 Duração
 - Estimativa por série: 45 s de execução + descanso prescrito. Aquecimento: 8 min. Cardio opcional: 10–15 min no fim dos dias de inferiores.
 - Se o treino exceder a duração, remove-se primeiro o último isolado, depois reduz-se 1 série nos isolados.
@@ -159,10 +165,16 @@ Frequência alvo: cada grupo principal 2×/semana.
 - Descarga (última semana de cada bloco): séries = metade arredondada para cima, RIR 3–4, a carga mantém-se (não sobe).
 - Rotação: no início de cada bloco, os exercícios isolados passam para a alternativa seguinte compatível (substitutos do catálogo, mesmas regras de restrição e equipamento, sem repetir exercícios no treino). Os compostos mantêm-se, para se ver a progressão. As alternativas ficam guardadas na prescrição (`alternativas`), e o bloco n usa a alternativa n módulo o número de alternativas.
 
+### 3.8 Ênfase (v1.3)
+- Equilibrado: sem alterações.
+- Mais pernas e glúteos: compostos de quadríceps, posteriores e glúteos ganham 1 série (máximo 5); isolados de tronco e braços perdem 1 série (mínimo 2).
+- Mais tronco: o inverso (compostos de peito e costas +1 série; isolados de pernas e gémeos −1 série).
+- Depois aplica-se o ajuste de duração (secção 3.5).
+
 ## 4. Regras de progressão (dupla progressão)
 
 Para cada Prescrição com faixa [mín, máx]:
-1. Se todas as séries da última sessão chegaram a máx reps com RIR ≥ 1: sobe a carga pelo incremento do exercício (barra inferiores 5 kg; barra superiores 2,5 kg; halteres 2 kg; máquina 1 placa ou 2,5 kg) e volta a mín reps.
+1. Se todas as séries da última sessão chegaram a máx reps com RIR ≥ 1: sobe a carga pelo incremento do exercício (barra inferiores 5 kg; barra superiores 2,5 kg; halteres 2 kg; máquina 1 placa ou 2,5 kg) e volta a mín reps. (v1.3) Se o incremento for mais de 10% da carga atual, sobe metade do incremento (arredondado a 0,25 kg, mínimo 1 kg). Ex.: halter de 6 kg sobe 1 kg e não 2 kg. Isto ajuda sobretudo quem usa cargas mais leves.
 2. Senão: mantém a carga e tenta +1 rep na série mais baixa.
 3. Se ficou abaixo de mín reps em 2 sessões seguidas: baixa a carga 10%.
 4. Dor ≥ 4: não sobe a carga e sugere substituto. Dor ≥ 7: recomenda parar o exercício hoje e mostra aviso para avaliação.

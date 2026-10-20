@@ -56,6 +56,8 @@ export interface Exercicio {
   /** Por ordem de preferência. */
   substitutos: string[]
   video?: string
+  /** Posição deitada (secção 3.4.1): evitada no 2.º e 3.º trimestres de gravidez. */
+  deitado?: 'costas' | 'barriga'
 }
 
 export const DIAS_POR_SEMANA = [2, 3, 4, 5, 6, 7] as const
@@ -65,6 +67,10 @@ export type Objetivo = 'recomposicao' | 'hipertrofia' | 'forca' | 'saude'
 export type Experiencia = 'iniciante' | 'regresso' | 'intermedio'
 export type AcessoEquipamento = 'ginasio' | 'halteres' | 'casa'
 export type Sexo = 'masculino' | 'feminino' | 'outro'
+export const GRAVIDEZ = ['nao', 'gravida-1t', 'gravida-2t3t', 'pos-parto'] as const
+export type Gravidez = (typeof GRAVIDEZ)[number]
+export const ENFASES = ['equilibrado', 'inferior', 'superior'] as const
+export type Enfase = (typeof ENFASES)[number]
 
 export interface Restricao {
   area: Area
@@ -88,6 +94,10 @@ export interface Anamnese {
   aceitaCardio: boolean
   /** Respostas às perguntas gerais do PAR-Q+ (true = "sim"). */
   parq: boolean[]
+  /** Secção 3.8; por omissão «equilibrado». */
+  enfase?: Enfase
+  /** Secção 3.4.1; só com sexo feminino. */
+  gravidez?: Gravidez
 }
 
 export interface Prescricao {
