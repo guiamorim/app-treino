@@ -1,44 +1,51 @@
 # Treino
 
-App pessoal (PWA) para seguir um plano de treino gerado a partir de uma anamnese, registar cada série e acompanhar a progressão. Funciona no iPhone (instalada no ecrã inicial) e em qualquer navegador, offline, com os dados guardados só no dispositivo.
+**English** · [Português](README.pt-PT.md)
 
-Especificação: [specs/especificacao-v1.md](specs/especificacao-v1.md)
+A personal PWA to follow a training plan generated from an intake questionnaire (anamnesis), log every set and track progression. It works on the iPhone (installed on the home screen) and in any browser, offline, with data stored on the device only. The app's interface is in European Portuguese.
 
-## Instalar no iPhone
+Specification: [specs/specification-v1.en.md](specs/specification-v1.en.md) · Market analysis and methodology: [docs/analysis.en.md](docs/analysis.en.md)
 
-1. Abre https://guiamorim.github.io/app-treino/ no **Safari**.
-2. Toca em **Partilhar** → **Adicionar ao ecrã principal**.
-3. Abre a app pelo ícone «Treino». Instalada assim, o iOS não apaga os dados.
-4. Faz uma cópia de segurança de 2 em 2 semanas em **Mais → Exportar cópia**.
+## Install on the iPhone
 
-## Desenvolvimento
+1. Open https://guiamorim.github.io/app-treino/ in **Safari**.
+2. Tap **Share** → **Add to Home Screen**.
+3. Open the app from the «Treino» icon. Installed this way, iOS does not delete its data.
+4. Make a backup every 2 weeks in **Mais → Exportar cópia**.
+
+## Development
 
 ```bash
 npm ci
-npm run dev        # servidor local
-npm test           # testes de unidade (domínio e dados)
-npm run test:e2e   # testes ponta a ponta num iPhone simulado (build de produção)
-npm run build      # gera dist/ com service worker e Content Security Policy
+npm run dev        # local server
+npm test           # unit tests (domain and data)
+npm run test:e2e   # end-to-end tests on a simulated iPhone (production build)
+npm run build      # builds dist/ with service worker and Content Security Policy
 ```
 
-## Organização
+## Layout
 
 ```
-specs/            especificação (fonte de verdade: SDD)
-src/domain/       regras puras em TypeScript, escritas com TDD: plano, progressão, sessão, relatórios, cópia, vídeo
-src/data/         IndexedDB (Dexie), exportação e importação
-src/ui/           ecrãs React
-src/catalog/      catálogo de exercícios (validado por esquema nos testes e ao arrancar)
+specs/            specification (source of truth: SDD), in PT and EN
+docs/             market analysis and methodology, in PT and EN
+src/domain/       pure TypeScript rules, written with TDD: plan, progression, session, reports, backup, video
+src/data/         IndexedDB (Dexie), export and import
+src/ui/           React screens
+src/catalog/      exercise catalogue (schema-validated in tests and at startup)
 tests/e2e/        Playwright
 ```
 
-Cada teste tem o código do critério da especificação que verifica (ex.: `F4`, `3.2`).
+Each test carries the code of the specification criterion it checks (e.g. `F4`, `3.2`). Code identifiers follow the Portuguese domain language; the specification maps each term to English.
 
-## Segurança
+## Security
 
-- Sem servidor, sem contas, sem analytics: os dados de saúde nunca saem do dispositivo.
-- Content Security Policy restrita; vídeos só de `youtube-nocookie.com` e `player.vimeo.com`, em iframe com `sandbox`.
-- Links de vídeo e ficheiros importados validados (lista de domínios e esquema Zod) antes de serem usados.
-- CI com `npm audit`, testes e Dependabot.
+- No server, no accounts, no analytics: health data never leaves the device.
+- Strict Content Security Policy; videos only from `youtube-nocookie.com` and `player.vimeo.com`, in a sandboxed iframe.
+- Video links and imported files are validated (domain allowlist and Zod schema) before use.
+- CI with `npm audit`, tests and Dependabot.
 
-A app não substitui avaliação médica nem de fisioterapia.
+## Documentation
+
+All documentation exists in Portuguese and English. Whoever changes a document updates both versions in the same commit.
+
+The app does not replace medical or physiotherapy assessment.
