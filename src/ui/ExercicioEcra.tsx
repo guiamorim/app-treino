@@ -1,0 +1,240 @@
+import { useState } from 'react'
+import { db } from '../data/db'
+import { motivoIncompatibilidade, prescricaoEfetiva, semanaDoPlano } from '../domain/plano'
+import { sugerir } from '../domain/progressao'
+import { estadoExercicio, historicoExercicio, registoDe } from '../domain/sessao'
+import { NOMES_GRUPOS, type Plano, type Serie } from '../domain/types'
+import { lerVideo, pesquisaYoutube } from '../domain/video'
+import { abrirSessao, alterarRegisto, sessaoAberta } from './acoes'
+import { agoraIso, catalogo, kg, type Dados } from './dados'
+import { ir } from './rota'
+import { Temporizador } from './Temporizador'
+import { VideoModal } from './Video'
+
+const numero = (s: string) => Number(s.replace(',', '.'))
+
+export function ExercicioEcra({ dados, plano, prescricaoId }: { dados: Dados; plano: Plano; prescricaoId: string }) {
+  const treino = plano.treinos.find((t) => t.prescricoes.some((p) => p.id === prescricaoId))
+  const p = treino?.prescricoes.find((x) => x.id === prescricaoId)
+  if (!treino || !p) {
+    return <><h1>Exercício não encontrado</h1><button onClick={() => ir('/hoje')}>Voltar</button></>
+  }
+  const sessao = sessaoAberta(dados.sessoes, plano, treino.id)
+  const reg = sessao ? registoDe(sessao, p.id) : undefined
+  const ex = catalogo.get(reg?.exercicioId ?? p.exercicioId)!
+  return <Registo key={`${p.id}-${ex.id}`} dados={dados} plano={plano} treinoId={treino.id} prescricaoId={p.id} exercicioId={ex.id} />
+}
+
+function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados: Dados; plano: Plano; treinoId: string; prescricaoId: string; exercicioId: string }) {
+  const treino = plano.treinos.find((t) => t.id === treinoId)!
+  const p = treino.prescricoes.find((x) => x.id === prescricaoId)!
+  const ex = catalogo.get(exercicioId)!
+  const base = catalogo.get(p.exercicioId)!
+  const sessao = sessaoAberta(dados.sessoes, plano, treino.id)
+  const reg = sessao ? registoDe(sessao, p.id) : undefined
+  const series = reg?.series ?? []
+  const ef = prescricaoEfetiva(p, plano, semanaDoPlano(plano, agoraIso()))
+  const estado = estadoExercicio(reg, ef)
+  const historico = historicoExercicio(dados.sessoes, ex.id, sessao?.id)
+  const sugestao = sugerir({ prescricao: ef, exercicio: ex, historico, readaptacao: plano.readaptacao })
+  const ultima = historico.at(-1)
+  const emSegundos = ex.medida === 'segundos'
+  const semCarga = ex.incrementoKg === 0
+
+  const ultimaSerie = series.at(-1)
+  const [carga, setCarga] = useState(String(ultimaSerie?.carga ?? sugestao.carga ?? ''))
+  const [reps, setReps] = useState(String(ultimaSerie?.reps ?? sugestao.reps))
+  const [rir, setRir] = useState<number | undefined>(undefined)
+  const [descanso, setDescanso] = useState<number | null>(null)
+  const [verVideo, setVerVideo] = useState(false)
+  const [trocar, setTrocar] = useState(false)
+  const [erro, setErro] = useState('')
+  // Estado local: a gravação é assíncrona e o controlo não pode esperar por ela.
+  const [dor, setDor] = useState(reg?.dor ?? 0)
+
+  const linkVideo = dados.videos[ex.id] ?? ex.video
+  const video = linkVideo ? lerVideo(linkVideo) : null
+  const substitutos = [...new Set([base.id, ...base.substitutos, ...ex.substitutos])]
+    .filter((id) => id !== ex.id)
+    .map((id) => catalogo.get(id)!)
+    .filter((s) => dados.anamnese && !motivoIncompatibilidade(s, dados.anamnese))
+
+  const alterar = async (f: Parameters<typeof alterarRegisto>[3]) => {
+    const s = await abrirSessao(dados.sessoes, plano, treino.id)
+    await alterarRegisto(s.id, p.id, ex.id, f)
+  }
+
+  async function concluirSerie() {
+    const c = semCarga ? 0 : numero(carga)
+    const r = numero(reps)
+    if (!(r > 0 && r <= 1000 && Number.isInteger(r))) return setErro(emSegundos ? 'Indica os segundos.' : 'Indica as repetições.')
+    if (!(c >= 0 && c <= 1000)) return setErro('Indica a carga em kg.')
+    setErro('')
+    const serie: Serie = { carga: c, reps: r, ...(rir !== undefined ? { rir } : {}) }
+    await alterar((x) => ({ ...x, series: [...x.series, serie] }))
+    setRir(undefined)
+    if (series.length + 1 < ef.series) setDescanso(Date.now() + ef.descansoSeg * 1000)
+  }
+
+  function mudarDor(valor: number) {
+    setDor(valor)
+    void alterar((x) => ({ ...x, dor: valor }))
+  }
+
+  async function mudarVideo() {
+    const novo = prompt('Cola o link do vídeo (YouTube ou Vimeo). Deixa vazio para repor o original.', dados.videos[ex.id] ?? '')
+    if (novo === null) return
+    const videos = { ...dados.videos }
+    if (novo.trim() === '') delete videos[ex.id]
+    else if (lerVideo(novo)) videos[ex.id] = novo.trim()
+    else return alert('Link não aceite. Usa um link do YouTube ou do Vimeo.')
+    await db.gravar('videos', videos)
+  }
+
+  async function substituir(id: string) {
+    if (series.length > 0 && !confirm('Já registaste séries neste exercício. Trocar apaga-as. Continuar?')) return
+    const s = await abrirSessao(dados.sessoes, plano, treino.id)
+    await alterarRegisto(s.id, p.id, id, (x) => ({ prescricaoId: x.prescricaoId, exercicioId: id, series: [] }))
+    setTrocar(false)
+  }
+
+  const semana = semanaDoPlano(plano, agoraIso())
+  const proximo = treino.prescricoes.find(
+    (x) => x.id !== p.id && sessao && !['feito', 'saltado'].includes(estadoExercicio(registoDe(sessao, x.id), prescricaoEfetiva(x, plano, semana))),
+  )
+  const unidade = emSegundos ? 's' : 'reps'
+
+  return (
+    <>
+      {descanso && <Temporizador fimEm={descanso} fechar={() => setDescanso(null)} />}
+      <button onClick={() => ir('/hoje')} style={{ marginTop: 12 }}>‹ {treino.nome}</button>
+      <h1>{ex.nome}</h1>
+      <p>
+        <span className="chip">{NOMES_GRUPOS[ex.grupoPrincipal]}</span>{' '}
+        {ex.gruposSecundarios.map((g) => <span key={g} className="secundario">{NOMES_GRUPOS[g]} · </span>)}
+      </p>
+      <p>{ex.objetivo}</p>
+      {p.nota && ex.id === p.exercicioId && <p className="secundario">{p.nota}</p>}
+
+      <div className="linha">
+        {video ? (
+          <button onClick={() => setVerVideo(true)}>▶ Ver vídeo</button>
+        ) : (
+          <a className="botao" href={pesquisaYoutube(ex.nome)} target="_blank" rel="noopener noreferrer">Procurar vídeo</a>
+        )}
+        <button onClick={mudarVideo}>Mudar vídeo</button>
+      </div>
+      {verVideo && video && <VideoModal video={video} titulo={ex.nome} fechar={() => setVerVideo(false)} />}
+
+      <details className="cartao">
+        <summary>Como fazer</summary>
+        <ul>{ex.pontosChave.map((k) => <li key={k}>{k}</li>)}</ul>
+        {ex.contraindicacoes.length > 0 && <p className="secundario">Cuidado se tiveres dor em: {ex.contraindicacoes.join(', ')}.</p>}
+      </details>
+
+      <div className={`cartao ${sugestao.alerta === 'parar' ? 'perigo-borda' : sugestao.alerta ? 'aviso' : ''}`}>
+        <h3>Hoje: {ef.series} × {ef.faixa[0]}–{ef.faixa[1]} {unidade} · RIR {ef.rir[0]}–{ef.rir[1]}</h3>
+        <p>
+          <strong>Sugestão: {sugestao.carga !== null && !semCarga ? `${kg(sugestao.carga)} kg × ` : ''}{sugestao.reps} {unidade}</strong>
+        </p>
+        <p className="secundario">{sugestao.motivo}</p>
+        {ultima && (
+          <p className="secundario">
+            Última vez: {semCarga ? '' : `${kg(ultima.series[0]!.carga)} kg × `}{ultima.series.map((s) => s.reps).join(', ')}{ultima.dor ? ` · dor ${ultima.dor}/10` : ''}
+          </p>
+        )}
+        <p className="secundario">RIR = repetições que ainda conseguias fazer no fim da série.</p>
+      </div>
+
+      {series.length > 0 && (
+        <div className="cartao">
+          <div className="series">
+            <strong>#</strong><strong>{semCarga ? '' : 'kg'}</strong><strong>{unidade}</strong><strong>RIR</strong><span />
+            {series.map((s, i) => (
+              <Linha key={i} n={i + 1} s={s} semCarga={semCarga} apagar={() => alterar((x) => ({ ...x, series: x.series.filter((_, j) => j !== i), concluido: false }))} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {estado === 'saltado' ? (
+        <div className="cartao">
+          <p>Exercício saltado.</p>
+          <button onClick={() => alterar((x) => ({ ...x, saltado: false }))}>Desfazer</button>
+        </div>
+      ) : estado === 'feito' ? (
+        <div className="cartao ok-borda">
+          <p><strong>Exercício feito ✓</strong></p>
+          <div className="linha">
+            <button onClick={() => alterar((x) => ({ ...x, concluido: false, series: x.series }))} disabled={series.length >= ef.series}>Mais uma série</button>
+            {proximo ? (
+              <button className="primario" onClick={() => ir(`/exercicio/${encodeURIComponent(proximo.id)}`)}>Próximo exercício</button>
+            ) : (
+              <button className="primario" onClick={() => ir('/hoje')}>Voltar ao treino</button>
+            )}
+          </div>
+        </div>
+      ) : (
+        <div className="cartao">
+          <h3>Série {series.length + 1} de {ef.series}</h3>
+          <div className="linha">
+            {!semCarga && (
+              <div><label htmlFor="carga">Carga (kg)</label><input id="carga" inputMode="decimal" value={carga} onChange={(e) => setCarga(e.target.value)} /></div>
+            )}
+            <div><label htmlFor="reps">{emSegundos ? 'Segundos' : 'Repetições'}</label><input id="reps" inputMode="numeric" value={reps} onChange={(e) => setReps(e.target.value)} /></div>
+          </div>
+          <label>RIR (opcional)</label>
+          <div className="linha" role="radiogroup" aria-label="RIR">
+            {[0, 1, 2, 3, 4, 5].map((n) => (
+              <button key={n} role="radio" aria-checked={rir === n} className={rir === n ? 'primario' : ''} onClick={() => setRir(rir === n ? undefined : n)} style={{ minWidth: 44, padding: 6 }}>
+                {n === 5 ? '5+' : n}
+              </button>
+            ))}
+          </div>
+          {erro && <p role="alert" style={{ color: 'var(--perigo)' }}>{erro}</p>}
+          <button className="primario largo" style={{ marginTop: 12 }} onClick={concluirSerie}>Concluir série</button>
+          <div className="linha" style={{ marginTop: 8 }}>
+            {series.length > 0 && <button onClick={() => alterar((x) => ({ ...x, concluido: true }))}>Terminar exercício</button>}
+            <button onClick={() => alterar((x) => ({ ...x, saltado: true }))}>Saltar</button>
+          </div>
+        </div>
+      )}
+
+      <div className="cartao">
+        <label htmlFor="dor">Dor ou desconforto neste exercício: {dor}/10</label>
+        <input id="dor" type="range" min={0} max={10} value={dor} onChange={(e) => mudarDor(Number(e.target.value))} />
+        {dor >= 7 && <p role="alert" style={{ color: 'var(--perigo)' }}>Dor forte: para este exercício hoje e procura avaliação de um profissional de saúde.</p>}
+        {dor >= 4 && dor < 7 && <p className="secundario">Dor moderada: não subas a carga; considera trocar de exercício.</p>}
+      </div>
+
+      <button className="largo" onClick={() => setTrocar(!trocar)}>Substituir exercício</button>
+      {trocar && (
+        <div className="cartao">
+          {substitutos.length === 0 ? <p className="secundario">Não há substitutos compatíveis com as tuas restrições e equipamento.</p> : (
+            <ul className="lista">
+              {substitutos.map((s) => (
+                <li key={s.id}>
+                  <button className="item" onClick={() => substituir(s.id)}>
+                    <span className="corpo"><span className="titulo">{s.nome}</span><br /><span className="secundario">{s.objetivo}</span></span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+    </>
+  )
+}
+
+function Linha({ n, s, semCarga, apagar }: { n: number; s: Serie; semCarga: boolean; apagar: () => void }) {
+  return (
+    <>
+      <span>{n}</span>
+      <span>{semCarga ? '' : kg(s.carga)}</span>
+      <span>{s.reps}</span>
+      <span>{s.rir ?? '–'}</span>
+      <button onClick={apagar} aria-label={`Apagar série ${n}`} style={{ minHeight: 36, padding: '4px 10px' }}>✕</button>
+    </>
+  )
+}
