@@ -29,6 +29,8 @@ describe('F2 geração do plano', () => {
     [3, ['Corpo inteiro A', 'Corpo inteiro B', 'Corpo inteiro C']],
     [4, ['Superior A', 'Inferior A', 'Superior B', 'Inferior B']],
     [5, ['Superior A', 'Inferior A', 'Superior B', 'Inferior B', 'Corpo inteiro A']],
+    [6, ['Empurrar A', 'Puxar A', 'Pernas A', 'Empurrar B', 'Puxar B', 'Pernas B']],
+    [7, ['Empurrar A', 'Puxar A', 'Pernas A', 'Empurrar B', 'Puxar B', 'Pernas B', 'Recuperação ativa']],
   ] as const)('3.1 %i dias por semana gera a divisão certa', (dias, nomes) => {
     expect(gerar({ diasPorSemana: dias }).treinos.map((t) => t.nome)).toEqual(nomes)
   })
@@ -44,6 +46,31 @@ describe('F2 geração do plano', () => {
       ).length
       expect(n, g).toBeGreaterThanOrEqual(2)
     }
+  })
+
+  it('3.1 com 6 dias (A/B/C duas vezes), cada grupo grande é treinado em pelo menos 2 treinos e tem 8+ séries', () => {
+    const p = gerar({ diasPorSemana: 6 })
+    for (const g of GRUPOS_GRANDES) {
+      const n = p.treinos.filter((t) => t.prescricoes.some((x) => catalogo.get(x.exercicioId)!.grupoPrincipal === g || catalogo.get(x.exercicioId)!.gruposSecundarios.includes(g))).length
+      expect(n, g).toBeGreaterThanOrEqual(2)
+      expect(volumeSemanal(p)[g as GrupoMuscular], g).toBeGreaterThanOrEqual(8)
+    }
+  })
+
+  it('3.1 com 7 dias o sétimo é recuperação ativa: leve, com caminhada, sem compostos', () => {
+    const rec = gerar({ diasPorSemana: 7, aceitaCardio: false }).treinos.at(-1)!
+    expect(rec.cardioMin).toBe(20)
+    expect(rec.prescricoes.length).toBeGreaterThan(0)
+    for (const x of rec.prescricoes) {
+      expect(x).toMatchObject({ series: 2, rir: [3, 4] })
+      expect(catalogo.get(x.exercicioId)!.tipo).toBe('isolado')
+    }
+  })
+
+  it('F1 «Nenhuma» restrição: exercícios base e sem avisos de avaliação', () => {
+    const p = gerar({ restricoes: [] })
+    expect(p.avisos).toEqual([])
+    expect(p.treinos.flatMap((t) => t.prescricoes).every((x) => x.nota === undefined)).toBe(true)
   })
 
   it('F2.2 restrição de ombro: nenhum exercício contraindicado; usa o primeiro substituto compatível', () => {
@@ -85,7 +112,7 @@ describe('F2 geração do plano', () => {
 
   it('F2.3 cada treino cabe na duração declarada', () => {
     for (const duracaoMin of [45, 60, 75] as const)
-      for (const diasPorSemana of [2, 3, 4, 5] as const)
+      for (const diasPorSemana of [2, 3, 4, 5, 6, 7] as const)
         for (const t of gerar({ duracaoMin, diasPorSemana }).treinos)
           expect(t.duracaoEstimadaMin, `${t.nome} ${duracaoMin}`).toBeLessThanOrEqual(duracaoMin)
   })

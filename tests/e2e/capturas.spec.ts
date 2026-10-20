@@ -20,6 +20,8 @@ test('capturas', async ({ page }) => {
   await page.screenshot({ path: `${process.env.CAPTURAS}/3-exercicio.png` })
   await page.getByRole('button', { name: /‹ Superior A/ }).click()
   await page.screenshot({ path: `${process.env.CAPTURAS}/2-hoje.png` })
+  await page.getByRole('link', { name: 'Início' }).click()
+  await page.screenshot({ path: `${process.env.CAPTURAS}/5-inicio.png`, fullPage: true })
   await page.getByRole('link', { name: 'Relatórios' }).click()
   await page.getByRole('tab', { name: 'Semana' }).click()
   await page.screenshot({ path: `${process.env.CAPTURAS}/4-semana.png`, fullPage: true })

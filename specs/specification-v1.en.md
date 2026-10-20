@@ -2,7 +2,7 @@
 
 **English** · [Português](especificacao-v1.md)
 
-Date: 2026-10-20 · Version 1.1 (adjustments made during implementation are marked v1.1)
+Date: 2026-10-20 · Version 1.2 (adjustments made during implementation are marked v1.1; new features are marked v1.2)
 
 The Portuguese version is the reference used for the domain names in the code. Both versions must stay in sync.
 
@@ -35,16 +35,20 @@ These names are used identically in the specification, the code and the UI. The 
 | **Pain** (`Dor`) | 0–10 rating of an Exercise in a Session |
 | **Measurement** (`Medicao`) | Body weight and waist on a date |
 | **Suggestion** (`Sugestao`) | Load and reps proposed for the next Session (computed, not stored) |
+| **Block** (`Bloco`, v1.2) | Cycle of progression weeks ending with a deload week; its length depends on the goal |
+| **Deload** (`Descarga`) | Week with half the sets and RIR 3–4, to recover before the next block |
+| **Achievement** (`Conquista`, v1.2) | Milestone computed from history (e.g. 10 workouts, 4 consecutive weeks met) |
 
 RIR = reps in reserve: how many more reps you could still have done at the end of the set.
 
 ## 2. Features and acceptance criteria
 
 ### F1. Anamnesis
-- Fields: age, height, weight, waist, sex, goal (body recomposition, hypertrophy, strength, general health), days per week (2–5), session length (45/60/75 min), experience (beginner, returning after a break, intermediate), equipment (full gym, dumbbells only, home), restrictions, accepts cardio (yes/no), PAR-Q+ (7 general questions).
+- Fields: age, height, weight, waist, sex, goal (body recomposition, hypertrophy, strength, general health), days per week (2–7), session length (45/60/75 min), experience (beginner, returning after a break, intermediate), equipment (full gym, dumbbells only, home), restrictions (painful areas, or "None"), accepts cardio (yes/no), PAR-Q+ (7 general questions).
 - **Given** I answer "yes" to any PAR-Q+ question, **when** I save, **then** I see a warning recommending medical clearance before training, and the plan is generated at conservative intensity and flagged as such.
 - **Given** I report a restriction that has not been professionally assessed, **then** the app recommends an assessment, without blocking.
 - **When** I change the anamnesis, **then** the app asks whether to generate a new plan; history is kept.
+- (v1.2) **Given** I tick "None" under pain or limitations, **then** every area is unticked, the plan uses the base exercises and there are no assessment warnings. Saving requires either "None" or at least one area.
 
 ### F2. Plan generation (rules in section 3)
 - **Given** an anamnesis, **when** I generate the plan, **then** the result is always the same for the same input (deterministic).
@@ -71,6 +75,7 @@ RIR = reps in reserve: how many more reps you could still have done at the end o
 - Primary and secondary groups, the exercise's purpose in 1–2 sentences, key technique points, contraindications.
 - **When** I tap the video, **then** a player opens in an overlay inside the app.
 - **Given** the video does not allow embedding or the link is not from an allowed domain, **then** an "open in YouTube/Vimeo" button is shown.
+- (v1.2) Ads: the app does not block YouTube ads. The player belongs to YouTube, on another origin, and the app cannot change it; working around ads breaches YouTube's terms. Ad-free options: Vimeo links, or opening in YouTube with YouTube Premium.
 
 ### F6. Progression (rules in section 4)
 - **Given** the history, **when** I open an exercise, **then** I see the Suggestion and its reason (e.g. "you did 12 reps on every set: go up to 22 kg").
@@ -92,6 +97,26 @@ RIR = reps in reserve: how many more reps you could still have done at the end o
 - Export everything as JSON (and history as CSV). Import JSON with schema validation; an invalid file is rejected without changing any data.
 - Visual reminder after more than 14 days since the last export.
 
+### F11. Home (`Início`, v1.2)
+- First tab of the bottom bar and the screen the app opens on. Minimal, read-only dashboard.
+- Shows: workouts this week vs target (days per week), training hours this week and this month, streak of weeks met, next workout, block phase and next change (F14), this week's volume vs last week (load × reps), personal records this month, adherence over the last 4 weeks, weight trend (7-day average, change over 4 weeks), phrase of the day.
+- Training hours: sum of end − start of finished sessions; each session counts at most 3 h (a session left open by mistake does not distort the total). Week runs Monday to Sunday; month is the calendar month.
+- **Given** there are no sessions, **then** the dashboard shows zeros and the next workout, without errors.
+
+### F12. Achievements and streak (v1.2)
+- Computed from history, never stored; importing a backup recomputes them.
+- Week met: finished workouts in the week (Monday to Sunday) ≥ the plan's days per week. Streak: consecutive weeks met up to the current week; the current week only counts once it is met and does not break the streak while it is in progress.
+- Volume record week: volume (sum of load × reps) higher than every previous week, from the second week with workouts onwards.
+- Achievements: first workout; 10, 25, 50 and 100 workouts; first week met; 4 and 12 consecutive weeks; first personal record; 10 personal records; first volume record week; one full block (at least one finished workout in every week of a block, deload included).
+- The streak is weekly, not daily, because rest days are part of the plan.
+
+### F13. Phrase of the day and reminders (v1.2)
+- Home shows a short motivational phrase, picked deterministically from the date from a fixed list of Portuguese phrases.
+- Reminders: user decision (2026-10-20): **no reminders**. Technical reason: on iPhone a web app cannot schedule local notifications, and push notifications require a server, which contradicts "data on the device only". Alternative assessed and not adopted: a calendar file (.ics) with a daily reminder, at a fixed time or 15 to 20 min before the usual training time.
+
+### F14. Blocks and next change (v1.2, rules in section 3.7)
+- On Home and on Today's workout: current phase (re-adaptation, week N of M of the block, or deload) and the next change with its date: end of re-adaptation (full sets), deload week (half the sets), or new block (isolation exercises rotate, listing what changes).
+
 ## 3. Plan generation rules (v1)
 
 ### 3.1 Split
@@ -100,6 +125,10 @@ RIR = reps in reserve: how many more reps you could still have done at the end o
 | 2–3 | Full body A/B(/C) |
 | 4 | Upper A, Lower A, Upper B, Lower B |
 | 5 | Upper/Lower + Full body |
+| 6 (v1.2) | Push A, Pull A, Legs A, Push B, Pull B, Legs B (A/B/C twice) |
+| 7 (v1.2) | The 6 days + Active recovery (20 min easy walk and light core, 2 sets at RIR 3–4) |
+
+With 3 days the split is Full body A/B/C rather than Push/Pull/Legs, because that split would train each muscle only once a week. With 7 days, the seventh is always a recovery day: strength training 7 days in a row is not recommended, especially when returning after a break.
 
 Target frequency: each major group 2×/week.
 
@@ -128,6 +157,12 @@ Target frequency: each major group 2×/week.
 ### 3.6 Cardio
 - If accepted: 10–15 min at moderate intensity (able to speak short sentences) at the end of 2 sessions per week.
 
+### 3.7 Blocks, deload and exercise rotation (v1.2)
+- Block length by goal: strength 4 weeks (3 + deload); recomposition and hypertrophy 5 weeks (4 + deload); general health 6 weeks (5 + deload). Stored in the plan (`semanasBloco`).
+- Weeks count from plan creation. With re-adaptation, weeks 1–2 are re-adaptation and the first block starts in week 3.
+- Deload (last week of each block): sets = half rounded up, RIR 3–4, load stays the same (no increase).
+- Rotation: at the start of each block, isolation exercises move to the next compatible alternative (catalogue substitutes, same restriction and equipment rules, no repeated exercise within a workout). Compounds stay, so progression stays visible. Alternatives are stored in the prescription (`alternativas`), and block n uses alternative n modulo the number of alternatives.
+
 ## 4. Progression rules (double progression)
 
 For each Prescription with range [min, max]:
@@ -136,6 +171,7 @@ For each Prescription with range [min, max]:
 3. If below min reps in 2 consecutive sessions: reduce the load by 10%.
 4. Pain ≥ 4: no load increase and a substitute is suggested. Pain ≥ 7: recommends stopping the exercise today and shows a warning to get assessed.
 5. Re-adaptation phase: no load increase in the first 2 sessions of each exercise.
+6. (v1.2) Deload week: keep the last session's load, no increase.
 
 ## 5. Non-functional requirements
 - Works offline after the first visit.
@@ -153,7 +189,7 @@ For each Prescription with range [min, max]:
 - Personal data never enters the repository: the anamnesis is filled in on the phone and tests use a fictitious profile. That is why the repository can be public.
 
 ## 7. Out of scope for v1
-Cross-device sync, push notifications, Apple Health, multiple users, AI, social features, plate calculator, automatic deload.
+Cross-device sync, notifications and reminders (on iPhone they need a server; no reminders by user decision), ad blocking, Apple Health, multiple users, AI, social features, plate calculator.
 
 ## 8. Technical structure
 ```
@@ -177,5 +213,6 @@ Fictitious profile used in the tests: recomposition, 4 days, 60 min, full gym, r
 - **Upper B:** converging machine chest press, one-arm dumbbell row, neutral-grip pulldown, face pull, hammer curl, cable triceps pushdown.
 - **Lower B:** goblet squat, hip thrust, Bulgarian split squat, seated leg curl, dead bug; 10 min cardio. (v1.1: the seated leg curl replaced the leg extension so hamstrings are trained 2×/week.)
 - Weeks 1–2: 2 sets per exercise, RIR 3–4. Then: 3 sets, RIR 1–3.
+- (v1.2) 5-week blocks from week 3: weeks 3–6 progression, week 7 deload; block 2 starts in week 8 and, for example, the dumbbell curl becomes a hammer curl and the rope extension becomes a cable pushdown.
 
 The catalogue's video links can be replaced in the app with other YouTube or Vimeo links.

@@ -107,3 +107,49 @@ test('F9 e F10: medições, exportação e importação inválida', async ({ pag
   await page.getByRole('link', { name: 'Medições' }).click()
   await expect(page.getByText('92,4 kg')).toBeVisible()
 })
+
+test('F1 v1.2: 7 dias e «Nenhuma» geram Empurrar/Puxar/Pernas com recuperação ativa', async ({ page }) => {
+  await page.goto('./')
+  await page.getByLabel('Idade').fill('45')
+  await page.getByLabel('Altura (cm)').fill('175')
+  await page.getByLabel('Peso (kg)').fill('85')
+  await page.getByLabel('Dias por semana').selectOption('7')
+  await expect(page.getByText(/1 dia de recuperação ativa/)).toBeVisible()
+  for (let i = 0; i < 7; i++) await page.locator(`input[name="parq-${i}"]`).nth(1).check()
+  await page.getByRole('button', { name: 'Gerar o meu plano' }).click()
+  await expect(page.getByText(/marca «Nenhuma» ou pelo menos uma zona/)).toBeVisible()
+
+  await page.getByLabel('Ombro').check()
+  await page.getByLabel('Nenhuma').check()
+  await expect(page.getByLabel('Ombro')).not.toBeChecked()
+  await page.getByRole('button', { name: 'Gerar o meu plano' }).click()
+
+  await expect(page.getByRole('heading', { name: 'Empurrar A' })).toBeVisible()
+  await expect(page.getByText('Supino reto com barra')).toBeVisible()
+  await expect(page.getByText(/sobre o teu plano/)).toHaveCount(0)
+  await expect(page.getByText(/Readaptação, semana 1 de 2/)).toBeVisible()
+  await expect(page.getByLabel('Fazer outro treino').locator('option')).toHaveText([
+    'Empurrar A (próximo)', 'Puxar A', 'Pernas A', 'Empurrar B', 'Puxar B', 'Pernas B', 'Recuperação ativa',
+  ])
+})
+
+test('F11 e F12: o Início mostra o painel e as conquistas depois de um treino', async ({ page }) => {
+  await preencherAnamnese(page)
+  await page.getByRole('link', { name: 'Início' }).click()
+  await expect(page.getByRole('heading', { name: 'Início' })).toBeVisible()
+  await expect(page.getByText('Superior A · ~')).toBeVisible()
+  await expect(page.locator('.indicador').filter({ hasText: 'treinos' }).first()).toContainText('0/4')
+
+  await page.getByRole('button', { name: /Próximo treino/ }).click()
+  for (const nome of ['Supino com halteres, pega neutra', 'Remada sentada no cabo (triângulo)', 'Puxada à frente na polia alta', 'Elevação lateral com halteres', 'Rosca alternada com halteres', 'Extensão de tríceps na polia com corda']) {
+    await page.getByText(nome, { exact: true }).click()
+    await page.getByRole('button', { name: 'Saltar', exact: true }).click()
+    await page.getByRole('button', { name: /‹ Superior A/ }).click()
+  }
+  await page.getByRole('button', { name: 'Terminar treino' }).click()
+
+  await page.getByRole('link', { name: 'Início' }).click()
+  await expect(page.locator('.indicador').filter({ hasText: 'treinos' }).first()).toContainText('1/4')
+  await expect(page.getByText('Inferior A · ~')).toBeVisible()
+  await expect(page.locator('.conquistas li.obtida')).toHaveText([/Primeiro treino/])
+})

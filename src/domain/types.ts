@@ -58,6 +58,9 @@ export interface Exercicio {
   video?: string
 }
 
+export const DIAS_POR_SEMANA = [2, 3, 4, 5, 6, 7] as const
+export type DiasPorSemana = (typeof DIAS_POR_SEMANA)[number]
+
 export type Objetivo = 'recomposicao' | 'hipertrofia' | 'forca' | 'saude'
 export type Experiencia = 'iniciante' | 'regresso' | 'intermedio'
 export type AcessoEquipamento = 'ginasio' | 'halteres' | 'casa'
@@ -77,7 +80,7 @@ export interface Anamnese {
   cinturaCm?: number
   sexo: Sexo
   objetivo: Objetivo
-  diasPorSemana: 2 | 3 | 4 | 5
+  diasPorSemana: DiasPorSemana
   duracaoMin: 45 | 60 | 75
   experiencia: Experiencia
   equipamento: AcessoEquipamento
@@ -96,6 +99,8 @@ export interface Prescricao {
   rir: [number, number]
   descansoSeg: number
   nota?: string
+  /** Secção 3.7: exercícios por ordem de rotação, um por bloco (o primeiro é o do bloco 1). */
+  alternativas?: string[]
 }
 
 export interface TreinoModelo {
@@ -113,6 +118,8 @@ export interface Plano {
   versaoRegras: number
   conservador: boolean
   readaptacao: boolean
+  /** Secção 3.7: semanas de cada bloco, descarga incluída. Planos antigos não têm (vale 5). */
+  semanasBloco?: number
   treinos: TreinoModelo[]
   avisos: string[]
 }

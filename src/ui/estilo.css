@@ -97,3 +97,14 @@ input[type='range'] { padding: 0; }
 .abas button[aria-selected='true'] { background: var(--acento); color: var(--acento-texto); border-color: var(--acento); }
 details > summary { cursor: pointer; min-height: 40px; display: flex; align-items: center; font-weight: 600; }
 .visualmente-oculto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.frase { font-style: italic; color: var(--texto-2); margin: 4px 0 12px; }
+button.proximo { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; width: 100%; text-align: left; border-left: 4px solid var(--acento); }
+button.proximo .titulo { font-weight: 600; font-size: 1.1rem; }
+.indicadores { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; text-align: center; }
+.indicador { display: flex; flex-direction: column; min-width: 0; }
+.indicador .valor { font-size: 1.35rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.indicador .secundario { font-size: 0.8rem; }
+.conquistas { list-style: none; padding: 0; margin: 8px 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; }
+.conquistas li { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 10px 4px; border: 1px solid var(--linha); border-radius: 12px; background: var(--cartao); font-size: 0.8rem; text-align: center; opacity: 0.4; filter: grayscale(1); }
+.conquistas li.obtida { opacity: 1; filter: none; border-color: var(--acento); }
+.conquistas li > span:first-child { font-size: 1.5rem; }

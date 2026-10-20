@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import type { Catalogo } from './catalogo'
-import { AREAS } from './types'
+import { AREAS, DIAS_POR_SEMANA } from './types'
 import type { Anamnese, Medicao, Plano, Sessao } from './types'
 import { lerVideo } from './video'
 
@@ -27,7 +27,7 @@ const anamnese = z.strictObject({
   cinturaCm: z.number().min(30).max(250).optional(),
   sexo: z.enum(['masculino', 'feminino', 'outro']),
   objetivo: z.enum(['recomposicao', 'hipertrofia', 'forca', 'saude']),
-  diasPorSemana: z.union([z.literal(2), z.literal(3), z.literal(4), z.literal(5)]),
+  diasPorSemana: z.union(DIAS_POR_SEMANA.map((d) => z.literal(d))),
   duracaoMin: z.union([z.literal(45), z.literal(60), z.literal(75)]),
   experiencia: z.enum(['iniciante', 'regresso', 'intermedio']),
   equipamento: z.enum(['ginasio', 'halteres', 'casa']),
@@ -43,6 +43,7 @@ const plano = z.strictObject({
   versaoRegras: z.number().int(),
   conservador: z.boolean(),
   readaptacao: z.boolean(),
+  semanasBloco: inteiro(2, 12).optional(),
   avisos: z.array(z.string().max(500)).max(50),
   treinos: z.array(z.strictObject({
     id,
@@ -58,6 +59,7 @@ const plano = z.strictObject({
       rir: faixa,
       descansoSeg: inteiro(0, 600),
       nota: z.string().max(500).optional(),
+      alternativas: z.array(id).min(1).max(10).optional(),
     })).max(20),
   })).max(7),
 })

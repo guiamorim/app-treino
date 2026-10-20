@@ -15,6 +15,8 @@ export interface Entrada {
   /** Sessões anteriores deste exercício, da mais antiga para a mais recente. */
   historico: RegistoExercicio[]
   readaptacao: boolean
+  /** Secção 4.6: semana de descarga. */
+  descarga?: boolean
 }
 
 const PASSO_SEGUNDOS = 5
@@ -25,7 +27,7 @@ const arredondar = (kg: number) => Math.floor(kg * 2) / 2
 const fmt = (kg: number) => kg.toLocaleString('pt-PT')
 
 /** Especificação, secção 4 (dupla progressão). */
-export function sugerir({ prescricao, exercicio, historico, readaptacao }: Entrada): Sugestao {
+export function sugerir({ prescricao, exercicio, historico, readaptacao, descarga }: Entrada): Sugestao {
   const [min, max] = prescricao.faixa
   const comSeries = historico.filter((h) => h.series.length > 0)
   const ultima = comSeries.at(-1)
@@ -56,6 +58,10 @@ export function sugerir({ prescricao, exercicio, historico, readaptacao }: Entra
       alerta: 'parar',
       motivo: `Na última sessão registaste dor ${dor}/10. Recomenda-se não fazer este exercício hoje e procurar avaliação de um profissional de saúde.`,
     }
+  }
+
+  if (descarga) {
+    return { carga, reps: min, subiu: false, motivo: `Semana de descarga: ${carga > 0 ? `mantém ${fmt(carga)} kg, ` : ''}faz menos séries e para longe da falha (RIR ${prescricao.rir[0]}–${prescricao.rir[1]}).` }
   }
 
   if (exercicio.medida === 'segundos') {

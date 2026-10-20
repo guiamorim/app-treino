@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { db } from '../data/db'
 import { gerarPlano } from '../domain/plano'
-import { AREAS, type Anamnese, type Area, type Restricao } from '../domain/types'
+import { AREAS, DIAS_POR_SEMANA, type Anamnese, type Area, type Restricao } from '../domain/types'
 import { agoraIso, catalogo, novoId, type Dados } from './dados'
 import { ir } from './rota'
 
@@ -15,6 +15,15 @@ export const PERGUNTAS_PARQ = [
   'Tens (ou tiveste nos últimos 12 meses) um problema de ossos, articulações, músculos, ligamentos ou tendões que possa piorar com mais atividade física?',
   'Algum médico já te disse que só deves fazer atividade física com supervisão médica?',
 ]
+
+const DICA_DIAS: Record<number, string> = {
+  2: 'Corpo inteiro A e B.',
+  3: 'Corpo inteiro A, B e C.',
+  4: 'Superior e inferior, A e B.',
+  5: 'Superior e inferior, A e B, mais corpo inteiro.',
+  6: 'A/B/C duas vezes: empurrar, puxar e pernas.',
+  7: 'A/B/C duas vezes e 1 dia de recuperação ativa (treinar força 7 dias seguidos não é recomendável).',
+}
 
 const NOMES_AREAS: Record<Area, string> = { ombro: 'Ombro', joelho: 'Joelho', lombar: 'Lombar', punho: 'Punho', anca: 'Anca', cotovelo: 'Cotovelo' }
 
@@ -34,6 +43,8 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
     aceitaCardio: a?.aceitaCardio ?? true,
   })
   const [restricoes, setRestricoes] = useState<Restricao[]>(a?.restricoes ?? [])
+  // F1 (v1.2): «Nenhuma» é uma resposta explícita, para não confundir com «esqueci-me de responder».
+  const [semDores, setSemDores] = useState(!!a && a.restricoes.length === 0)
   const [parq, setParq] = useState<(boolean | null)[]>(a?.parq ?? PERGUNTAS_PARQ.map(() => null))
   const [erro, setErro] = useState('')
 
@@ -42,8 +53,14 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
     onChange: (e: { target: { value: string } }) => setF({ ...f, [k]: e.target.value }),
   })
 
-  const alternarArea = (area: Area) =>
+  const alternarArea = (area: Area) => {
+    setSemDores(false)
     setRestricoes((r) => (r.some((x) => x.area === area) ? r.filter((x) => x.area !== area) : [...r, { area, intensidade: 3, avaliadaPorProfissional: false }]))
+  }
+  const marcarNenhuma = (v: boolean) => {
+    setSemDores(v)
+    if (v) setRestricoes([])
+  }
   const mudarRestricao = (area: Area, m: Partial<Restricao>) => setRestricoes((r) => r.map((x) => (x.area === area ? { ...x, ...m } : x)))
 
   async function guardar(e: FormEvent) {
@@ -54,6 +71,7 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
     if (!(alturaCm >= 100 && alturaCm <= 250)) return setErro('Indica a altura em centímetros (ex.: 175).')
     if (!(pesoKg >= 20 && pesoKg <= 400)) return setErro('Indica o peso em kg.')
     if (f.cinturaCm && !(cintura >= 30 && cintura <= 250)) return setErro('Indica a cintura em centímetros ou deixa em branco.')
+    if (!semDores && restricoes.length === 0) return setErro('Nas dores ou limitações, marca «Nenhuma» ou pelo menos uma zona.')
     if (parq.some((x) => x === null)) return setErro('Responde a todas as perguntas de saúde (PAR-Q+).')
 
     const nova: Anamnese = {
@@ -104,12 +122,13 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
       </select>
       <div className="linha">
         <div><label htmlFor="dias">Dias por semana</label>
-          <select id="dias" {...campo('diasPorSemana')}>{[2, 3, 4, 5].map((d) => <option key={d} value={d}>{d}</option>)}</select>
+          <select id="dias" {...campo('diasPorSemana')}>{DIAS_POR_SEMANA.map((d) => <option key={d} value={d}>{d}</option>)}</select>
         </div>
         <div><label htmlFor="duracao">Minutos por treino</label>
           <select id="duracao" {...campo('duracaoMin')}>{[45, 60, 75].map((d) => <option key={d} value={d}>{d}</option>)}</select>
         </div>
       </div>
+      <p className="secundario">{DICA_DIAS[Number(f.diasPorSemana)]}</p>
       <label htmlFor="experiencia">Experiência</label>
       <select id="experiencia" {...campo('experiencia')}>
         <option value="iniciante">Iniciante</option>
@@ -126,6 +145,7 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
 
       <h2>Dores ou limitações</h2>
       <p className="secundario">Marca as zonas onde costumas ter dor. O plano evita os exercícios que as sobrecarregam.</p>
+      <label className="opcao"><input type="checkbox" checked={semDores} onChange={(e) => marcarNenhuma(e.target.checked)} /> Nenhuma</label>
       {AREAS.map((area) => {
         const r = restricoes.find((x) => x.area === area)
         return (

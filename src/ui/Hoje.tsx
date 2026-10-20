@@ -4,6 +4,7 @@ import { estadoExercicio, estadoSessao, proximoTreino, registoDe } from '../doma
 import { NOMES_GRUPOS, type EstadoExercicio, type Plano } from '../domain/types'
 import { abrirSessao, sessaoAberta, terminarSessao } from './acoes'
 import { agoraIso, catalogo, dataCurta, type Dados } from './dados'
+import { textoFase } from './Fase'
 import { ir } from './rota'
 
 const ICONES: Record<EstadoExercicio, string> = { 'por-fazer': '', 'em-curso': '•', feito: '✓', saltado: '–' }
@@ -34,9 +35,7 @@ export function Hoje({ dados, plano }: { dados: Dados; plano: Plano }) {
   return (
     <>
       <h1>{treino.nome}</h1>
-      <p className="secundario">
-        Semana {semana} do plano{plano.readaptacao && semana <= 2 ? ' · readaptação: 2 séries leves' : ''} · ~{treino.duracaoEstimadaMin} min
-      </p>
+      <p className="secundario">~{treino.duracaoEstimadaMin} min · {textoFase(plano, semana)}</p>
       <p>{treino.sintese}</p>
 
       {plano.avisos.length > 0 && (

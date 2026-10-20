@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 
 export type Rota =
+  | { ecra: 'inicio' }
   | { ecra: 'hoje' }
   | { ecra: 'exercicio'; prescricaoId: string }
   | { ecra: 'relatorios' }
@@ -13,13 +14,14 @@ export function lerRota(hash: string): Rota {
   switch (ecra) {
     case 'exercicio':
       return arg ? { ecra: 'exercicio', prescricaoId: decodeURIComponent(arg) } : { ecra: 'hoje' }
+    case 'hoje':
     case 'relatorios':
     case 'medicoes':
     case 'mais':
     case 'anamnese':
       return { ecra }
     default:
-      return { ecra: 'hoje' }
+      return { ecra: 'inicio' }
   }
 }
 
