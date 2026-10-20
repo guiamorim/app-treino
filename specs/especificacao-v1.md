@@ -1,5 +1,7 @@
 # App de treino: especificação v1
 
+[English](specification-v1.en.md) · **Português**
+
 Data: 2026-10-20 · Versão 1.1 (ajustes feitos durante a implementação, marcados com v1.1)
 
 ## 0. Decisões fechadas
@@ -7,7 +9,7 @@ Data: 2026-10-20 · Versão 1.1 (ajustes feitos durante a implementação, marca
 | Tema | Decisão |
 |---|---|
 | Plataforma | PWA instalada no ecrã inicial do iPhone; também abre em qualquer navegador |
-| Dados | Só no dispositivo (IndexedDB), com exportação e importação de cópia de segurança. Sincronização fica fora da v1 (a resposta à pergunta 2 veio com as duas opções; assumi a recomendada) |
+| Dados | Só no dispositivo (IndexedDB), com exportação e importação de cópia de segurança. Sincronização fica fora da v1 |
 | Utilizadores | Um só, sem login |
 | Plano | Gerado por regras determinísticas a partir da anamnese, sem IA |
 | Restrições | Uma dor nunca avaliada gera recomendação de avaliação; exercícios contraindicados são substituídos |
@@ -113,7 +115,7 @@ Frequência alvo: cada grupo principal 2×/semana.
 ### 3.4 Restrições
 - Cada exercício tem contraindicações (ex.: `ombro`) e substitutos ordenados.
 - Exercício contraindicado é trocado pelo primeiro substituto sem a mesma contraindicação; se não houver, o exercício é removido e o volume do grupo é redistribuído.
-- Reintrodução: um exercício evitado só é sugerido de novo depois de 4 sessões seguidas com dor ≤ 2 no substituto, e sempre como opção, nunca automaticamente.
+- Reintrodução (**por implementar**): um exercício evitado só é sugerido de novo depois de 4 sessões seguidas com dor ≤ 2 no substituto, e sempre como opção, nunca automaticamente. Na v1 pode ser trocado à mão em «Substituir exercício».
 
 ### 3.5 Duração
 - Estimativa por série: 45 s de execução + descanso prescrito. Aquecimento: 8 min. Cardio opcional: 10–15 min no fim dos dias de inferiores.
@@ -143,22 +145,25 @@ Para cada Prescrição com faixa [mín, máx]:
 - iframe com `sandbox="allow-scripts allow-same-origin allow-presentation"` e `referrerpolicy="strict-origin-when-cross-origin"`.
 - Nenhum conteúdo de dados inserido como HTML.
 - Importação validada por esquema (Zod).
-- Integração contínua: testes, lint, `npm audit`, Dependabot, análise de segredos; ramo principal protegido.
-- Os teus dados nunca entram no repositório: a anamnese é preenchida no telemóvel. Por isso o repositório pode ser público sem expor nada pessoal.
+- Integração contínua: typecheck, testes de unidade e ponta a ponta, `npm audit`; Dependabot ativo. A análise de segredos do GitHub aplica-se a repositórios públicos. Proteção do ramo principal: **por configurar**.
+- Dados pessoais nunca entram no repositório: a anamnese é preenchida no telemóvel e os testes usam um perfil fictício. Por isso o repositório pode ser público.
 
 ## 7. Fora da v1
 Sincronização entre dispositivos, notificações push, Apple Health, vários utilizadores, IA, social, calculadora de discos, deload automático.
 
 ## 8. Estrutura técnica
 ```
-specs/            esta especificação, dividida por funcionalidade
+specs/            esta especificação (PT e EN)
+docs/             análise de mercado e metodologia (PT e EN)
 src/domain/       TypeScript puro: plano, progressão, relatórios (TDD, sem dependências de UI)
 src/data/         IndexedDB via Dexie, exportação/importação
 src/ui/           React
-catalog/          exercises.json (catálogo versionado)
+src/catalog/      exercicios.json (catálogo versionado)
 tests/e2e/        Playwright: anamnese → plano → sessão → relatório
 ```
-Regra: cada critério de aceitação da secção 2 tem pelo menos um teste com o seu código (ex.: `F4.3`).
+Regra: cada critério de aceitação da secção 2 tem pelo menos um teste com o seu código (ex.: `F4`, `3.2`).
+
+Documentação: toda a documentação do repositório existe em português e em inglês; qualquer alteração atualiza as duas versões.
 
 ## 9. Exemplo de resultado das regras
 Perfil fictício usado nos testes: recomposição, 4 dias, 60 min, ginásio completo, regresso após paragem, restrição de ombro, aceita cardio curto.
