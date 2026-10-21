@@ -3,6 +3,7 @@ import { db } from '../data/db'
 import { paraCsv } from '../domain/copia'
 import { agoraIso, catalogo, dataCurta, diasDesde, hojeIso, type Dados } from './dados'
 import { ir } from './rota'
+import { reduzirImagem } from './imagem'
 
 function descarregar(nome: string, conteudo: string, tipo: string) {
   const url = URL.createObjectURL(new Blob([conteudo], { type: tipo }))
@@ -26,7 +27,7 @@ export function Mais({ dados }: { dados: Dados }) {
   async function importar(f: File) {
     if (!confirm('Importar substitui todos os dados deste dispositivo pelos do ficheiro. Continuar?')) return
     try {
-      if (f.size > 20_000_000) throw new Error('Ficheiro demasiado grande.')
+      if (f.size > 300_000_000) throw new Error('Ficheiro demasiado grande.')
       await db.importar(JSON.parse(await f.text()))
       setMensagem('Cópia importada com sucesso.')
     } catch {
@@ -37,6 +38,8 @@ export function Mais({ dados }: { dados: Dados }) {
   return (
     <>
       <h1>Mais</h1>
+      <PerfilCartao dados={dados} />
+
       <div className="cartao">
         <h3>O teu plano</h3>
         <button className="largo" onClick={() => ir('/anamnese')}>Editar anamnese e gerar novo plano</button>
@@ -48,12 +51,13 @@ export function Mais({ dados }: { dados: Dados }) {
           Os dados existem só neste dispositivo. {dados.ultimaExportacao ? `Última cópia: ${dataCurta(dados.ultimaExportacao)}.` : 'Ainda não fizeste nenhuma cópia.'}
           {dias > 14 && ' Recomenda-se uma cópia a cada 2 semanas (guarda-a no iCloud Drive ou envia-a por email para ti).'}
         </p>
+        {dados.fotos.length > 0 && <p className="secundario">A cópia inclui as tuas {dados.fotos.length} fotos de avaliação: guarda-a num sítio privado.</p>}
         <button className="primario largo" onClick={exportar}>Exportar cópia (JSON)</button>
         <div className="linha" style={{ marginTop: 8 }}>
           <button onClick={() => descarregar(`treino-historico-${hojeIso()}.csv`, paraCsv(dados.sessoes, catalogo), 'text/csv')}>Exportar histórico (CSV)</button>
           <button onClick={() => ficheiro.current?.click()}>Importar cópia</button>
         </div>
-        <input ref={ficheiro} type="file" accept="application/json,.json" hidden onChange={(e) => { const f = e.target.files?.[0]; if (f) void importar(f); e.target.value = '' }} />
+        <input ref={ficheiro} type="file" accept="application/json,.json" hidden aria-label="Ficheiro de cópia" onChange={(e) => { const f = e.target.files?.[0]; if (f) void importar(f); e.target.value = '' }} />
         {mensagem && <p role="status">{mensagem}</p>}
       </div>
 
@@ -66,5 +70,54 @@ export function Mais({ dados }: { dados: Dados }) {
         <p className="secundario">Sem anúncios, sem rastreio, sem servidor. Os vídeos são de terceiros (YouTube/Vimeo).</p>
       </div>
     </>
+  )
+}
+
+/** F16: nome e foto de perfil, usados na saudação do Início. */
+function PerfilCartao({ dados }: { dados: Dados }) {
+  const ficheiro = useRef<HTMLInputElement>(null)
+  const [nome, setNome] = useState(dados.perfil.nome ?? '')
+  const [estado, setEstado] = useState('')
+
+  async function gravar(mudanca: { nome?: string; foto?: string | null }) {
+    const atual = (await db.ler<{ nome?: string; foto?: string }>('perfil')) ?? {}
+    const novo = { ...atual }
+    if (mudanca.nome !== undefined) {
+      const n = mudanca.nome.trim().slice(0, 40)
+      if (n) novo.nome = n
+      else delete novo.nome
+    }
+    if (mudanca.foto === null) delete novo.foto
+    else if (mudanca.foto) novo.foto = mudanca.foto
+    await db.gravar('perfil', novo)
+  }
+
+  async function escolherFoto(f: File) {
+    try {
+      await gravar({ foto: await reduzirImagem(f, 256) })
+      setEstado('Foto de perfil atualizada.')
+    } catch {
+      setEstado('Não foi possível ler esta imagem.')
+    }
+  }
+
+  return (
+    <div className="cartao">
+      <h3>Perfil</h3>
+      <div className="linha" style={{ alignItems: 'center' }}>
+        {dados.perfil.foto ? <img className="avatar grande" src={dados.perfil.foto} alt="Foto de perfil" /> : <span className="avatar grande vazio" aria-hidden="true">👤</span>}
+        <div style={{ flex: 3 }}>
+          <button onClick={() => ficheiro.current?.click()}>{dados.perfil.foto ? 'Mudar foto' : 'Adicionar foto'}</button>
+          {dados.perfil.foto && <button className="perigo" onClick={() => gravar({ foto: null })} style={{ marginLeft: 8 }}>Remover</button>}
+        </div>
+      </div>
+      <input ref={ficheiro} type="file" accept="image/*" hidden aria-label="Escolher foto de perfil" onChange={(e) => { const f = e.target.files?.[0]; if (f) void escolherFoto(f); e.target.value = '' }} />
+      <label htmlFor="perfil-nome">Nome</label>
+      <div className="linha">
+        <input id="perfil-nome" maxLength={40} autoComplete="given-name" value={nome} onChange={(e) => setNome(e.target.value)} style={{ flex: 3 }} />
+        <button onClick={async () => { await gravar({ nome }); setEstado('Nome guardado.') }}>Guardar</button>
+      </div>
+      {estado && <p role="status" className="secundario">{estado}</p>}
+    </div>
   )
 }

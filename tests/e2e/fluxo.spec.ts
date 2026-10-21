@@ -102,7 +102,7 @@ test('F9 e F10: medições, exportação e importação inválida', async ({ pag
   expect((await descarga).suggestedFilename()).toMatch(/^treino-\d{4}-\d{2}-\d{2}\.json$/)
 
   page.on('dialog', (d) => d.accept())
-  await page.locator('input[type=file]').setInputFiles({ name: 'x.json', mimeType: 'application/json', buffer: Buffer.from('{"formato":"outra"}') })
+  await page.getByLabel('Ficheiro de cópia').setInputFiles({ name: 'x.json', mimeType: 'application/json', buffer: Buffer.from('{"formato":"outra"}') })
   await expect(page.getByText('Ficheiro inválido. Nenhum dado foi alterado.')).toBeVisible()
   await page.getByRole('link', { name: 'Medições' }).click()
   await expect(page.getByText('92,4 kg')).toBeVisible()
@@ -136,7 +136,8 @@ test('F1 v1.2: 7 dias e «Nenhuma» geram Empurrar/Puxar/Pernas com recuperaçã
 test('F11 e F12: o Início mostra o painel e as conquistas depois de um treino', async ({ page }) => {
   await preencherAnamnese(page)
   await page.getByRole('link', { name: 'Início' }).click()
-  await expect(page.getByRole('heading', { name: 'Início' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: /^(Bom dia|Boa tarde|Boa noite)$/ })).toBeVisible()
+  await expect(page.locator('figure.frase blockquote')).toHaveText(/^“.+”$/)
   await expect(page.getByText('Superior A · ~')).toBeVisible()
   await expect(page.locator('.indicador').filter({ hasText: 'treinos' }).first()).toContainText('0/4')
 
@@ -173,4 +174,43 @@ test('F1 v1.3: gravidez no 2.º trimestre troca exercícios deitado e só aparec
   await expect(page.getByText('Supino com halteres, pega neutra')).toHaveCount(0)
   await page.getByText(/aviso.* sobre o teu plano/).click()
   await expect(page.getByText(/obstetra/)).toBeVisible()
+})
+
+// PNG 2×3 válido, só para testes.
+const PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAIAAAADCAIAAAA2iEnWAAAAEElEQVR4nGP4z8AARAwoFABE0AX7pM/egAAAAABJRU5ErkJggg==', 'base64')
+
+test('F15 e F16: perfil com nome e foto, saudação e fotos de avaliação comparadas', async ({ page }) => {
+  await preencherAnamnese(page)
+  await page.getByRole('link', { name: 'Mais' }).click()
+  await page.getByLabel('Nome').fill('Ana')
+  await page.getByRole('button', { name: 'Guardar', exact: true }).click()
+  await expect(page.getByText('Nome guardado.')).toBeVisible()
+  await page.getByLabel('Escolher foto de perfil').setInputFiles({ name: 'eu.png', mimeType: 'image/png', buffer: PNG })
+  await expect(page.getByRole('img', { name: 'Foto de perfil' })).toHaveAttribute('src', /^data:image\/jpeg;base64,/)
+
+  await page.getByRole('link', { name: 'Início' }).click()
+  await expect(page.getByRole('heading', { name: /^(Bom dia|Boa tarde|Boa noite), Ana$/ })).toBeVisible()
+
+  await page.getByRole('link', { name: 'Medições' }).click()
+  for (const [data, peso, cintura] of [['2026-09-15', '90', '98'], ['2026-10-15', '88,5', '96']]) {
+    await page.getByLabel('Data').fill(data)
+    await page.getByLabel('Peso (kg)').fill(peso)
+    await page.getByLabel('Cintura (cm)').fill(cintura)
+    await page.getByRole('button', { name: 'Guardar medição' }).click()
+    await expect(page.getByText(`${peso} kg`)).toBeVisible()
+    await expect(page.getByLabel('Peso (kg)')).toHaveValue('')
+  }
+
+  await page.getByRole('link', { name: 'Fotos' }).click()
+  await expect(page.getByText('Ainda sem fotos.')).toBeVisible()
+  for (const data of ['2026-09-15', '2026-10-15']) {
+    await page.getByLabel('Data').fill(data)
+    await page.getByLabel('Escolher foto').setInputFiles({ name: 'f.png', mimeType: 'image/png', buffer: PNG })
+    await expect(page.getByRole('button', { name: 'Adicionar foto' })).toBeEnabled()
+  }
+  await expect(page.locator('.galeria img')).toHaveCount(2)
+  await expect(page.getByRole('heading', { name: 'Comparar' })).toBeVisible()
+  await expect(page.getByRole('status')).toHaveText('Diferença: -1,5 kg · -2 cm de cintura')
+  await page.getByRole('radio', { name: 'Lado' }).click()
+  await expect(page.getByText('Sem foto de lado neste mês')).toHaveCount(2)
 })

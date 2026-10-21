@@ -1,5 +1,6 @@
 import { conquistas, recordesPessoais, sequenciaSemanal, volumeSessao } from '../domain/conquistas'
 import { fraseDoDia } from '../domain/frases'
+import { saudacao } from '../domain/perfil'
 import { horasTreino, inicioMes, tendenciaPeso, treinosEntre } from '../domain/painel'
 import { semanaDoPlano, treinoEfetivo } from '../domain/plano'
 import { aderencia, inicioSemana } from '../domain/relatorios'
@@ -44,12 +45,19 @@ export function Inicio({ dados, plano, anamnese }: { dados: Dados; plano: Plano;
   const lista = conquistas(s, plano, meta, agora)
   const obtidas = lista.filter((c) => c.obtida).length
   const semana = semanaDoPlano(plano, agora.toISOString())
+  const frase = fraseDoDia(agora)
   const proximo = treinoEfetivo(plano.treinos.find((t) => t.id === proximoTreino(plano, s).treinoId) ?? plano.treinos[0]!, plano, semana)
 
   return (
     <>
-      <h1>Início</h1>
-      <p className="frase">«{fraseDoDia(agora)}»</p>
+      <div className="saudacao">
+        {dados.perfil.foto && <img className="avatar" src={dados.perfil.foto} alt="" />}
+        <h1>{saudacao(agora, dados.perfil.nome)}</h1>
+      </div>
+      <figure className="frase">
+        <blockquote>“{frase.texto}”</blockquote>
+        {frase.autor && <figcaption>{frase.autor}</figcaption>}
+      </figure>
 
       <button className="cartao proximo" onClick={() => ir('/hoje')}>
         <span className="secundario">Próximo treino</span>

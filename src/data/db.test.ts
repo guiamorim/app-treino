@@ -11,12 +11,16 @@ describe('F10 exportar e importar', () => {
     await a.gravar('plano', gerarPlano(perfilExemplo, catalogo, { id: 'p1', agora: '2026-10-20T08:00:00.000Z' }))
     await a.sessoes.put({ id: 's1', planoId: 'p1', treinoId: 'superior-a', inicio: '2026-10-20T10:00:00.000Z', exercicios: [] })
     await a.medicoes.put({ id: 'm1', data: '2026-10-20', pesoKg: 85 })
+    await a.fotos.put({ id: 'f1', data: '2026-10-20', pose: 'lado', imagem: 'data:image/jpeg;base64,/9j/AAAA' })
+    await a.gravar('perfil', { nome: 'Rui' })
     const copia = await a.exportar('2026-10-20T12:00:00.000Z')
 
     const b = new BaseDados('b')
     await b.medicoes.put({ id: 'velha', data: '2020-01-01', pesoKg: 80 })
     await b.importar(JSON.parse(JSON.stringify(copia)))
     expect(await b.exportar('2026-10-20T12:00:00.000Z')).toEqual(copia)
+    expect(copia.fotos).toHaveLength(1)
+    expect(copia.perfil).toEqual({ nome: 'Rui' })
   })
 
   it('F10.2 ficheiro inválido não altera os dados existentes', async () => {

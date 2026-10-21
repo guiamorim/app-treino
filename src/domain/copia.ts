@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import type { Catalogo } from './catalogo'
-import { AREAS, DIAS_POR_SEMANA, ENFASES, GRAVIDEZ } from './types'
-import type { Anamnese, Medicao, Plano, Sessao } from './types'
+import { AREAS, DIAS_POR_SEMANA, ENFASES, GRAVIDEZ, POSES } from './types'
+import type { Anamnese, FotoAvaliacao, Medicao, Perfil, Plano, Sessao } from './types'
 import { lerVideo } from './video'
 
 const inteiro = (min: number, max: number) => z.number().int().min(min).max(max)
@@ -66,6 +66,11 @@ const plano = z.strictObject({
   })).max(7),
 })
 
+// F15/F16: só JPEG em base64 (o que a app produz); nada de SVG ou outros formatos com código.
+const jpeg = (maxBytes: number) => z.string().max(Math.ceil(maxBytes * 4 / 3) + 30).regex(/^data:image\/jpeg;base64,[A-Za-z0-9+/]+=*$/)
+const foto = z.strictObject({ id, data: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), pose: z.enum(POSES), imagem: jpeg(3_000_000), nota: z.string().max(200).optional() })
+const perfil = z.strictObject({ nome: z.string().max(40).optional(), foto: jpeg(300_000).optional() })
+
 const esquemaCopia = z.strictObject({
   formato: z.literal('app-treino'),
   versao: z.literal(1),
@@ -75,6 +80,8 @@ const esquemaCopia = z.strictObject({
   sessoes: z.array(sessao).max(10_000),
   medicoes: z.array(medicao).max(10_000),
   videos: z.record(id, z.string().refine((u) => lerVideo(u) !== null, 'Link de vídeo não permitido')),
+  fotos: z.array(foto).max(2000).optional(),
+  perfil: perfil.optional(),
 })
 
 export interface Copia {
@@ -87,6 +94,9 @@ export interface Copia {
   medicoes: Medicao[]
   /** Links de vídeo escolhidos por ti, por id de exercício. */
   videos: Record<string, string>
+  /** v1.4; cópias antigas não têm. */
+  fotos?: FotoAvaliacao[]
+  perfil?: Perfil
 }
 
 /** F10.2: valida um ficheiro importado; lança erro se não for uma cópia válida. */

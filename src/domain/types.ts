@@ -166,4 +166,25 @@ export interface Medicao {
   cinturaCm?: number
 }
 
+export const POSES = ['frente', 'lado', 'costas'] as const
+export type Pose = (typeof POSES)[number]
+
+/** F15: foto de avaliação, guardada como JPEG recodificado (sem metadados). */
+export interface FotoAvaliacao {
+  id: string
+  /** AAAA-MM-DD */
+  data: string
+  pose: Pose
+  /** data:image/jpeg;base64,… */
+  imagem: string
+  nota?: string
+}
+
+/** F16 */
+export interface Perfil {
+  nome?: string
+  /** data:image/jpeg;base64,… */
+  foto?: string
+}
+
 export type EstadoExercicio = 'por-fazer' | 'em-curso' | 'feito' | 'saltado'

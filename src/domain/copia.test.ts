@@ -15,6 +15,8 @@ const copia: Copia = {
   ],
   medicoes: [{ id: 'm1', data: '2026-10-20', pesoKg: 85, cinturaCm: 92 }],
   videos: { 'leg-press': 'https://youtu.be/waAxlYvtCcI' },
+  fotos: [{ id: 'f1', data: '2026-10-20', pose: 'frente', imagem: 'data:image/jpeg;base64,/9j/AAAA', nota: 'manhã' }],
+  perfil: { nome: 'Ana', foto: 'data:image/jpeg;base64,/9j/BBBB' },
 }
 
 describe('F10 cópia de segurança', () => {
@@ -28,6 +30,9 @@ describe('F10 cópia de segurança', () => {
     ['série com reps negativas', { ...copia, sessoes: [{ ...copia.sessoes[0], exercicios: [{ ...copia.sessoes[0]!.exercicios[0], series: [{ carga: 20, reps: -1 }] }] }] }],
     ['dor fora de 0–10', { ...copia, sessoes: [{ ...copia.sessoes[0], exercicios: [{ ...copia.sessoes[0]!.exercicios[0], dor: 11 }] }] }],
     ['vídeo de domínio não permitido', { ...copia, videos: { x: 'https://evil.com/v' } }],
+    ['F15 foto que não é JPEG em base64', { ...copia, fotos: [{ ...copia.fotos![0], imagem: 'data:image/svg+xml;base64,PHN2Zz4=' }] }],
+    ['F15 foto com pose desconhecida', { ...copia, fotos: [{ ...copia.fotos![0], pose: 'cima' }] }],
+    ['F16 nome com mais de 40 caracteres', { ...copia, perfil: { nome: 'x'.repeat(41) } }],
     ['campo inesperado', { ...copia, extra: '<script>' }],
     ['nada', null],
   ])('F10.2 rejeita ficheiro inválido: %s', (_, dados) => {
