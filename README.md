@@ -28,7 +28,7 @@ npm run build      # builds dist/ with service worker and Content Security Polic
 ```
 specs/            specification (source of truth: SDD), in PT and EN
 docs/             market analysis and methodology, in PT and EN
-src/domain/       pure TypeScript rules, written with TDD: plan, blocks, progression, session, reports, dashboard, achievements, backup, video
+src/domain/       pure TypeScript rules, written with TDD: plan, blocks, progression, session, reports, dashboard, achievements, photos, profile, backup, video
 src/data/         IndexedDB (Dexie), export and import
 src/ui/           React screens
 src/catalog/      exercise catalogue (schema-validated in tests and at startup)

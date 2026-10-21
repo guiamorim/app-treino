@@ -2,7 +2,7 @@
 
 **English** · [Português](especificacao-v1.md)
 
-Date: 2026-10-20 · Version 1.3 (adjustments made during implementation are marked v1.1; new features are marked v1.2 and v1.3)
+Date: 2026-10-20 · Version 1.4 (adjustments made during implementation are marked v1.1; new features are marked v1.2, v1.3 and v1.4)
 
 The Portuguese version is the reference used for the domain names in the code. Both versions must stay in sync.
 
@@ -34,6 +34,8 @@ These names are used identically in the specification, the code and the UI. The 
 | **Set** (`Serie`) | Record of load (kg), reps and RIR |
 | **Pain** (`Dor`) | 0–10 rating of an Exercise in a Session |
 | **Measurement** (`Medicao`) | Body weight and waist on a date |
+| **Progress photo** (`FotoAvaliacao`, v1.4) | Body photo on a date and in a pose (front, side, back), for personal comparison |
+| **Profile** (`Perfil`, v1.4) | The person's name and photo, used in the greeting |
 | **Suggestion** (`Sugestao`) | Load and reps proposed for the next Session (computed, not stored) |
 | **Block** (`Bloco`, v1.2) | Cycle of progression weeks ending with a deload week; its length depends on the goal |
 | **Deload** (`Descarga`) | Week with half the sets and RIR 3–4, to recover before the next block |
@@ -114,7 +116,22 @@ RIR = reps in reserve: how many more reps you could still have done at the end o
 
 ### F13. Phrase of the day and reminders (v1.2)
 - Home shows a short motivational phrase, picked deterministically from the date from a fixed list of Portuguese phrases.
+- (v1.4) The phrase is shown in double quotes (“…”). When authorship is well documented, the author is shown below it (e.g. Juvenal, Fernando Pessoa, Lao Tzu). Phrases of doubtful or unknown authorship are shown without an author; proverbs are labelled "Provérbio".
 - Reminders: user decision (2026-10-20): **no reminders**. Technical reason: on iPhone a web app cannot schedule local notifications, and push notifications require a server, which contradicts "data on the device only". Alternative assessed and not adopted: a calendar file (.ics) with a daily reminder, at a fixed time or 15 to 20 min before the usual training time.
+
+### F15. Progress photos (v1.4)
+- "Fotos" tab in the bottom bar.
+- Add a photo: date (today by default), pose (front, side, back) and an optional note. The photo comes from the camera or the photo library.
+- Before saving, the image is resized (longest side up to 1280 px) and re-encoded as JPEG. This reduces its size and strips metadata (including GPS location).
+- Photos are grouped by month, newest first.
+- Compare: I pick two months and a pose and see the photos side by side, each with the weight and waist of the closest measurement (up to 7 days apart) and the difference between them.
+- Visual reminder after more than 30 days since the last photo. Tip: same light, same time of day, same distance.
+- Photos stay on the device only. The JSON backup includes them (with a note that the file contains photos); the CSV does not.
+- The app does not analyse the photos automatically (no AI); the analysis is the visual comparison with the measurements.
+
+### F16. Profile and greeting (v1.4)
+- In "Mais": name (up to 40 characters) and profile photo (resized to 256 px, same processing as progress photos). Both optional.
+- On Home: "Bom dia", "Boa tarde" or "Boa noite" (good morning/afternoon/evening), followed by the name if set, based on the device time: 5:00–11:59 morning, 12:00–19:59 afternoon, 20:00–4:59 evening. Shows the profile photo, if set.
 
 ### F14. Blocks and next change (v1.2, rules in section 3.7)
 - On Home and on Today's workout: current phase (re-adaptation, week N of M of the block, or deload) and the next change with its date: end of re-adaptation (full sets), deload week (half the sets), or new block (isolation exercises rotate, listing what changes).
@@ -192,11 +209,12 @@ For each Prescription with range [min, max]:
 - No analytics, no trackers, no network calls except videos.
 
 ## 6. Security
-- Content Security Policy: `default-src 'self'`; `frame-src` only `https://www.youtube-nocookie.com` and `https://player.vimeo.com`; `img-src 'self' https://i.ytimg.com data:`.
+- Content Security Policy: `default-src 'self'`; `frame-src` only `https://www.youtube-nocookie.com` and `https://player.vimeo.com`; `img-src 'self' https://i.ytimg.com data: blob:` (v1.4: `blob:` to read the chosen photo before re-encoding it).
 - Video links accepted only from youtube.com, youtu.be, m.youtube.com, vimeo.com; converted to embed URLs.
 - iframe with `sandbox="allow-scripts allow-same-origin allow-presentation"` and `referrerpolicy="strict-origin-when-cross-origin"`.
 - No data content is ever inserted as HTML.
-- Import validated by schema (Zod).
+- Import validated by schema (Zod). Photos accepted only as `data:image/jpeg;base64,` and with a size limit.
+- (v1.4) Photos are re-encoded on the device before saving, which strips EXIF metadata (including GPS). They never leave the device except in the backup the person exports.
 - Continuous integration: typecheck, unit and end-to-end tests, `npm audit`; Dependabot enabled. GitHub secret scanning applies to public repositories. Main branch protection: **not yet configured**.
 - Personal data never enters the repository: the anamnesis is filled in on the phone and tests use a fictitious profile. That is why the repository can be public.
 

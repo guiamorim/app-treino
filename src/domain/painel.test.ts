@@ -46,6 +46,14 @@ describe('F13 frase do dia', () => {
     expect(fraseDoDia(new Date(2026, 9, 20, 22))).toBe(a)
     expect(fraseDoDia(new Date(2026, 9, 21, 8))).not.toBe(a)
     expect(FRASES).toContain(a)
-    expect(FRASES.every((f) => f.length <= 80)).toBe(true)
+  })
+
+  it('v1.4: frases curtas, sem aspas no texto (a interface põe-nas), e várias com autor', () => {
+    for (const f of FRASES) {
+      expect(f.texto.length).toBeLessThanOrEqual(120)
+      expect(f.texto).not.toMatch(/["“”«»]/)
+      if (f.autor !== undefined) expect(f.autor.trim()).not.toBe('')
+    }
+    expect(FRASES.filter((f) => f.autor).length).toBeGreaterThanOrEqual(10)
   })
 })

@@ -7,12 +7,14 @@ import { ExercicioEcra } from './ExercicioEcra'
 import { Relatorios } from './Relatorios'
 import { Medicoes } from './Medicoes'
 import { Mais } from './Mais'
+import { Fotos } from './Fotos'
 
 const SEPARADORES = [
   { rota: 'inicio', nome: 'Início', icone: '🏠' },
   { rota: 'hoje', nome: 'Hoje', icone: '🏋️' },
   { rota: 'relatorios', nome: 'Relatórios', icone: '📈' },
   { rota: 'medicoes', nome: 'Medições', icone: '⚖️' },
+  { rota: 'fotos', nome: 'Fotos', icone: '📷' },
   { rota: 'mais', nome: 'Mais', icone: '⋯' },
 ] as const
 
@@ -31,6 +33,7 @@ export function App() {
         {rota.ecra === 'exercicio' && <ExercicioEcra dados={dados} plano={dados.plano} prescricaoId={rota.prescricaoId} />}
         {rota.ecra === 'relatorios' && <Relatorios dados={dados} />}
         {rota.ecra === 'medicoes' && <Medicoes dados={dados} />}
+        {rota.ecra === 'fotos' && <Fotos dados={dados} />}
         {rota.ecra === 'mais' && <Mais dados={dados} />}
       </main>
       <nav className="navegacao" aria-label="Principal">

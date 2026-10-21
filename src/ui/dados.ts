@@ -2,7 +2,7 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../data/db'
 import dadosCatalogo from '../catalog/exercicios.json'
 import { carregarCatalogo } from '../domain/catalogo'
-import type { Anamnese, Medicao, Plano, Sessao } from '../domain/types'
+import type { Anamnese, FotoAvaliacao, Medicao, Perfil, Plano, Sessao } from '../domain/types'
 
 export const catalogo = carregarCatalogo(dadosCatalogo)
 
@@ -13,6 +13,8 @@ export interface Dados {
   medicoes: Medicao[]
   videos: Record<string, string>
   ultimaExportacao?: string
+  fotos: FotoAvaliacao[]
+  perfil: Perfil
 }
 
 export function useDados(): Dados | undefined {
@@ -23,6 +25,8 @@ export function useDados(): Dados | undefined {
     medicoes: await db.medicoes.orderBy('data').toArray(),
     videos: (await db.ler<Record<string, string>>('videos')) ?? {},
     ultimaExportacao: await db.ler<string>('ultimaExportacao'),
+    fotos: await db.fotos.orderBy('data').toArray(),
+    perfil: (await db.ler<Perfil>('perfil')) ?? {},
   }))
 }
 

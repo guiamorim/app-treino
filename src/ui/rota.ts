@@ -6,6 +6,7 @@ export type Rota =
   | { ecra: 'exercicio'; prescricaoId: string }
   | { ecra: 'relatorios' }
   | { ecra: 'medicoes' }
+  | { ecra: 'fotos' }
   | { ecra: 'mais' }
   | { ecra: 'anamnese' }
 
@@ -17,6 +18,7 @@ export function lerRota(hash: string): Rota {
     case 'hoje':
     case 'relatorios':
     case 'medicoes':
+    case 'fotos':
     case 'mais':
     case 'anamnese':
       return { ecra }

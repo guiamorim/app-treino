@@ -9,7 +9,7 @@ const CSP = [
   "default-src 'self'",
   "script-src 'self'",
   "style-src 'self'",
-  "img-src 'self' data: https://i.ytimg.com",
+  "img-src 'self' data: blob: https://i.ytimg.com",
   "frame-src https://www.youtube-nocookie.com https://player.vimeo.com",
   "connect-src 'self'",
   "manifest-src 'self'",

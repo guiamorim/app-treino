@@ -2,7 +2,7 @@
 
 [English](specification-v1.en.md) · **Português**
 
-Data: 2026-10-20 · Versão 1.3 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 e v1.3)
+Data: 2026-10-20 · Versão 1.4 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2, v1.3 e v1.4)
 
 ## 0. Decisões fechadas
 
@@ -32,6 +32,8 @@ Estes nomes são usados iguais na especificação, no código e na interface.
 | **Série** | Registo de carga (kg), repetições e RIR |
 | **Dor** | Avaliação 0–10 de um Exercício numa Sessão |
 | **Medição** | Peso e cintura numa data |
+| **Foto de avaliação** (v1.4) | Foto do corpo numa data e numa pose (frente, lado, costas), para comparação pessoal |
+| **Perfil** (v1.4) | Nome e foto da pessoa, usados na saudação |
 | **Sugestão** | Carga e repetições propostas para a próxima Sessão (calculada, não guardada) |
 | **Bloco** (v1.2) | Ciclo de semanas de progressão terminado por uma semana de descarga; a duração depende do objetivo |
 | **Descarga** | Semana com metade das séries e RIR 3–4, para recuperar antes do bloco seguinte |
@@ -110,7 +112,22 @@ Estes nomes são usados iguais na especificação, no código e na interface.
 
 ### F13. Frase do dia e lembretes (v1.2)
 - O Início mostra uma frase curta de motivação, escolhida de forma determinística a partir da data numa lista fixa de frases em português.
+- (v1.4) A frase aparece entre aspas duplas (“…”). Quando a autoria está bem documentada, o autor aparece por baixo (ex.: Juvenal, Fernando Pessoa, Lao Tsé). Frases de autoria duvidosa ou desconhecida aparecem sem autor; provérbios aparecem como «Provérbio».
 - Lembretes: decisão do utilizador (2026-10-20): **sem lembretes**. Motivo técnico: no iPhone uma app web não consegue agendar notificações locais, e notificações push exigem um servidor, o que contraria «dados só no dispositivo». Alternativa avaliada e não adotada: ficheiro de calendário (.ics) com um lembrete diário, a uma hora fixa ou 15 a 20 min antes do horário habitual.
+
+### F15. Fotos de avaliação (v1.4)
+- Separador «Fotos» na barra inferior.
+- Adicionar foto: data (por omissão hoje), pose (frente, lado, costas) e nota opcional. A foto vem da câmara ou da galeria.
+- Antes de gravar, a imagem é redimensionada (lado maior até 1280 px) e recodificada em JPEG. Isto reduz o tamanho e remove os metadados (incluindo localização GPS).
+- As fotos são agrupadas por mês, da mais recente para a mais antiga.
+- Comparar: escolho dois meses e uma pose e vejo as fotos lado a lado, cada uma com o peso e a cintura da medição mais próxima (até 7 dias de diferença) e a diferença entre as duas.
+- Lembrete visual se passaram mais de 30 dias desde a última foto. Dica: mesma luz, mesma hora do dia, mesma distância.
+- As fotos ficam só no dispositivo. A cópia de segurança JSON inclui-as (avisando que o ficheiro contém fotos); o CSV não.
+- A app não analisa as fotos automaticamente (sem IA); a análise é a comparação visual com as medições.
+
+### F16. Perfil e saudação (v1.4)
+- Em «Mais»: nome (até 40 caracteres) e foto de perfil (redimensionada para 256 px, mesmo tratamento das fotos de avaliação). Ambos opcionais.
+- No Início: «Bom dia», «Boa tarde» ou «Boa noite», seguido do nome se existir, conforme a hora do dispositivo: 5h00–11h59 bom dia, 12h00–19h59 boa tarde, 20h00–4h59 boa noite. Mostra a foto de perfil, se existir.
 
 ### F14. Blocos e próxima mudança (v1.2, regras na secção 3.7)
 - No Início e no Treino de hoje: fase atual (readaptação, semana N de M do bloco, ou descarga) e a próxima mudança com data: fim da readaptação (séries completas), semana de descarga (metade das séries), ou novo bloco (troca dos exercícios isolados, com a lista do que muda).
@@ -188,11 +205,12 @@ Para cada Prescrição com faixa [mín, máx]:
 - Sem analytics, sem rastreadores, sem chamadas de rede exceto vídeos.
 
 ## 6. Segurança
-- Content Security Policy: `default-src 'self'`; `frame-src` só `https://www.youtube-nocookie.com` e `https://player.vimeo.com`; `img-src 'self' https://i.ytimg.com data:`.
+- Content Security Policy: `default-src 'self'`; `frame-src` só `https://www.youtube-nocookie.com` e `https://player.vimeo.com`; `img-src 'self' https://i.ytimg.com data: blob:` (v1.4: `blob:` para ler a foto escolhida antes de a recodificar).
 - Links de vídeo aceites só de youtube.com, youtu.be, m.youtube.com, vimeo.com; convertidos em URL de incorporação.
 - iframe com `sandbox="allow-scripts allow-same-origin allow-presentation"` e `referrerpolicy="strict-origin-when-cross-origin"`.
 - Nenhum conteúdo de dados inserido como HTML.
-- Importação validada por esquema (Zod).
+- Importação validada por esquema (Zod). Fotos aceites só como `data:image/jpeg;base64,` e com tamanho limitado.
+- (v1.4) Fotos recodificadas no dispositivo antes de gravar, o que remove metadados EXIF (incluindo GPS). Não saem do dispositivo exceto na cópia de segurança que a pessoa exporta.
 - Integração contínua: typecheck, testes de unidade e ponta a ponta, `npm audit`; Dependabot ativo. A análise de segredos do GitHub aplica-se a repositórios públicos. Proteção do ramo principal: **por configurar**.
 - Dados pessoais nunca entram no repositório: a anamnese é preenchida no telemóvel e os testes usam um perfil fictício. Por isso o repositório pode ser público.
 
