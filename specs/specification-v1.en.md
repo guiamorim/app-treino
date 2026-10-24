@@ -2,7 +2,7 @@
 
 **English** · [Português](especificacao-v1.md)
 
-Date: 2026-10-20 · Version 1.4 (adjustments made during implementation are marked v1.1; new features are marked v1.2, v1.3 and v1.4)
+Date: 2026-10-20 · Version 1.5 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.5)
 
 The Portuguese version is the reference used for the domain names in the code. Both versions must stay in sync.
 
@@ -96,6 +96,7 @@ RIR = reps in reserve: how many more reps you could still have done at the end o
 
 ### F9. Measurements
 - Quick logging of weight and waist. Visual reminder after more than 7 days.
+- (v1.5) Optional measurements: chest, arm, hip and thigh (cm), with instructions on where to measure. All of them appear in the photo comparison (F15).
 
 ### F10. Backup
 - Export everything as JSON (and history as CSV). Import JSON with schema validation; an invalid file is rejected without changing any data.
@@ -128,10 +129,22 @@ RIR = reps in reserve: how many more reps you could still have done at the end o
 - Visual reminder after more than 30 days since the last photo. Tip: same light, same time of day, same distance.
 - Photos stay on the device only. The JSON backup includes them (with a note that the file contains photos); the CSV does not.
 - The app does not analyse the photos automatically (no AI); the analysis is the visual comparison with the measurements.
+- (v1.5) "How to take the photos" guide: same time (morning, fasted), same light and plain background, phone at chest height about 2 m away, fitted clothing or swimwear, relaxed posture, all three poses, once a month.
+- (v1.5) "Report for the PT" (PDF), from the comparison: for the two chosen months, the photos of each pose side by side, every measurement near those dates and the differences, training sessions and sets in the period, pain of 4/10 or more, and a blank space for the personal trainer's notes. The app gathers the material; the analysis is done by the professional. The photos go into the PDF exactly as stored (JPEG without metadata). The PDF is generated on the device and leaves it only if I share it.
 
 ### F16. Profile and greeting (v1.4)
 - In "Mais": name (up to 40 characters) and profile photo (resized to 256 px, same processing as progress photos). Both optional.
 - On Home: "Bom dia", "Boa tarde" or "Boa noite" (good morning/afternoon/evening), followed by the name if set, based on the device time: 5:00–11:59 morning, 12:00–19:59 afternoon, 20:00–4:59 evening. Shows the profile photo, if set.
+
+### F17. Export plan and history (v1.5)
+- In "Mais", an "Exportar" section: training sheet (current plan with exercises, groups, sets, reps, RIR and rest) and history (sessions, sets and measurements), as PDF, Excel (.xlsx) and JSON.
+- PDF and Excel are generated on the device, with no external services or third-party libraries. The Excel file has the sheets "Ficha", "Histórico" and "Medições". The plan and history PDFs are text only; the only PDF with photos is the report for the PT (F15).
+- The JSON for plan and history is the backup (F10).
+
+### F18. Larger catalogue and muscle images (v1.5)
+- Catalogue with at least 70 exercises, under the same rules (equipment, contraindications, substitutes).
+- Each exercise shows a body drawing (front and back) with the primary group highlighted and the secondary groups in a lighter shade. The drawings come from the react-native-body-highlighter library (MIT licence, commercial use allowed; the licence notice ships with the code and appears in "Sobre" (About)). Female body if the sex in the anamnesis is female; male otherwise. Chosen by Guilherme on 2026-10-24 out of four compared options.
+- New exercises may have no video: "Procurar no YouTube" (search YouTube) is shown and I can save the chosen link (existing feature).
 
 ### F14. Blocks and next change (v1.2, rules in section 3.7)
 - On Home and on Today's workout: current phase (re-adaptation, week N of M of the block, or deload) and the next change with its date: end of re-adaptation (full sets), deload week (half the sets), or new block (isolation exercises rotate, listing what changes).
@@ -150,6 +163,19 @@ RIR = reps in reserve: how many more reps you could still have done at the end o
 With 3 days the split is Full body A/B/C rather than Push/Pull/Legs, because that split would train each muscle only once a week. With 7 days, the seventh is always a recovery day: strength training 7 days in a row is not recommended, especially when returning after a break.
 
 Target frequency: each major group 2×/week.
+
+**Choice of training template (v1.5).** In the anamnesis I pick the template; only combinations coherent with the days per week are shown:
+
+| Template | Days | Workouts (in rotation) |
+|---|---|---|
+| Automatic (recommended) | 2–7 | Table above |
+| Full body | 2–4 | Full body A, B (2 days) or A, B, C (3–4 days) |
+| A/B: upper and lower | 2–6 | Upper A, Lower A (2 days) or Upper A, Lower A, Upper B, Lower B |
+| A/B/C: push, pull, legs | 3–7 | Push, Pull and Legs A and B; with 7 days, plus Active recovery |
+| By muscle group | 4–6 | Chest and triceps, Back and biceps, Legs A, Shoulders and core; with 5–6 days, plus Legs B |
+
+- Combinations with 1×/week per group (A/B with 2 days, A/B/C with 3 days, By muscle group) are allowed, with a warning in the plan: evidence favours 2×/week (Schoenfeld et al., 2016).
+- An incoherent combination (e.g. saved before changing the days) generates the automatic template, with a warning.
 
 ### 3.2 Parameters by goal
 | Goal | Compounds | Isolation | RIR | Rest compounds / isolation |

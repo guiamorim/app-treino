@@ -1,28 +1,41 @@
 import { useState, type FormEvent } from 'react'
 import { db } from '../data/db'
+import { INFO_MEDIDAS, MEDIDAS_CM, type MedidaCm } from '../domain/types'
 import { dataCurta, diasDesde, hojeIso, kg, novoId, type Dados } from './dados'
+
+const EXTRAS = MEDIDAS_CM.filter((k) => k !== 'cinturaCm')
+const vazias = (): Record<MedidaCm, string> => ({ cinturaCm: '', peitoCm: '', bracoCm: '', ancaCm: '', coxaCm: '' })
+const numero = (s: string) => (s.trim() ? Number(s.replace(',', '.')) : undefined)
 
 export function Medicoes({ dados }: { dados: Dados }) {
   const [data, setData] = useState(hojeIso())
   const [peso, setPeso] = useState('')
-  const [cintura, setCintura] = useState('')
+  const [medidas, setMedidas] = useState(vazias)
   const [erro, setErro] = useState('')
   const ultima = dados.medicoes.at(-1)
   const dias = diasDesde(ultima?.data)
 
   async function guardar(e: FormEvent) {
     e.preventDefault()
-    const p = peso ? Number(peso.replace(',', '.')) : undefined
-    const c = cintura ? Number(cintura.replace(',', '.')) : undefined
-    if (p === undefined && c === undefined) return setErro('Indica o peso, a cintura ou ambos.')
+    const p = numero(peso)
+    const valores = MEDIDAS_CM.map((k) => [k, numero(medidas[k])] as const).filter((x): x is readonly [MedidaCm, number] => x[1] !== undefined)
+    if (p === undefined && valores.length === 0) return setErro('Indica o peso ou pelo menos uma medida.')
     if (p !== undefined && !(p >= 20 && p <= 400)) return setErro('Peso inválido.')
-    if (c !== undefined && !(c >= 30 && c <= 250)) return setErro('Cintura inválida.')
+    const errada = valores.find(([k, v]) => !(v >= INFO_MEDIDAS[k].min && v <= INFO_MEDIDAS[k].max))
+    if (errada) return setErro(`${INFO_MEDIDAS[errada[0]].nome} inválida.`)
     if (!/^\d{4}-\d{2}-\d{2}$/.test(data)) return setErro('Data inválida.')
     setErro('')
-    await db.medicoes.put({ id: novoId(), data, ...(p !== undefined ? { pesoKg: p } : {}), ...(c !== undefined ? { cinturaCm: c } : {}) })
+    await db.medicoes.put({ id: novoId(), data, ...(p !== undefined ? { pesoKg: p } : {}), ...Object.fromEntries(valores) })
     setPeso('')
-    setCintura('')
+    setMedidas(vazias())
   }
+
+  const campo = (k: MedidaCm) => (
+    <div key={k}>
+      <label htmlFor={k}>{INFO_MEDIDAS[k].nome} (cm)</label>
+      <input id={k} inputMode="decimal" value={medidas[k]} onChange={(e) => setMedidas({ ...medidas, [k]: e.target.value })} />
+    </div>
+  )
 
   return (
     <>
@@ -35,22 +48,36 @@ export function Medicoes({ dados }: { dados: Dados }) {
         <input id="data" type="date" value={data} max={hojeIso()} onChange={(e) => setData(e.target.value)} />
         <div className="linha">
           <div><label htmlFor="peso">Peso (kg)</label><input id="peso" inputMode="decimal" value={peso} onChange={(e) => setPeso(e.target.value)} /></div>
-          <div><label htmlFor="cintura">Cintura (cm)</label><input id="cintura" inputMode="decimal" value={cintura} onChange={(e) => setCintura(e.target.value)} /></div>
+          {campo('cinturaCm')}
         </div>
+        <details style={{ marginTop: 8 }}>
+          <summary>Mais medidas (opcional)</summary>
+          <div className="grelha-medidas">{EXTRAS.map(campo)}</div>
+          <p className="secundario">Fita métrica justa sem apertar a pele, de manhã, sempre do mesmo lado do corpo.</p>
+          <ul className="secundario">
+            {MEDIDAS_CM.map((k) => <li key={k}><strong>{INFO_MEDIDAS[k].nome}:</strong> {INFO_MEDIDAS[k].onde}</li>)}
+          </ul>
+        </details>
         {erro && <p role="alert" style={{ color: 'var(--perigo)' }}>{erro}</p>}
         <button type="submit" className="primario largo" style={{ marginTop: 12 }}>Guardar medição</button>
       </form>
       {dados.medicoes.length > 0 && (
         <div className="cartao">
           <ul className="lista">
-            {[...dados.medicoes].reverse().map((m) => (
-              <li key={m.id} className="linha" style={{ padding: '6px 0' }}>
-                <span>{dataCurta(m.data)}</span>
-                <span>{m.pesoKg !== undefined ? `${kg(m.pesoKg)} kg` : '–'}</span>
-                <span>{m.cinturaCm !== undefined ? `${kg(m.cinturaCm)} cm` : '–'}</span>
-                <button style={{ flex: 'none', minHeight: 36 }} aria-label={`Apagar medição de ${dataCurta(m.data)}`} onClick={() => confirm('Apagar esta medição?') && db.medicoes.delete(m.id)}>✕</button>
-              </li>
-            ))}
+            {[...dados.medicoes].reverse().map((m) => {
+              const extras = EXTRAS.filter((k) => m[k] !== undefined).map((k) => `${INFO_MEDIDAS[k].nome} ${kg(m[k]!)}`)
+              return (
+                <li key={m.id} style={{ padding: '6px 0' }}>
+                  <div className="linha">
+                    <span>{dataCurta(m.data)}</span>
+                    <span>{m.pesoKg !== undefined ? `${kg(m.pesoKg)} kg` : '–'}</span>
+                    <span>{m.cinturaCm !== undefined ? `${kg(m.cinturaCm)} cm` : '–'}</span>
+                    <button style={{ flex: 'none', minHeight: 36 }} aria-label={`Apagar medição de ${dataCurta(m.data)}`} onClick={() => confirm('Apagar esta medição?') && db.medicoes.delete(m.id)}>✕</button>
+                  </div>
+                  {extras.length > 0 && <div className="secundario">{extras.join(' · ')} cm</div>}
+                </li>
+              )
+            })}
           </ul>
         </div>
       )}

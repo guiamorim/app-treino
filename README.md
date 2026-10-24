@@ -28,7 +28,7 @@ npm run build      # builds dist/ with service worker and Content Security Polic
 ```
 specs/            specification (source of truth: SDD), in PT and EN
 docs/             market analysis and methodology, in PT and EN
-src/domain/       pure TypeScript rules, written with TDD: plan, blocks, progression, session, reports, dashboard, achievements, photos, profile, backup, video
+src/domain/       pure TypeScript rules, written with TDD: plan, blocks, progression, session, reports, dashboard, achievements, photos, profile, backup, export (PDF and Excel written by hand), muscle map, video
 src/data/         IndexedDB (Dexie), export and import
 src/ui/           React screens
 src/catalog/      exercise catalogue (schema-validated in tests and at startup)
@@ -49,3 +49,7 @@ Each test carries the code of the specification criterion it checks (e.g. `F4`, 
 All documentation exists in Portuguese and English. Whoever changes a document updates both versions in the same commit.
 
 The app does not replace medical or physiotherapy assessment.
+
+## Third-party material
+
+- Muscle drawings in `src/ui/corpo/corpos.json`: extracted from [react-native-body-highlighter](https://github.com/HichamELBSI/react-native-body-highlighter) 3.2.0, © 2022 Hicham Elabbassi, MIT licence ([src/ui/corpo/LICENSE](src/ui/corpo/LICENSE)).

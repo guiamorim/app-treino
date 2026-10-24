@@ -1,18 +1,11 @@
 import { useRef, useState } from 'react'
 import { db } from '../data/db'
 import { paraCsv } from '../domain/copia'
+import { excelFichaHistorico, pdfFicha, pdfHistorico } from '../domain/exportar'
 import { agoraIso, catalogo, dataCurta, diasDesde, hojeIso, type Dados } from './dados'
+import { descarregar, paraExportacao, TIPO_PDF, TIPO_XLSX } from './ficheiros'
 import { ir } from './rota'
 import { reduzirImagem } from './imagem'
-
-function descarregar(nome: string, conteudo: string, tipo: string) {
-  const url = URL.createObjectURL(new Blob([conteudo], { type: tipo }))
-  const a = document.createElement('a')
-  a.href = url
-  a.download = nome
-  a.click()
-  setTimeout(() => URL.revokeObjectURL(url), 1000)
-}
 
 export function Mais({ dados }: { dados: Dados }) {
   const ficheiro = useRef<HTMLInputElement>(null)
@@ -45,6 +38,16 @@ export function Mais({ dados }: { dados: Dados }) {
         <button className="largo" onClick={() => ir('/anamnese')}>Editar anamnese e gerar novo plano</button>
       </div>
 
+      <div className="cartao">
+        <h3>Exportar</h3>
+        <p className="secundario">Ficha de treino e histórico para imprimir, partilhar ou abrir no Excel. O JSON é a cópia de segurança, mais abaixo.</p>
+        <div className="linha">
+          <button disabled={!dados.plano} onClick={() => descarregar(`ficha-treino-${hojeIso()}.pdf`, pdfFicha(paraExportacao(dados), catalogo, agoraIso()), TIPO_PDF)}>Ficha (PDF)</button>
+          <button onClick={() => descarregar(`historico-treino-${hojeIso()}.pdf`, pdfHistorico(paraExportacao(dados), catalogo, agoraIso()), TIPO_PDF)}>Histórico (PDF)</button>
+        </div>
+        <button className="largo" style={{ marginTop: 8 }} onClick={() => descarregar(`treino-${hojeIso()}.xlsx`, excelFichaHistorico(paraExportacao(dados), catalogo, agoraIso()), TIPO_XLSX)}>Ficha, histórico e medições (Excel)</button>
+      </div>
+
       <div className={`cartao ${dias > 14 ? 'aviso' : ''}`}>
         <h3>Cópia de segurança</h3>
         <p className="secundario">
@@ -68,6 +71,7 @@ export function Mais({ dados }: { dados: Dados }) {
           Esta app não substitui avaliação médica nem de fisioterapia. Se sentires dor forte, tonturas ou dor no peito, para e procura ajuda.
         </p>
         <p className="secundario">Sem anúncios, sem rastreio, sem servidor. Os vídeos são de terceiros (YouTube/Vimeo).</p>
+        <p className="secundario">Desenhos dos músculos: react-native-body-highlighter, © 2022 Hicham Elabbassi, licença MIT.</p>
       </div>
     </>
   )

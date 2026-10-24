@@ -31,8 +31,17 @@ describe('F15 fotos de avaliação', () => {
     const c = compararFotos(fotos, m, '2026-09', '2026-10', 'frente')
     expect(c.antes?.foto.id).toBe('a2')
     expect(c.depois?.foto.id).toBe('b')
-    expect(c.difPesoKg).toBeCloseTo(-2.5)
-    expect(c.difCinturaCm).toBeCloseTo(-3)
-    expect(compararFotos(fotos, m, '2026-09', '2026-10', 'costas')).toEqual({})
+    expect(c.diferencas.pesoKg).toBeCloseTo(-2.5)
+    expect(c.diferencas.cinturaCm).toBeCloseTo(-3)
+    expect(compararFotos(fotos, m, '2026-09', '2026-10', 'costas')).toEqual({ diferencas: {} })
+  })
+
+  it('F9 v1.5 compara também peito, braço, anca e coxa quando medidos nos dois meses', () => {
+    const fotos = [foto('a', '2026-09-20'), foto('b', '2026-10-20')]
+    const m: Medicao[] = [
+      { id: '1', data: '2026-09-20', peitoCm: 100, bracoCm: 33, coxaCm: 58 },
+      { id: '2', data: '2026-10-20', peitoCm: 101.5, bracoCm: 34, ancaCm: 99 },
+    ]
+    expect(compararFotos(fotos, m, '2026-09', '2026-10', 'frente').diferencas).toEqual({ peitoCm: 1.5, bracoCm: 1 })
   })
 })

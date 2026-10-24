@@ -69,6 +69,8 @@ export type AcessoEquipamento = 'ginasio' | 'halteres' | 'casa'
 export type Sexo = 'masculino' | 'feminino' | 'outro'
 export const GRAVIDEZ = ['nao', 'gravida-1t', 'gravida-2t3t', 'pos-parto'] as const
 export type Gravidez = (typeof GRAVIDEZ)[number]
+export const DIVISOES_TREINO = ['automatico', 'corpo', 'ab', 'abc', 'grupos'] as const
+export type DivisaoTreino = (typeof DIVISOES_TREINO)[number]
 export const ENFASES = ['equilibrado', 'inferior', 'superior'] as const
 export type Enfase = (typeof ENFASES)[number]
 
@@ -94,6 +96,8 @@ export interface Anamnese {
   aceitaCardio: boolean
   /** Respostas às perguntas gerais do PAR-Q+ (true = "sim"). */
   parq: boolean[]
+  /** Secção 3.1 (v1.5); por omissão «automatico». */
+  divisao?: DivisaoTreino
   /** Secção 3.8; por omissão «equilibrado». */
   enfase?: Enfase
   /** Secção 3.4.1; só com sexo feminino. */
@@ -159,11 +163,22 @@ export interface Sessao {
   exercicios: RegistoExercicio[]
 }
 
-export interface Medicao {
+/** F9: perímetros opcionais, em cm. */
+export const MEDIDAS_CM = ['cinturaCm', 'peitoCm', 'bracoCm', 'ancaCm', 'coxaCm'] as const
+export type MedidaCm = (typeof MEDIDAS_CM)[number]
+
+export const INFO_MEDIDAS: Record<MedidaCm, { nome: string; min: number; max: number; onde: string }> = {
+  cinturaCm: { nome: 'Cintura', min: 30, max: 250, onde: 'À altura do umbigo, no fim de uma expiração normal, sem encolher a barriga.' },
+  peitoCm: { nome: 'Peito', min: 50, max: 250, onde: 'Na linha dos mamilos, com os braços descontraídos ao lado do corpo.' },
+  bracoCm: { nome: 'Braço', min: 15, max: 80, onde: 'A meio entre o ombro e o cotovelo, braço relaxado; mede sempre o mesmo lado.' },
+  ancaCm: { nome: 'Anca', min: 50, max: 250, onde: 'Na parte mais larga dos glúteos, com os pés juntos.' },
+  coxaCm: { nome: 'Coxa', min: 25, max: 120, onde: 'A meio entre a virilha e o joelho, de pé; mede sempre a mesma perna.' },
+}
+
+export interface Medicao extends Partial<Record<MedidaCm, number>> {
   id: string
   data: string
   pesoKg?: number
-  cinturaCm?: number
 }
 
 export const POSES = ['frente', 'lado', 'costas'] as const

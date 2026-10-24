@@ -1,5 +1,5 @@
 // F15: fotos de avaliação agrupadas por mês e comparação com as medições.
-import type { FotoAvaliacao, Medicao, Pose } from './types'
+import { MEDIDAS_CM, type FotoAvaliacao, type Medicao, type MedidaCm, type Pose } from './types'
 
 const DIA_MS = 86_400_000
 const MAX_DIAS_MEDICAO = 7
@@ -38,8 +38,8 @@ export interface LadoComparacao {
 export interface Comparacao {
   antes?: LadoComparacao
   depois?: LadoComparacao
-  difPesoKg?: number
-  difCinturaCm?: number
+  /** Depois menos antes, para cada valor medido nos dois lados. */
+  diferencas: Partial<Record<'pesoKg' | MedidaCm, number>>
 }
 
 /** Última foto de cada mês na pose escolhida, com a medição mais próxima e as diferenças. */
@@ -52,17 +52,13 @@ export function compararFotos(fotos: FotoAvaliacao[], medicoes: Medicao[], mesAn
   }
   const antes = lado(ultima(mesAntes))
   const depois = lado(ultima(mesDepois))
-  const r: Comparacao = {}
+  const r: Comparacao = { diferencas: {} }
   if (antes) r.antes = antes
   if (depois) r.depois = depois
-  const dif = (k: 'pesoKg' | 'cinturaCm') => {
+  for (const k of ['pesoKg', ...MEDIDAS_CM] as const) {
     const a = antes?.medicao?.[k]
     const b = depois?.medicao?.[k]
-    return a !== undefined && b !== undefined ? Math.round((b - a) * 10) / 10 : undefined
+    if (a !== undefined && b !== undefined) r.diferencas[k] = Math.round((b - a) * 10) / 10
   }
-  const p = dif('pesoKg')
-  const c = dif('cinturaCm')
-  if (p !== undefined) r.difPesoKg = p
-  if (c !== undefined) r.difCinturaCm = c
   return r
 }

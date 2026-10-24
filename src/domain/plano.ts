@@ -1,7 +1,7 @@
 import { estadoBloco, exercicioNoBloco, SEMANAS_BLOCO } from './blocos'
 import { obter, type Catalogo } from './catalogo'
-import { DIVISOES, MODELOS, type Modelo } from './modelos'
-import type { AcessoEquipamento, Anamnese, Enfase, Equipamento, Exercicio, GrupoMuscular, Objetivo, Plano, Prescricao, TipoExercicio, TreinoModelo } from './types'
+import { DIVISOES, MODELOS, MODELOS_ESCOLHA, type Modelo } from './modelos'
+import type { AcessoEquipamento, Anamnese, DiasPorSemana, DivisaoTreino, Enfase, Equipamento, Exercicio, GrupoMuscular, Objetivo, Plano, Prescricao, TipoExercicio, TreinoModelo } from './types'
 import { NOMES_GRUPOS } from './types'
 
 export const VERSAO_REGRAS = 2
@@ -197,7 +197,20 @@ export function gerarPlano(a: Anamnese, catalogo: Catalogo, opts: { id: string; 
       avisos.push(`A dor no ${NOMES_AREAS[r.area]} nunca foi avaliada. Recomenda-se avaliação por médico ou fisioterapeuta.`)
     }
   }
-  const treinos = DIVISOES[a.diasPorSemana].map((id) => gerarTreino(MODELOS[id]!, a, catalogo, conservador, avisos))
+  const divisao = a.divisao ?? 'automatico'
+  let ids = DIVISOES[a.diasPorSemana]
+  if (divisao !== 'automatico') {
+    const m = MODELOS_ESCOLHA[divisao]
+    if (divisoesPossiveis(a.diasPorSemana).includes(divisao)) {
+      ids = m.treinos(a.diasPorSemana)
+      if (m.umaVezPorSemana(a.diasPorSemana)) {
+        avisos.push('Com este modelo e estes dias, cada grupo muscular é treinado cerca de 1×/semana. A evidência favorece 2×/semana; o modelo automático garante-o.')
+      }
+    } else {
+      avisos.push(`O modelo escolhido não serve para ${a.diasPorSemana} dias por semana; foi usado o modelo automático.`)
+    }
+  }
+  const treinos = ids.map((id) => gerarTreino(MODELOS[id]!, a, catalogo, conservador, avisos))
   return {
     id: opts.id,
     criadoEm: opts.agora,
@@ -208,6 +221,14 @@ export function gerarPlano(a: Anamnese, catalogo: Catalogo, opts: { id: string; 
     treinos,
     avisos,
   }
+}
+
+/** Secção 3.1 (v1.5): modelos coerentes com os dias por semana. */
+export function divisoesPossiveis(dias: DiasPorSemana): DivisaoTreino[] {
+  return ['automatico', ...(Object.keys(MODELOS_ESCOLHA) as Exclude<DivisaoTreino, 'automatico'>[]).filter((k) => {
+    const [min, max] = MODELOS_ESCOLHA[k].dias
+    return dias >= min && dias <= max
+  })]
 }
 
 export function semanaDoPlano(plano: Plano, data: string): number {

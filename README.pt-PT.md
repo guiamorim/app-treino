@@ -28,7 +28,7 @@ npm run build      # gera dist/ com service worker e Content Security Policy
 ```
 specs/            especificação (fonte de verdade: SDD), em PT e EN
 docs/             análise de mercado e metodologia, em PT e EN
-src/domain/       regras puras em TypeScript, escritas com TDD: plano, blocos, progressão, sessão, relatórios, painel, conquistas, fotos, perfil, cópia, vídeo
+src/domain/       regras puras em TypeScript, escritas com TDD: plano, blocos, progressão, sessão, relatórios, painel, conquistas, fotos, perfil, cópia, exportação (PDF e Excel escritos à mão), mapa muscular, vídeo
 src/data/         IndexedDB (Dexie), exportação e importação
 src/ui/           ecrãs React
 src/catalog/      catálogo de exercícios (validado por esquema nos testes e ao arrancar)
@@ -49,3 +49,7 @@ Cada teste tem o código do critério da especificação que verifica (ex.: `F4`
 Toda a documentação existe em português e em inglês. Quem alterar um documento atualiza as duas versões no mesmo commit.
 
 A app não substitui avaliação médica nem de fisioterapia.
+
+## Material de terceiros
+
+- Desenhos dos músculos em `src/ui/corpo/corpos.json`: extraídos de [react-native-body-highlighter](https://github.com/HichamELBSI/react-native-body-highlighter) 3.2.0, © 2022 Hicham Elabbassi, licença MIT ([src/ui/corpo/LICENSE](src/ui/corpo/LICENSE)).
