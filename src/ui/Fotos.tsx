@@ -1,8 +1,10 @@
 import { useRef, useState } from 'react'
 import { db } from '../data/db'
+import { pdfRelatorioPt } from '../domain/exportar'
 import { compararFotos, fotosPorMes } from '../domain/fotos'
-import { POSES, type FotoAvaliacao, type Pose } from '../domain/types'
-import { dataCurta, diasDesde, hojeIso, kg, novoId, type Dados } from './dados'
+import { INFO_MEDIDAS, MEDIDAS_CM, POSES, type FotoAvaliacao, type Medicao, type Pose } from '../domain/types'
+import { agoraIso, catalogo, dataCurta, diasDesde, hojeIso, kg, novoId, type Dados } from './dados'
+import { descarregar, paraExportacao, TIPO_PDF } from './ficheiros'
 import { reduzirImagem } from './imagem'
 
 const NOMES_POSES: Record<Pose, string> = { frente: 'Frente', lado: 'Lado', costas: 'Costas' }
@@ -10,6 +12,35 @@ const MAX_LADO = 1280
 
 const nomeMes = (mes: string) => new Date(`${mes}-15T12:00:00`).toLocaleDateString('pt-PT', { month: 'long', year: 'numeric' })
 const sinal = (n: number, unidade: string) => `${n > 0 ? '+' : ''}${kg(n)} ${unidade}`
+
+const medidasTexto = (m: Medicao) => [
+  m.pesoKg !== undefined && `${kg(m.pesoKg)} kg`,
+  ...MEDIDAS_CM.map((k) => m[k] !== undefined && `${INFO_MEDIDAS[k].nome.toLowerCase()} ${kg(m[k])} cm`),
+].filter(Boolean).join(' · ')
+
+function textoDiferencas(d: ReturnType<typeof compararFotos>['diferencas']) {
+  return [
+    d.pesoKg !== undefined && sinal(d.pesoKg, 'kg'),
+    ...MEDIDAS_CM.map((k) => d[k] !== undefined && sinal(d[k], `cm de ${INFO_MEDIDAS[k].nome.toLowerCase()}`)),
+  ].filter(Boolean).join(' · ')
+}
+
+function GuiaFotos({ aberto }: { aberto: boolean }) {
+  return (
+    <details className="cartao" open={aberto}>
+      <summary>Como tirar as fotos</summary>
+      <ul>
+        <li>Uma vez por mês, à mesma hora: de manhã, em jejum, antes de treinar.</li>
+        <li>Mesma luz e fundo liso. Evita luz por trás de ti.</li>
+        <li>Telemóvel à altura do peito, a cerca de 2 m, na vertical. Usa o temporizador ou pede ajuda.</li>
+        <li>Roupa justa ou de banho, sempre a mesma.</li>
+        <li>Postura relaxada, sem contrair, braços ligeiramente afastados do corpo.</li>
+        <li>As três poses: frente, lado e costas.</li>
+        <li>No mesmo dia, regista o peso e as medidas em Medições para a comparação mostrar os números.</li>
+      </ul>
+    </details>
+  )
+}
 
 export function Fotos({ dados }: { dados: Dados }) {
   const ficheiro = useRef<HTMLInputElement>(null)
@@ -29,7 +60,7 @@ export function Fotos({ dados }: { dados: Dados }) {
   const [poseComparar, setPoseComparar] = useState<Pose>('frente')
   const antes = mesAntes || meses.at(-1)?.mes || ''
   const depois = mesDepois || meses[0]?.mes || ''
-  const comp = meses.length >= 2 ? compararFotos(dados.fotos, dados.medicoes, antes, depois, poseComparar) : {}
+  const comp = meses.length >= 2 ? compararFotos(dados.fotos, dados.medicoes, antes, depois, poseComparar) : { diferencas: {} }
 
   async function adicionar(f: File) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(data)) return setErro('Data inválida.')
@@ -55,6 +86,7 @@ export function Fotos({ dados }: { dados: Dados }) {
           {ultima ? `Última foto há ${Math.floor(dias)} dias.` : 'Ainda sem fotos.'} Tira-as com a mesma luz, à mesma hora e à mesma distância, para a comparação ser justa.
         </p>
       )}
+      <GuiaFotos aberto={dados.fotos.length === 0} />
 
       <div className="cartao">
         <div className="linha">
@@ -102,19 +134,18 @@ export function Fotos({ dados }: { dados: Dados }) {
                   {lado && (
                     <figcaption className="secundario">
                       {dataCurta(lado.foto.data)}
-                      {lado.medicao?.pesoKg !== undefined && ` · ${kg(lado.medicao.pesoKg)} kg`}
-                      {lado.medicao?.cinturaCm !== undefined && ` · ${kg(lado.medicao.cinturaCm)} cm`}
+                      {lado.medicao && ` · ${medidasTexto(lado.medicao)}`}
                     </figcaption>
                   )}
                 </figure>
               ))}
             </div>
-            {(comp.difPesoKg !== undefined || comp.difCinturaCm !== undefined) && (
-              <p role="status">
-                Diferença: {[comp.difPesoKg !== undefined && sinal(comp.difPesoKg, 'kg'), comp.difCinturaCm !== undefined && sinal(comp.difCinturaCm, 'cm de cintura')].filter(Boolean).join(' · ')}
-              </p>
-            )}
-            {comp.antes && comp.depois && !comp.antes.medicao && <p className="secundario">Regista peso e cintura em Medições perto da data das fotos para veres a diferença.</p>}
+            {Object.keys(comp.diferencas).length > 0 && <p role="status">Diferença: {textoDiferencas(comp.diferencas)}</p>}
+            {comp.antes && comp.depois && !(comp.antes.medicao && comp.depois.medicao) && <p className="secundario">Regista o peso e as medidas em Medições perto da data das fotos para veres a diferença.</p>}
+            <button className="largo" style={{ marginTop: 8 }} onClick={() => descarregar(`relatorio-pt-${antes}-${depois}.pdf`, pdfRelatorioPt(paraExportacao(dados), catalogo, antes < depois ? antes : depois, antes < depois ? depois : antes, agoraIso()), TIPO_PDF)}>
+              Relatório para o PT (PDF)
+            </button>
+            <p className="secundario">Fotos das três poses lado a lado, medidas e treinos do período, para enviares ao teu personal trainer. Contém as tuas fotos: partilha-o só com quem confias.</p>
           </div>
         </>
       )}

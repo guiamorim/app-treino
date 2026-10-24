@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import type { Catalogo } from './catalogo'
-import { AREAS, DIAS_POR_SEMANA, ENFASES, GRAVIDEZ, POSES } from './types'
+import { AREAS, DIAS_POR_SEMANA, DIVISOES_TREINO, ENFASES, GRAVIDEZ, INFO_MEDIDAS, MEDIDAS_CM, POSES, type MedidaCm } from './types'
 import type { Anamnese, FotoAvaliacao, Medicao, Perfil, Plano, Sessao } from './types'
 import { lerVideo } from './video'
 
@@ -18,7 +18,12 @@ const registo = z.strictObject({
   saltado: z.boolean().optional(),
 })
 const sessao = z.strictObject({ id, planoId: id, treinoId: id, inicio: data, fim: data.optional(), exercicios: z.array(registo).max(50) })
-const medicao = z.strictObject({ id, data, pesoKg: z.number().min(20).max(400).optional(), cinturaCm: z.number().min(30).max(250).optional() })
+const medicao = z.strictObject({
+  id,
+  data,
+  pesoKg: z.number().min(20).max(400).optional(),
+  ...(Object.fromEntries(MEDIDAS_CM.map((k) => [k, z.number().min(INFO_MEDIDAS[k].min).max(INFO_MEDIDAS[k].max).optional()])) as Record<MedidaCm, z.ZodOptional<z.ZodNumber>>),
+})
 
 const anamnese = z.strictObject({
   idade: inteiro(14, 110),
@@ -35,6 +40,7 @@ const anamnese = z.strictObject({
   aceitaCardio: z.boolean(),
   parq: z.array(z.boolean()).length(7),
   enfase: z.enum(ENFASES).optional(),
+  divisao: z.enum(DIVISOES_TREINO).optional(),
   gravidez: z.enum(GRAVIDEZ).optional(),
 })
 

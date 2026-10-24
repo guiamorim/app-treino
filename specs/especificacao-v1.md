@@ -2,7 +2,7 @@
 
 [English](specification-v1.en.md) · **Português**
 
-Data: 2026-10-20 · Versão 1.4 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2, v1.3 e v1.4)
+Data: 2026-10-20 · Versão 1.5 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.5)
 
 ## 0. Decisões fechadas
 
@@ -92,6 +92,7 @@ Estes nomes são usados iguais na especificação, no código e na interface.
 
 ### F9. Medições
 - Registo rápido de peso e cintura. Lembrete visual se passaram mais de 7 dias.
+- (v1.5) Medidas opcionais: peito, braço, anca e coxa (cm), com instruções de onde medir. Todas entram na comparação de fotos (F15).
 
 ### F10. Cópia de segurança
 - Exportar tudo em JSON (e histórico em CSV). Importar JSON com validação de esquema; ficheiro inválido é rejeitado sem alterar dados.
@@ -124,10 +125,22 @@ Estes nomes são usados iguais na especificação, no código e na interface.
 - Lembrete visual se passaram mais de 30 dias desde a última foto. Dica: mesma luz, mesma hora do dia, mesma distância.
 - As fotos ficam só no dispositivo. A cópia de segurança JSON inclui-as (avisando que o ficheiro contém fotos); o CSV não.
 - A app não analisa as fotos automaticamente (sem IA); a análise é a comparação visual com as medições.
+- (v1.5) Guia «Como tirar as fotos»: mesma hora (de manhã, em jejum), mesma luz e fundo liso, telemóvel à altura do peito a cerca de 2 m, roupa justa ou de banho, postura relaxada, as três poses, uma vez por mês.
+- (v1.5) «Relatório para o PT» (PDF), a partir da comparação: para os dois meses escolhidos, as fotos de cada pose lado a lado, as medições perto dessas datas e as diferenças, treinos e séries do período, dores de 4/10 ou mais e um espaço em branco para as notas do personal trainer. A app junta o material; a análise é feita pelo profissional. As fotos entram no PDF tal como estão guardadas (JPEG sem metadados). O PDF é gerado no dispositivo e só sai dele se eu o partilhar.
 
 ### F16. Perfil e saudação (v1.4)
 - Em «Mais»: nome (até 40 caracteres) e foto de perfil (redimensionada para 256 px, mesmo tratamento das fotos de avaliação). Ambos opcionais.
 - No Início: «Bom dia», «Boa tarde» ou «Boa noite», seguido do nome se existir, conforme a hora do dispositivo: 5h00–11h59 bom dia, 12h00–19h59 boa tarde, 20h00–4h59 boa noite. Mostra a foto de perfil, se existir.
+
+### F17. Exportar ficha e histórico (v1.5)
+- Em «Mais», secção «Exportar»: ficha de treino (plano atual com exercícios, grupos, séries, repetições, RIR e descanso) e histórico (sessões, séries e medições), em PDF, Excel (.xlsx) e JSON.
+- PDF e Excel são gerados no dispositivo, sem serviços externos nem bibliotecas de terceiros. O Excel tem as folhas «Ficha», «Histórico» e «Medições». Os PDF da ficha e do histórico têm só texto; o único PDF com fotos é o relatório para o PT (F15).
+- O JSON da ficha e do histórico é a cópia de segurança (F10).
+
+### F18. Catálogo alargado e imagens dos músculos (v1.5)
+- Catálogo com pelo menos 70 exercícios, com as mesmas regras (equipamento, contraindicações, substitutos).
+- Cada exercício mostra um desenho do corpo (frente e costas) com o grupo principal destacado e os secundários em tom mais claro. O desenho é da própria app (SVG), sem imagens de terceiros.
+- Exercícios novos podem não ter vídeo: aparece «Procurar no YouTube» e posso guardar o link escolhido (já existente).
 
 ### F14. Blocos e próxima mudança (v1.2, regras na secção 3.7)
 - No Início e no Treino de hoje: fase atual (readaptação, semana N de M do bloco, ou descarga) e a próxima mudança com data: fim da readaptação (séries completas), semana de descarga (metade das séries), ou novo bloco (troca dos exercícios isolados, com a lista do que muda).
@@ -146,6 +159,19 @@ Estes nomes são usados iguais na especificação, no código e na interface.
 Com 3 dias usa-se Corpo inteiro A/B/C e não Empurrar/Puxar/Pernas, porque com essa divisão cada músculo seria treinado só 1 vez por semana. Com 7 dias, o sétimo é sempre de recuperação: treinar força 7 dias seguidos não é recomendável, sobretudo a regressar após paragem.
 
 Frequência alvo: cada grupo principal 2×/semana.
+
+**Escolha do modelo de treino (v1.5).** Na anamnese escolho o modelo; só aparecem as combinações coerentes com os dias por semana:
+
+| Modelo | Dias | Treinos (em rotação) |
+|---|---|---|
+| Automático (recomendado) | 2–7 | Tabela acima |
+| Corpo inteiro | 2–4 | Corpo inteiro A, B (2 dias) ou A, B, C (3–4 dias) |
+| A/B: superior e inferior | 2–6 | Superior A, Inferior A (2 dias) ou Superior A, Inferior A, Superior B, Inferior B |
+| A/B/C: empurrar, puxar, pernas | 3–7 | Empurrar, Puxar e Pernas A e B; com 7 dias, mais Recuperação ativa |
+| Por grupo muscular | 4–6 | Peito e tríceps, Costas e bíceps, Pernas A, Ombros e core; com 5–6 dias, mais Pernas B |
+
+- Combinações com frequência de 1×/semana por grupo (A/B com 2 dias, A/B/C com 3 dias, Por grupo muscular) são permitidas, com um aviso no plano: a evidência favorece 2×/semana (Schoenfeld et al., 2016).
+- Uma combinação incoerente (ex.: guardada antes de mudar os dias) gera o modelo automático, com aviso.
 
 ### 3.2 Parâmetros por objetivo
 | Objetivo | Compostos | Isolados | RIR | Descanso compostos / isolados |

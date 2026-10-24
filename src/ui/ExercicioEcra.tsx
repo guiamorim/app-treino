@@ -9,6 +9,7 @@ import { lerVideo, pesquisaYoutube } from '../domain/video'
 import { abrirSessao, alterarRegisto, sessaoAberta } from './acoes'
 import { agoraIso, catalogo, kg, type Dados } from './dados'
 import { ir } from './rota'
+import { Corpo } from './Corpo'
 import { Temporizador } from './Temporizador'
 import { VideoModal } from './Video'
 
@@ -114,8 +115,9 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
       <h1>{ex.nome}</h1>
       <p>
         <span className="chip">{NOMES_GRUPOS[ex.grupoPrincipal]}</span>{' '}
-        {ex.gruposSecundarios.map((g) => <span key={g} className="secundario">{NOMES_GRUPOS[g]} · </span>)}
+        <span className="secundario">{ex.gruposSecundarios.map((g) => NOMES_GRUPOS[g]).join(' · ')}</span>
       </p>
+      <Corpo ex={ex} />
       <p>{ex.objetivo}</p>
       {ef.nota && ex.id === ef.exercicioId && <p className="secundario">{ef.nota}</p>}
 
@@ -123,7 +125,7 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
         {video ? (
           <button onClick={() => setVerVideo(true)}>▶ Ver vídeo</button>
         ) : (
-          <a className="botao" href={pesquisaYoutube(ex.nome)} target="_blank" rel="noopener noreferrer">Procurar vídeo</a>
+          <a className="botao" href={pesquisaYoutube(ex.nome)} target="_blank" rel="noopener noreferrer">Procurar no YouTube</a>
         )}
         <button onClick={mudarVideo}>Mudar vídeo</button>
       </div>

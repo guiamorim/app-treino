@@ -1,4 +1,4 @@
-import type { DiasPorSemana } from './types'
+import type { DiasPorSemana, DivisaoTreino } from './types'
 
 // Treinos-modelo base (especificação, secção 3.1). Cada posição indica o exercício preferido;
 // a geração troca-o por um substituto quando há restrições ou falta equipamento.
@@ -188,6 +188,45 @@ export const MODELOS: Record<string, Modelo> = {
       { exercicioId: 'dead-bug' },
     ],
   },
+  'peito-triceps': {
+    id: 'peito-triceps',
+    nome: 'Peito e tríceps',
+    tipo: 'superior',
+    sintese: 'Treino por grupo muscular: peito em vários ângulos e tríceps no fim.',
+    posicoes: [
+      { exercicioId: 'supino-barra', principal: true },
+      { exercicioId: 'supino-inclinado-halteres' },
+      { exercicioId: 'crucifixo-maquina' },
+      { exercicioId: 'triceps-corda' },
+      { exercicioId: 'triceps-frances' },
+    ],
+  },
+  'costas-biceps': {
+    id: 'costas-biceps',
+    nome: 'Costas e bíceps',
+    tipo: 'superior',
+    sintese: 'Treino por grupo muscular: puxadas verticais e horizontais e bíceps no fim.',
+    posicoes: [
+      { exercicioId: 'puxada-frente', principal: true },
+      { exercicioId: 'remada-cabo-sentado' },
+      { exercicioId: 'remada-halter-unilateral' },
+      { exercicioId: 'curl-halteres' },
+      { exercicioId: 'curl-martelo' },
+    ],
+  },
+  'ombros-core': {
+    id: 'ombros-core',
+    nome: 'Ombros e core',
+    tipo: 'superior',
+    sintese: 'Treino por grupo muscular: ombros (frente, lado e trás) e estabilidade do tronco.',
+    posicoes: [
+      { exercicioId: 'desenvolvimento-halteres', principal: true },
+      { exercicioId: 'elevacao-lateral' },
+      { exercicioId: 'face-pull' },
+      { exercicioId: 'pallof' },
+      { exercicioId: 'prancha-lateral' },
+    ],
+  },
   recuperacao: {
     id: 'recuperacao',
     nome: 'Recuperação ativa',
@@ -204,4 +243,17 @@ export const DIVISOES: Record<DiasPorSemana, string[]> = {
   5: ['superior-a', 'inferior-a', 'superior-b', 'inferior-b', 'corpo-a'],
   6: ['empurrar-a', 'puxar-a', 'pernas-a', 'empurrar-b', 'puxar-b', 'pernas-b'],
   7: ['empurrar-a', 'puxar-a', 'pernas-a', 'empurrar-b', 'puxar-b', 'pernas-b', 'recuperacao'],
+}
+
+/** Secção 3.1 (v1.5): modelos que o utilizador pode escolher e os dias em que fazem sentido. */
+const PPL = ['empurrar-a', 'puxar-a', 'pernas-a', 'empurrar-b', 'puxar-b', 'pernas-b']
+export const MODELOS_ESCOLHA: Record<Exclude<DivisaoTreino, 'automatico'>, { dias: [number, number]; treinos: (dias: number) => string[]; umaVezPorSemana: (dias: number) => boolean }> = {
+  corpo: { dias: [2, 4], treinos: (d) => (d === 2 ? ['corpo-a', 'corpo-b'] : ['corpo-a', 'corpo-b', 'corpo-c']), umaVezPorSemana: () => false },
+  ab: { dias: [2, 6], treinos: (d) => (d === 2 ? ['superior-a', 'inferior-a'] : ['superior-a', 'inferior-a', 'superior-b', 'inferior-b']), umaVezPorSemana: (d) => d === 2 },
+  abc: { dias: [3, 7], treinos: (d) => (d === 7 ? [...PPL, 'recuperacao'] : PPL), umaVezPorSemana: (d) => d === 3 },
+  grupos: {
+    dias: [4, 6],
+    treinos: (d) => (d === 4 ? ['peito-triceps', 'costas-biceps', 'pernas-a', 'ombros-core'] : ['peito-triceps', 'costas-biceps', 'pernas-a', 'ombros-core', 'pernas-b']),
+    umaVezPorSemana: () => true,
+  },
 }

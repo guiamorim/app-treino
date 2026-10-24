@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { gerarPlano, prescricaoEfetiva, semanaDoPlano } from './plano'
+import { divisoesPossiveis, gerarPlano, prescricaoEfetiva, semanaDoPlano } from './plano'
 import { catalogo, perfilExemplo } from './fixtures'
 import type { Anamnese, GrupoMuscular, Plano } from './types'
 import { GRUPOS_GRANDES } from './types'
@@ -212,6 +212,52 @@ describe('3.8 ênfase', () => {
 
   it('«equilibrado» é igual a não indicar ênfase', () => {
     expect(gerar({ enfase: 'equilibrado' })).toEqual(gerar())
+  })
+})
+
+describe('3.1 v1.5 escolha do modelo de treino', () => {
+  it('só oferece combinações coerentes com os dias', () => {
+    expect(divisoesPossiveis(2)).toEqual(['automatico', 'corpo', 'ab'])
+    expect(divisoesPossiveis(3)).toEqual(['automatico', 'corpo', 'ab', 'abc'])
+    expect(divisoesPossiveis(4)).toEqual(['automatico', 'corpo', 'ab', 'abc', 'grupos'])
+    expect(divisoesPossiveis(5)).toEqual(['automatico', 'ab', 'abc', 'grupos'])
+    expect(divisoesPossiveis(7)).toEqual(['automatico', 'abc'])
+  })
+
+  it.each([
+    ['corpo', 4, ['Corpo inteiro A', 'Corpo inteiro B', 'Corpo inteiro C']],
+    ['corpo', 2, ['Corpo inteiro A', 'Corpo inteiro B']],
+    ['ab', 3, ['Superior A', 'Inferior A', 'Superior B', 'Inferior B']],
+    ['ab', 2, ['Superior A', 'Inferior A']],
+    ['abc', 3, ['Empurrar A', 'Puxar A', 'Pernas A', 'Empurrar B', 'Puxar B', 'Pernas B']],
+    ['grupos', 4, ['Peito e tríceps', 'Costas e bíceps', 'Pernas A', 'Ombros e core']],
+    ['grupos', 5, ['Peito e tríceps', 'Costas e bíceps', 'Pernas A', 'Ombros e core', 'Pernas B']],
+  ] as const)('%s com %i dias', (divisao, dias, nomes) => {
+    expect(gerar({ divisao, diasPorSemana: dias }).treinos.map((t) => t.nome)).toEqual(nomes)
+  })
+
+  it('«automatico» é igual a não escolher', () => {
+    expect(gerar({ divisao: 'automatico' })).toEqual(gerar())
+  })
+
+  it('frequência de 1×/semana gera aviso; combinação incoerente usa o automático com aviso', () => {
+    expect(gerar({ divisao: 'grupos', diasPorSemana: 4 }).avisos.join(' ')).toMatch(/1×\/semana/)
+    expect(gerar({ divisao: 'abc', diasPorSemana: 3 }).avisos.join(' ')).toMatch(/1×\/semana/)
+    expect(gerar({ divisao: 'ab', diasPorSemana: 4 }).avisos.join(' ')).not.toMatch(/1×\/semana/)
+    const p = gerar({ divisao: 'corpo', diasPorSemana: 6 })
+    expect(p.treinos.map((t) => t.nome)).toEqual(gerar({ diasPorSemana: 6 }).treinos.map((t) => t.nome))
+    expect(p.avisos.join(' ')).toMatch(/modelo automático/)
+  })
+
+  it('todas as combinações possíveis cabem na duração e não repetem exercícios', () => {
+    for (const dias of [2, 3, 4, 5, 6, 7] as const)
+      for (const divisao of divisoesPossiveis(dias))
+        for (const duracaoMin of [45, 60, 75] as const)
+          for (const t of gerar({ divisao, diasPorSemana: dias, duracaoMin }).treinos) {
+            expect(t.duracaoEstimadaMin, `${divisao} ${dias} ${t.nome}`).toBeLessThanOrEqual(duracaoMin)
+            const ids = t.prescricoes.map((x) => x.exercicioId)
+            expect(new Set(ids).size).toBe(ids.length)
+          }
   })
 })
 

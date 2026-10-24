@@ -1,7 +1,8 @@
 import { useState, type FormEvent } from 'react'
 import { db } from '../data/db'
-import { gerarPlano } from '../domain/plano'
-import { AREAS, DIAS_POR_SEMANA, type Anamnese, type Enfase, type Gravidez, type Area, type Restricao } from '../domain/types'
+import { MODELOS_ESCOLHA } from '../domain/modelos'
+import { divisoesPossiveis, gerarPlano } from '../domain/plano'
+import { AREAS, DIAS_POR_SEMANA, type Anamnese, type DiasPorSemana, type DivisaoTreino, type Enfase, type Gravidez, type Area, type Restricao } from '../domain/types'
 import { agoraIso, catalogo, novoId, type Dados } from './dados'
 import { ir } from './rota'
 
@@ -25,6 +26,15 @@ const DICA_DIAS: Record<number, string> = {
   7: 'A/B/C duas vezes e 1 dia de recuperação ativa (treinar força 7 dias seguidos não é recomendável).',
 }
 
+// 3.1 (v1.5): modelo de treino escolhido pela pessoa.
+const NOMES_DIVISOES: Record<DivisaoTreino, string> = {
+  automatico: 'Automático (recomendado)',
+  corpo: 'Corpo inteiro',
+  ab: 'A/B: superior e inferior',
+  abc: 'A/B/C: empurrar, puxar e pernas',
+  grupos: 'Por grupo muscular',
+}
+
 const NOMES_AREAS: Record<Area, string> = { ombro: 'Ombro', joelho: 'Joelho', lombar: 'Lombar', punho: 'Punho', anca: 'Anca', cotovelo: 'Cotovelo' }
 
 export function AnamneseEcra({ dados }: { dados: Dados }) {
@@ -43,12 +53,17 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
     aceitaCardio: a?.aceitaCardio ?? true,
     enfase: a?.enfase ?? 'equilibrado',
     gravidez: a?.gravidez ?? 'nao',
+    divisao: a?.divisao ?? 'automatico',
   })
   const [restricoes, setRestricoes] = useState<Restricao[]>(a?.restricoes ?? [])
   // F1 (v1.2): «Nenhuma» é uma resposta explícita, para não confundir com «esqueci-me de responder».
   const [semDores, setSemDores] = useState(!!a && a.restricoes.length === 0)
   const [parq, setParq] = useState<(boolean | null)[]>(a?.parq ?? PERGUNTAS_PARQ.map(() => null))
   const [erro, setErro] = useState('')
+  const dias = Number(f.diasPorSemana) as DiasPorSemana
+  const possiveis = divisoesPossiveis(dias)
+  // Se os dias mudarem e o modelo deixar de servir, volta ao automático.
+  const divisao = possiveis.includes(f.divisao) ? f.divisao : 'automatico'
 
   const campo = (k: keyof typeof f) => ({
     value: String(f[k]),
@@ -89,6 +104,7 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
       aceitaCardio: f.aceitaCardio,
       parq: parq as boolean[],
       enfase: f.enfase as Enfase,
+      ...(divisao !== 'automatico' ? { divisao } : {}),
       ...(f.sexo === 'feminino' ? { gravidez: f.gravidez as Gravidez } : {}),
     }
     await db.gravar('anamnese', nova)
@@ -150,7 +166,15 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
           <select id="duracao" {...campo('duracaoMin')}>{[45, 60, 75].map((d) => <option key={d} value={d}>{d}</option>)}</select>
         </div>
       </div>
-      <p className="secundario">{DICA_DIAS[Number(f.diasPorSemana)]}</p>
+      <label htmlFor="divisao">Modelo de treino</label>
+      <select id="divisao" value={divisao} onChange={(e) => setF({ ...f, divisao: e.target.value as DivisaoTreino })}>
+        {possiveis.map((d) => <option key={d} value={d}>{NOMES_DIVISOES[d]}</option>)}
+      </select>
+      {divisao === 'automatico' ? (
+        <p className="secundario">{DICA_DIAS[dias]}</p>
+      ) : MODELOS_ESCOLHA[divisao].umaVezPorSemana(dias) ? (
+        <p className="secundario">Com este modelo, cada grupo muscular é treinado cerca de 1×/semana. A evidência favorece 2×/semana; o automático garante-o.</p>
+      ) : null}
       <label htmlFor="experiencia">Experiência</label>
       <select id="experiencia" {...campo('experiencia')}>
         <option value="iniciante">Iniciante</option>

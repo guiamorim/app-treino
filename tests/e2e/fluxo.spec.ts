@@ -213,4 +213,54 @@ test('F15 e F16: perfil com nome e foto, saudação e fotos de avaliação compa
   await expect(page.getByRole('status')).toHaveText('Diferença: -1,5 kg · -2 cm de cintura')
   await page.getByRole('radio', { name: 'Lado' }).click()
   await expect(page.getByText('Sem foto de lado neste mês')).toHaveCount(2)
+
+  // F15 v1.5: relatório para o PT com as fotos (JPEG) dentro do PDF.
+  const descarga = page.waitForEvent('download')
+  await page.getByRole('button', { name: 'Relatório para o PT (PDF)' }).click()
+  const relatorio = await descarga
+  expect(relatorio.suggestedFilename()).toBe('relatorio-pt-2026-09-2026-10.pdf')
+  const pdf = (await import('node:fs')).readFileSync((await relatorio.path())!, 'latin1')
+  expect(pdf.startsWith('%PDF-1.4')).toBe(true)
+  expect(pdf.match(/\/Filter \/DCTDecode/g)).toHaveLength(2)
+})
+
+test('v1.5: modelo por grupo muscular, músculos do exercício, medidas extra e exportação', async ({ page }) => {
+  await page.goto('./')
+  await page.getByLabel('Idade').fill('45')
+  await page.getByLabel('Altura (cm)').fill('175')
+  await page.getByLabel('Peso (kg)').fill('85')
+  await page.getByLabel('Dias por semana').selectOption('2')
+  // 3.1: «Por grupo muscular» só existe de 4 a 6 dias.
+  await expect(page.getByLabel('Modelo de treino').locator('option')).toHaveText(['Automático (recomendado)', 'Corpo inteiro', 'A/B: superior e inferior'])
+  await page.getByLabel('Dias por semana').selectOption('5')
+  await page.getByLabel('Modelo de treino').selectOption({ label: 'Por grupo muscular' })
+  await expect(page.getByText(/cerca de 1×\/semana/)).toBeVisible()
+  await page.getByLabel('Nenhuma').check()
+  for (let i = 0; i < 7; i++) await page.locator(`input[name="parq-${i}"]`).nth(1).check()
+  await page.getByRole('button', { name: 'Gerar o meu plano' }).click()
+
+  // F18: desenho do corpo com o grupo principal.
+  await expect(page.getByRole('heading', { name: 'Peito e tríceps' })).toBeVisible()
+  await page.getByText('Supino reto com barra').click()
+  await expect(page.getByRole('img', { name: 'Músculos trabalhados: Peito; secundários: Tríceps, Ombros.' })).toBeVisible()
+  await expect(page.locator('.musculo.principal[data-grupo="peito"]')).toHaveCount(1)
+
+  // F9 v1.5: medidas extra com instruções.
+  await page.getByRole('link', { name: 'Medições' }).click()
+  await page.getByText('Mais medidas (opcional)').click()
+  await expect(page.getByText(/A meio entre o ombro e o cotovelo/)).toBeVisible()
+  await page.getByLabel('Braço (cm)').fill('34,5')
+  await page.getByRole('button', { name: 'Guardar medição' }).click()
+  await expect(page.getByText('Braço 34,5 cm')).toBeVisible()
+
+  // F17: exportações geradas no dispositivo.
+  await page.getByRole('link', { name: 'Mais' }).click()
+  const fs = await import('node:fs')
+  for (const [botao, ficheiro, inicio] of [['Ficha (PDF)', /^ficha-treino-.*\.pdf$/, '%PDF'], ['Histórico (PDF)', /^historico-treino-.*\.pdf$/, '%PDF'], ['Ficha, histórico e medições (Excel)', /^treino-.*\.xlsx$/, 'PK']] as const) {
+    const descarga = page.waitForEvent('download')
+    await page.getByRole('button', { name: botao }).click()
+    const d = await descarga
+    expect(d.suggestedFilename()).toMatch(ficheiro)
+    expect(fs.readFileSync((await d.path())!, 'latin1').startsWith(inicio)).toBe(true)
+  }
 })
