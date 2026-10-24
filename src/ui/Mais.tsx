@@ -71,6 +71,7 @@ export function Mais({ dados }: { dados: Dados }) {
           Esta app não substitui avaliação médica nem de fisioterapia. Se sentires dor forte, tonturas ou dor no peito, para e procura ajuda.
         </p>
         <p className="secundario">Sem anúncios, sem rastreio, sem servidor. Os vídeos são de terceiros (YouTube/Vimeo).</p>
+        <p className="secundario">Desenhos dos músculos: react-native-body-highlighter, © 2022 Hicham Elabbassi, licença MIT.</p>
       </div>
     </>
   )

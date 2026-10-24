@@ -143,7 +143,7 @@ RIR = reps in reserve: how many more reps you could still have done at the end o
 
 ### F18. Larger catalogue and muscle images (v1.5)
 - Catalogue with at least 70 exercises, under the same rules (equipment, contraindications, substitutes).
-- Each exercise shows a body drawing (front and back) with the primary group highlighted and the secondary groups in a lighter shade. The drawing is the app's own (SVG), with no third-party images.
+- Each exercise shows a body drawing (front and back) with the primary group highlighted and the secondary groups in a lighter shade. The drawings come from the react-native-body-highlighter library (MIT licence, commercial use allowed; the licence notice ships with the code and appears in "Sobre" (About)). Female body if the sex in the anamnesis is female; male otherwise. Chosen by Guilherme on 2026-10-24 out of four compared options.
 - New exercises may have no video: "Procurar no YouTube" (search YouTube) is shown and I can save the chosen link (existing feature).
 
 ### F14. Blocks and next change (v1.2, rules in section 3.7)

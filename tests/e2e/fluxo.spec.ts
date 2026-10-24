@@ -174,6 +174,10 @@ test('F1 v1.3: gravidez no 2.º trimestre troca exercícios deitado e só aparec
   await expect(page.getByText('Supino com halteres, pega neutra')).toHaveCount(0)
   await page.getByText(/aviso.* sobre o teu plano/).click()
   await expect(page.getByText(/obstetra/)).toBeVisible()
+
+  // F18: o desenho dos músculos usa o corpo feminino.
+  await page.locator('.lista .item').first().click()
+  await expect(page.locator('.corpo-musculos')).toHaveAttribute('data-corpo', 'feminino')
 })
 
 // PNG 2×3 válido, só para testes.
@@ -244,6 +248,7 @@ test('v1.5: modelo por grupo muscular, músculos do exercício, medidas extra e 
   await page.getByText('Supino reto com barra').click()
   await expect(page.getByRole('img', { name: 'Músculos trabalhados: Peito; secundários: Tríceps, Ombros.' })).toBeVisible()
   await expect(page.locator('.musculo.principal[data-grupo="peito"]')).toHaveCount(1)
+  await expect(page.locator('.corpo-musculos')).toHaveAttribute('data-corpo', 'masculino')
 
   // F9 v1.5: medidas extra com instruções.
   await page.getByRole('link', { name: 'Medições' }).click()

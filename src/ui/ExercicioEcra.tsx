@@ -117,7 +117,7 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
         <span className="chip">{NOMES_GRUPOS[ex.grupoPrincipal]}</span>{' '}
         <span className="secundario">{ex.gruposSecundarios.map((g) => NOMES_GRUPOS[g]).join(' · ')}</span>
       </p>
-      <Corpo ex={ex} />
+      <Corpo ex={ex} sexo={dados.anamnese?.sexo} />
       <p>{ex.objetivo}</p>
       {ef.nota && ex.id === ef.exercicioId && <p className="secundario">{ef.nota}</p>}
 

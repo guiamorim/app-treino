@@ -139,7 +139,7 @@ Estes nomes são usados iguais na especificação, no código e na interface.
 
 ### F18. Catálogo alargado e imagens dos músculos (v1.5)
 - Catálogo com pelo menos 70 exercícios, com as mesmas regras (equipamento, contraindicações, substitutos).
-- Cada exercício mostra um desenho do corpo (frente e costas) com o grupo principal destacado e os secundários em tom mais claro. O desenho é da própria app (SVG), sem imagens de terceiros.
+- Cada exercício mostra um desenho do corpo (frente e costas) com o grupo principal destacado e os secundários em tom mais claro. Os desenhos vêm da biblioteca react-native-body-highlighter (licença MIT, uso comercial permitido; o aviso de licença acompanha o código e aparece em «Sobre»). Corpo feminino se o sexo na anamnese for feminino; masculino nos outros casos. Escolhido pelo Guilherme em 2026-10-24, entre quatro opções comparadas.
 - Exercícios novos podem não ter vídeo: aparece «Procurar no YouTube» e posso guardar o link escolhido (já existente).
 
 ### F14. Blocos e próxima mudança (v1.2, regras na secção 3.7)

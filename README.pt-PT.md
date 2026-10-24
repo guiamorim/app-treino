@@ -49,3 +49,7 @@ Cada teste tem o código do critério da especificação que verifica (ex.: `F4`
 Toda a documentação existe em português e em inglês. Quem alterar um documento atualiza as duas versões no mesmo commit.
 
 A app não substitui avaliação médica nem de fisioterapia.
+
+## Material de terceiros
+
+- Desenhos dos músculos em `src/ui/corpo/corpos.json`: extraídos de [react-native-body-highlighter](https://github.com/HichamELBSI/react-native-body-highlighter) 3.2.0, © 2022 Hicham Elabbassi, licença MIT ([src/ui/corpo/LICENSE](src/ui/corpo/LICENSE)).

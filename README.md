@@ -49,3 +49,7 @@ Each test carries the code of the specification criterion it checks (e.g. `F4`, 
 All documentation exists in Portuguese and English. Whoever changes a document updates both versions in the same commit.
 
 The app does not replace medical or physiotherapy assessment.
+
+## Third-party material
+
+- Muscle drawings in `src/ui/corpo/corpos.json`: extracted from [react-native-body-highlighter](https://github.com/HichamELBSI/react-native-body-highlighter) 3.2.0, © 2022 Hicham Elabbassi, MIT licence ([src/ui/corpo/LICENSE](src/ui/corpo/LICENSE)).
