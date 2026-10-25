@@ -269,3 +269,44 @@ test('v1.5: modelo por grupo muscular, músculos do exercício, medidas extra e 
     expect(fs.readFileSync((await d.path())!, 'latin1').startsWith(inicio)).toBe(true)
   }
 })
+
+test('F19: lembrete de alongamento no fim do treino, alongamento do treino e por grupo muscular', async ({ page }) => {
+  page.on('dialog', (d) => d.accept())
+  await preencherAnamnese(page)
+  for (const [nome, carga] of [['Supino com halteres, pega neutra', '16'], ['Remada sentada no cabo (triângulo)', '30']] as const) {
+    await page.getByText(nome, { exact: true }).click()
+    await page.getByLabel('Carga (kg)').fill(carga)
+    await page.getByLabel('Repetições').fill('10')
+    await page.getByRole('button', { name: 'Concluir série' }).click()
+    await page.getByRole('button', { name: /‹ Superior A/ }).click()
+  }
+  await expect(page.getByRole('region', { name: 'Lembrete de alongamento' })).toHaveCount(0)
+  await page.getByRole('button', { name: 'Terminar treino' }).click()
+
+  // Lembrete no Hoje e no Início; o peito fica de fora por causa do ombro.
+  const lembrete = page.getByRole('region', { name: 'Lembrete de alongamento' })
+  await expect(lembrete).toContainText('Hora de alongar')
+  await expect(lembrete).toContainText('Costas')
+  await page.getByRole('link', { name: 'Início' }).click()
+  await page.getByRole('button', { name: 'Alongar agora' }).click()
+
+  await expect(page.getByRole('heading', { name: 'Alongar' })).toBeVisible()
+  await expect(page.getByText('Depois de Superior A')).toBeVisible()
+  await expect(page.getByText(/Sem alongamento seguro para: Peito/)).toBeVisible()
+  const cartao = page.getByRole('region', { name: '1. Costas agarrado a um apoio' })
+  await expect(cartao.getByRole('img', { name: /Músculos trabalhados: Costas/ })).toBeVisible()
+  await expect(cartao.getByText('2 × 30 s')).toBeVisible()
+  await expect(cartao.getByRole('link', { name: 'Procurar no YouTube' })).toHaveAttribute('href', /youtube\.com\/results\?search_query=alongamento/)
+  await cartao.getByRole('button', { name: 'Manter 30 s' }).click()
+  await expect(cartao.getByRole('timer')).toContainText('Manter')
+
+  await page.getByRole('radio', { name: 'Por grupo muscular' }).click()
+  await page.getByRole('radio', { name: 'Gémeos' }).click()
+  await expect(page.getByRole('heading', { name: /Gémeos num degrau/ })).toBeVisible()
+  await expect(page.locator('.musculo.principal[data-grupo="gemeos"]').first()).toBeVisible()
+
+  await page.getByRole('radio', { name: 'Do treino' }).click()
+  await page.getByRole('button', { name: 'Alongamento feito' }).click()
+  await expect(page.getByRole('heading', { name: /^(Bom dia|Boa tarde|Boa noite)$/ })).toBeVisible()
+  await expect(page.getByRole('region', { name: 'Lembrete de alongamento' })).toHaveCount(0)
+})

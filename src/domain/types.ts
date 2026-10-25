@@ -161,6 +161,27 @@ export interface Sessao {
   inicio: string
   fim?: string
   exercicios: RegistoExercicio[]
+  /** F19 (v1.6): resposta ao lembrete de alongamento no fim do treino. */
+  alongamento?: 'feito' | 'dispensado'
+}
+
+/** F19 (v1.6): alongamento estático do catálogo. */
+export const POSICOES_ALONGAMENTO = ['pe', 'sentado', 'joelhos', 'lado', 'deitado'] as const
+export type PosicaoAlongamento = (typeof POSICOES_ALONGAMENTO)[number]
+
+export interface Alongamento {
+  id: string
+  nome: string
+  grupo: GrupoMuscular
+  gruposSecundarios: GrupoMuscular[]
+  /** «deitado» é de costas ou de barriga; «lado» é deitado de lado. */
+  posicao: PosicaoAlongamento
+  /** 2 quando se faz um lado de cada vez. */
+  lados: 1 | 2
+  passos: string[]
+  cuidados: string[]
+  contraindicacoes: Area[]
+  video?: string
 }
 
 /** F9: perímetros opcionais, em cm. */

@@ -1,16 +1,17 @@
 import { useState } from 'react'
 import { semanaDoPlano, treinoEfetivo } from '../domain/plano'
 import { estadoExercicio, estadoSessao, proximoTreino, registoDe } from '../domain/sessao'
-import { NOMES_GRUPOS, type EstadoExercicio, type Plano } from '../domain/types'
+import { NOMES_GRUPOS, type Anamnese, type EstadoExercicio, type Plano } from '../domain/types'
 import { abrirSessao, sessaoAberta, terminarSessao } from './acoes'
 import { agoraIso, catalogo, dataCurta, type Dados } from './dados'
+import { LembreteAlongamento } from './Alongamento'
 import { textoFase } from './Fase'
 import { ir } from './rota'
 
 const ICONES: Record<EstadoExercicio, string> = { 'por-fazer': '', 'em-curso': '•', feito: '✓', saltado: '–' }
 const NOMES_ESTADO: Record<EstadoExercicio, string> = { 'por-fazer': 'por fazer', 'em-curso': 'em curso', feito: 'feito', saltado: 'saltado' }
 
-export function Hoje({ dados, plano }: { dados: Dados; plano: Plano }) {
+export function Hoje({ dados, plano, anamnese }: { dados: Dados; plano: Plano; anamnese: Anamnese }) {
   const proximo = proximoTreino(plano, dados.sessoes)
   const [escolhido, setEscolhido] = useState<string | null>(null)
   const treinoId = escolhido ?? proximo.treinoId
@@ -34,6 +35,7 @@ export function Hoje({ dados, plano }: { dados: Dados; plano: Plano }) {
 
   return (
     <>
+      <LembreteAlongamento dados={dados} anamnese={anamnese} />
       <h1>{treino.nome}</h1>
       <p className="secundario">~{treino.duracaoEstimadaMin} min · {textoFase(plano, semana)}</p>
       <p>{treino.sintese}</p>
@@ -90,6 +92,7 @@ export function Hoje({ dados, plano }: { dados: Dados; plano: Plano }) {
       </div>
 
       {sessao && !estado?.completa && <button className="largo" onClick={terminar}>Terminar treino</button>}
+      <button className="largo" style={{ marginTop: 8 }} onClick={() => ir('/alongamento')}>🧘 Alongamentos</button>
 
       <label htmlFor="treino">Fazer outro treino</label>
       <select id="treino" value={treino.id} onChange={(e) => setEscolhido(e.target.value)}>

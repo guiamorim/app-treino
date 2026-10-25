@@ -34,4 +34,6 @@ test('capturas', async ({ page }) => {
   await page.screenshot({ path: `${process.env.CAPTURAS}/6-medicoes.png`, fullPage: true })
   await page.getByRole('link', { name: 'Mais' }).click()
   await page.screenshot({ path: `${process.env.CAPTURAS}/7-mais.png`, fullPage: true })
+  await page.goto('./#/alongamento/posteriores')
+  await page.screenshot({ path: `${process.env.CAPTURAS}/9-alongamento.png`, fullPage: true })
 })

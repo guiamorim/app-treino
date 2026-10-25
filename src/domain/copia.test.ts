@@ -10,7 +10,7 @@ const copia: Copia = {
   anamnese: perfilExemplo,
   plano: gerarPlano(perfilExemplo, catalogo, { id: 'p1', agora: '2026-10-20T08:00:00.000Z' }),
   sessoes: [
-    { id: 's1', planoId: 'p1', treinoId: 'superior-a', inicio: '2026-10-20T10:00:00.000Z', fim: '2026-10-20T11:00:00.000Z',
+    { id: 's1', planoId: 'p1', treinoId: 'superior-a', inicio: '2026-10-20T10:00:00.000Z', fim: '2026-10-20T11:00:00.000Z', alongamento: 'feito',
       exercicios: [{ prescricaoId: 'superior-a-1', exercicioId: 'supino-halteres-neutro', series: [{ carga: 20, reps: 10, rir: 2 }], dor: 1 }] },
   ],
   medicoes: [{ id: 'm1', data: '2026-10-20', pesoKg: 85, cinturaCm: 92, peitoCm: 101, bracoCm: 34, ancaCm: 100, coxaCm: 58 }],

@@ -1,10 +1,13 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../data/db'
+import dadosAlongamentos from '../catalog/alongamentos.json'
 import dadosCatalogo from '../catalog/exercicios.json'
+import { carregarAlongamentos } from '../domain/alongamentos'
 import { carregarCatalogo } from '../domain/catalogo'
 import type { Anamnese, FotoAvaliacao, Medicao, Perfil, Plano, Sessao } from '../domain/types'
 
 export const catalogo = carregarCatalogo(dadosCatalogo)
+export const alongamentos = carregarAlongamentos(dadosAlongamentos)
 
 export interface Dados {
   anamnese?: Anamnese

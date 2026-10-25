@@ -138,3 +138,10 @@ figure.frase figcaption::before { content: '— '; }
 .musculo.principal { fill: var(--acento); }
 .musculo.secundario { fill: color-mix(in srgb, var(--acento) 55%, var(--fundo)); }
 .grelha-medidas { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }
+.corpo-musculos.compacto { gap: 4px; margin: 4px 0; }
+.corpo-musculos.compacto svg { width: 60px; height: 120px; }
+.corpo-musculos.compacto figcaption { display: none; }
+.grupos-escolha { display: flex; flex-wrap: wrap; gap: 6px; }
+.grupos-escolha button { flex: none; min-height: 40px; padding: 6px 12px; }
+.alongamento-topo { display: flex; gap: 12px; align-items: flex-start; }
+.alongamento-topo > div:last-child { flex: 1; min-width: 0; }

@@ -2,7 +2,7 @@
 
 **English** · [Português](especificacao-v1.md)
 
-Date: 2026-10-20 · Version 1.5 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.5)
+Date: 2026-10-20 · Version 1.6 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.6)
 
 The Portuguese version is the reference used for the domain names in the code. Both versions must stay in sync.
 
@@ -40,6 +40,7 @@ These names are used identically in the specification, the code and the UI. The 
 | **Block** (`Bloco`, v1.2) | Cycle of progression weeks ending with a deload week; its length depends on the goal |
 | **Deload** (`Descarga`) | Week with half the sets and RIR 3–4, to recover before the next block |
 | **Achievement** (`Conquista`, v1.2) | Milestone computed from history (e.g. 10 workouts, 4 consecutive weeks met) |
+| **Stretch** (`Alongamento`, v1.6) | Entry in the stretch catalogue: name, muscle group, position, one or both sides, steps, cautions and contraindications |
 
 RIR = reps in reserve: how many more reps you could still have done at the end of the set.
 
@@ -145,6 +146,17 @@ RIR = reps in reserve: how many more reps you could still have done at the end o
 - Catalogue with at least 70 exercises, under the same rules (equipment, contraindications, substitutes).
 - Each exercise shows a body drawing (front and back) with the primary group highlighted and the secondary groups in a lighter shade. The drawings come from the react-native-body-highlighter library (MIT licence, commercial use allowed; the licence notice ships with the code and appears in "Sobre" (About)). Female body if the sex in the anamnesis is female; male otherwise. Chosen by Guilherme on 2026-10-24 out of four compared options.
 - New exercises may have no video: "Procurar no YouTube" (search YouTube) is shown and I can save the chosen link (existing feature).
+
+### F19. Stretching (v1.6)
+- "Alongar" (stretch) screen, opened from Home, from Today's workout and from the reminder at the end of a workout. It is not a new tab in the bottom bar, so the bar does not get cramped on the iPhone.
+- Two modes:
+  - "Do treino" (from the workout): one stretch per muscle group trained as primary in the workout, in exercise order, up to 6 groups. The workout is the last one finished in the past 12 hours; if there is none, the next workout.
+  - "Por grupo muscular" (by muscle group): I pick a group, see the body drawing with that group highlighted (same library as F18) and every compatible stretch for it.
+- Each stretch shows: the body drawing with the group highlighted, the dose (2 × 30 s; per side when it is one-sided), the written steps, the cautions, a timer for the hold, "Procurar no YouTube" (search YouTube) and "Mudar vídeo" (change video: a saved YouTube or Vimeo link, as for exercises).
+- GIFs: not included. I found no collection of stretching GIFs with a clear licence for commercial use; the video and the written instructions cover the guidance.
+- Rules: static stretching, to mild tension and never pain, 2 repetitions of 30 s per muscle (ACSM: hold 10–30 s, about 60 s in total per muscle). The app says honestly that stretching improves flexibility but does not prevent next-day muscle soreness (Cochrane review, 2011).
+- Restrictions: a stretch contraindicated for an area marked as painful is not shown. In the 2nd and 3rd trimester of pregnancy, stretches lying on the back or front are not shown.
+- Reminder: after finishing a workout, Today and Home show "Hora de alongar" (time to stretch), with the estimated time, until I choose "Feito" (done) or "Hoje não" (not today), which is saved in the session (and in the backup). It only appears for workouts finished in the last 12 hours. It is an in-app notice; there are still no notifications (F13).
 
 ### F14. Blocks and next change (v1.2, rules in section 3.7)
 - On Home and on Today's workout: current phase (re-adaptation, week N of M of the block, or deload) and the next change with its date: end of re-adaptation (full sets), deload week (half the sets), or new block (isolation exercises rotate, listing what changes).

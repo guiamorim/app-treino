@@ -17,7 +17,7 @@ const registo = z.strictObject({
   concluido: z.boolean().optional(),
   saltado: z.boolean().optional(),
 })
-const sessao = z.strictObject({ id, planoId: id, treinoId: id, inicio: data, fim: data.optional(), exercicios: z.array(registo).max(50) })
+const sessao = z.strictObject({ id, planoId: id, treinoId: id, inicio: data, fim: data.optional(), exercicios: z.array(registo).max(50), alongamento: z.enum(['feito', 'dispensado']).optional() })
 const medicao = z.strictObject({
   id,
   data,

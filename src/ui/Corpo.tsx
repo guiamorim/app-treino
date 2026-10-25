@@ -26,13 +26,13 @@ function Figura({ vista, titulo, d }: { vista: Vista; titulo: string; d: ReturnT
   )
 }
 
-export function Corpo({ ex, sexo }: { ex: Pick<Exercicio, 'grupoPrincipal' | 'gruposSecundarios'>; sexo?: Sexo }) {
+export function Corpo({ ex, sexo, compacto }: { ex: Pick<Exercicio, 'grupoPrincipal' | 'gruposSecundarios'>; sexo?: Sexo; compacto?: boolean }) {
   const d = destaquesPorRegiao(ex)
   const corpo = corpos[sexo === 'feminino' ? 'feminino' : 'masculino']
   const secundarios = ex.gruposSecundarios.filter((g) => g !== ex.grupoPrincipal).map((g) => NOMES_GRUPOS[g])
   const descricao = `Músculos trabalhados: ${NOMES_GRUPOS[ex.grupoPrincipal]}${secundarios.length ? `; secundários: ${secundarios.join(', ')}` : ''}.`
   return (
-    <div className="corpo-musculos" role="img" aria-label={descricao} data-corpo={sexo === 'feminino' ? 'feminino' : 'masculino'}>
+    <div className={`corpo-musculos${compacto ? ' compacto' : ''}`} role="img" aria-label={descricao} data-corpo={sexo === 'feminino' ? 'feminino' : 'masculino'}>
       <Figura vista={corpo.frente} titulo="Frente" d={d} />
       <Figura vista={corpo.costas} titulo="Costas" d={d} />
     </div>

@@ -7,6 +7,7 @@ import { aderencia, inicioSemana } from '../domain/relatorios'
 import { proximoTreino } from '../domain/sessao'
 import type { Anamnese, Plano, Sessao } from '../domain/types'
 import { kg, type Dados } from './dados'
+import { LembreteAlongamento } from './Alongamento'
 import { textoFase, TrocasProximoBloco } from './Fase'
 import { ir } from './rota'
 
@@ -59,12 +60,14 @@ export function Inicio({ dados, plano, anamnese }: { dados: Dados; plano: Plano;
         {frase.autor && <figcaption>{frase.autor}</figcaption>}
       </figure>
 
+      <LembreteAlongamento dados={dados} anamnese={anamnese} />
       <button className="cartao proximo" onClick={() => ir('/hoje')}>
         <span className="secundario">Próximo treino</span>
         <span className="titulo">{proximo.nome} · ~{proximo.duracaoEstimadaMin} min</span>
         <span className="secundario">{textoFase(plano, semana)}</span>
       </button>
       <TrocasProximoBloco plano={plano} semana={semana} />
+      <button className="largo" onClick={() => ir('/alongamento')}>🧘 Alongamentos</button>
 
       <h2>Esta semana</h2>
       <div className="cartao indicadores">

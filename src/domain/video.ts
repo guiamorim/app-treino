@@ -57,6 +57,6 @@ export function lerVideo(texto: string): Video | null {
 }
 
 /** Pesquisa no YouTube, para quando um exercício não tem vídeo. */
-export function pesquisaYoutube(nomeExercicio: string): string {
-  return `https://www.youtube.com/results?search_query=${encodeURIComponent(nomeExercicio + ' execução')}`
+export function pesquisaYoutube(nomeExercicio: string, sufixo = 'execução'): string {
+  return `https://www.youtube.com/results?search_query=${encodeURIComponent(`${nomeExercicio} ${sufixo}`)}`
 }
