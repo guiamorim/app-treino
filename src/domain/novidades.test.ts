@@ -49,5 +49,7 @@ describe('F20 novidades', () => {
     expect(lerNovidades({ versoes: [] })).toBeNull()
     expect(lerNovidades('<html>')).toBeNull()
     expect(lerNovidades(dados)).not.toBeNull()
+    // Campos novos de versões futuras não invalidam o ficheiro.
+    expect(lerNovidades({ ...dados, extra: 1, versoes: dados.versoes.map((v) => ({ ...v, traducoes: {} })) })).not.toBeNull()
   })
 })

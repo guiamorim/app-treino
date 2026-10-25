@@ -3,9 +3,10 @@ import { z } from 'zod'
 
 const versao = z.string().regex(/^\d+\.\d+\.\d+$/)
 
-const esquema = z.strictObject({
+// z.object (não estrito): versões futuras podem acrescentar campos (ex.: traduções) sem partir o aviso desta.
+const esquema = z.object({
   versoes: z
-    .array(z.strictObject({ versao, data: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), itens: z.array(z.string().min(1).max(300)).min(1).max(10) }))
+    .array(z.object({ versao, data: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), itens: z.array(z.string().min(1).max(300)).min(1).max(10) }))
     .min(1),
   emPreparacao: z.array(z.string().min(1).max(300)).max(10),
 })
