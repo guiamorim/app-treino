@@ -1,3 +1,4 @@
+import { locale, t } from '../i18n'
 export interface Ponto {
   x: number
   y: number
@@ -7,7 +8,7 @@ export interface Ponto {
 
 /** Gráfico de linha simples em SVG, sem bibliotecas externas. */
 export function GraficoLinha({ pontos, titulo, unidade, cor = 'var(--acento)', extra }: { pontos: Ponto[]; titulo: string; unidade: string; cor?: string; extra?: Ponto[] }) {
-  if (pontos.length === 0) return <p className="secundario">Ainda sem dados.</p>
+  if (pontos.length === 0) return <p className="secundario">{t('Ainda sem dados.')}</p>
   const L = 320, A = 160, m = { e: 36, d: 8, t: 10, b: 22 }
   const todos = [...pontos, ...(extra ?? [])]
   const xs = todos.map((p) => p.x), ys = todos.map((p) => p.y)
@@ -19,10 +20,10 @@ export function GraficoLinha({ pontos, titulo, unidade, cor = 'var(--acento)', e
   const px = (x: number) => m.e + (x1 === x0 ? (L - m.e - m.d) / 2 : ((x - x0) / (x1 - x0)) * (L - m.e - m.d))
   const py = (y: number) => m.t + (1 - (y - y0) / (y1 - y0)) * (A - m.t - m.b)
   const caminho = (ps: Ponto[]) => ps.map((p, i) => `${i ? 'L' : 'M'}${px(p.x).toFixed(1)},${py(p.y).toFixed(1)}`).join(' ')
-  const fmt = (n: number) => n.toLocaleString('pt-PT', { maximumFractionDigits: 1 })
-  const data = (t: number) => new Date(t).toLocaleDateString('pt-PT', { day: 'numeric', month: 'short' })
+  const fmt = (n: number) => n.toLocaleString(locale(), { maximumFractionDigits: 1 })
+  const data = (ms: number) => new Date(ms).toLocaleDateString(locale(), { day: 'numeric', month: 'short' })
   return (
-    <svg className="grafico" viewBox={`0 0 ${L} ${A}`} role="img" aria-label={`${titulo}: de ${fmt(pontos[0]!.y)} para ${fmt(pontos.at(-1)!.y)} ${unidade}`}>
+    <svg className="grafico" viewBox={`0 0 ${L} ${A}`} role="img" aria-label={t('{titulo}: de {de} para {para} {unidade}', { titulo, de: fmt(pontos[0]!.y), para: fmt(pontos.at(-1)!.y), unidade })}>
       {[y0 + folga, (y0 + y1) / 2, y1 - folga].map((v) => (
         <g key={v}>
           <line x1={m.e} x2={L - m.d} y1={py(v)} y2={py(v)} stroke="var(--linha)" />

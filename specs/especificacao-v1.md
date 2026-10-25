@@ -2,7 +2,7 @@
 
 [English](specification-v1.en.md) · **Português**
 
-Data: 2026-10-20 · Versão 1.7 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.7)
+Data: 2026-10-20 · Versão 1.8 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.8)
 
 ## 0. Decisões fechadas
 
@@ -13,7 +13,7 @@ Data: 2026-10-20 · Versão 1.7 (ajustes feitos durante a implementação marcad
 | Utilizadores | Um por dispositivo, sem login. Outras pessoas (homens ou mulheres) usam a app no seu próprio telemóvel; os dados não são partilhados (v1.3) |
 | Plano | Gerado por regras determinísticas a partir da anamnese, sem IA |
 | Restrições | Uma dor nunca avaliada gera recomendação de avaliação; exercícios contraindicados são substituídos |
-| Língua | Português de Portugal |
+| Língua | Interface em português de Portugal, inglês e espanhol (v1.8, F21); documentação em português e inglês |
 | Metodologia | SDD (esta especificação manda) + TDD no domínio + DDD leve |
 
 ## 1. Linguagem do domínio
@@ -172,6 +172,15 @@ Estes nomes são usados iguais na especificação, no código e na interface.
 - É um aviso dentro da app, visível com a app aberta. Não há notificação com a app fechada: no iPhone isso exige notificações push e um servidor (F13).
 - Passagem da 1.6: a 1.6 não tem o aviso, por isso a 1.7 entra sozinha na abertura seguinte, como as versões anteriores; a partir daí as versões novas esperam pelo «Atualizar agora».
 
+### F21. Idiomas (v1.8)
+- A app está em português de Portugal, inglês e espanhol: todos os ecrãs, os nomes e as sínteses dos treinos, os avisos e as notas do plano, as sugestões de progressão, os catálogos de exercícios e de alongamentos, as frases do dia, as conquistas, as novidades e as exportações em PDF e Excel. No CSV traduzem-se os nomes dos exercícios; os cabeçalhos das colunas ficam fixos, para não estragar folhas de cálculo que já os usem.
+- Na primeira abertura o idioma segue o do telemóvel: português se for português (de qualquer país), espanhol se for espanhol, inglês nos restantes.
+- Muda-se no ecrã de boas-vindas e em «Mais», cartão «Idioma · Language». A escolha fica só no dispositivo (não entra na cópia de segurança) e aplica-se logo, sem recarregar.
+- O plano guardado não muda ao trocar de idioma: os nomes, os avisos e as notas são mostrados no idioma atual. Os nomes dos exercícios no histórico também.
+- O idioma de cada frase é o português: o código marca cada texto com `t('…')` e as traduções estão em `src/i18n/en.json` e `src/i18n/es.json`; os textos dos catálogos estão em `src/catalog/i18n/`. Um teste falha se um texto da app não tiver tradução nos dois idiomas, se as variáveis (`{n}`) não coincidirem ou se sobrar uma tradução que já não se usa. Por isso cada funcionalidade nova chega aos três idiomas ao mesmo tempo.
+- As traduções foram escritas sem revisão por um tradutor nativo.
+- A documentação do repositório continua em português e inglês.
+
 ### F14. Blocos e próxima mudança (v1.2, regras na secção 3.7)
 - No Início e no Treino de hoje: fase atual (readaptação, semana N de M do bloco, ou descarga) e a próxima mudança com data: fim da readaptação (séries completas), semana de descarga (metade das séries), ou novo bloco (troca dos exercícios isolados, com a lista do que muda).
 
@@ -282,6 +291,7 @@ src/data/         IndexedDB via Dexie, exportação/importação
 src/ui/           React
 src/catalog/      exercicios.json e alongamentos.json (catálogos versionados)
 src/novidades.json  novidades de cada versão e o que está em preparação (F20)
+src/i18n/         traduções da interface em inglês e espanhol (F21)
 tests/e2e/        Playwright: anamnese → plano → sessão → relatório
 ```
 Regra: cada critério de aceitação da secção 2 tem pelo menos um teste com o seu código (ex.: `F4`, `3.2`).

@@ -1,4 +1,5 @@
 // F19: alongamentos depois do treino ou por grupo muscular.
+import { t } from '../i18n'
 import { z } from 'zod'
 import type { Catalogo } from './catalogo'
 import { AREAS, GRUPOS_MUSCULARES, POSICOES_ALONGAMENTO, type Alongamento, type Anamnese, type GrupoMuscular, type Plano, type Sessao } from './types'
@@ -77,8 +78,16 @@ export function exerciciosParaAlongar(plano: Plano, sessoes: Sessao[], agora: st
     const feitos = s.exercicios.filter((e) => !e.saltado && e.series.length > 0).map((e) => e.exercicioId)
     const treino = plano.treinos.find((t) => t.id === s.treinoId)
     const ids = feitos.length ? feitos : (treino?.prescricoes.map((p) => p.exercicioId) ?? [])
-    return { treinoNome: treino?.nome ?? 'Treino', exercicioIds: ids, sessao: s }
+    return { treinoNome: treino?.nome ?? t('Treino'), exercicioIds: ids, sessao: s }
   }
-  const t = plano.treinos.find((x) => x.id === proximoTreinoId) ?? plano.treinos[0]!
-  return { treinoNome: t.nome, exercicioIds: t.prescricoes.map((p) => p.exercicioId) }
+  const tr = plano.treinos.find((x) => x.id === proximoTreinoId) ?? plano.treinos[0]!
+  return { treinoNome: tr.nome, exercicioIds: tr.prescricoes.map((p) => p.exercicioId) }
+}
+
+/** F21: textos de cada alongamento noutro idioma (nome, passos e cuidados), por id. */
+const esquemaTraducao = z.record(z.string(), z.strictObject({ nome: z.string().min(1), passos: z.array(z.string().min(1)), cuidados: z.array(z.string().min(1)) }))
+
+export function traduzirAlongamentos(cat: CatalogoAlongamentos, dados: unknown): CatalogoAlongamentos {
+  const tr = esquemaTraducao.parse(dados)
+  return new Map([...cat].map(([id, a]) => [id, tr[id] ? { ...a, ...tr[id] } : a]))
 }

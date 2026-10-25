@@ -321,14 +321,14 @@ test('F20: versão, procurar atualizações, novidades depois de atualizar', asy
 
   // Mais: versão instalada, procura sem versão nova, em preparação e histórico.
   await page.goto('./#/mais')
-  await expect(page.getByText('Versão instalada: 1.7.0')).toBeVisible()
+  await expect(page.getByText('Versão instalada: 1.8.0')).toBeVisible()
   await page.getByRole('button', { name: 'Procurar atualizações' }).click()
   await expect(page.getByText('Já tens a versão mais recente.')).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Em preparação' })).toBeVisible()
   await page.getByText('Novidades de cada versão', { exact: true }).click()
   await expect(page.getByText(/Alongamentos do treino do dia/)).toBeVisible()
 
-  // Quem vinha da 1.6 vê as novidades da 1.7 uma vez no Início.
+  // Quem vinha da 1.6 vê as novidades da 1.7 e da 1.8 uma vez no Início.
   // Texto em vez de função: a configuração de TypeScript dos testes não inclui os tipos do navegador.
   await page.evaluate(`new Promise((fim, erro) => {
     const pedido = indexedDB.open('app-treino')
@@ -342,11 +342,56 @@ test('F20: versão, procurar atualizações, novidades depois de atualizar', asy
   await page.goto('./#/inicio')
   await page.reload()
   const cartao = page.getByRole('region', { name: 'Novidades' })
-  await expect(cartao.getByRole('heading', { name: /Novidades da versão 1\.7\.0/ })).toBeVisible()
+  await expect(cartao.getByRole('heading', { name: /Novidades da versão 1\.8\.0/ })).toBeVisible()
+  await expect(cartao.getByText(/em português, inglês e espanhol/)).toBeVisible()
   await expect(cartao.getByText(/Aviso de versão nova/)).toBeVisible()
   await cartao.getByRole('button', { name: 'Fechar' }).click()
   await expect(cartao).toHaveCount(0)
   await page.reload()
   await expect(page.getByRole('heading', { name: /Bom dia|Boa tarde|Boa noite|Olá/ }).first()).toBeVisible()
   await expect(page.getByRole('region', { name: 'Novidades' })).toHaveCount(0)
+})
+
+test('F21: escolher inglês e espanhol em «Mais» traduz a navegação, o plano e os avisos', async ({ page }) => {
+  await preencherAnamnese(page)
+  await expect(page.getByRole('heading', { name: 'Superior A' })).toBeVisible()
+
+  await page.goto('./#/mais')
+  const idioma = page.getByRole('radiogroup', { name: /Idioma/ })
+  await expect(idioma.getByRole('radio', { name: 'Português' })).toHaveAttribute('aria-checked', 'true')
+  await idioma.getByRole('radio', { name: 'English' }).click()
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en-GB')
+  await expect(page.getByRole('heading', { name: 'Your plan' })).toBeVisible()
+  const nav = page.getByRole('navigation', { name: 'Main' })
+  await expect(nav.getByText('Home')).toBeVisible()
+  await nav.getByText('Today').click()
+  await expect(page.getByRole('heading', { name: 'Upper A' })).toBeVisible()
+  await expect(page.getByText('Dumbbell bench press, neutral grip')).toBeVisible()
+  await page.getByText(/warnings? about your plan/).click()
+  await expect(page.getByText(/shoulder pain has never been assessed/)).toBeVisible()
+
+  // A escolha fica guardada: depois de recarregar continua em inglês.
+  await page.reload()
+  await expect(page.getByRole('heading', { name: 'Upper A' })).toBeVisible()
+
+  await page.goto('./#/mais')
+  await page.getByRole('radio', { name: 'Español' }).click()
+  await expect(page.locator('html')).toHaveAttribute('lang', 'es-ES')
+  await expect(page.getByRole('heading', { name: 'Tu plan' })).toBeVisible()
+  await page.getByRole('navigation', { name: 'Principal' }).getByText('Hoy').click()
+  await expect(page.getByRole('heading', { name: 'Tren superior A' })).toBeVisible()
+
+  await page.goto('./#/mais')
+  await page.getByRole('radio', { name: 'Português' }).click()
+  await expect(page.getByRole('heading', { name: 'O teu plano' })).toBeVisible()
+})
+
+test.describe('F21: telemóvel em inglês', () => {
+  test.use({ locale: 'en-GB' })
+  test('a primeira abertura segue o idioma do telemóvel', async ({ page }) => {
+    await page.goto('./')
+    await expect(page.getByRole('heading', { name: 'Welcome' })).toBeVisible()
+    await expect(page.getByLabel('Height (cm)')).toBeVisible()
+    await expect(page.getByRole('radio', { name: 'English' })).toHaveAttribute('aria-checked', 'true')
+  })
 })

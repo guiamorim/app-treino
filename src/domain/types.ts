@@ -1,3 +1,5 @@
+import { m, traduzido } from '../i18n'
+
 // Linguagem do domínio (especificação, secção 1). Os nomes aqui são os mesmos da interface.
 
 export const GRUPOS_MUSCULARES = [
@@ -16,21 +18,29 @@ export type GrupoMuscular = (typeof GRUPOS_MUSCULARES)[number]
 
 export const GRUPOS_GRANDES: readonly GrupoMuscular[] = ['peito', 'costas', 'quadriceps', 'posteriores', 'gluteos']
 
-export const NOMES_GRUPOS: Record<GrupoMuscular, string> = {
-  peito: 'Peito',
-  costas: 'Costas',
-  ombros: 'Ombros',
-  biceps: 'Bíceps',
-  triceps: 'Tríceps',
-  quadriceps: 'Quadríceps',
-  posteriores: 'Posteriores da coxa',
-  gluteos: 'Glúteos',
-  gemeos: 'Gémeos',
-  core: 'Core',
-}
+export const NOMES_GRUPOS: Record<GrupoMuscular, string> = traduzido({
+  peito: m('Peito'),
+  costas: m('Costas'),
+  ombros: m('Ombros'),
+  biceps: m('Bíceps'),
+  triceps: m('Tríceps'),
+  quadriceps: m('Quadríceps'),
+  posteriores: m('Posteriores da coxa'),
+  gluteos: m('Glúteos'),
+  gemeos: m('Gémeos'),
+  core: m('Core'),
+})
 
 export const AREAS = ['ombro', 'joelho', 'lombar', 'punho', 'anca', 'cotovelo'] as const
 export type Area = (typeof AREAS)[number]
+export const NOMES_AREAS: Record<Area, string> = traduzido({
+  ombro: m('ombro'),
+  joelho: m('joelho'),
+  lombar: m('lombar'),
+  punho: m('punho'),
+  anca: m('anca'),
+  cotovelo: m('cotovelo'),
+})
 
 export const EQUIPAMENTOS = ['barra', 'halteres', 'maquina', 'cabo', 'peso-corporal'] as const
 export type Equipamento = (typeof EQUIPAMENTOS)[number]
@@ -188,13 +198,18 @@ export interface Alongamento {
 export const MEDIDAS_CM = ['cinturaCm', 'peitoCm', 'bracoCm', 'ancaCm', 'coxaCm'] as const
 export type MedidaCm = (typeof MEDIDAS_CM)[number]
 
-export const INFO_MEDIDAS: Record<MedidaCm, { nome: string; min: number; max: number; onde: string }> = {
-  cinturaCm: { nome: 'Cintura', min: 30, max: 250, onde: 'À altura do umbigo, no fim de uma expiração normal, sem encolher a barriga.' },
-  peitoCm: { nome: 'Peito', min: 50, max: 250, onde: 'Na linha dos mamilos, com os braços descontraídos ao lado do corpo.' },
-  bracoCm: { nome: 'Braço', min: 15, max: 80, onde: 'A meio entre o ombro e o cotovelo, braço relaxado; mede sempre o mesmo lado.' },
-  ancaCm: { nome: 'Anca', min: 50, max: 250, onde: 'Na parte mais larga dos glúteos, com os pés juntos.' },
-  coxaCm: { nome: 'Coxa', min: 25, max: 120, onde: 'A meio entre a virilha e o joelho, de pé; mede sempre a mesma perna.' },
+const MEDIDAS_PT: Record<MedidaCm, { nome: string; min: number; max: number; onde: string }> = {
+  cinturaCm: { nome: m('Cintura'), min: 30, max: 250, onde: m('À altura do umbigo, no fim de uma expiração normal, sem encolher a barriga.') },
+  peitoCm: { nome: m('Peito'), min: 50, max: 250, onde: m('Na linha dos mamilos, com os braços descontraídos ao lado do corpo.') },
+  bracoCm: { nome: m('Braço'), min: 15, max: 80, onde: m('A meio entre o ombro e o cotovelo, braço relaxado; mede sempre o mesmo lado.') },
+  ancaCm: { nome: m('Anca'), min: 50, max: 250, onde: m('Na parte mais larga dos glúteos, com os pés juntos.') },
+  coxaCm: { nome: m('Coxa'), min: 25, max: 120, onde: m('A meio entre a virilha e o joelho, de pé; mede sempre a mesma perna.') },
 }
+
+/** Nome e instruções de cada medida, no idioma atual (F21). */
+export const INFO_MEDIDAS = Object.fromEntries(
+  MEDIDAS_CM.map((k) => [k, { ...traduzido({ nome: MEDIDAS_PT[k].nome, onde: MEDIDAS_PT[k].onde }), min: MEDIDAS_PT[k].min, max: MEDIDAS_PT[k].max }]),
+) as typeof MEDIDAS_PT
 
 export interface Medicao extends Partial<Record<MedidaCm, number>> {
   id: string

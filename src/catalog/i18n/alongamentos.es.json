@@ -1,0 +1,302 @@
+{
+ "peito-ombreira": {
+  "nome": "Pecho en el marco de la puerta",
+  "passos": [
+   "Antebrazo apoyado en el marco, codo a la altura del hombro",
+   "Da un pequeño paso adelante con la pierna del mismo lado",
+   "Gira el tronco hacia el lado contrario hasta notar que el pecho se estira"
+  ],
+  "cuidados": [
+   "No empujes el hombro hacia delante",
+   "Si se te duerme la mano, baja el codo"
+  ]
+ },
+ "peito-maos-atras": {
+  "nome": "Pecho con las manos entrelazadas detrás",
+  "passos": [
+   "De pie, entrelaza las manos detrás de la espalda",
+   "Estira los brazos y lleva las escápulas hacia atrás",
+   "Abre el pecho y sube ligeramente las manos"
+  ],
+  "cuidados": [
+   "Mantén el cuello largo, sin levantar la barbilla",
+   "No arquees la zona lumbar"
+  ]
+ },
+ "costas-suporte": {
+  "nome": "Espalda agarrado a un apoyo",
+  "passos": [
+   "Agarra un apoyo fijo a la altura de la cintura con las dos manos",
+   "Da dos pasos atrás y lleva la cadera hacia atrás",
+   "Deja los brazos estirados y el pecho bajar hasta notar que la espalda se estira"
+  ],
+  "cuidados": [
+   "Rodillas ligeramente flexionadas",
+   "El apoyo tiene que estar bien sujeto"
+  ]
+ },
+ "costas-lateral-pe": {
+  "nome": "Inclinación lateral con el brazo arriba",
+  "passos": [
+   "De pie, pies a la anchura de la cadera",
+   "Lleva un brazo por encima de la cabeza",
+   "Inclina el tronco hacia el lado contrario hasta notar que el lateral de la espalda se estira"
+  ],
+  "cuidados": [
+   "Inclínate hacia el lado, sin girar el tronco",
+   "Suelta el aire mientras te inclinas"
+  ]
+ },
+ "postura-crianca": {
+  "nome": "Postura del niño",
+  "passos": [
+   "De rodillas, siéntate sobre los talones",
+   "Lleva los brazos hacia delante y apoya las manos en el suelo",
+   "Deja que el pecho baje hacia los muslos y respira despacio"
+  ],
+  "cuidados": [
+   "Pon un cojín entre los muslos y los talones si es incómodo",
+   "Separa las rodillas si la barriga no cabe"
+  ]
+ },
+ "ombro-braco-cruzado": {
+  "nome": "Hombro con el brazo cruzado",
+  "passos": [
+   "Lleva un brazo estirado por delante del pecho",
+   "Con la otra mano, tira de él por el codo hacia el pecho",
+   "Mantén el hombro abajo, lejos de la oreja"
+  ],
+  "cuidados": [
+   "Tira del codo, no de la mano",
+   "Sin dolor en la parte delantera del hombro"
+  ]
+ },
+ "ombro-toalha": {
+  "nome": "Hombros con toalla por encima de la cabeza",
+  "passos": [
+   "Agarra una toalla con las manos bien separadas",
+   "Sube los brazos estirados por encima de la cabeza",
+   "Llévalos un poco hacia atrás solo hasta notar tensión en los hombros"
+  ],
+  "cuidados": [
+   "Cuanto más separadas las manos, más fácil",
+   "No arquees la zona lumbar"
+  ]
+ },
+ "biceps-parede": {
+  "nome": "Bíceps en la pared",
+  "passos": [
+   "De lado a la pared, apoya la palma a la altura del hombro, dedos hacia atrás",
+   "Brazo estirado",
+   "Gira el cuerpo despacio hacia el lado contrario hasta notar que la parte delantera del brazo se estira"
+  ],
+  "cuidados": [
+   "Codo estirado pero no bloqueado",
+   "Para si lo notas en el hombro"
+  ]
+ },
+ "biceps-banco": {
+  "nome": "Bíceps con las manos detrás en un banco",
+  "passos": [
+   "De espaldas a un banco o mesa, apoya las manos detrás, palmas hacia abajo",
+   "Brazos estirados",
+   "Flexiona un poco las rodillas para bajar el cuerpo hasta notar los bíceps"
+  ],
+  "cuidados": [
+   "Baja poco; la tensión debe ser ligera",
+   "Mantén el pecho abierto"
+  ]
+ },
+ "triceps-cabeca": {
+  "nome": "Tríceps con el brazo detrás de la cabeza",
+  "passos": [
+   "Lleva un brazo por encima de la cabeza y dobla el codo, mano hacia la espalda",
+   "Con la otra mano, empuja el codo despacio hacia atrás",
+   "Mantén la cabeza recta"
+  ],
+  "cuidados": [
+   "No fuerces el codo por detrás de la cabeza",
+   "Se puede hacer sentado"
+  ]
+ },
+ "triceps-parede": {
+  "nome": "Tríceps con el codo en la pared",
+  "passos": [
+   "De frente a la pared, dobla un brazo y apoya el codo en la pared por encima de la cabeza",
+   "La mano cae detrás de la cabeza",
+   "Inclina el pecho hacia la pared hasta notar la parte de atrás del brazo"
+  ],
+  "cuidados": [
+   "Movimiento pequeño",
+   "Sin dolor en el hombro"
+  ]
+ },
+ "quadriceps-pe": {
+  "nome": "Cuádriceps de pie",
+  "passos": [
+   "Apoya una mano en una pared para mantener el equilibrio",
+   "Dobla una rodilla y agarra el pie o el tobillo por detrás",
+   "Junta las rodillas y empuja la cadera ligeramente hacia delante"
+  ],
+  "cuidados": [
+   "Si no llegas al pie, usa una toalla",
+   "No tires del talón con fuerza contra el glúteo"
+  ]
+ },
+ "flexor-anca-afundo": {
+  "nome": "Parte delantera de la cadera en zancada",
+  "passos": [
+   "Una rodilla en el suelo (con cojín) y el otro pie delante",
+   "Aprieta el glúteo de la pierna de atrás",
+   "Lleva la cadera hacia delante despacio hasta notar la parte delantera de la cadera y del muslo"
+  ],
+  "cuidados": [
+   "Tronco recto, sin arquear la zona lumbar",
+   "La rodilla de delante queda encima del tobillo"
+  ]
+ },
+ "quadriceps-deitado-lado": {
+  "nome": "Cuádriceps tumbado de lado",
+  "passos": [
+   "Túmbate de lado con la cabeza apoyada en el brazo",
+   "Dobla la rodilla de arriba y agarra el pie",
+   "Lleva el muslo ligeramente hacia atrás hasta notar la parte delantera del muslo"
+  ],
+  "cuidados": [
+   "Rodillas alineadas",
+   "Usa una toalla si no llegas al pie"
+  ]
+ },
+ "posteriores-calcanhar": {
+  "nome": "Isquiotibiales con el talón en un escalón",
+  "passos": [
+   "Apoya el talón en un escalón bajo, pierna estirada",
+   "Espalda recta, manos en la cadera",
+   "Inclina el tronco hacia delante desde la cadera hasta notar la parte de atrás del muslo"
+  ],
+  "cuidados": [
+   "Mantén la espalda recta; doblar la espalda no estira más el muslo",
+   "Rodilla de apoyo ligeramente flexionada"
+  ]
+ },
+ "posteriores-deitado-toalha": {
+  "nome": "Isquiotibiales tumbado con toalla",
+  "passos": [
+   "Tumbado boca arriba, pasa una toalla por la planta de un pie",
+   "Sube la pierna estirada sujetando la toalla",
+   "La otra pierna queda doblada con el pie en el suelo"
+  ],
+  "cuidados": [
+   "La zona lumbar queda apoyada en el suelo",
+   "Sube solo hasta notar tensión"
+  ]
+ },
+ "posteriores-sentado": {
+  "nome": "Isquiotibiales sentado en el suelo",
+  "passos": [
+   "Sentado en el suelo, una pierna estirada y la otra doblada con el pie en el muslo",
+   "Espalda recta",
+   "Inclina el tronco sobre la pierna estirada desde la cadera"
+  ],
+  "cuidados": [
+   "Lleva el pecho a la rodilla, no la cabeza",
+   "Para si lo notas en la zona lumbar"
+  ]
+ },
+ "gluteo-figura-4": {
+  "nome": "Glúteo en figura 4, tumbado",
+  "passos": [
+   "Tumbado boca arriba, rodillas dobladas",
+   "Cruza un tobillo sobre la rodilla contraria",
+   "Tira del muslo de abajo hacia el pecho hasta notar el glúteo del lado cruzado"
+  ],
+  "cuidados": [
+   "Cabeza y hombros relajados en el suelo",
+   "Sin dolor en la rodilla"
+  ]
+ },
+ "gluteo-cadeira": {
+  "nome": "Glúteo sentado en una silla",
+  "passos": [
+   "Sentado al borde de una silla, cruza un tobillo sobre la rodilla contraria",
+   "Espalda recta",
+   "Inclina el tronco hacia delante hasta notar el glúteo"
+  ],
+  "cuidados": [
+   "Presiona la rodilla cruzada solo ligeramente",
+   "Bueno para hacer en cualquier sitio"
+  ]
+ },
+ "gemeos-parede": {
+  "nome": "Gemelos en la pared, pierna estirada",
+  "passos": [
+   "Manos en la pared, una pierna delante y la otra detrás",
+   "La pierna de atrás queda estirada con el talón en el suelo",
+   "Lleva la cadera hacia la pared hasta notar la pantorrilla"
+  ],
+  "cuidados": [
+   "Pie de atrás apuntando hacia delante",
+   "Talón siempre en el suelo"
+  ]
+ },
+ "soleo-parede": {
+  "nome": "Gemelos en la pared, rodilla flexionada",
+  "passos": [
+   "Misma posición que el estiramiento anterior, con los pies más cerca",
+   "Dobla las dos rodillas",
+   "Mantén el talón de atrás en el suelo hasta notar la parte baja de la pierna"
+  ],
+  "cuidados": [
+   "Estira el músculo más profundo (sóleo)",
+   "Movimiento pequeño"
+  ]
+ },
+ "gemeos-degrau": {
+  "nome": "Gemelos en un escalón",
+  "passos": [
+   "Punta de un pie en el borde de un escalón, agarrado a un pasamanos",
+   "Deja que el talón baje por debajo del escalón",
+   "Mantén la rodilla estirada sin bloquearla"
+  ],
+  "cuidados": [
+   "Agárrate siempre al pasamanos",
+   "Baja despacio"
+  ]
+ },
+ "core-cobra": {
+  "nome": "Abdominales en cobra",
+  "passos": [
+   "Tumbado boca abajo, manos al lado de los hombros",
+   "Empuja el suelo y sube el pecho, cadera en el suelo",
+   "Sube solo hasta notar que la barriga se estira, sin dolor lumbar"
+  ],
+  "cuidados": [
+   "Hombros lejos de las orejas",
+   "Puedes quedarte apoyado en los antebrazos para que sea más suave"
+  ]
+ },
+ "core-rotacao-deitado": {
+  "nome": "Rotación de columna tumbado",
+  "passos": [
+   "Tumbado boca arriba, brazos abiertos en cruz",
+   "Dobla las rodillas y déjalas caer hacia un lado",
+   "Mantén los hombros en el suelo y mira hacia el lado contrario"
+  ],
+  "cuidados": [
+   "Movimiento lento",
+   "Pon un cojín debajo de las rodillas si no llegan al suelo"
+  ]
+ },
+ "core-gato-vaca": {
+  "nome": "Zona lumbar en gato y vaca",
+  "passos": [
+   "Apoyado en manos y rodillas",
+   "Al soltar el aire, redondea la espalda y lleva la barbilla al pecho",
+   "Al tomar aire, deja que la barriga baje y mira al frente; alterna despacio durante el tiempo indicado"
+  ],
+  "cuidados": [
+   "Movimiento suave, dentro de lo que no duele",
+   "Manos debajo de los hombros, rodillas debajo de la cadera"
+  ]
+ }
+}

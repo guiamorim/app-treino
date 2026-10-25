@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react'
 import { db } from '../data/db'
 import { INFO_MEDIDAS, MEDIDAS_CM, type MedidaCm } from '../domain/types'
 import { dataCurta, diasDesde, hojeIso, kg, novoId, type Dados } from './dados'
+import { t } from '../i18n'
 
 const EXTRAS = MEDIDAS_CM.filter((k) => k !== 'cinturaCm')
 const vazias = (): Record<MedidaCm, string> => ({ cinturaCm: '', peitoCm: '', bracoCm: '', ancaCm: '', coxaCm: '' })
@@ -19,11 +20,11 @@ export function Medicoes({ dados }: { dados: Dados }) {
     e.preventDefault()
     const p = numero(peso)
     const valores = MEDIDAS_CM.map((k) => [k, numero(medidas[k])] as const).filter((x): x is readonly [MedidaCm, number] => x[1] !== undefined)
-    if (p === undefined && valores.length === 0) return setErro('Indica o peso ou pelo menos uma medida.')
-    if (p !== undefined && !(p >= 20 && p <= 400)) return setErro('Peso inválido.')
+    if (p === undefined && valores.length === 0) return setErro(t('Indica o peso ou pelo menos uma medida.'))
+    if (p !== undefined && !(p >= 20 && p <= 400)) return setErro(t('Peso inválido.'))
     const errada = valores.find(([k, v]) => !(v >= INFO_MEDIDAS[k].min && v <= INFO_MEDIDAS[k].max))
-    if (errada) return setErro(`${INFO_MEDIDAS[errada[0]].nome} inválida.`)
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(data)) return setErro('Data inválida.')
+    if (errada) return setErro(t('{medida}: valor inválido.', { medida: INFO_MEDIDAS[errada[0]].nome }))
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(data)) return setErro(t('Data inválida.'))
     setErro('')
     await db.medicoes.put({ id: novoId(), data, ...(p !== undefined ? { pesoKg: p } : {}), ...Object.fromEntries(valores) })
     setPeso('')
@@ -39,27 +40,27 @@ export function Medicoes({ dados }: { dados: Dados }) {
 
   return (
     <>
-      <h1>Medições</h1>
+      <h1>{t('Medições')}</h1>
       {dias > 7 && (
-        <p className="cartao aviso">{ultima ? `Última medição há ${Math.floor(dias)} dias.` : 'Ainda sem medições.'} Pesa-te de manhã, em jejum, e mede a cintura à altura do umbigo.</p>
+        <p className="cartao aviso">{ultima ? t('Última medição há {n} dias.', { n: Math.floor(dias) }) : t('Ainda sem medições.')} {t('Pesa-te de manhã, em jejum, e mede a cintura à altura do umbigo.')}</p>
       )}
       <form className="cartao" onSubmit={guardar} noValidate>
-        <label htmlFor="data">Data</label>
+        <label htmlFor="data">{t('Data')}</label>
         <input id="data" type="date" value={data} max={hojeIso()} onChange={(e) => setData(e.target.value)} />
         <div className="linha">
-          <div><label htmlFor="peso">Peso (kg)</label><input id="peso" inputMode="decimal" value={peso} onChange={(e) => setPeso(e.target.value)} /></div>
+          <div><label htmlFor="peso">{t('Peso (kg)')}</label><input id="peso" inputMode="decimal" value={peso} onChange={(e) => setPeso(e.target.value)} /></div>
           {campo('cinturaCm')}
         </div>
         <details style={{ marginTop: 8 }}>
-          <summary>Mais medidas (opcional)</summary>
+          <summary>{t('Mais medidas (opcional)')}</summary>
           <div className="grelha-medidas">{EXTRAS.map(campo)}</div>
-          <p className="secundario">Fita métrica justa sem apertar a pele, de manhã, sempre do mesmo lado do corpo.</p>
+          <p className="secundario">{t('Fita métrica justa sem apertar a pele, de manhã, sempre do mesmo lado do corpo.')}</p>
           <ul className="secundario">
             {MEDIDAS_CM.map((k) => <li key={k}><strong>{INFO_MEDIDAS[k].nome}:</strong> {INFO_MEDIDAS[k].onde}</li>)}
           </ul>
         </details>
         {erro && <p role="alert" style={{ color: 'var(--perigo)' }}>{erro}</p>}
-        <button type="submit" className="primario largo" style={{ marginTop: 12 }}>Guardar medição</button>
+        <button type="submit" className="primario largo" style={{ marginTop: 12 }}>{t('Guardar medição')}</button>
       </form>
       {dados.medicoes.length > 0 && (
         <div className="cartao">
@@ -72,7 +73,7 @@ export function Medicoes({ dados }: { dados: Dados }) {
                     <span>{dataCurta(m.data)}</span>
                     <span>{m.pesoKg !== undefined ? `${kg(m.pesoKg)} kg` : '–'}</span>
                     <span>{m.cinturaCm !== undefined ? `${kg(m.cinturaCm)} cm` : '–'}</span>
-                    <button style={{ flex: 'none', minHeight: 36 }} aria-label={`Apagar medição de ${dataCurta(m.data)}`} onClick={() => confirm('Apagar esta medição?') && db.medicoes.delete(m.id)}>✕</button>
+                    <button style={{ flex: 'none', minHeight: 36 }} aria-label={t('Apagar medição de {data}', { data: dataCurta(m.data) })} onClick={() => confirm(t('Apagar esta medição?')) && db.medicoes.delete(m.id)}>✕</button>
                   </div>
                   {extras.length > 0 && <div className="secundario">{extras.join(' · ')} cm</div>}
                 </li>

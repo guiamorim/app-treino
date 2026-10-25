@@ -1,3 +1,4 @@
+import { m } from '../i18n'
 import type { DiasPorSemana, DivisaoTreino } from './types'
 
 // Treinos-modelo base (especificação, secção 3.1). Cada posição indica o exercício preferido;
@@ -20,9 +21,9 @@ export interface Modelo {
 export const MODELOS: Record<string, Modelo> = {
   'superior-a': {
     id: 'superior-a',
-    nome: 'Superior A',
+    nome: m('Superior A'),
     tipo: 'superior',
-    sintese: 'Empurrar e puxar: foco em peito e costas, com ombros e braços no fim.',
+    sintese: m('Empurrar e puxar: foco em peito e costas, com ombros e braços no fim.'),
     posicoes: [
       { exercicioId: 'supino-barra', principal: true },
       { exercicioId: 'remada-cabo-sentado', principal: true },
@@ -34,9 +35,9 @@ export const MODELOS: Record<string, Modelo> = {
   },
   'inferior-a': {
     id: 'inferior-a',
-    nome: 'Inferior A',
+    nome: m('Inferior A'),
     tipo: 'inferior',
-    sintese: 'Pernas com foco em quadríceps e posteriores da coxa; core no fim.',
+    sintese: m('Pernas com foco em quadríceps e posteriores da coxa; core no fim.'),
     posicoes: [
       { exercicioId: 'leg-press', principal: true },
       { exercicioId: 'peso-morto-romeno', principal: true },
@@ -47,9 +48,9 @@ export const MODELOS: Record<string, Modelo> = {
   },
   'superior-b': {
     id: 'superior-b',
-    nome: 'Superior B',
+    nome: m('Superior B'),
     tipo: 'superior',
-    sintese: 'Peito superior e costas; ombro posterior para equilibrar a postura.',
+    sintese: m('Peito superior e costas; ombro posterior para equilibrar a postura.'),
     posicoes: [
       { exercicioId: 'supino-inclinado-barra', principal: true },
       { exercicioId: 'remada-halter-unilateral', principal: true },
@@ -61,9 +62,9 @@ export const MODELOS: Record<string, Modelo> = {
   },
   'inferior-b': {
     id: 'inferior-b',
-    nome: 'Inferior B',
+    nome: m('Inferior B'),
     tipo: 'inferior',
-    sintese: 'Pernas com foco em glúteos e quadríceps; posteriores sentado, trabalho unilateral e core.',
+    sintese: m('Pernas com foco em glúteos e quadríceps; posteriores sentado, trabalho unilateral e core.'),
     posicoes: [
       { exercicioId: 'agachamento-goblet', principal: true },
       { exercicioId: 'hip-thrust', principal: true },
@@ -74,9 +75,9 @@ export const MODELOS: Record<string, Modelo> = {
   },
   'corpo-a': {
     id: 'corpo-a',
-    nome: 'Corpo inteiro A',
+    nome: m('Corpo inteiro A'),
     tipo: 'corpo',
-    sintese: 'Corpo inteiro: pernas, empurrar, puxar e dobradiça da anca.',
+    sintese: m('Corpo inteiro: pernas, empurrar, puxar e dobradiça da anca.'),
     posicoes: [
       { exercicioId: 'leg-press' },
       { exercicioId: 'supino-barra' },
@@ -88,9 +89,9 @@ export const MODELOS: Record<string, Modelo> = {
   },
   'corpo-b': {
     id: 'corpo-b',
-    nome: 'Corpo inteiro B',
+    nome: m('Corpo inteiro B'),
     tipo: 'corpo',
-    sintese: 'Corpo inteiro: agachamento, peito superior, puxada vertical e glúteos.',
+    sintese: m('Corpo inteiro: agachamento, peito superior, puxada vertical e glúteos.'),
     posicoes: [
       { exercicioId: 'agachamento-goblet' },
       { exercicioId: 'supino-inclinado-barra' },
@@ -102,9 +103,9 @@ export const MODELOS: Record<string, Modelo> = {
   },
   'corpo-c': {
     id: 'corpo-c',
-    nome: 'Corpo inteiro C',
+    nome: m('Corpo inteiro C'),
     tipo: 'corpo',
-    sintese: 'Corpo inteiro: trabalho unilateral, máquinas e ombro posterior.',
+    sintese: m('Corpo inteiro: trabalho unilateral, máquinas e ombro posterior.'),
     posicoes: [
       { exercicioId: 'agachamento-bulgaro' },
       { exercicioId: 'supino-maquina' },
@@ -116,9 +117,9 @@ export const MODELOS: Record<string, Modelo> = {
   },
   'empurrar-a': {
     id: 'empurrar-a',
-    nome: 'Empurrar A',
+    nome: m('Empurrar A'),
     tipo: 'superior',
-    sintese: 'Treino A: empurrar. Peito, ombros e tríceps.',
+    sintese: m('Treino A: empurrar. Peito, ombros e tríceps.'),
     posicoes: [
       { exercicioId: 'supino-barra', principal: true },
       { exercicioId: 'supino-inclinado-halteres' },
@@ -128,9 +129,9 @@ export const MODELOS: Record<string, Modelo> = {
   },
   'puxar-a': {
     id: 'puxar-a',
-    nome: 'Puxar A',
+    nome: m('Puxar A'),
     tipo: 'superior',
-    sintese: 'Treino B: puxar. Costas, ombro posterior e bíceps.',
+    sintese: m('Treino B: puxar. Costas, ombro posterior e bíceps.'),
     posicoes: [
       { exercicioId: 'remada-cabo-sentado', principal: true },
       { exercicioId: 'puxada-frente' },
@@ -140,9 +141,9 @@ export const MODELOS: Record<string, Modelo> = {
   },
   'pernas-a': {
     id: 'pernas-a',
-    nome: 'Pernas A',
+    nome: m('Pernas A'),
     tipo: 'inferior',
-    sintese: 'Treino C: pernas. Quadríceps e posteriores da coxa; core no fim.',
+    sintese: m('Treino C: pernas. Quadríceps e posteriores da coxa; core no fim.'),
     posicoes: [
       { exercicioId: 'leg-press', principal: true },
       { exercicioId: 'peso-morto-romeno', principal: true },
@@ -153,9 +154,9 @@ export const MODELOS: Record<string, Modelo> = {
   },
   'empurrar-b': {
     id: 'empurrar-b',
-    nome: 'Empurrar B',
+    nome: m('Empurrar B'),
     tipo: 'superior',
-    sintese: 'Treino A: empurrar. Peito superior, ombros e tríceps.',
+    sintese: m('Treino A: empurrar. Peito superior, ombros e tríceps.'),
     posicoes: [
       { exercicioId: 'supino-inclinado-barra', principal: true },
       { exercicioId: 'supino-maquina' },
@@ -165,9 +166,9 @@ export const MODELOS: Record<string, Modelo> = {
   },
   'puxar-b': {
     id: 'puxar-b',
-    nome: 'Puxar B',
+    nome: m('Puxar B'),
     tipo: 'superior',
-    sintese: 'Treino B: puxar. Costas em puxada vertical, ombro posterior e bíceps.',
+    sintese: m('Treino B: puxar. Costas em puxada vertical, ombro posterior e bíceps.'),
     posicoes: [
       { exercicioId: 'puxada-neutra', principal: true },
       { exercicioId: 'remada-halter-unilateral' },
@@ -177,9 +178,9 @@ export const MODELOS: Record<string, Modelo> = {
   },
   'pernas-b': {
     id: 'pernas-b',
-    nome: 'Pernas B',
+    nome: m('Pernas B'),
     tipo: 'inferior',
-    sintese: 'Treino C: pernas. Glúteos e quadríceps; posteriores sentado, unilateral e core.',
+    sintese: m('Treino C: pernas. Glúteos e quadríceps; posteriores sentado, unilateral e core.'),
     posicoes: [
       { exercicioId: 'agachamento-goblet', principal: true },
       { exercicioId: 'hip-thrust', principal: true },
@@ -190,9 +191,9 @@ export const MODELOS: Record<string, Modelo> = {
   },
   'peito-triceps': {
     id: 'peito-triceps',
-    nome: 'Peito e tríceps',
+    nome: m('Peito e tríceps'),
     tipo: 'superior',
-    sintese: 'Treino por grupo muscular: peito em vários ângulos e tríceps no fim.',
+    sintese: m('Treino por grupo muscular: peito em vários ângulos e tríceps no fim.'),
     posicoes: [
       { exercicioId: 'supino-barra', principal: true },
       { exercicioId: 'supino-inclinado-halteres' },
@@ -203,9 +204,9 @@ export const MODELOS: Record<string, Modelo> = {
   },
   'costas-biceps': {
     id: 'costas-biceps',
-    nome: 'Costas e bíceps',
+    nome: m('Costas e bíceps'),
     tipo: 'superior',
-    sintese: 'Treino por grupo muscular: puxadas verticais e horizontais e bíceps no fim.',
+    sintese: m('Treino por grupo muscular: puxadas verticais e horizontais e bíceps no fim.'),
     posicoes: [
       { exercicioId: 'puxada-frente', principal: true },
       { exercicioId: 'remada-cabo-sentado' },
@@ -216,9 +217,9 @@ export const MODELOS: Record<string, Modelo> = {
   },
   'ombros-core': {
     id: 'ombros-core',
-    nome: 'Ombros e core',
+    nome: m('Ombros e core'),
     tipo: 'superior',
-    sintese: 'Treino por grupo muscular: ombros (frente, lado e trás) e estabilidade do tronco.',
+    sintese: m('Treino por grupo muscular: ombros (frente, lado e trás) e estabilidade do tronco.'),
     posicoes: [
       { exercicioId: 'desenvolvimento-halteres', principal: true },
       { exercicioId: 'elevacao-lateral' },
@@ -229,9 +230,9 @@ export const MODELOS: Record<string, Modelo> = {
   },
   recuperacao: {
     id: 'recuperacao',
-    nome: 'Recuperação ativa',
+    nome: m('Recuperação ativa'),
     tipo: 'recuperacao',
-    sintese: 'Dia leve para recuperar: caminhada tranquila e core sem esforço. Não é para cansar.',
+    sintese: m('Dia leve para recuperar: caminhada tranquila e core sem esforço. Não é para cansar.'),
     posicoes: [{ exercicioId: 'dead-bug' }, { exercicioId: 'prancha' }],
   },
 }
