@@ -8,6 +8,7 @@ import { Relatorios } from './Relatorios'
 import { Medicoes } from './Medicoes'
 import { Mais } from './Mais'
 import { Fotos } from './Fotos'
+import { AlongamentoEcra } from './Alongamento'
 
 const SEPARADORES = [
   { rota: 'inicio', nome: 'Início', icone: '🏠' },
@@ -29,12 +30,13 @@ export function App() {
     <>
       <main>
         {rota.ecra === 'inicio' && <Inicio dados={dados} plano={dados.plano} anamnese={dados.anamnese} />}
-        {rota.ecra === 'hoje' && <Hoje dados={dados} plano={dados.plano} />}
+        {rota.ecra === 'hoje' && <Hoje dados={dados} plano={dados.plano} anamnese={dados.anamnese} />}
         {rota.ecra === 'exercicio' && <ExercicioEcra dados={dados} plano={dados.plano} prescricaoId={rota.prescricaoId} />}
         {rota.ecra === 'relatorios' && <Relatorios dados={dados} />}
         {rota.ecra === 'medicoes' && <Medicoes dados={dados} />}
         {rota.ecra === 'fotos' && <Fotos dados={dados} />}
         {rota.ecra === 'mais' && <Mais dados={dados} />}
+        {rota.ecra === 'alongamento' && <AlongamentoEcra key={rota.grupo ?? ''} dados={dados} plano={dados.plano} anamnese={dados.anamnese} grupo={rota.grupo} />}
       </main>
       <nav className="navegacao" aria-label="Principal">
         {SEPARADORES.map((s) => (

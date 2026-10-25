@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 /** Contagem baseada na hora de fim, para continuar certa se a app for para segundo plano. */
-export function Temporizador({ fimEm, fechar }: { fimEm: number; fechar: () => void }) {
+export function Temporizador({ fimEm, fechar, rotulos = ['Descanso', 'Descanso terminado'] }: { fimEm: number; fechar: () => void; rotulos?: [string, string] }) {
   const [agora, setAgora] = useState(Date.now())
   const restante = Math.max(0, Math.ceil((fimEm - agora) / 1000))
   useEffect(() => {
@@ -16,7 +16,7 @@ export function Temporizador({ fimEm, fechar }: { fimEm: number; fechar: () => v
   return (
     <div className={`cartao temporizador ${restante === 0 ? 'fim' : ''}`} role="timer" aria-live={restante === 0 ? 'assertive' : 'off'}>
       <div className="linha">
-        <span>{restante === 0 ? 'Descanso terminado' : 'Descanso'}</span>
+        <span>{restante === 0 ? rotulos[1] : rotulos[0]}</span>
         <span className="numero">{mm}:{ss}</span>
         <button onClick={fechar} style={{ flex: 'none' }}>{restante === 0 ? 'OK' : 'Saltar'}</button>
       </div>

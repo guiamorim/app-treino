@@ -2,7 +2,7 @@
 
 [English](specification-v1.en.md) · **Português**
 
-Data: 2026-10-20 · Versão 1.5 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.5)
+Data: 2026-10-20 · Versão 1.6 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.6)
 
 ## 0. Decisões fechadas
 
@@ -38,6 +38,7 @@ Estes nomes são usados iguais na especificação, no código e na interface.
 | **Bloco** (v1.2) | Ciclo de semanas de progressão terminado por uma semana de descarga; a duração depende do objetivo |
 | **Descarga** | Semana com metade das séries e RIR 3–4, para recuperar antes do bloco seguinte |
 | **Conquista** (v1.2) | Marco calculado a partir do histórico (ex.: 10 treinos, 4 semanas seguidas cumpridas) |
+| **Alongamento** (v1.6) | Entrada do catálogo de alongamentos: nome, grupo muscular, posição, um ou dois lados, passos, cuidados e contraindicações |
 
 ## 2. Funcionalidades e critérios de aceitação
 
@@ -141,6 +142,17 @@ Estes nomes são usados iguais na especificação, no código e na interface.
 - Catálogo com pelo menos 70 exercícios, com as mesmas regras (equipamento, contraindicações, substitutos).
 - Cada exercício mostra um desenho do corpo (frente e costas) com o grupo principal destacado e os secundários em tom mais claro. Os desenhos vêm da biblioteca react-native-body-highlighter (licença MIT, uso comercial permitido; o aviso de licença acompanha o código e aparece em «Sobre»). Corpo feminino se o sexo na anamnese for feminino; masculino nos outros casos. Escolhido pelo Guilherme em 2026-10-24, entre quatro opções comparadas.
 - Exercícios novos podem não ter vídeo: aparece «Procurar no YouTube» e posso guardar o link escolhido (já existente).
+
+### F19. Alongamentos (v1.6)
+- Ecrã «Alongar», aberto a partir do Início, do treino de hoje e do lembrete no fim do treino. Não é um separador novo na barra de baixo, para a barra não ficar apertada no iPhone.
+- Dois modos:
+  - «Do treino»: um alongamento por grupo muscular trabalhado como principal no treino, pela ordem dos exercícios, até 6 grupos. O treino é o último terminado nas últimas 12 horas; se não houver, o próximo treino.
+  - «Por grupo muscular»: escolho um grupo, vejo o desenho do corpo com esse grupo destacado (mesma biblioteca de F18) e todos os alongamentos compatíveis para ele.
+- Cada alongamento mostra: o desenho do corpo com o grupo destacado, a dose (2 × 30 s; por lado quando é de um só lado), os passos escritos, os cuidados, um temporizador para o tempo de manutenção, «Procurar no YouTube» e «Mudar vídeo» (link do YouTube ou Vimeo guardado, como nos exercícios).
+- GIFs: não incluídos. Não encontrei uma coleção de GIFs de alongamentos com licença clara para uso comercial; o vídeo e as instruções escritas cobrem a orientação.
+- Regras: alongamento estático, até sentir tensão ligeira e nunca dor, 2 repetições de 30 s por músculo (ACSM: manter 10–30 s, cerca de 60 s no total por músculo). A app diz com honestidade que alongar melhora a flexibilidade mas não evita as dores musculares do dia seguinte (revisão Cochrane, 2011).
+- Restrições: um alongamento com contraindicação numa zona marcada com dor não aparece. No 2.º e 3.º trimestre de gravidez, os alongamentos deitado de costas ou de barriga não aparecem.
+- Lembrete: depois de terminar um treino, o ecrã Hoje e o Início mostram «Hora de alongar», com o tempo estimado, até eu escolher «Feito» ou «Hoje não», o que fica guardado na sessão (e na cópia de segurança). Só aparece para treinos terminados nas últimas 12 horas. É um aviso dentro da app; continua a não haver notificações (F13).
 
 ### F14. Blocos e próxima mudança (v1.2, regras na secção 3.7)
 - No Início e no Treino de hoje: fase atual (readaptação, semana N de M do bloco, ou descarga) e a próxima mudança com data: fim da readaptação (séries completas), semana de descarga (metade das séries), ou novo bloco (troca dos exercícios isolados, com a lista do que muda).

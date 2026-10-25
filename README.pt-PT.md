@@ -28,10 +28,10 @@ npm run build      # gera dist/ com service worker e Content Security Policy
 ```
 specs/            especificação (fonte de verdade: SDD), em PT e EN
 docs/             análise de mercado e metodologia, em PT e EN
-src/domain/       regras puras em TypeScript, escritas com TDD: plano, blocos, progressão, sessão, relatórios, painel, conquistas, fotos, perfil, cópia, exportação (PDF e Excel escritos à mão), mapa muscular, vídeo
+src/domain/       regras puras em TypeScript, escritas com TDD: plano, blocos, progressão, sessão, relatórios, painel, conquistas, fotos, perfil, cópia, exportação (PDF e Excel escritos à mão), mapa muscular, alongamentos, vídeo
 src/data/         IndexedDB (Dexie), exportação e importação
 src/ui/           ecrãs React
-src/catalog/      catálogo de exercícios (validado por esquema nos testes e ao arrancar)
+src/catalog/      catálogos de exercícios e de alongamentos (validado por esquema nos testes e ao arrancar)
 tests/e2e/        Playwright
 ```
 
