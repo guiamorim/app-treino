@@ -1,0 +1,67 @@
+{
+  "versoes": [
+    {
+      "versao": "1.7.0",
+      "data": "2026-10-25",
+      "itens": [
+        "Aviso de versão nova com o resumo do que muda e o botão «Atualizar agora».",
+        "Em «Mais»: versão instalada, «Procurar atualizações», novidades de cada versão e o que está em preparação.",
+        "Depois de atualizar, o Início mostra uma vez as novidades da versão."
+      ]
+    },
+    {
+      "versao": "1.6.0",
+      "data": "2026-10-25",
+      "itens": [
+        "Alongamentos do treino do dia ou por grupo muscular, com o desenho do corpo, passos escritos, temporizador e vídeo.",
+        "Lembrete «Hora de alongar» no fim de cada treino."
+      ]
+    },
+    {
+      "versao": "1.5.0",
+      "data": "2026-10-24",
+      "itens": [
+        "Escolha do modelo de treino na anamnese.",
+        "Catálogo com 75 exercícios e desenho dos músculos trabalhados.",
+        "Medidas de peito, braço, anca e coxa.",
+        "Exportar ficha e histórico em PDF e Excel, e relatório com fotos para o PT."
+      ]
+    },
+    {
+      "versao": "1.4.0",
+      "data": "2026-10-21",
+      "itens": [
+        "Fotos de avaliação com comparação lado a lado.",
+        "Nome e foto de perfil, com saudação no Início.",
+        "Frases do dia com autor quando é conhecido."
+      ]
+    },
+    {
+      "versao": "1.3.0",
+      "data": "2026-10-20",
+      "itens": [
+        "Planos para homens e mulheres, com ênfase escolhida, gravidez e pós-parto.",
+        "Aumentos de carga proporcionais ao peso usado."
+      ]
+    },
+    {
+      "versao": "1.2.0",
+      "data": "2026-10-20",
+      "itens": [
+        "Planos de 2 a 7 dias por semana.",
+        "Início com resumo da semana, conquistas e sequência.",
+        "Blocos de treino com semana de descarga e troca de exercícios."
+      ]
+    },
+    {
+      "versao": "1.0.0",
+      "data": "2026-10-20",
+      "itens": [
+        "Plano de treino gerado pela anamnese, registo de séries, relatórios e funcionamento sem internet."
+      ]
+    }
+  ],
+  "emPreparacao": [
+    "Conta com sessão iniciada e cópia na nuvem: em estudo, ainda sem decisão. Enquanto não houver, os dados continuam só no teu telemóvel."
+  ]
+}

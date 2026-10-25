@@ -4,4 +4,5 @@
 - **No personal data.** The repository is public. Never commit anyone's real anamnesis, measurements, health information or training logs. Tests use the fictitious profile `perfilExemplo` in `src/domain/fixtures.ts`.
 - **Spec first.** `specs/` is the source of truth. Change the specification (both languages) before or together with the code, and keep each test named after the criterion it checks (e.g. `F4`, `3.2`).
 - **Domain language.** Code identifiers use the Portuguese domain terms from section 1 of the specification. The app UI is in European Portuguese.
+- **Releases.** A change with new features adds a version at the top of `src/novidades.json` (summary in European Portuguese, shown in the app) and bumps `package.json` to the same number (F20).
 - **Checks before pushing:** `npm run typecheck`, `npm test`, `npm run test:e2e`.
