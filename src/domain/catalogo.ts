@@ -43,3 +43,11 @@ export function obter(catalogo: Catalogo, id: string): Exercicio {
   if (!ex) throw new Error(`Exercício desconhecido: ${id}`)
   return ex
 }
+
+/** F21: textos de cada exercício noutro idioma (nome, objetivo e pontos-chave), por id. */
+const esquemaTraducao = z.record(z.string(), z.strictObject({ nome: z.string().min(1), objetivo: z.string().min(1), pontosChave: z.array(z.string().min(1)) }))
+
+export function traduzirCatalogo(catalogo: Catalogo, dados: unknown): Catalogo {
+  const tr = esquemaTraducao.parse(dados)
+  return new Map([...catalogo].map(([id, ex]) => [id, tr[id] ? { ...ex, ...tr[id] } : ex]))
+}

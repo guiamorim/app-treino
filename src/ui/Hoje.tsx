@@ -7,16 +7,17 @@ import { agoraIso, catalogo, dataCurta, type Dados } from './dados'
 import { LembreteAlongamento } from './Alongamento'
 import { textoFase } from './Fase'
 import { ir } from './rota'
+import { m, t, traduzido } from '../i18n'
 
 const ICONES: Record<EstadoExercicio, string> = { 'por-fazer': '', 'em-curso': '•', feito: '✓', saltado: '–' }
-const NOMES_ESTADO: Record<EstadoExercicio, string> = { 'por-fazer': 'por fazer', 'em-curso': 'em curso', feito: 'feito', saltado: 'saltado' }
+const NOMES_ESTADO: Record<EstadoExercicio, string> = traduzido({ 'por-fazer': m('por fazer'), 'em-curso': m('em curso'), feito: m('feito'), saltado: m('saltado') })
 
 export function Hoje({ dados, plano, anamnese }: { dados: Dados; plano: Plano; anamnese: Anamnese }) {
   const proximo = proximoTreino(plano, dados.sessoes)
   const [escolhido, setEscolhido] = useState<string | null>(null)
   const treinoId = escolhido ?? proximo.treinoId
   const semana = semanaDoPlano(plano, agoraIso())
-  const treino = treinoEfetivo(plano.treinos.find((t) => t.id === treinoId) ?? plano.treinos[0]!, plano, semana)
+  const treino = treinoEfetivo(plano.treinos.find((x) => x.id === treinoId) ?? plano.treinos[0]!, plano, semana)
   const sessao = sessaoAberta(dados.sessoes, plano, treino.id)
   const estado = sessao ? estadoSessao(sessao, treino) : undefined
   const ultimaTerminada = dados.sessoes.filter((s) => s.fim).at(-1)
@@ -28,7 +29,7 @@ export function Hoje({ dados, plano, anamnese }: { dados: Dados; plano: Plano; a
 
   async function terminar() {
     if (!sessao) return
-    if (!estado?.completa && !confirm('Ainda há exercícios por fazer. Terminar o treino mesmo assim?')) return
+    if (!estado?.completa && !confirm(t('Ainda há exercícios por fazer. Terminar o treino mesmo assim?'))) return
     await terminarSessao(sessao.id)
     setEscolhido(null)
   }
@@ -42,16 +43,16 @@ export function Hoje({ dados, plano, anamnese }: { dados: Dados; plano: Plano; a
 
       {plano.avisos.length > 0 && (
         <details className="cartao aviso">
-          <summary>⚠️ {plano.avisos.length === 1 ? '1 aviso' : `${plano.avisos.length} avisos`} sobre o teu plano</summary>
+          <summary>⚠️ {plano.avisos.length === 1 ? t('1 aviso sobre o teu plano') : t('{n} avisos sobre o teu plano', { n: plano.avisos.length })}</summary>
           {plano.avisos.map((a) => <p key={a}>{a}</p>)}
         </details>
       )}
 
       {estado?.completa && (
         <div className="cartao ok-borda" role="status">
-          <h3>Treino completo 🎉</h3>
-          {estado.saltados > 0 && <p className="secundario">{estado.saltados} exercício(s) saltado(s).</p>}
-          <button className="primario largo" onClick={terminar}>Terminar treino</button>
+          <h3>{t('Treino completo')} 🎉</h3>
+          {estado.saltados > 0 && <p className="secundario">{t('{n} exercício(s) saltado(s).', { n: estado.saltados })}</p>}
+          <button className="primario largo" onClick={terminar}>{t('Terminar treino')}</button>
         </div>
       )}
 
@@ -83,25 +84,25 @@ export function Hoje({ dados, plano, anamnese }: { dados: Dados; plano: Plano; a
             <li className="item" style={{ cursor: 'default' }}>
               <span className="estado" aria-hidden="true">♥</span>
               <span className="corpo">
-                <span className="titulo">Cardio {treino.cardioMin} min</span><br />
-                <span className="secundario">Intensidade moderada: consegues falar frases curtas.</span>
+                <span className="titulo">{t('Cardio {min} min', { min: treino.cardioMin })}</span><br />
+                <span className="secundario">{t('Intensidade moderada: consegues falar frases curtas.')}</span>
               </span>
             </li>
           )}
         </ul>
       </div>
 
-      {sessao && !estado?.completa && <button className="largo" onClick={terminar}>Terminar treino</button>}
-      <button className="largo" style={{ marginTop: 8 }} onClick={() => ir('/alongamento')}>🧘 Alongamentos</button>
+      {sessao && !estado?.completa && <button className="largo" onClick={terminar}>{t('Terminar treino')}</button>}
+      <button className="largo" style={{ marginTop: 8 }} onClick={() => ir('/alongamento')}>🧘 {t('Alongamentos')}</button>
 
-      <label htmlFor="treino">Fazer outro treino</label>
+      <label htmlFor="treino">{t('Fazer outro treino')}</label>
       <select id="treino" value={treino.id} onChange={(e) => setEscolhido(e.target.value)}>
-        {plano.treinos.map((t) => (
-          <option key={t.id} value={t.id}>{t.nome}{t.id === proximo.treinoId ? ' (próximo)' : ''}</option>
+        {plano.treinos.map((x) => (
+          <option key={x.id} value={x.id}>{x.nome}{x.id === proximo.treinoId ? ` (${t('próximo')})` : ''}</option>
         ))}
       </select>
       {ultimaTerminada && (
-        <p className="secundario">Último treino: {plano.treinos.find((t) => t.id === ultimaTerminada.treinoId)?.nome ?? 'plano anterior'}, {dataCurta(ultimaTerminada.inicio)}.</p>
+        <p className="secundario">{t('Último treino: {treino}, {data}.', { treino: plano.treinos.find((x) => x.id === ultimaTerminada.treinoId)?.nome ?? t('plano anterior'), data: dataCurta(ultimaTerminada.inicio) })}</p>
       )}
     </>
   )

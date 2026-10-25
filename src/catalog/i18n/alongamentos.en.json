@@ -1,0 +1,302 @@
+{
+ "peito-ombreira": {
+  "nome": "Chest stretch in a doorway",
+  "passos": [
+   "Forearm against the door frame, elbow at shoulder height",
+   "Take a small step forward with the leg on the same side",
+   "Turn your torso to the opposite side until you feel the chest stretch"
+  ],
+  "cuidados": [
+   "Do not push the shoulder forward",
+   "If your hand tingles, lower the elbow"
+  ]
+ },
+ "peito-maos-atras": {
+  "nome": "Chest stretch with hands clasped behind",
+  "passos": [
+   "Standing, clasp your hands behind your back",
+   "Straighten your arms and draw your shoulder blades back",
+   "Open the chest and lift your hands slightly"
+  ],
+  "cuidados": [
+   "Keep the neck long, without lifting the chin",
+   "Do not arch the lower back"
+  ]
+ },
+ "costas-suporte": {
+  "nome": "Back stretch holding a support",
+  "passos": [
+   "Hold a fixed support at waist height with both hands",
+   "Take two steps back and push your hips back",
+   "Keep your arms straight and let your chest sink until you feel your back stretch"
+  ],
+  "cuidados": [
+   "Knees slightly bent",
+   "The support must be secure"
+  ]
+ },
+ "costas-lateral-pe": {
+  "nome": "Side bend with arm overhead",
+  "passos": [
+   "Standing, feet hip-width apart",
+   "Take one arm over your head",
+   "Lean your torso to the opposite side until you feel the side of your back stretch"
+  ],
+  "cuidados": [
+   "Lean to the side, without twisting the torso",
+   "Breathe out as you lean"
+  ]
+ },
+ "postura-crianca": {
+  "nome": "Child's pose",
+  "passos": [
+   "Kneeling, sit back on your heels",
+   "Reach your arms forward and rest your hands on the floor",
+   "Let your chest sink towards your thighs and breathe slowly"
+  ],
+  "cuidados": [
+   "Put a cushion between your thighs and heels if it is uncomfortable",
+   "Spread your knees if your belly does not fit"
+  ]
+ },
+ "ombro-braco-cruzado": {
+  "nome": "Cross-body shoulder stretch",
+  "passos": [
+   "Take one arm straight across your chest",
+   "With the other hand, pull it by the elbow towards your chest",
+   "Keep the shoulder down, away from the ear"
+  ],
+  "cuidados": [
+   "Pull at the elbow, not the hand",
+   "No pain at the front of the shoulder"
+  ]
+ },
+ "ombro-toalha": {
+  "nome": "Overhead shoulder stretch with a towel",
+  "passos": [
+   "Hold a towel with your hands wide apart",
+   "Raise your straight arms above your head",
+   "Take them slightly back only until you feel tension in the shoulders"
+  ],
+  "cuidados": [
+   "The wider the hands, the easier it is",
+   "Do not arch the lower back"
+  ]
+ },
+ "biceps-parede": {
+  "nome": "Biceps stretch against a wall",
+  "passos": [
+   "Side-on to the wall, place your palm on it at shoulder height, fingers pointing back",
+   "Arm straight",
+   "Slowly turn your body away until you feel the front of the arm stretch"
+  ],
+  "cuidados": [
+   "Elbow straight but not locked",
+   "Stop if you feel it in the shoulder"
+  ]
+ },
+ "biceps-banco": {
+  "nome": "Biceps stretch with hands behind on a bench",
+  "passos": [
+   "Back to a bench or table, put your hands behind you, palms down",
+   "Arms straight",
+   "Bend your knees a little to lower your body until you feel the biceps"
+  ],
+  "cuidados": [
+   "Go down only a little; the tension should be mild",
+   "Keep your chest open"
+  ]
+ },
+ "triceps-cabeca": {
+  "nome": "Overhead triceps stretch",
+  "passos": [
+   "Raise one arm overhead and bend the elbow, hand towards your back",
+   "With the other hand, gently push the elbow back",
+   "Keep your head upright"
+  ],
+  "cuidados": [
+   "Do not force the elbow behind your head",
+   "Can be done seated"
+  ]
+ },
+ "triceps-parede": {
+  "nome": "Triceps stretch with elbow on a wall",
+  "passos": [
+   "Facing the wall, bend one arm and rest the elbow on the wall above your head",
+   "The hand drops behind your head",
+   "Lean your chest towards the wall until you feel the back of the arm"
+  ],
+  "cuidados": [
+   "Small movement",
+   "No shoulder pain"
+  ]
+ },
+ "quadriceps-pe": {
+  "nome": "Standing quad stretch",
+  "passos": [
+   "Put one hand on a wall for balance",
+   "Bend one knee and hold your foot or ankle behind you",
+   "Bring your knees together and push your hips slightly forward"
+  ],
+  "cuidados": [
+   "If you cannot reach your foot, use a towel",
+   "Do not pull the heel hard against the glute"
+  ]
+ },
+ "flexor-anca-afundo": {
+  "nome": "Kneeling hip flexor stretch",
+  "passos": [
+   "One knee on the floor (on a cushion) and the other foot in front",
+   "Squeeze the glute of the back leg",
+   "Slowly move your hips forward until you feel the front of the hip and thigh"
+  ],
+  "cuidados": [
+   "Torso upright, without arching the lower back",
+   "The front knee stays over the ankle"
+  ]
+ },
+ "quadriceps-deitado-lado": {
+  "nome": "Side-lying quad stretch",
+  "passos": [
+   "Lie on your side with your head resting on your arm",
+   "Bend the top knee and hold your foot",
+   "Take the thigh slightly back until you feel the front of the thigh"
+  ],
+  "cuidados": [
+   "Knees in line",
+   "Use a towel if you cannot reach your foot"
+  ]
+ },
+ "posteriores-calcanhar": {
+  "nome": "Hamstring stretch with heel on a step",
+  "passos": [
+   "Rest your heel on a low step, leg straight",
+   "Back straight, hands on hips",
+   "Lean forward from the hips until you feel the back of the thigh"
+  ],
+  "cuidados": [
+   "Keep your back straight; rounding it does not stretch the thigh more",
+   "Standing knee slightly bent"
+  ]
+ },
+ "posteriores-deitado-toalha": {
+  "nome": "Lying hamstring stretch with a towel",
+  "passos": [
+   "Lying on your back, loop a towel around the sole of one foot",
+   "Raise the straight leg holding the towel",
+   "The other leg stays bent with the foot on the floor"
+  ],
+  "cuidados": [
+   "Lower back stays on the floor",
+   "Raise only until you feel tension"
+  ]
+ },
+ "posteriores-sentado": {
+  "nome": "Seated hamstring stretch",
+  "passos": [
+   "Sitting on the floor, one leg straight and the other bent with the foot against the thigh",
+   "Back straight",
+   "Lean over the straight leg from the hips"
+  ],
+  "cuidados": [
+   "Bring your chest to your knee, not your head",
+   "Stop if you feel it in the lower back"
+  ]
+ },
+ "gluteo-figura-4": {
+  "nome": "Lying figure-4 glute stretch",
+  "passos": [
+   "Lying on your back, knees bent",
+   "Cross one ankle over the opposite knee",
+   "Pull the bottom thigh towards your chest until you feel the glute of the crossed side"
+  ],
+  "cuidados": [
+   "Head and shoulders relaxed on the floor",
+   "No knee pain"
+  ]
+ },
+ "gluteo-cadeira": {
+  "nome": "Seated glute stretch on a chair",
+  "passos": [
+   "Sitting at the edge of a chair, cross one ankle over the opposite knee",
+   "Back straight",
+   "Lean your torso forward until you feel the glute"
+  ],
+  "cuidados": [
+   "Press the crossed knee only lightly",
+   "Good to do anywhere"
+  ]
+ },
+ "gemeos-parede": {
+  "nome": "Wall calf stretch, straight leg",
+  "passos": [
+   "Hands on the wall, one leg in front and the other behind",
+   "The back leg stays straight with the heel on the floor",
+   "Move your hips towards the wall until you feel the calf"
+  ],
+  "cuidados": [
+   "Back foot pointing forward",
+   "Heel always on the floor"
+  ]
+ },
+ "soleo-parede": {
+  "nome": "Wall calf stretch, bent knee",
+  "passos": [
+   "Same position as the previous stretch, with the feet closer together",
+   "Bend both knees",
+   "Keep the back heel on the floor until you feel the lower part of the leg"
+  ],
+  "cuidados": [
+   "Stretches the deeper muscle (soleus)",
+   "Small movement"
+  ]
+ },
+ "gemeos-degrau": {
+  "nome": "Calf stretch on a step",
+  "passos": [
+   "Ball of one foot on the edge of a step, holding a handrail",
+   "Let the heel drop below the step",
+   "Keep the knee straight without locking it"
+  ],
+  "cuidados": [
+   "Always hold the handrail",
+   "Lower slowly"
+  ]
+ },
+ "core-cobra": {
+  "nome": "Cobra ab stretch",
+  "passos": [
+   "Lying face down, hands beside your shoulders",
+   "Push the floor away and lift your chest, hips on the floor",
+   "Lift only until you feel your belly stretch, with no lower-back pain"
+  ],
+  "cuidados": [
+   "Shoulders away from the ears",
+   "You can stay on your forearms to make it gentler"
+  ]
+ },
+ "core-rotacao-deitado": {
+  "nome": "Lying spinal twist",
+  "passos": [
+   "Lying on your back, arms out in a cross",
+   "Bend your knees and let them fall to one side",
+   "Keep your shoulders on the floor and look the other way"
+  ],
+  "cuidados": [
+   "Slow movement",
+   "Put a cushion under your knees if they do not reach the floor"
+  ]
+ },
+ "core-gato-vaca": {
+  "nome": "Cat-cow for the lower back",
+  "passos": [
+   "On your hands and knees",
+   "As you breathe out, round your back and bring your chin to your chest",
+   "As you breathe in, let your belly drop and look ahead; alternate slowly for the time shown"
+  ],
+  "cuidados": [
+   "Gentle movement, within what does not hurt",
+   "Hands under the shoulders, knees under the hips"
+  ]
+ }
+}

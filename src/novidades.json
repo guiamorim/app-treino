@@ -1,13 +1,51 @@
 {
   "versoes": [
     {
+      "versao": "1.8.0",
+      "data": "2026-10-25",
+      "itens": [
+        "A app passa a estar em português, inglês e espanhol. Escolhe o idioma em «Mais»; por omissão segue o idioma do telemóvel.",
+        "Exercícios, alongamentos, avisos do plano, frases do dia e exportações em PDF e Excel também traduzidos."
+      ],
+      "traducoes": {
+        "en": {
+          "itens": [
+            "The app is now available in Portuguese, English and Spanish. Choose the language in “More”; by default it follows your phone's language.",
+            "Exercises, stretches, plan warnings, daily quotes and PDF and Excel exports are translated too."
+          ]
+        },
+        "es": {
+          "itens": [
+            "La app ya está en portugués, inglés y español. Elige el idioma en «Más»; por defecto sigue el idioma del móvil.",
+            "Ejercicios, estiramientos, avisos del plan, frases del día y exportaciones en PDF y Excel también traducidos."
+          ]
+        }
+      }
+    },
+    {
       "versao": "1.7.0",
       "data": "2026-10-25",
       "itens": [
         "Aviso de versão nova com o resumo do que muda e o botão «Atualizar agora».",
         "Em «Mais»: versão instalada, «Procurar atualizações», novidades de cada versão e o que está em preparação.",
         "Depois de atualizar, o Início mostra uma vez as novidades da versão."
-      ]
+      ],
+      "traducoes": {
+        "en": {
+          "itens": [
+            "New version notice with a summary of what changes and an “Update now” button.",
+            "In “More”: installed version, “Check for updates”, what's new in each version and what is in preparation.",
+            "After updating, Home shows the version's notes once."
+          ]
+        },
+        "es": {
+          "itens": [
+            "Aviso de versión nueva con el resumen de lo que cambia y el botón «Actualizar ahora».",
+            "En «Más»: versión instalada, «Buscar actualizaciones», novedades de cada versión y lo que está en preparación.",
+            "Después de actualizar, el Inicio muestra una vez las novedades de la versión."
+          ]
+        }
+      }
     },
     {
       "versao": "1.6.0",
@@ -15,7 +53,21 @@
       "itens": [
         "Alongamentos do treino do dia ou por grupo muscular, com o desenho do corpo, passos escritos, temporizador e vídeo.",
         "Lembrete «Hora de alongar» no fim de cada treino."
-      ]
+      ],
+      "traducoes": {
+        "en": {
+          "itens": [
+            "Stretches for the day's workout or by muscle group, with the body drawing, written steps, a timer and video.",
+            "“Time to stretch” reminder at the end of each workout."
+          ]
+        },
+        "es": {
+          "itens": [
+            "Estiramientos del entrenamiento del día o por grupo muscular, con el dibujo del cuerpo, pasos escritos, temporizador y vídeo.",
+            "Recordatorio «Hora de estirar» al final de cada entrenamiento."
+          ]
+        }
+      }
     },
     {
       "versao": "1.5.0",
@@ -25,7 +77,25 @@
         "Catálogo com 75 exercícios e desenho dos músculos trabalhados.",
         "Medidas de peito, braço, anca e coxa.",
         "Exportar ficha e histórico em PDF e Excel, e relatório com fotos para o PT."
-      ]
+      ],
+      "traducoes": {
+        "en": {
+          "itens": [
+            "Choice of training template in the questionnaire.",
+            "Catalogue of 75 exercises with a drawing of the muscles worked.",
+            "Chest, arm, hip and thigh measurements.",
+            "Export the plan and history as PDF and Excel, and a report with photos for your PT."
+          ]
+        },
+        "es": {
+          "itens": [
+            "Elección del modelo de entrenamiento en el cuestionario.",
+            "Catálogo de 75 ejercicios con el dibujo de los músculos trabajados.",
+            "Medidas de pecho, brazo, cadera y muslo.",
+            "Exportar el plan y el historial en PDF y Excel, y un informe con fotos para el entrenador."
+          ]
+        }
+      }
     },
     {
       "versao": "1.4.0",
@@ -34,7 +104,23 @@
         "Fotos de avaliação com comparação lado a lado.",
         "Nome e foto de perfil, com saudação no Início.",
         "Frases do dia com autor quando é conhecido."
-      ]
+      ],
+      "traducoes": {
+        "en": {
+          "itens": [
+            "Progress photos with side-by-side comparison.",
+            "Profile name and photo, with a greeting on Home.",
+            "Daily quotes with the author when it is known."
+          ]
+        },
+        "es": {
+          "itens": [
+            "Fotos de evaluación con comparación lado a lado.",
+            "Nombre y foto de perfil, con saludo en el Inicio.",
+            "Frases del día con autor cuando se conoce."
+          ]
+        }
+      }
     },
     {
       "versao": "1.3.0",
@@ -42,7 +128,21 @@
       "itens": [
         "Planos para homens e mulheres, com ênfase escolhida, gravidez e pós-parto.",
         "Aumentos de carga proporcionais ao peso usado."
-      ]
+      ],
+      "traducoes": {
+        "en": {
+          "itens": [
+            "Plans for men and women, with a chosen emphasis, pregnancy and postpartum.",
+            "Load increases proportional to the weight used."
+          ]
+        },
+        "es": {
+          "itens": [
+            "Planes para hombres y mujeres, con énfasis a elegir, embarazo y posparto.",
+            "Subidas de carga proporcionales al peso usado."
+          ]
+        }
+      }
     },
     {
       "versao": "1.2.0",
@@ -51,17 +151,57 @@
         "Planos de 2 a 7 dias por semana.",
         "Início com resumo da semana, conquistas e sequência.",
         "Blocos de treino com semana de descarga e troca de exercícios."
-      ]
+      ],
+      "traducoes": {
+        "en": {
+          "itens": [
+            "Plans from 2 to 7 days a week.",
+            "Home with a weekly summary, achievements and streak.",
+            "Training blocks with a deload week and exercise rotation."
+          ]
+        },
+        "es": {
+          "itens": [
+            "Planes de 2 a 7 días por semana.",
+            "Inicio con resumen de la semana, logros y racha.",
+            "Bloques de entrenamiento con semana de descarga y cambio de ejercicios."
+          ]
+        }
+      }
     },
     {
       "versao": "1.0.0",
       "data": "2026-10-20",
       "itens": [
         "Plano de treino gerado pela anamnese, registo de séries, relatórios e funcionamento sem internet."
-      ]
+      ],
+      "traducoes": {
+        "en": {
+          "itens": [
+            "Training plan generated from the questionnaire, set logging, reports and offline use."
+          ]
+        },
+        "es": {
+          "itens": [
+            "Plan de entrenamiento generado a partir del cuestionario, registro de series, informes y funcionamiento sin internet."
+          ]
+        }
+      }
     }
   ],
   "emPreparacao": [
     "Conta com sessão iniciada e cópia na nuvem: em estudo, ainda sem decisão. Enquanto não houver, os dados continuam só no teu telemóvel."
-  ]
+  ],
+  "traducoes": {
+    "en": {
+      "emPreparacao": [
+        "Account sign-in and cloud backup: under study, no decision yet. Until then, your data stays only on your phone."
+      ]
+    },
+    "es": {
+      "emPreparacao": [
+        "Cuenta con inicio de sesión y copia en la nube: en estudio, todavía sin decisión. Mientras tanto, tus datos siguen solo en tu móvil."
+      ]
+    }
+  }
 }

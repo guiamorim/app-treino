@@ -1,0 +1,677 @@
+{
+ "supino-barra": {
+  "nome": "Press de banca con barra",
+  "objetivo": "Fuerza y masa del pecho con carga alta. Exige buena estabilidad del hombro.",
+  "pontosChave": [
+   "Escápulas juntas y hacia abajo",
+   "Agarre un poco más ancho que los hombros, sin exagerar",
+   "La barra baja hasta la parte baja del pecho, codos a ~45° del tronco"
+  ]
+ },
+ "supino-halteres-neutro": {
+  "nome": "Press de banca con mancuernas, agarre neutro",
+  "objetivo": "Trabajar el pecho con menos tensión en el hombro: el agarre neutro mantiene los codos cerca del tronco.",
+  "pontosChave": [
+   "Palmas enfrentadas",
+   "Codos a ~30–45° del tronco",
+   "Bajar hasta notar estiramiento en el pecho, sin dolor"
+  ]
+ },
+ "supino-maquina": {
+  "nome": "Press de pecho en máquina convergente",
+  "objetivo": "Pecho con trayectoria guiada; permite subir la carga con poco riesgo.",
+  "pontosChave": [
+   "Ajustar el asiento para que los agarres queden a media altura del pecho",
+   "Espalda y escápulas apoyadas",
+   "No bloquear los codos al final"
+  ]
+ },
+ "supino-inclinado-barra": {
+  "nome": "Press inclinado con barra",
+  "objetivo": "Énfasis en la parte superior del pecho.",
+  "pontosChave": [
+   "Banco a 30°",
+   "La barra baja a la parte alta del pecho",
+   "Escápulas juntas"
+  ]
+ },
+ "supino-inclinado-halteres": {
+  "nome": "Press inclinado con mancuernas, agarre neutro",
+  "objetivo": "Parte superior del pecho con menos tensión en el hombro.",
+  "pontosChave": [
+   "Banco a 30°",
+   "Palmas enfrentadas",
+   "Bajada controlada"
+  ]
+ },
+ "flexoes": {
+  "nome": "Flexiones",
+  "objetivo": "Pecho y tríceps sin material; el hombro se mueve libremente porque las escápulas no están fijas.",
+  "pontosChave": [
+   "Cuerpo en línea recta de la cabeza a los pies",
+   "Codos a ~45° del tronco",
+   "Si cuesta mucho, apoyar las manos en un banco"
+  ]
+ },
+ "remada-cabo-sentado": {
+  "nome": "Remo sentado en polea (triángulo)",
+  "objetivo": "Grosor de la espalda y postura: tirar en horizontal equilibra el trabajo de pecho.",
+  "pontosChave": [
+   "Tronco recto, sin balancearse",
+   "Tirar del triángulo hasta el abdomen",
+   "Juntar las escápulas al final"
+  ]
+ },
+ "remada-halter-unilateral": {
+  "nome": "Remo con mancuerna a una mano",
+  "objetivo": "Espalda con apoyo en el banco, lo que protege la zona lumbar y permite corregir diferencias entre lados.",
+  "pontosChave": [
+   "Mano y rodilla apoyadas en el banco, espalda neutra",
+   "Tirar de la mancuerna hacia la cadera",
+   "Bajar hasta estirar bien"
+  ]
+ },
+ "puxada-frente": {
+  "nome": "Jalón al pecho en polea alta",
+  "objetivo": "Anchura de la espalda (dorsal ancho) con un movimiento vertical.",
+  "pontosChave": [
+   "Agarre a la anchura de los hombros o algo más",
+   "Tirar de la barra hasta lo alto del pecho",
+   "No tirar por detrás de la nuca"
+  ]
+ },
+ "puxada-neutra": {
+  "nome": "Jalón con triángulo (agarre neutro)",
+  "objetivo": "Dorsal ancho con agarre neutro, normalmente más cómodo para hombros y codos.",
+  "pontosChave": [
+   "Pecho ligeramente hacia arriba",
+   "Tirar hasta la barbilla/pecho",
+   "Subida controlada"
+  ]
+ },
+ "elevacao-lateral": {
+  "nome": "Elevaciones laterales con mancuernas",
+  "objetivo": "Deltoides lateral (anchura de hombros) con carga ligera.",
+  "pontosChave": [
+   "Carga ligera, sin balanceo",
+   "Subir hasta la altura de los hombros, no más",
+   "Brazos ligeramente por delante del cuerpo"
+  ]
+ },
+ "face-pull": {
+  "nome": "Face pull en polea con cuerda",
+  "objetivo": "Deltoides posterior y rotadores externos: ayuda a equilibrar el hombro de quien hace mucho press.",
+  "pontosChave": [
+   "Polea a la altura de la cara",
+   "Tirar de la cuerda hacia los ojos, separando las manos",
+   "Codos altos, girar los brazos hacia fuera al final"
+  ]
+ },
+ "crucifixo-invertido": {
+  "nome": "Aperturas invertidas con mancuernas",
+  "objetivo": "Deltoides posterior y parte alta de la espalda.",
+  "pontosChave": [
+   "Tronco inclinado hacia delante, espalda neutra",
+   "Abrir los brazos con los codos ligeramente flexionados",
+   "Carga ligera"
+  ]
+ },
+ "curl-halteres": {
+  "nome": "Curl alterno con mancuernas",
+  "objetivo": "Bíceps.",
+  "pontosChave": [
+   "Codos pegados al tronco",
+   "Girar la palma hacia arriba al subir",
+   "Bajar despacio"
+  ]
+ },
+ "curl-martelo": {
+  "nome": "Curl martillo con mancuernas",
+  "objetivo": "Bíceps y braquial, con un agarre neutro más amable con la muñeca.",
+  "pontosChave": [
+   "Palmas enfrentadas",
+   "Codos fijos",
+   "Sin balancear el tronco"
+  ]
+ },
+ "triceps-corda": {
+  "nome": "Extensión de tríceps en polea con cuerda",
+  "objetivo": "Tríceps.",
+  "pontosChave": [
+   "Codos pegados al tronco",
+   "Separar los extremos de la cuerda al final",
+   "Solo se mueve el antebrazo"
+  ]
+ },
+ "triceps-polia": {
+  "nome": "Extensión de tríceps en polea con barra",
+  "objetivo": "Tríceps con más carga que con la cuerda.",
+  "pontosChave": [
+   "Codos fijos a los lados del cuerpo",
+   "Extender por completo",
+   "Subida controlada"
+  ]
+ },
+ "triceps-halteres-deitado": {
+  "nome": "Press francés con mancuernas",
+  "objetivo": "Tríceps con mancuernas, tumbado en el banco.",
+  "pontosChave": [
+   "Brazos en vertical",
+   "Doblar solo los codos, mancuernas al lado de la cabeza",
+   "Carga moderada"
+  ]
+ },
+ "leg-press": {
+  "nome": "Prensa de piernas a 45°",
+  "objetivo": "Fuerza y masa de las piernas con la columna apoyada.",
+  "pontosChave": [
+   "Zona lumbar siempre pegada al respaldo",
+   "Rodillas en la dirección de los pies",
+   "No bloquear las rodillas arriba"
+  ]
+ },
+ "agachamento-goblet": {
+  "nome": "Sentadilla goblet con mancuerna",
+  "objetivo": "Sentadilla con el peso delante: ayuda a mantener el tronco recto y aprender el patrón.",
+  "pontosChave": [
+   "Mancuerna junto al pecho",
+   "Bajar entre las piernas, tronco recto",
+   "Las rodillas siguen la dirección de los pies"
+  ]
+ },
+ "agachamento-bulgaro": {
+  "nome": "Sentadilla búlgara con mancuernas",
+  "objetivo": "Piernas de una en una: equilibrio, glúteos y cuádriceps con poca carga en la columna.",
+  "pontosChave": [
+   "Pie de atrás apoyado en un banco",
+   "Bajar en vertical",
+   "Empezar solo con el peso del cuerpo"
+  ]
+ },
+ "extensao-pernas": {
+  "nome": "Extensión de piernas en máquina",
+  "objetivo": "Aislar el cuádriceps.",
+  "pontosChave": [
+   "Rodilla alineada con el eje de la máquina",
+   "Subir hasta estirar, bajar despacio",
+   "Sin impulso"
+  ]
+ },
+ "peso-morto-romeno": {
+  "nome": "Peso muerto rumano con barra",
+  "objetivo": "Isquiotibiales y glúteos mediante la bisagra de cadera.",
+  "pontosChave": [
+   "Espalda neutra de principio a fin",
+   "Llevar la cadera hacia atrás, rodillas ligeramente flexionadas",
+   "Barra siempre pegada a las piernas"
+  ]
+ },
+ "peso-morto-romeno-halteres": {
+  "nome": "Peso muerto rumano con mancuernas",
+  "objetivo": "Isquiotibiales y glúteos con mancuernas.",
+  "pontosChave": [
+   "Espalda neutra",
+   "Cadera hacia atrás",
+   "Mancuernas pegadas a las piernas"
+  ]
+ },
+ "leg-curl-deitado": {
+  "nome": "Curl femoral tumbado",
+  "objetivo": "Aislar los isquiotibiales.",
+  "pontosChave": [
+   "Cadera pegada al banco",
+   "Flexionar las rodillas hasta el final",
+   "Bajada lenta"
+  ]
+ },
+ "leg-curl-sentado": {
+  "nome": "Curl femoral sentado",
+  "objetivo": "Isquiotibiales en posición estirada (sentado).",
+  "pontosChave": [
+   "Rodilla alineada con el eje",
+   "Sujetar bien los muslos",
+   "Bajada controlada"
+  ]
+ },
+ "hip-thrust": {
+  "nome": "Hip thrust (elevación de cadera)",
+  "objetivo": "Glúteos con carga alta y poca exigencia para la zona lumbar.",
+  "pontosChave": [
+   "Escápulas apoyadas en el banco",
+   "Barbilla abajo, subir hasta que la cadera quede alineada",
+   "Pausa de 1 s arriba"
+  ]
+ },
+ "ponte-gluteos": {
+  "nome": "Puente de glúteos",
+  "objetivo": "Glúteos en el suelo, sin material.",
+  "pontosChave": [
+   "Pies cerca de los glúteos",
+   "Subir la cadera apretando los glúteos",
+   "No arquear la zona lumbar"
+  ]
+ },
+ "gemeos-pe": {
+  "nome": "Elevación de gemelos de pie",
+  "objetivo": "Gemelos (pantorrilla).",
+  "pontosChave": [
+   "Bajar hasta estirar bien el talón",
+   "Pausa de 1 s arriba",
+   "Sin rebotar"
+  ]
+ },
+ "prancha": {
+  "nome": "Plancha",
+  "objetivo": "Estabilidad del tronco: aprender a mantener la columna neutra bajo esfuerzo.",
+  "pontosChave": [
+   "Antebrazos debajo de los hombros",
+   "Apretar glúteos y abdomen",
+   "Parar cuando la zona lumbar empiece a ceder"
+  ]
+ },
+ "dead-bug": {
+  "nome": "Dead bug",
+  "objetivo": "Control del core con la zona lumbar protegida en el suelo.",
+  "pontosChave": [
+   "Zona lumbar pegada al suelo",
+   "Extender despacio el brazo y la pierna opuestos",
+   "Soltar el aire al extender"
+  ]
+ },
+ "crucifixo-halteres": {
+  "nome": "Aperturas con mancuernas",
+  "objetivo": "Aislar el pecho con un estiramiento controlado, sin ayuda de los tríceps.",
+  "pontosChave": [
+   "Codos ligeramente flexionados y fijos",
+   "Bajar solo hasta notar estiramiento, sin dolor en el hombro",
+   "Juntar las mancuernas sobre el pecho en arco"
+  ]
+ },
+ "crucifixo-maquina": {
+  "nome": "Aperturas en máquina (pec deck)",
+  "objetivo": "Aislar el pecho con trayectoria guiada y poca exigencia de estabilidad.",
+  "pontosChave": [
+   "Asiento ajustado para que las manos queden a la altura del pecho",
+   "Escápulas apoyadas en el respaldo",
+   "Cerrar los brazos sin chocar las muñecas"
+  ]
+ },
+ "crucifixo-cabo": {
+  "nome": "Cruce de poleas",
+  "objetivo": "Aislar el pecho con tensión constante durante todo el movimiento.",
+  "pontosChave": [
+   "Un pie adelantado para tener estabilidad",
+   "Codos ligeramente flexionados",
+   "Juntar las manos delante del pecho, controlando la vuelta"
+  ]
+ },
+ "supino-inclinado-maquina": {
+  "nome": "Press inclinado en máquina",
+  "objetivo": "Parte superior del pecho con trayectoria guiada; buena alternativa al press inclinado con barra.",
+  "pontosChave": [
+   "Agarres a la altura de la parte alta del pecho",
+   "Escápulas juntas",
+   "Empujar sin bloquear los codos"
+  ]
+ },
+ "paralelas": {
+  "nome": "Fondos en paralelas",
+  "objetivo": "Parte baja del pecho y tríceps con el peso del cuerpo.",
+  "pontosChave": [
+   "Tronco ligeramente inclinado hacia delante",
+   "Bajar hasta que los hombros queden a la altura de los codos, no más",
+   "Sin dolor en el hombro; si duele, parar"
+  ]
+ },
+ "flexoes-inclinadas": {
+  "nome": "Flexiones inclinadas (manos en un banco)",
+  "objetivo": "Versión más fácil de las flexiones, útil para empezar o entrenar en casa.",
+  "pontosChave": [
+   "Manos en un banco o mesa estable",
+   "Cuerpo en línea recta de la cabeza a los talones",
+   "Pecho hasta cerca del apoyo"
+  ]
+ },
+ "remada-curvada-barra": {
+  "nome": "Remo inclinado con barra",
+  "objetivo": "Grosor de la espalda con carga alta; exige una zona lumbar estable.",
+  "pontosChave": [
+   "Tronco a ~45°, espalda neutra",
+   "Tirar de la barra hacia el ombligo",
+   "No balancear el tronco"
+  ]
+ },
+ "remada-maquina": {
+  "nome": "Remo en máquina con apoyo en el pecho",
+  "objetivo": "Espalda sin carga en la zona lumbar: el pecho queda apoyado.",
+  "pontosChave": [
+   "Pecho apoyado en el soporte",
+   "Llevar los codos hacia atrás y juntar las escápulas",
+   "Volver despacio, brazos estirados"
+  ]
+ },
+ "elevacoes": {
+  "nome": "Dominadas",
+  "objetivo": "Tirón vertical con el peso del cuerpo; muy buen indicador de fuerza relativa.",
+  "pontosChave": [
+   "Agarre a la anchura de los hombros o algo más",
+   "Empezar con los brazos estirados y las escápulas abajo",
+   "Barbilla por encima de la barra sin balancearse"
+  ]
+ },
+ "remada-invertida": {
+  "nome": "Remo invertido (cuerpo bajo una barra o mesa)",
+  "objetivo": "Espalda con el peso del cuerpo; en casa se puede hacer debajo de una mesa robusta.",
+  "pontosChave": [
+   "Cuerpo en línea recta",
+   "Tirar del pecho hasta la barra",
+   "Cuanto más horizontal el cuerpo, más difícil"
+  ]
+ },
+ "pullover-cabo": {
+  "nome": "Pullover en polea alta (brazos estirados)",
+  "objetivo": "Aislar el dorsal ancho sin ayuda de los bíceps.",
+  "pontosChave": [
+   "Brazos casi estirados",
+   "Llevar la barra hasta los muslos en arco",
+   "Tronco ligeramente inclinado y fijo"
+  ]
+ },
+ "hiperextensao": {
+  "nome": "Hiperextensión en banco romano (45°)",
+  "objetivo": "Cadena posterior: glúteos, isquiotibiales y zona lumbar.",
+  "pontosChave": [
+   "Cadera apoyada justo debajo del hueso de la cadera",
+   "Bajar con la espalda neutra",
+   "Subir hasta alinear el cuerpo, sin hiperextender"
+  ]
+ },
+ "encolhimentos": {
+  "nome": "Encogimientos con mancuernas",
+  "objetivo": "Trapecio superior.",
+  "pontosChave": [
+   "Brazos estirados a los lados del cuerpo",
+   "Subir los hombros hacia las orejas",
+   "Pausa de 1 s arriba, sin girar los hombros"
+  ]
+ },
+ "desenvolvimento-halteres": {
+  "nome": "Press de hombros con mancuernas, sentado",
+  "objetivo": "Fuerza y masa de los hombros con un movimiento por encima de la cabeza.",
+  "pontosChave": [
+   "Respaldo casi vertical",
+   "Mancuernas a la altura de las orejas, codos ligeramente adelantados",
+   "Empujar sin arquear la zona lumbar"
+  ]
+ },
+ "desenvolvimento-maquina": {
+  "nome": "Press de hombros en máquina",
+  "objetivo": "Hombros por encima de la cabeza con trayectoria guiada.",
+  "pontosChave": [
+   "Agarres a la altura de los hombros",
+   "Espalda apoyada",
+   "Empujar sin bloquear los codos"
+  ]
+ },
+ "press-landmine": {
+  "nome": "Press a una mano en landmine",
+  "objetivo": "Empujar hacia arriba y adelante, en una trayectoria que suele ser más amable con el hombro.",
+  "pontosChave": [
+   "Extremo de la barra en una esquina o soporte",
+   "Empujar hacia arriba y adelante",
+   "Tronco firme, sin girar"
+  ]
+ },
+ "elevacao-lateral-cabo": {
+  "nome": "Elevación lateral en polea",
+  "objetivo": "Deltoides lateral con tensión constante.",
+  "pontosChave": [
+   "Polea baja, cable pasando por delante del cuerpo",
+   "Subir hasta la altura del hombro",
+   "Codo ligeramente flexionado"
+  ]
+ },
+ "elevacao-frontal": {
+  "nome": "Elevación frontal con mancuernas",
+  "objetivo": "Deltoides anterior; normalmente ya muy trabajado en los press.",
+  "pontosChave": [
+   "Subir hasta la altura de los hombros",
+   "Sin balancear el tronco",
+   "Bajar despacio"
+  ]
+ },
+ "curl-barra": {
+  "nome": "Curl con barra",
+  "objetivo": "Bíceps con carga alta.",
+  "pontosChave": [
+   "Codos pegados al tronco",
+   "Subir sin balancearse",
+   "Barra Z si molesta la muñeca"
+  ]
+ },
+ "curl-cabo": {
+  "nome": "Curl en polea baja",
+  "objetivo": "Bíceps con tensión constante.",
+  "pontosChave": [
+   "Codos fijos",
+   "Subir hasta la contracción máxima",
+   "Bajar en 2 s"
+  ]
+ },
+ "curl-concentrado": {
+  "nome": "Curl concentrado",
+  "objetivo": "Bíceps aislado, sin posibilidad de balanceo.",
+  "pontosChave": [
+   "Sentado, codo apoyado en la cara interna del muslo",
+   "Subir despacio",
+   "Extender por completo abajo"
+  ]
+ },
+ "curl-inclinado": {
+  "nome": "Curl con mancuernas en banco inclinado",
+  "objetivo": "Bíceps en posición estirada.",
+  "pontosChave": [
+   "Banco a ~60°",
+   "Brazos colgando por detrás del tronco",
+   "No adelantar los codos"
+  ]
+ },
+ "triceps-frances": {
+  "nome": "Extensión de tríceps por encima de la cabeza con mancuerna",
+  "objetivo": "Cabeza larga del tríceps en posición estirada.",
+  "pontosChave": [
+   "Mancuerna sujeta con las dos manos",
+   "Codos apuntando hacia delante",
+   "Bajar detrás de la cabeza solo hasta donde sea cómodo"
+  ]
+ },
+ "triceps-corda-acima": {
+  "nome": "Extensión de tríceps por encima de la cabeza en polea",
+  "objetivo": "Tríceps en posición estirada, con tensión constante.",
+  "pontosChave": [
+   "De espaldas a la polea, cuerda detrás de la cabeza",
+   "Codos fijos",
+   "Extender hasta delante de la cabeza"
+  ]
+ },
+ "fundos-banco": {
+  "nome": "Fondos en banco",
+  "objetivo": "Tríceps con el peso del cuerpo, sin material.",
+  "pontosChave": [
+   "Manos en el banco a la anchura de la cadera",
+   "Bajar hasta ~90° en los codos",
+   "Hombros lejos de las orejas"
+  ]
+ },
+ "supino-fechado": {
+  "nome": "Press de banca con agarre cerrado",
+  "objetivo": "Tríceps con carga alta.",
+  "pontosChave": [
+   "Manos a la anchura de los hombros",
+   "Codos pegados al tronco",
+   "Barra hasta la parte baja del pecho"
+  ]
+ },
+ "agachamento-barra": {
+  "nome": "Sentadilla con barra",
+  "objetivo": "El ejercicio base de piernas; exige técnica y movilidad.",
+  "pontosChave": [
+   "Barra sobre los trapecios, pies a la anchura de los hombros",
+   "Bajar con el tronco firme hasta donde mantengas la espalda neutra",
+   "Rodillas en la dirección de los pies"
+  ]
+ },
+ "agachamento-hack": {
+  "nome": "Sentadilla en máquina hack",
+  "objetivo": "Cuádriceps con carga alta y la espalda apoyada.",
+  "pontosChave": [
+   "Espalda apoyada",
+   "Pies en el centro de la plataforma",
+   "Bajar controlado, sin levantar los talones"
+  ]
+ },
+ "afundos": {
+  "nome": "Zancadas caminando con mancuernas",
+  "objetivo": "Piernas de forma unilateral, con equilibrio.",
+  "pontosChave": [
+   "Paso largo",
+   "La rodilla de atrás casi toca el suelo",
+   "Tronco recto"
+  ]
+ },
+ "step-up": {
+  "nome": "Subida al banco con mancuernas",
+  "objetivo": "Piernas de forma unilateral, con poca carga en la zona lumbar.",
+  "pontosChave": [
+   "Banco a la altura de la rodilla",
+   "Empujar con la pierna de arriba, sin impulso de la de abajo",
+   "Bajar despacio"
+  ]
+ },
+ "agachamento-peso-corporal": {
+  "nome": "Sentadilla con el peso del cuerpo",
+  "objetivo": "Piernas en casa, sin material.",
+  "pontosChave": [
+   "Pies a la anchura de los hombros",
+   "Bajar como para sentarse en una silla",
+   "Peso en los talones y el centro del pie"
+  ]
+ },
+ "peso-morto-barra": {
+  "nome": "Peso muerto convencional",
+  "objetivo": "Fuerza de toda la cadena posterior; exige una técnica cuidada.",
+  "pontosChave": [
+   "Barra pegada a las espinillas",
+   "Espalda neutra, pecho arriba",
+   "Empujar el suelo y extender cadera y rodillas a la vez"
+  ]
+ },
+ "peso-morto-unilateral": {
+  "nome": "Peso muerto rumano a una pierna con mancuerna",
+  "objetivo": "Isquiotibiales y glúteos con menos carga y más equilibrio.",
+  "pontosChave": [
+   "Pierna de apoyo ligeramente flexionada",
+   "La cadera va hacia atrás y la pierna libre sube por detrás",
+   "Espalda neutra"
+  ]
+ },
+ "abducao-maquina": {
+  "nome": "Abducción de cadera en máquina",
+  "objetivo": "Glúteo medio, importante para la estabilidad de la cadera y la rodilla.",
+  "pontosChave": [
+   "Espalda apoyada",
+   "Abrir las piernas de forma controlada",
+   "Pausa de 1 s abierto"
+  ]
+ },
+ "kickback-cabo": {
+  "nome": "Patada de glúteo en polea (kickback)",
+  "objetivo": "Aislar el glúteo mayor.",
+  "pontosChave": [
+   "Tobillera en la polea baja",
+   "Llevar la pierna hacia atrás sin arquear la zona lumbar",
+   "Apretar el glúteo al final"
+  ]
+ },
+ "ponte-gluteos-unilateral": {
+  "nome": "Puente de glúteos a una pierna",
+  "objetivo": "Glúteos sin material, una pierna cada vez.",
+  "pontosChave": [
+   "Tumbado boca arriba, un pie en el suelo y la otra pierna estirada",
+   "Subir la cadera hasta alinear el tronco",
+   "Pausa de 1 s arriba"
+  ]
+ },
+ "gemeos-sentado": {
+  "nome": "Elevación de gemelos sentado",
+  "objetivo": "Gemelos con la rodilla flexionada (más sóleo).",
+  "pontosChave": [
+   "Almohadilla sobre las rodillas",
+   "Bajar hasta estirar bien",
+   "Subir y hacer una pausa de 1 s"
+  ]
+ },
+ "gemeos-leg-press": {
+  "nome": "Elevación de gemelos en prensa",
+  "objetivo": "Gemelos con la pierna estirada, con carga estable y sin peso sobre los hombros.",
+  "pontosChave": [
+   "Solo la punta de los pies en la plataforma",
+   "Rodillas casi estiradas, sin bloquear",
+   "Recorrido completo y pausa arriba"
+  ]
+ },
+ "prancha-lateral": {
+  "nome": "Plancha lateral",
+  "objetivo": "Músculos laterales del tronco y estabilidad de la cadera.",
+  "pontosChave": [
+   "Antebrazo debajo del hombro",
+   "Cuerpo en línea recta",
+   "No dejar caer la cadera"
+  ]
+ },
+ "pallof": {
+  "nome": "Press Pallof en polea",
+  "objetivo": "Core antirrotación: resistir que el tronco gire.",
+  "pontosChave": [
+   "De lado a la polea, cable a la altura del pecho",
+   "Empujar las manos hacia delante",
+   "Mantener el tronco sin girar"
+  ]
+ },
+ "elevacao-pernas": {
+  "nome": "Elevación de piernas tumbado",
+  "objetivo": "Abdominales inferiores.",
+  "pontosChave": [
+   "Zona lumbar pegada al suelo",
+   "Subir las piernas hasta 90°",
+   "Bajar despacio sin arquear"
+  ]
+ },
+ "abdominal-cabo": {
+  "nome": "Crunch en polea alta, de rodillas",
+  "objetivo": "Abdominales con carga progresiva.",
+  "pontosChave": [
+   "Cuerda junto a la cabeza",
+   "Enrollar el tronco llevando los codos a los muslos",
+   "No tirar con los brazos"
+  ]
+ },
+ "bird-dog": {
+  "nome": "Bird dog",
+  "objetivo": "Estabilidad lumbar y coordinación; seguro para quien tiene dolor lumbar.",
+  "pontosChave": [
+   "A cuatro patas",
+   "Extender el brazo y la pierna opuestos",
+   "Tronco inmóvil, sin girar la cadera"
+  ]
+ },
+ "farmer-walk": {
+  "nome": "Paseo del granjero",
+  "objetivo": "Agarre, trapecio y core caminando con carga.",
+  "pontosChave": [
+   "Mancuernas pesadas a los lados del cuerpo",
+   "Tronco recto, hombros hacia atrás",
+   "Pasos cortos y controlados"
+  ]
+ }
+}
