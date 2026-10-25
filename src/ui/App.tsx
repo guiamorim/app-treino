@@ -13,14 +13,15 @@ import { Fotos } from './Fotos'
 import { AlongamentoEcra } from './Alongamento'
 import { AvisoAtualizacao } from './Atualizacao'
 import { VERSAO } from './versao'
+import { m, t } from '../i18n'
 
 const SEPARADORES = [
-  { rota: 'inicio', nome: 'Início', icone: '🏠' },
-  { rota: 'hoje', nome: 'Hoje', icone: '🏋️' },
-  { rota: 'relatorios', nome: 'Relatórios', icone: '📈' },
-  { rota: 'medicoes', nome: 'Medições', icone: '⚖️' },
-  { rota: 'fotos', nome: 'Fotos', icone: '📷' },
-  { rota: 'mais', nome: 'Mais', icone: '⋯' },
+  { rota: 'inicio', nome: m('Início'), icone: '🏠' },
+  { rota: 'hoje', nome: m('Hoje'), icone: '🏋️' },
+  { rota: 'relatorios', nome: m('Relatórios'), icone: '📈' },
+  { rota: 'medicoes', nome: m('Medições'), icone: '⚖️' },
+  { rota: 'fotos', nome: m('Fotos'), icone: '📷' },
+  { rota: 'mais', nome: m('Mais'), icone: '⋯' },
 ] as const
 
 export function App() {
@@ -31,7 +32,7 @@ export function App() {
   useEffect(() => {
     if (instalacaoNova) db.gravar('versaoVista', VERSAO)
   }, [instalacaoNova])
-  if (!dados) return <p className="secundario">A carregar…</p>
+  if (!dados) return <p className="secundario">{t('A carregar…')}</p>
   if (!dados.anamnese || !dados.plano || rota.ecra === 'anamnese') return <AnamneseEcra dados={dados} />
 
   const ativo = rota.ecra === 'exercicio' ? 'hoje' : rota.ecra
@@ -48,11 +49,11 @@ export function App() {
         {rota.ecra === 'mais' && <Mais dados={dados} />}
         {rota.ecra === 'alongamento' && <AlongamentoEcra key={rota.grupo ?? ''} dados={dados} plano={dados.plano} anamnese={dados.anamnese} grupo={rota.grupo} />}
       </main>
-      <nav className="navegacao" aria-label="Principal">
+      <nav className="navegacao" aria-label={t('Principal')}>
         {SEPARADORES.map((s) => (
           <a key={s.rota} href={`#/${s.rota}`} aria-current={ativo === s.rota ? 'page' : undefined}>
             <span className="icone" aria-hidden="true">{s.icone}</span>
-            {s.nome}
+            {t(s.nome)}
           </a>
         ))}
       </nav>

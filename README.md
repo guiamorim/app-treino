@@ -2,7 +2,7 @@
 
 **English** · [Português](README.pt-PT.md)
 
-A personal PWA to follow a training plan generated from an intake questionnaire (anamnesis), log every set and track progression. It works on the iPhone (installed on the home screen) and in any browser, offline, with data stored on the device only. The app's interface is in European Portuguese.
+A personal PWA to follow a training plan generated from an intake questionnaire (anamnesis), log every set and track progression. It works on the iPhone (installed on the home screen) and in any browser, offline, with data stored on the device only. The app's interface is in European Portuguese, English and Spanish; it follows the phone's language and can be changed in "Mais" (More).
 
 Specification: [specs/specification-v1.en.md](specs/specification-v1.en.md) · Market analysis and methodology: [docs/analysis.en.md](docs/analysis.en.md)
 
@@ -26,7 +26,7 @@ npm run build      # builds dist/ with service worker and Content Security Polic
 ## Releasing a new version
 
 1. Add the version at the top of `src/novidades.json`, with the date and a short summary of what changes (this is what the "Nova versão disponível" notice and Home show after updating). Update "Em preparação" (in preparation) if needed.
-2. Use the same number in `package.json` (a test checks they match).
+2. Use the same number in `package.json` (a test checks they match). Add the English and Spanish summary under `traducoes`.
 3. Once merged into the main branch, GitHub Pages publishes it and the installed app shows the notice the next time it opens or comes to the foreground.
 
 ## Layout
@@ -39,8 +39,11 @@ src/data/         IndexedDB (Dexie), export and import
 src/ui/           React screens
 src/catalog/      exercise and stretch catalogues (schema-validated in tests and at startup)
 src/novidades.json  what's new in each version and what is in preparation, shown in the app
+src/i18n/         English and Spanish translations of the UI (the Portuguese text is the key)
 tests/e2e/        Playwright
 ```
+
+Every text shown in the app is written in Portuguese inside `t('…')` and translated in `src/i18n/en.json` and `src/i18n/es.json`; a test (F21) fails if a translation is missing.
 
 Each test carries the code of the specification criterion it checks (e.g. `F4`, `3.2`). Code identifiers follow the Portuguese domain language; the specification maps each term to English.
 

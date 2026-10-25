@@ -5,37 +5,39 @@ import { divisoesPossiveis, gerarPlano } from '../domain/plano'
 import { AREAS, DIAS_POR_SEMANA, type Anamnese, type DiasPorSemana, type DivisaoTreino, type Enfase, type Gravidez, type Area, type Restricao } from '../domain/types'
 import { agoraIso, catalogo, novoId, type Dados } from './dados'
 import { ir } from './rota'
+import { m, t, traduzido } from '../i18n'
+import { CartaoIdioma } from './Idioma'
 
 // Perguntas gerais do PAR-Q+ (versão 2023), adaptadas para português de Portugal.
 export const PERGUNTAS_PARQ = [
-  'Algum médico já te disse que tens um problema de coração ou tensão arterial alta?',
-  'Sentes dor no peito em repouso, no dia a dia ou quando fazes atividade física?',
-  'Nos últimos 12 meses perdeste o equilíbrio por tonturas ou perdeste a consciência? (Responde «não» se as tonturas foram só por respiração acelerada durante exercício intenso.)',
-  'Alguma vez te foi diagnosticada outra doença crónica (além de coração ou tensão alta)?',
-  'Tomas medicação prescrita para uma doença crónica?',
-  'Tens (ou tiveste nos últimos 12 meses) um problema de ossos, articulações, músculos, ligamentos ou tendões que possa piorar com mais atividade física?',
-  'Algum médico já te disse que só deves fazer atividade física com supervisão médica?',
+  m('Algum médico já te disse que tens um problema de coração ou tensão arterial alta?'),
+  m('Sentes dor no peito em repouso, no dia a dia ou quando fazes atividade física?'),
+  m('Nos últimos 12 meses perdeste o equilíbrio por tonturas ou perdeste a consciência? (Responde «não» se as tonturas foram só por respiração acelerada durante exercício intenso.)'),
+  m('Alguma vez te foi diagnosticada outra doença crónica (além de coração ou tensão alta)?'),
+  m('Tomas medicação prescrita para uma doença crónica?'),
+  m('Tens (ou tiveste nos últimos 12 meses) um problema de ossos, articulações, músculos, ligamentos ou tendões que possa piorar com mais atividade física?'),
+  m('Algum médico já te disse que só deves fazer atividade física com supervisão médica?'),
 ]
 
-const DICA_DIAS: Record<number, string> = {
-  2: 'Corpo inteiro A e B.',
-  3: 'Corpo inteiro A, B e C.',
-  4: 'Superior e inferior, A e B.',
-  5: 'Superior e inferior, A e B, mais corpo inteiro.',
-  6: 'A/B/C duas vezes: empurrar, puxar e pernas.',
-  7: 'A/B/C duas vezes e 1 dia de recuperação ativa (treinar força 7 dias seguidos não é recomendável).',
-}
+const DICA_DIAS: Record<number, string> = traduzido({
+  2: m('Corpo inteiro A e B.'),
+  3: m('Corpo inteiro A, B e C.'),
+  4: m('Superior e inferior, A e B.'),
+  5: m('Superior e inferior, A e B, mais corpo inteiro.'),
+  6: m('A/B/C duas vezes: empurrar, puxar e pernas.'),
+  7: m('A/B/C duas vezes e 1 dia de recuperação ativa (treinar força 7 dias seguidos não é recomendável).'),
+})
 
 // 3.1 (v1.5): modelo de treino escolhido pela pessoa.
-const NOMES_DIVISOES: Record<DivisaoTreino, string> = {
-  automatico: 'Automático (recomendado)',
-  corpo: 'Corpo inteiro',
-  ab: 'A/B: superior e inferior',
-  abc: 'A/B/C: empurrar, puxar e pernas',
-  grupos: 'Por grupo muscular',
-}
+const NOMES_DIVISOES: Record<DivisaoTreino, string> = traduzido({
+  automatico: m('Automático (recomendado)'),
+  corpo: m('Corpo inteiro'),
+  ab: m('A/B: superior e inferior'),
+  abc: m('A/B/C: empurrar, puxar e pernas'),
+  grupos: m('Por grupo muscular'),
+})
 
-const NOMES_AREAS: Record<Area, string> = { ombro: 'Ombro', joelho: 'Joelho', lombar: 'Lombar', punho: 'Punho', anca: 'Anca', cotovelo: 'Cotovelo' }
+const NOMES_AREAS: Record<Area, string> = traduzido({ ombro: m('Ombro'), joelho: m('Joelho'), lombar: m('Lombar'), punho: m('Punho'), anca: m('Anca'), cotovelo: m('Cotovelo') })
 
 export function AnamneseEcra({ dados }: { dados: Dados }) {
   const a = dados.anamnese
@@ -78,18 +80,18 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
     setSemDores(v)
     if (v) setRestricoes([])
   }
-  const mudarRestricao = (area: Area, m: Partial<Restricao>) => setRestricoes((r) => r.map((x) => (x.area === area ? { ...x, ...m } : x)))
+  const mudarRestricao = (area: Area, mudanca: Partial<Restricao>) => setRestricoes((r) => r.map((x) => (x.area === area ? { ...x, ...mudanca } : x)))
 
   async function guardar(e: FormEvent) {
     e.preventDefault()
     const num = (s: string) => Number(s.replace(',', '.'))
     const idade = num(f.idade), alturaCm = num(f.alturaCm), pesoKg = num(f.pesoKg), cintura = num(f.cinturaCm)
-    if (!(idade >= 14 && idade <= 110)) return setErro('Indica uma idade entre 14 e 110.')
-    if (!(alturaCm >= 100 && alturaCm <= 250)) return setErro('Indica a altura em centímetros (ex.: 175).')
-    if (!(pesoKg >= 20 && pesoKg <= 400)) return setErro('Indica o peso em kg.')
-    if (f.cinturaCm && !(cintura >= 30 && cintura <= 250)) return setErro('Indica a cintura em centímetros ou deixa em branco.')
-    if (!semDores && restricoes.length === 0) return setErro('Nas dores ou limitações, marca «Nenhuma» ou pelo menos uma zona.')
-    if (parq.some((x) => x === null)) return setErro('Responde a todas as perguntas de saúde (PAR-Q+).')
+    if (!(idade >= 14 && idade <= 110)) return setErro(t('Indica uma idade entre 14 e 110.'))
+    if (!(alturaCm >= 100 && alturaCm <= 250)) return setErro(t('Indica a altura em centímetros (ex.: 175).'))
+    if (!(pesoKg >= 20 && pesoKg <= 400)) return setErro(t('Indica o peso em kg.'))
+    if (f.cinturaCm && !(cintura >= 30 && cintura <= 250)) return setErro(t('Indica a cintura em centímetros ou deixa em branco.'))
+    if (!semDores && restricoes.length === 0) return setErro(t('Nas dores ou limitações, marca «Nenhuma» ou pelo menos uma zona.'))
+    if (parq.some((x) => x === null)) return setErro(t('Responde a todas as perguntas de saúde (PAR-Q+).'))
 
     const nova: Anamnese = {
       idade, alturaCm, pesoKg,
@@ -109,89 +111,90 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
     }
     await db.gravar('anamnese', nova)
     // F1.3: alterar a anamnese pergunta antes de substituir o plano; o histórico mantém-se.
-    const gerar = !dados.plano || confirm('Gerar um novo plano com estes dados? O histórico de treinos mantém-se.')
+    const gerar = !dados.plano || confirm(t('Gerar um novo plano com estes dados? O histórico de treinos mantém-se.'))
     if (gerar) await db.gravar('plano', gerarPlano(nova, catalogo, { id: novoId(), agora: agoraIso() }))
     ir('/hoje')
   }
 
   return (
     <form onSubmit={guardar} noValidate>
-      <h1>{a ? 'Anamnese' : 'Bem-vindo'}</h1>
-      {!a && <p className="secundario">Responde a estas perguntas para gerar o teu plano. Os dados ficam só neste dispositivo.</p>}
+      <h1>{a ? t('Anamnese') : t('Bem-vindo')}</h1>
+      {!a && <p className="secundario">{t('Responde a estas perguntas para gerar o teu plano. Os dados ficam só neste dispositivo.')}</p>}
+      {!a && <CartaoIdioma idioma={dados.idioma} />}
 
-      <h2>Sobre ti</h2>
+      <h2>{t('Sobre ti')}</h2>
       <div className="linha">
-        <div><label htmlFor="idade">Idade</label><input id="idade" inputMode="numeric" {...campo('idade')} /></div>
-        <div><label htmlFor="sexo">Sexo</label>
-          <select id="sexo" {...campo('sexo')}><option value="masculino">Masculino</option><option value="feminino">Feminino</option><option value="outro">Outro</option></select>
+        <div><label htmlFor="idade">{t('Idade')}</label><input id="idade" inputMode="numeric" {...campo('idade')} /></div>
+        <div><label htmlFor="sexo">{t('Sexo')}</label>
+          <select id="sexo" {...campo('sexo')}><option value="masculino">{t('Masculino')}</option><option value="feminino">{t('Feminino')}</option><option value="outro">{t('Outro')}</option></select>
         </div>
       </div>
       <div className="linha">
-        <div><label htmlFor="altura">Altura (cm)</label><input id="altura" inputMode="decimal" {...campo('alturaCm')} /></div>
-        <div><label htmlFor="peso">Peso (kg)</label><input id="peso" inputMode="decimal" {...campo('pesoKg')} /></div>
-        <div><label htmlFor="cintura">Cintura (cm)</label><input id="cintura" inputMode="decimal" placeholder="opcional" {...campo('cinturaCm')} /></div>
+        <div><label htmlFor="altura">{t('Altura (cm)')}</label><input id="altura" inputMode="decimal" {...campo('alturaCm')} /></div>
+        <div><label htmlFor="peso">{t('Peso (kg)')}</label><input id="peso" inputMode="decimal" {...campo('pesoKg')} /></div>
+        <div><label htmlFor="cintura">{t('Cintura (cm)')}</label><input id="cintura" inputMode="decimal" placeholder={t('opcional')} {...campo('cinturaCm')} /></div>
       </div>
 
       {f.sexo === 'feminino' && (
         <>
-          <label htmlFor="gravidez">Gravidez ou pós-parto</label>
+          <label htmlFor="gravidez">{t('Gravidez ou pós-parto')}</label>
           <select id="gravidez" {...campo('gravidez')}>
-            <option value="nao">Não</option>
-            <option value="gravida-1t">Grávida, 1.º trimestre</option>
-            <option value="gravida-2t3t">Grávida, 2.º ou 3.º trimestre</option>
-            <option value="pos-parto">Pós-parto (menos de 12 meses)</option>
+            <option value="nao">{t('Não')}</option>
+            <option value="gravida-1t">{t('Grávida, 1.º trimestre')}</option>
+            <option value="gravida-2t3t">{t('Grávida, 2.º ou 3.º trimestre')}</option>
+            <option value="pos-parto">{t('Pós-parto (menos de 12 meses)')}</option>
           </select>
         </>
       )}
 
-      <h2>Objetivo e disponibilidade</h2>
-      <label htmlFor="objetivo">Objetivo</label>
+      <h2>{t('Objetivo e disponibilidade')}</h2>
+      <label htmlFor="objetivo">{t('Objetivo')}</label>
       <select id="objetivo" {...campo('objetivo')}>
-        <option value="recomposicao">Recomposição (perder gordura e manter/ganhar músculo)</option>
-        <option value="hipertrofia">Ganhar massa muscular</option>
-        <option value="forca">Ganhar força</option>
-        <option value="saude">Saúde geral</option>
+        <option value="recomposicao">{t('Recomposição (perder gordura e manter/ganhar músculo)')}</option>
+        <option value="hipertrofia">{t('Ganhar massa muscular')}</option>
+        <option value="forca">{t('Ganhar força')}</option>
+        <option value="saude">{t('Saúde geral')}</option>
       </select>
-      <label htmlFor="enfase">Ênfase</label>
+      <label htmlFor="enfase">{t('Ênfase')}</label>
       <select id="enfase" {...campo('enfase')}>
-        <option value="equilibrado">Equilibrado</option>
-        <option value="inferior">Mais pernas e glúteos</option>
-        <option value="superior">Mais tronco (peito, costas, ombros, braços)</option>
+        <option value="equilibrado">{t('Equilibrado')}</option>
+        <option value="inferior">{t('Mais pernas e glúteos')}</option>
+        <option value="superior">{t('Mais tronco (peito, costas, ombros, braços)')}</option>
       </select>
       <div className="linha">
-        <div><label htmlFor="dias">Dias por semana</label>
+        <div><label htmlFor="dias">{t('Dias por semana')}</label>
           <select id="dias" {...campo('diasPorSemana')}>{DIAS_POR_SEMANA.map((d) => <option key={d} value={d}>{d}</option>)}</select>
         </div>
-        <div><label htmlFor="duracao">Minutos por treino</label>
+        <div><label htmlFor="duracao">{t('Minutos por treino')}</label>
           <select id="duracao" {...campo('duracaoMin')}>{[45, 60, 75].map((d) => <option key={d} value={d}>{d}</option>)}</select>
         </div>
       </div>
-      <label htmlFor="divisao">Modelo de treino</label>
+      <label htmlFor="divisao">{t('Modelo de treino')}</label>
       <select id="divisao" value={divisao} onChange={(e) => setF({ ...f, divisao: e.target.value as DivisaoTreino })}>
         {possiveis.map((d) => <option key={d} value={d}>{NOMES_DIVISOES[d]}</option>)}
       </select>
       {divisao === 'automatico' ? (
         <p className="secundario">{DICA_DIAS[dias]}</p>
       ) : MODELOS_ESCOLHA[divisao].umaVezPorSemana(dias) ? (
-        <p className="secundario">Com este modelo, cada grupo muscular é treinado cerca de 1×/semana. A evidência favorece 2×/semana; o automático garante-o.</p>
+        <p className="secundario">{t('Com este modelo, cada grupo muscular é treinado cerca de 1×/semana. A evidência favorece 2×/semana; o automático garante-o.')}</p>
       ) : null}
-      <label htmlFor="experiencia">Experiência</label>
+      <label htmlFor="experiencia">{t('Experiência')}</label>
       <select id="experiencia" {...campo('experiencia')}>
-        <option value="iniciante">Iniciante</option>
-        <option value="regresso">A regressar após paragem</option>
-        <option value="intermedio">Treino regularmente há mais de 1 ano</option>
+        <option value="iniciante">{t('Iniciante')}</option>
+        <option value="regresso">{t('A regressar após paragem')}</option>
+        <option value="intermedio">{t('Treino regularmente há mais de 1 ano')}</option>
       </select>
-      <label htmlFor="equipamento">Onde treinas</label>
+      <label htmlFor="equipamento">{t('Onde treinas')}</label>
       <select id="equipamento" {...campo('equipamento')}>
-        <option value="ginasio">Ginásio completo</option>
-        <option value="halteres">Só halteres</option>
-        <option value="casa">Em casa, sem equipamento</option>
+        <option value="ginasio">{t('Ginásio completo')}</option>
+        <option value="halteres">{t('Só halteres')}</option>
+        <option value="casa">{t('Em casa, sem equipamento')}</option>
       </select>
-      <label className="opcao"><input type="checkbox" checked={f.aceitaCardio} onChange={(e) => setF({ ...f, aceitaCardio: e.target.checked })} /> Aceito 10 min de cardio no fim de alguns treinos</label>
+      <label className="opcao"><input type="checkbox" checked={f.aceitaCardio} onChange={(e) => setF({ ...f, aceitaCardio: e.target.checked })} /> {t('Aceito 10 min de cardio no fim de alguns treinos')}</label>
 
-      <h2>Dores ou limitações</h2>
-      <p className="secundario">Marca as zonas onde costumas ter dor. O plano evita os exercícios que as sobrecarregam.</p>
-      <label className="opcao"><input type="checkbox" checked={semDores} onChange={(e) => marcarNenhuma(e.target.checked)} /> Nenhuma</label>
+      <h2>{t('Dores ou limitações')}</h2>
+      <p className="secundario">{t('Marca as zonas onde costumas ter dor. O plano evita os exercícios que as sobrecarregam.')}</p>
+      <label className="opcao"><input type="checkbox" checked={semDores} onChange={(e) => marcarNenhuma(e.target.checked)} /> {t('Nenhuma')}</label>
       {AREAS.map((area) => {
         const r = restricoes.find((x) => x.area === area)
         return (
@@ -199,34 +202,34 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
             <label className="opcao"><input type="checkbox" checked={!!r} onChange={() => alternarArea(area)} /> {NOMES_AREAS[area]}</label>
             {r && (
               <>
-                <label htmlFor={`int-${area}`}>Dor habitual: {r.intensidade}/10</label>
+                <label htmlFor={`int-${area}`}>{t('Dor habitual: {n}/10', { n: r.intensidade })}</label>
                 <input id={`int-${area}`} type="range" min={0} max={10} value={r.intensidade} onChange={(e) => mudarRestricao(area, { intensidade: Number(e.target.value) })} />
-                <label className="opcao"><input type="checkbox" checked={r.avaliadaPorProfissional} onChange={(e) => mudarRestricao(area, { avaliadaPorProfissional: e.target.checked })} /> Já foi avaliada por médico ou fisioterapeuta</label>
+                <label className="opcao"><input type="checkbox" checked={r.avaliadaPorProfissional} onChange={(e) => mudarRestricao(area, { avaliadaPorProfissional: e.target.checked })} /> {t('Já foi avaliada por médico ou fisioterapeuta')}</label>
               </>
             )}
           </div>
         )
       })}
 
-      <h2>Saúde (PAR-Q+)</h2>
-      <p className="secundario">Rastreio internacional antes de começar atividade física.</p>
+      <h2>{t('Saúde (PAR-Q+)')}</h2>
+      <p className="secundario">{t('Rastreio internacional antes de começar atividade física.')}</p>
       {PERGUNTAS_PARQ.map((q, i) => (
         <fieldset key={i} className="cartao" style={{ margin: '8px 0' }}>
-          <legend className="visualmente-oculto">Pergunta {i + 1}</legend>
-          <p>{q}</p>
+          <legend className="visualmente-oculto">{t('Pergunta {n}', { n: i + 1 })}</legend>
+          <p>{t(q)}</p>
           <div className="linha">
             {[true, false].map((v) => (
-              <label key={String(v)} className="opcao"><input type="radio" name={`parq-${i}`} checked={parq[i] === v} onChange={() => setParq(parq.map((x, j) => (j === i ? v : x)))} /> {v ? 'Sim' : 'Não'}</label>
+              <label key={String(v)} className="opcao"><input type="radio" name={`parq-${i}`} checked={parq[i] === v} onChange={() => setParq(parq.map((x, j) => (j === i ? v : x)))} /> {v ? t('Sim') : t('Não')}</label>
             ))}
           </div>
         </fieldset>
       ))}
 
       {erro && <p role="alert" className="cartao perigo-borda">{erro}</p>}
-      <p className="secundario">Esta app não substitui avaliação médica nem de fisioterapia.</p>
+      <p className="secundario">{t('Esta app não substitui avaliação médica nem de fisioterapia.')}</p>
       <div className="linha" style={{ marginTop: 16 }}>
-        {a && dados.plano && <button type="button" onClick={() => ir('/mais')}>Cancelar</button>}
-        <button type="submit" className="primario">{a ? 'Guardar' : 'Gerar o meu plano'}</button>
+        {a && dados.plano && <button type="button" onClick={() => ir('/mais')}>{t('Cancelar')}</button>}
+        <button type="submit" className="primario">{a ? t('Guardar') : t('Gerar o meu plano')}</button>
       </div>
     </form>
   )

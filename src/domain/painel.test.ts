@@ -43,9 +43,9 @@ describe('F11 painel', () => {
 describe('F13 frase do dia', () => {
   it('é determinística por data e muda de um dia para o outro', () => {
     const a = fraseDoDia(new Date(2026, 9, 20, 8))
-    expect(fraseDoDia(new Date(2026, 9, 20, 22))).toBe(a)
-    expect(fraseDoDia(new Date(2026, 9, 21, 8))).not.toBe(a)
-    expect(FRASES).toContain(a)
+    expect(fraseDoDia(new Date(2026, 9, 20, 22))).toEqual(a)
+    expect(fraseDoDia(new Date(2026, 9, 21, 8))).not.toEqual(a)
+    expect(FRASES).toContainEqual(a)
   })
 
   it('v1.4: frases curtas, sem aspas no texto (a interface põe-nas), e várias com autor', () => {

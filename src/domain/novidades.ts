@@ -1,14 +1,19 @@
 // F20: novidades de cada versão e o que está em preparação, lidas de src/novidades.json.
 import { z } from 'zod'
+import type { Idioma } from '../i18n'
 
 const versao = z.string().regex(/^\d+\.\d+\.\d+$/)
 
 // z.object (não estrito): versões futuras podem acrescentar campos (ex.: traduções) sem partir o aviso desta.
+const itens = z.array(z.string().min(1).max(300)).max(10)
+// F21: o texto principal é em português; «traducoes» tem o mesmo texto em inglês e espanhol.
+const traducoes = <T extends z.ZodRawShape>(forma: T) => z.object({ en: z.object(forma).optional(), es: z.object(forma).optional() }).optional()
 const esquema = z.object({
   versoes: z
-    .array(z.object({ versao, data: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), itens: z.array(z.string().min(1).max(300)).min(1).max(10) }))
+    .array(z.object({ versao, data: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), itens: itens.min(1), traducoes: traducoes({ itens: itens.min(1) }) }))
     .min(1),
-  emPreparacao: z.array(z.string().min(1).max(300)).max(10),
+  emPreparacao: itens,
+  traducoes: traducoes({ emPreparacao: itens }),
 })
 
 export type Novidades = z.infer<typeof esquema>
@@ -44,4 +49,14 @@ export const novidadesDepois = (n: Novidades, versao: string) => n.versoes.filte
 export function novidadesPorVer(n: Novidades, vista: string | undefined, temPlano: boolean): NovidadesVersao[] {
   if (vista === undefined) return temPlano ? [n.versoes[0]!] : []
   return novidadesDepois(n, vista)
+}
+
+/** F21: as novidades no idioma pedido; sem tradução, ficam em português. */
+export function novidadesNoIdioma(n: Novidades, idioma: Idioma): Novidades {
+  if (idioma === 'pt') return n
+  return {
+    ...n,
+    versoes: n.versoes.map((v) => ({ ...v, itens: v.traducoes?.[idioma]?.itens ?? v.itens })),
+    emPreparacao: n.traducoes?.[idioma]?.emPreparacao ?? n.emPreparacao,
+  }
 }

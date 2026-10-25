@@ -1,3 +1,5 @@
+import { t } from '../i18n'
+
 export interface Video {
   plataforma: 'youtube' | 'vimeo'
   id: string
@@ -57,6 +59,6 @@ export function lerVideo(texto: string): Video | null {
 }
 
 /** Pesquisa no YouTube, para quando um exercício não tem vídeo. */
-export function pesquisaYoutube(nomeExercicio: string, sufixo = 'execução'): string {
+export function pesquisaYoutube(nomeExercicio: string, sufixo = t('execução')): string {
   return `https://www.youtube.com/results?search_query=${encodeURIComponent(`${nomeExercicio} ${sufixo}`)}`
 }

@@ -1,8 +1,9 @@
+import { m, t } from '../i18n'
 import { estadoBloco, exercicioNoBloco, SEMANAS_BLOCO } from './blocos'
 import { obter, type Catalogo } from './catalogo'
 import { DIVISOES, MODELOS, MODELOS_ESCOLHA, type Modelo } from './modelos'
 import type { AcessoEquipamento, Anamnese, DiasPorSemana, DivisaoTreino, Enfase, Equipamento, Exercicio, GrupoMuscular, Objetivo, Plano, Prescricao, TipoExercicio, TreinoModelo } from './types'
-import { NOMES_GRUPOS } from './types'
+import { NOMES_AREAS, NOMES_GRUPOS } from './types'
 
 export const VERSAO_REGRAS = 2
 
@@ -43,15 +44,6 @@ const EQUIPAMENTO_DISPONIVEL: Record<AcessoEquipamento, Equipamento[]> = {
   casa: ['peso-corporal'],
 }
 
-const NOMES_AREAS: Record<string, string> = {
-  ombro: 'ombro',
-  joelho: 'joelho',
-  lombar: 'lombar',
-  punho: 'punho',
-  anca: 'anca',
-  cotovelo: 'cotovelo',
-}
-
 /** A resposta de gravidez só conta com sexo feminino (secção 3.4.1). */
 const gravidezAtiva = (a: Anamnese) => (a.sexo === 'feminino' ? a.gravidez ?? 'nao' : 'nao')
 
@@ -70,10 +62,10 @@ function aplicarEnfase(p: Prescricao, ex: Exercicio, enfase: Enfase): Prescricao
 
 export function motivoIncompatibilidade(ex: Exercicio, a: Anamnese): string | null {
   const area = ex.contraindicacoes.find((c) => a.restricoes.some((r) => r.area === c))
-  if (area) return `por causa do ${NOMES_AREAS[area]}`
-  if (ex.deitado && gravidezAtiva(a) === 'gravida-2t3t') return 'por causa da gravidez'
+  if (area) return t('por causa do {area}', { area: NOMES_AREAS[area] })
+  if (ex.deitado && gravidezAtiva(a) === 'gravida-2t3t') return t('por causa da gravidez')
   const disponivel = EQUIPAMENTO_DISPONIVEL[a.equipamento]
-  if (!ex.equipamento.some((q) => disponivel.includes(q))) return 'por falta de equipamento'
+  if (!ex.equipamento.some((q) => disponivel.includes(q))) return t('por falta de equipamento')
   return null
 }
 
@@ -83,7 +75,7 @@ function escolher(base: Exercicio, a: Anamnese, catalogo: Catalogo, usados: Set<
   for (const id of base.substitutos) {
     const s = obter(catalogo, id)
     if (!usados.has(s.id) && !motivoIncompatibilidade(s, a)) {
-      return { ex: s, nota: `Substitui «${base.nome}» ${motivo ?? 'para não repetir exercício'}.` }
+      return { ex: s, nota: t('Substitui «{nome}» {motivo}.', { nome: base.nome, motivo: motivo ?? t('para não repetir exercício') }) }
     }
   }
   return null
@@ -162,7 +154,7 @@ function gerarTreino(m: Modelo, a: Anamnese, catalogo: Catalogo, conservador: bo
   for (const base of semSubstituto) {
     const alvo = prescricoes.find((p) => obter(catalogo, p.exercicioId).grupoPrincipal === base.grupoPrincipal)
     if (alvo && alvo.series < 5) alvo.series++
-    else avisos.push(`${m.nome}: sem exercício compatível para ${NOMES_GRUPOS[base.grupoPrincipal]} («${base.nome}» foi removido).`)
+    else avisos.push(t('{treino}: sem exercício compatível para {grupo} («{nome}» foi removido).', { treino: t(m.nome), grupo: NOMES_GRUPOS[base.grupoPrincipal], nome: base.nome }))
   }
 
   const cardioMin = m.tipo === 'recuperacao' ? MIN_CAMINHADA : a.aceitaCardio && m.tipo === 'inferior' ? MIN_CARDIO : undefined
@@ -183,18 +175,18 @@ export function gerarPlano(a: Anamnese, catalogo: Catalogo, opts: { id: string; 
   const parq = a.parq.some(Boolean)
   const conservador = parq || gravidez !== 'nao'
   if (parq) {
-    avisos.push('Respondeste «sim» a pelo menos uma pergunta do PAR-Q+. Consulta um médico antes de aumentar a intensidade. O plano foi gerado em modo conservador.')
+    avisos.push(t('Respondeste «sim» a pelo menos uma pergunta do PAR-Q+. Consulta um médico antes de aumentar a intensidade. O plano foi gerado em modo conservador.'))
   }
   if (gravidez === 'gravida-1t' || gravidez === 'gravida-2t3t') {
-    avisos.push('Gravidez: treina com acompanhamento do teu médico ou obstetra. Plano conservador; para se sentires dor, tonturas, falta de ar invulgar, contrações ou perdas de sangue ou líquido.'
-      + (gravidez === 'gravida-2t3t' ? ' A partir do 2.º trimestre, os exercícios deitado de costas ou de barriga para baixo foram trocados.' : ''))
+    avisos.push(t('Gravidez: treina com acompanhamento do teu médico ou obstetra. Plano conservador; para se sentires dor, tonturas, falta de ar invulgar, contrações ou perdas de sangue ou líquido.')
+      + (gravidez === 'gravida-2t3t' ? ' ' + t('A partir do 2.º trimestre, os exercícios deitado de costas ou de barriga para baixo foram trocados.') : ''))
   }
   if (gravidez === 'pos-parto') {
-    avisos.push('Pós-parto: retoma com autorização do teu médico ou obstetra e, idealmente, avaliação do pavimento pélvico e da diástase por fisioterapeuta. Plano conservador.')
+    avisos.push(t('Pós-parto: retoma com autorização do teu médico ou obstetra e, idealmente, avaliação do pavimento pélvico e da diástase por fisioterapeuta. Plano conservador.'))
   }
   for (const r of a.restricoes) {
     if (!r.avaliadaPorProfissional) {
-      avisos.push(`A dor no ${NOMES_AREAS[r.area]} nunca foi avaliada. Recomenda-se avaliação por médico ou fisioterapeuta.`)
+      avisos.push(t('A dor no {area} nunca foi avaliada. Recomenda-se avaliação por médico ou fisioterapeuta.', { area: NOMES_AREAS[r.area] }))
     }
   }
   const divisao = a.divisao ?? 'automatico'
@@ -204,10 +196,10 @@ export function gerarPlano(a: Anamnese, catalogo: Catalogo, opts: { id: string; 
     if (divisoesPossiveis(a.diasPorSemana).includes(divisao)) {
       ids = m.treinos(a.diasPorSemana)
       if (m.umaVezPorSemana(a.diasPorSemana)) {
-        avisos.push('Com este modelo e estes dias, cada grupo muscular é treinado cerca de 1×/semana. A evidência favorece 2×/semana; o modelo automático garante-o.')
+        avisos.push(t('Com este modelo e estes dias, cada grupo muscular é treinado cerca de 1×/semana. A evidência favorece 2×/semana; o modelo automático garante-o.'))
       }
     } else {
-      avisos.push(`O modelo escolhido não serve para ${a.diasPorSemana} dias por semana; foi usado o modelo automático.`)
+      avisos.push(t('O modelo escolhido não serve para {dias} dias por semana; foi usado o modelo automático.', { dias: a.diasPorSemana }))
     }
   }
   const treinos = ids.map((id) => gerarTreino(MODELOS[id]!, a, catalogo, conservador, avisos))
@@ -243,7 +235,7 @@ export function prescricaoEfetiva(p: Prescricao, plano: Plano, semana: number): 
   const exercicioId = exercicioNoBloco(p.alternativas, p.exercicioId, e.bloco)
   if (exercicioId !== p.exercicioId) {
     const { nota: _, ...resto } = r
-    r = { ...resto, exercicioId, nota: `Bloco ${e.bloco}: exercício isolado trocado para variar o estímulo.` }
+    r = { ...resto, exercicioId, nota: t('Bloco {n}: exercício isolado trocado para variar o estímulo.', { n: e.bloco }) }
   }
   if (e.fase === 'readaptacao') return { ...r, series: Math.min(r.series, 2), rir: [3, 4] }
   if (e.fase === 'descarga') return { ...r, series: Math.ceil(r.series / 2), rir: [3, 4] }
@@ -254,4 +246,31 @@ export function prescricaoEfetiva(p: Prescricao, plano: Plano, semana: number): 
 export function treinoEfetivo(t: TreinoModelo, plano: Plano, semana: number): TreinoModelo {
   const prescricoes = t.prescricoes.map((p) => prescricaoEfetiva(p, plano, semana))
   return { ...t, prescricoes, duracaoEstimadaMin: duracaoEstimadaMin(prescricoes, t.cardioMin ?? 0) }
+}
+
+/**
+ * F21: o plano no idioma atual. O plano guardado tem os nomes em português e os avisos e notas no idioma
+ * em que foi gerado; aqui os nomes são traduzidos e os avisos e notas gerados de novo a partir da anamnese.
+ * Uma nota só é trocada quando o exercício gerado agora é o mesmo do plano guardado.
+ */
+export function planoNoIdioma(plano: Plano, a: Anamnese | undefined, catalogo: Catalogo): Plano {
+  const novo = a ? gerarPlano(a, catalogo, { id: plano.id, agora: plano.criadoEm }) : undefined
+  return {
+    ...plano,
+    avisos: novo?.avisos ?? plano.avisos,
+    treinos: plano.treinos.map((tr) => {
+      const gerado = novo?.treinos.find((x) => x.id === tr.id)
+      return {
+        ...tr,
+        nome: t(tr.nome),
+        sintese: t(tr.sintese),
+        prescricoes: tr.prescricoes.map((p) => {
+          const q = gerado?.prescricoes.find((x) => x.id === p.id && x.exercicioId === p.exercicioId)
+          if (!gerado) return p
+          const { nota: _, ...resto } = p
+          return q?.nota ? { ...resto, nota: q.nota } : p.nota && !q ? p : resto
+        }),
+      }
+    }),
+  }
 }

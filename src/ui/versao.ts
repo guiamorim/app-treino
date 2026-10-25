@@ -1,10 +1,13 @@
 // F20: deteção de versão nova pelo service worker e ativação quando a pessoa pede.
 import { useSyncExternalStore } from 'react'
 import dadosNovidades from '../novidades.json'
-import { carregarNovidades, lerNovidades, novidadesDepois, versaoAtual, type NovidadesVersao } from '../domain/novidades'
+import { carregarNovidades, lerNovidades, novidadesDepois, novidadesNoIdioma, versaoAtual, type NovidadesVersao } from '../domain/novidades'
+import { idiomaAtual } from '../i18n'
 
-export const novidades = carregarNovidades(dadosNovidades)
-export const VERSAO = versaoAtual(novidades)
+const todas = carregarNovidades(dadosNovidades)
+export const VERSAO = versaoAtual(todas)
+/** F21: as novidades no idioma atual. */
+export const novidades = () => novidadesNoIdioma(todas, idiomaAtual())
 
 let registo: ServiceWorkerRegistration | undefined
 let pronta = false
@@ -83,7 +86,7 @@ export async function novidadesDaVersaoNova(): Promise<NovidadesVersao[] | null>
   try {
     const r = await fetch(`${import.meta.env.BASE_URL}novidades.json`, { cache: 'no-store' })
     const n = r.ok ? lerNovidades(await r.json()) : null
-    return n ? novidadesDepois(n, VERSAO) : null
+    return n ? novidadesDepois(novidadesNoIdioma(n, idiomaAtual()), VERSAO) : null
   } catch {
     return null
   }

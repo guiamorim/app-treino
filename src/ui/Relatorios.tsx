@@ -3,15 +3,16 @@ import { aderencia, alvoVolume, inicioSemana, mediaMovel, progressaoExercicio, v
 import { GRUPOS_MUSCULARES, NOMES_GRUPOS } from '../domain/types'
 import { catalogo, dataCurta, kg, type Dados } from './dados'
 import { GraficoLinha } from './Grafico'
+import { t } from '../i18n'
 
 export function Relatorios({ dados }: { dados: Dados }) {
   const [aba, setAba] = useState<'progressao' | 'semana'>('progressao')
   return (
     <>
-      <h1>Relatórios</h1>
+      <h1>{t('Relatórios')}</h1>
       <div className="abas" role="tablist">
-        <button role="tab" aria-selected={aba === 'progressao'} onClick={() => setAba('progressao')}>Progressão</button>
-        <button role="tab" aria-selected={aba === 'semana'} onClick={() => setAba('semana')}>Semana</button>
+        <button role="tab" aria-selected={aba === 'progressao'} onClick={() => setAba('progressao')}>{t('Progressão')}</button>
+        <button role="tab" aria-selected={aba === 'semana'} onClick={() => setAba('semana')}>{t('Semana')}</button>
       </div>
       {aba === 'progressao' ? <Progressao dados={dados} /> : <Semana dados={dados} />}
     </>
@@ -24,18 +25,18 @@ function Progressao({ dados }: { dados: Dados }) {
     .filter((e) => e !== undefined)
   const [id, setId] = useState(feitos[0]?.id ?? '')
   const ex = catalogo.get(id) ?? feitos[0]
-  if (!ex) return <p className="secundario">Regista o primeiro treino para ver a tua progressão.</p>
+  if (!ex) return <p className="secundario">{t('Regista o primeiro treino para ver a tua progressão.')}</p>
   const pontos = progressaoExercicio(dados.sessoes, ex.id)
   const comCarga = pontos.some((p) => p.e1rm !== null)
   const recordes = pontos.filter((p) => p.recorde).length
   return (
     <>
-      <label htmlFor="ex">Exercício</label>
+      <label htmlFor="ex">{t('Exercício')}</label>
       <select id="ex" value={ex.id} onChange={(e) => setId(e.target.value)}>
         {feitos.map((e) => <option key={e.id} value={e.id}>{e.nome}</option>)}
       </select>
       <div className="cartao">
-        <h3>{comCarga ? '1RM estimado (kg)' : ex.medida === 'segundos' ? 'Melhor tempo (s)' : 'Melhores repetições'}</h3>
+        <h3>{comCarga ? t('1RM estimado (kg)') : ex.medida === 'segundos' ? t('Melhor tempo (s)') : t('Melhores repetições')}</h3>
         <GraficoLinha
           titulo={ex.nome}
           unidade={comCarga ? 'kg' : ex.medida === 'segundos' ? 's' : 'reps'}
@@ -43,25 +44,25 @@ function Progressao({ dados }: { dados: Dados }) {
             x: Date.parse(p.data),
             y: comCarga ? Math.round((p.e1rm ?? 0) * 10) / 10 : p.melhor.reps,
             destaque: p.recorde,
-            rotulo: `${dataCurta(p.data)}: ${kg(p.melhor.carga)} kg × ${p.melhor.reps}${p.recorde ? ' (recorde)' : ''}`,
+            rotulo: `${dataCurta(p.data)}: ${kg(p.melhor.carga)} kg × ${p.melhor.reps}${p.recorde ? ` (${t('recorde')})` : ''}`,
           }))}
         />
-        <p className="secundario">Pontos verdes = recorde pessoal ({recordes}). {comCarga && '1RM estimado pela fórmula de Epley, só com séries até 12 reps.'}</p>
+        <p className="secundario">{t('Pontos verdes = recorde pessoal ({n}).', { n: recordes })} {comCarga && t('1RM estimado pela fórmula de Epley, só com séries até 12 reps.')}</p>
       </div>
       {pontos.some((p) => p.dor > 0) && (
         <div className="cartao">
-          <h3>Dor registada (0–10)</h3>
-          <GraficoLinha titulo="Dor" unidade="/10" cor="var(--perigo)" pontos={pontos.map((p) => ({ x: Date.parse(p.data), y: p.dor }))} />
+          <h3>{t('Dor registada (0–10)')}</h3>
+          <GraficoLinha titulo={t('Dor')} unidade="/10" cor="var(--perigo)" pontos={pontos.map((p) => ({ x: Date.parse(p.data), y: p.dor }))} />
         </div>
       )}
       <div className="cartao">
-        <h3>Histórico</h3>
+        <h3>{t('Histórico')}</h3>
         <ul className="lista">
           {[...pontos].reverse().slice(0, 10).map((p) => (
             <li key={p.data} className="linha" style={{ padding: '8px 0' }}>
               <span>{dataCurta(p.data)}</span>
               <span>{p.melhor.carga ? `${kg(p.melhor.carga)} kg × ` : ''}{p.melhor.reps}</span>
-              <span>{p.recorde ? '🏆' : ''}{p.dor ? ` dor ${p.dor}` : ''}</span>
+              <span>{p.recorde ? '🏆' : ''}{p.dor ? ` ${t('dor')} ${p.dor}` : ''}</span>
             </li>
           ))}
         </ul>
@@ -85,15 +86,15 @@ function Semana({ dados }: { dados: Dados }) {
   return (
     <>
       <div className="cartao">
-        <h3>Aderência (últimas 4 semanas)</h3>
-        <p><span className="numero">{ad.feitas}</span> de {ad.planeadas} treinos ({ad.planeadas ? Math.round((ad.feitas / ad.planeadas) * 100) : 0}%)</p>
+        <h3>{t('Aderência (últimas 4 semanas)')}</h3>
+        <p><span className="numero">{ad.feitas}</span> {t('de {n} treinos ({pct}%)', { n: ad.planeadas, pct: ad.planeadas ? Math.round((ad.feitas / ad.planeadas) * 100) : 0 })}</p>
       </div>
 
       <div className="cartao">
         <div className="linha">
-          <button onClick={() => setDesvio(desvio - 1)} aria-label="Semana anterior" style={{ flex: 'none' }}>‹</button>
-          <h3 style={{ textAlign: 'center' }}>Séries por grupo<br /><span className="secundario">{dataCurta(inicio.toISOString())} – {dataCurta(new Date(fim.getTime() - 1).toISOString())}</span></h3>
-          <button onClick={() => setDesvio(desvio + 1)} disabled={desvio >= 0} aria-label="Semana seguinte" style={{ flex: 'none' }}>›</button>
+          <button onClick={() => setDesvio(desvio - 1)} aria-label={t('Semana anterior')} style={{ flex: 'none' }}>‹</button>
+          <h3 style={{ textAlign: 'center' }}>{t('Séries por grupo')}<br /><span className="secundario">{dataCurta(inicio.toISOString())} – {dataCurta(new Date(fim.getTime() - 1).toISOString())}</span></h3>
+          <button onClick={() => setDesvio(desvio + 1)} disabled={desvio >= 0} aria-label={t('Semana seguinte')} style={{ flex: 'none' }}>›</button>
         </div>
         {GRUPOS_MUSCULARES.map((g) => {
           const [amin, amax] = alvoVolume(g)
@@ -109,26 +110,26 @@ function Semana({ dados }: { dados: Dados }) {
             </div>
           )
         })}
-        <p className="secundario">Exercício principal conta 1 série; grupos secundários contam 0,5. Faixa verde = alvo semanal.</p>
+        <p className="secundario">{t('Exercício principal conta 1 série; grupos secundários contam 0,5. Faixa verde = alvo semanal.')}</p>
       </div>
 
       <div className="cartao">
-        <h3>Peso (kg)</h3>
+        <h3>{t('Peso (kg)')}</h3>
         <GraficoLinha
-          titulo="Peso"
+          titulo={t('Peso')}
           unidade="kg"
-          pontos={pesos.map((p) => ({ x: Date.parse(p.data), y: p.media, rotulo: `${dataCurta(p.data)}: média ${kg(p.media)} kg` }))}
+          pontos={pesos.map((p) => ({ x: Date.parse(p.data), y: p.media, rotulo: `${dataCurta(p.data)}: ${t('média')} ${kg(p.media)} kg` }))}
           extra={pesos.map((p) => ({ x: Date.parse(p.data), y: p.valor }))}
         />
-        <p className="secundario">Linha cheia = média de 7 dias; tracejado = pesagens.</p>
+        <p className="secundario">{t('Linha cheia = média de 7 dias; tracejado = pesagens.')}</p>
       </div>
       <div className="cartao">
-        <h3>Cintura (cm)</h3>
-        <GraficoLinha titulo="Cintura" unidade="cm" pontos={cinturas.map((m) => ({ x: Date.parse(m.data), y: m.cinturaCm! }))} />
+        <h3>{t('Cintura (cm)')}</h3>
+        <GraficoLinha titulo={t('Cintura')} unidade="cm" pontos={cinturas.map((m) => ({ x: Date.parse(m.data), y: m.cinturaCm! }))} />
         {ultimaCintura !== undefined && primeiraCintura !== undefined && cinturas.length > 1 && (
-          <p>{ultimaCintura <= primeiraCintura ? '↓' : '↑'} {kg(Math.abs(ultimaCintura - primeiraCintura))} cm desde {dataCurta(cinturas[0]!.data)}</p>
+          <p>{ultimaCintura <= primeiraCintura ? '↓' : '↑'} {t('{cm} cm desde {data}', { cm: kg(Math.abs(ultimaCintura - primeiraCintura)), data: dataCurta(cinturas[0]!.data) })}</p>
         )}
-        <p className="secundario">Para recomposição, a cintura diz mais do que o peso.</p>
+        <p className="secundario">{t('Para recomposição, a cintura diz mais do que o peso.')}</p>
       </div>
     </>
   )

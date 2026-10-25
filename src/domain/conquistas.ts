@@ -1,4 +1,5 @@
 // F12: conquistas, sequência semanal e recordes, calculados a partir do histórico.
+import { m, t } from '../i18n'
 import { semanaInicioBloco, estadoBloco } from './blocos'
 import { semanaDoPlano } from './plano'
 import { inicioSemana, progressaoExercicio } from './relatorios'
@@ -74,20 +75,20 @@ export function conquistas(sessoes: Sessao[], plano: Plano | undefined, meta: nu
   const feitos = sessoes.filter((s) => s.fim).length
   const melhorSequencia = maiorSequencia(sessoes, meta)
   const recordes = recordesPessoais(sessoes).length
-  const c = (id: string, icone: string, nome: string, descricao: string, obtida: boolean): Conquista => ({ id, icone, nome, descricao, obtida })
+  const c = (id: string, icone: string, nome: string, descricao: string, obtida: boolean): Conquista => ({ id, icone, nome: t(nome), descricao: t(descricao), obtida })
   return [
-    c('primeiro-treino', '🌱', 'Primeiro treino', 'Terminaste o primeiro treino.', feitos >= 1),
-    c('treinos-10', '🔟', '10 treinos', 'Terminaste 10 treinos.', feitos >= 10),
-    c('treinos-25', '🥉', '25 treinos', 'Terminaste 25 treinos.', feitos >= 25),
-    c('treinos-50', '🥈', '50 treinos', 'Terminaste 50 treinos.', feitos >= 50),
-    c('treinos-100', '🥇', '100 treinos', 'Terminaste 100 treinos.', feitos >= 100),
-    c('semana-cumprida', '✅', 'Semana cumprida', 'Fizeste todos os treinos de uma semana.', melhorSequencia >= 1),
-    c('sequencia-4', '🔥', '4 semanas seguidas', '4 semanas seguidas cumpridas.', melhorSequencia >= 4),
-    c('sequencia-12', '🏅', '12 semanas seguidas', '12 semanas seguidas cumpridas.', melhorSequencia >= 12),
-    c('primeiro-recorde', '🏆', 'Primeiro recorde', 'Bateste um recorde pessoal.', recordes >= 1),
-    c('recordes-10', '💪', '10 recordes', 'Bateste 10 recordes pessoais.', recordes >= 10),
-    c('volume-recorde', '📈', 'Recorde de volume', 'Uma semana com mais volume do que todas as anteriores.', semanasRecordeVolume(sessoes).length >= 1),
-    c('bloco-completo', '🧱', 'Bloco completo', 'Treinaste em todas as semanas de um bloco, descarga incluída.', !!plano && blocoCompleto(sessoes, plano, agora)),
+    c('primeiro-treino', '🌱', m('Primeiro treino'), m('Terminaste o primeiro treino.'), feitos >= 1),
+    c('treinos-10', '🔟', m('10 treinos'), m('Terminaste 10 treinos.'), feitos >= 10),
+    c('treinos-25', '🥉', m('25 treinos'), m('Terminaste 25 treinos.'), feitos >= 25),
+    c('treinos-50', '🥈', m('50 treinos'), m('Terminaste 50 treinos.'), feitos >= 50),
+    c('treinos-100', '🥇', m('100 treinos'), m('Terminaste 100 treinos.'), feitos >= 100),
+    c('semana-cumprida', '✅', m('Semana cumprida'), m('Fizeste todos os treinos de uma semana.'), melhorSequencia >= 1),
+    c('sequencia-4', '🔥', m('4 semanas seguidas'), m('4 semanas seguidas cumpridas.'), melhorSequencia >= 4),
+    c('sequencia-12', '🏅', m('12 semanas seguidas'), m('12 semanas seguidas cumpridas.'), melhorSequencia >= 12),
+    c('primeiro-recorde', '🏆', m('Primeiro recorde'), m('Bateste um recorde pessoal.'), recordes >= 1),
+    c('recordes-10', '💪', m('10 recordes'), m('Bateste 10 recordes pessoais.'), recordes >= 10),
+    c('volume-recorde', '📈', m('Recorde de volume'), m('Uma semana com mais volume do que todas as anteriores.'), semanasRecordeVolume(sessoes).length >= 1),
+    c('bloco-completo', '🧱', m('Bloco completo'), m('Treinaste em todas as semanas de um bloco, descarga incluída.'), !!plano && blocoCompleto(sessoes, plano, agora)),
   ]
 }
 

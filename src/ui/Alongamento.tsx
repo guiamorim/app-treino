@@ -9,6 +9,7 @@ import { agoraIso, alongamentos, catalogo, type Dados } from './dados'
 import { ir } from './rota'
 import { Temporizador } from './Temporizador'
 import { VideoModal } from './Video'
+import { t } from '../i18n'
 
 type Modo = 'treino' | 'grupo'
 
@@ -33,24 +34,24 @@ export function AlongamentoEcra({ dados, plano, anamnese, grupo }: { dados: Dado
 
   return (
     <>
-      <h1>Alongar</h1>
+      <h1>{t('Alongar')}</h1>
       <p className="secundario">
-        Alongamento estático: vai até sentir tensão ligeira, nunca dor, e respira devagar. Melhora a flexibilidade; não evita as dores musculares do dia seguinte.
+        {t('Alongamento estático: vai até sentir tensão ligeira, nunca dor, e respira devagar. Melhora a flexibilidade; não evita as dores musculares do dia seguinte.')}
       </p>
-      <div className="linha" role="radiogroup" aria-label="Tipo de alongamento">
-        <button role="radio" aria-checked={modo === 'treino'} className={modo === 'treino' ? 'primario' : undefined} onClick={() => setModo('treino')}>Do treino</button>
-        <button role="radio" aria-checked={modo === 'grupo'} className={modo === 'grupo' ? 'primario' : undefined} onClick={() => setModo('grupo')}>Por grupo muscular</button>
+      <div className="linha" role="radiogroup" aria-label={t('Tipo de alongamento')}>
+        <button role="radio" aria-checked={modo === 'treino'} className={modo === 'treino' ? 'primario' : undefined} onClick={() => setModo('treino')}>{t('Do treino')}</button>
+        <button role="radio" aria-checked={modo === 'grupo'} className={modo === 'grupo' ? 'primario' : undefined} onClick={() => setModo('grupo')}>{t('Por grupo muscular')}</button>
       </div>
 
       {modo === 'treino' ? (
         <p>
-          <strong>{alvo.sessao ? `Depois de ${alvo.treinoNome}` : `Para o próximo treino: ${alvo.treinoNome}`}</strong>
+          <strong>{alvo.sessao ? t('Depois de {treino}', { treino: alvo.treinoNome }) : t('Para o próximo treino: {treino}', { treino: alvo.treinoNome })}</strong>
           {lista.length > 0 && ` · ~${duracaoMin(lista)} min`}
-          {semAlongamento.length > 0 && <><br /><span className="secundario">Sem alongamento seguro para: {semAlongamento.map((g) => NOMES_GRUPOS[g]).join(', ')} (por causa das tuas restrições).</span></>}
+          {semAlongamento.length > 0 && <><br /><span className="secundario">{t('Sem alongamento seguro para: {grupos} (por causa das tuas restrições).', { grupos: semAlongamento.map((g) => NOMES_GRUPOS[g]).join(', ') })}</span></>}
         </p>
       ) : (
         <>
-          <div className="grupos-escolha" role="radiogroup" aria-label="Grupo muscular" style={{ marginTop: 12 }}>
+          <div className="grupos-escolha" role="radiogroup" aria-label={t('Grupo muscular')} style={{ marginTop: 12 }}>
             {GRUPOS_MUSCULARES.map((g) => (
               <button key={g} role="radio" aria-checked={escolhido === g} className={escolhido === g ? 'primario' : undefined} onClick={() => setEscolhido(g)}>{NOMES_GRUPOS[g]}</button>
             ))}
@@ -60,13 +61,13 @@ export function AlongamentoEcra({ dados, plano, anamnese, grupo }: { dados: Dado
         </>
       )}
 
-      {lista.length === 0 && <p className="cartao aviso">Não há alongamentos compatíveis com as tuas restrições para {modo === 'treino' ? 'este treino' : 'este grupo'}.</p>}
+      {lista.length === 0 && <p className="cartao aviso">{modo === 'treino' ? t('Não há alongamentos compatíveis com as tuas restrições para este treino.') : t('Não há alongamentos compatíveis com as tuas restrições para este grupo.')}</p>}
       {lista.map((a, i) => <CartaoAlongamento key={a.id} a={a} n={i + 1} dados={dados} anamnese={anamnese} />)}
 
       {modo === 'treino' && pendente && (
         <div className="linha" style={{ marginTop: 12 }}>
-          <button className="primario" onClick={() => marcar('feito')}>Alongamento feito</button>
-          <button onClick={() => marcar('dispensado')}>Hoje não</button>
+          <button className="primario" onClick={() => marcar('feito')}>{t('Alongamento feito')}</button>
+          <button onClick={() => marcar('dispensado')}>{t('Hoje não')}</button>
         </div>
       )}
     </>
@@ -81,12 +82,12 @@ function CartaoAlongamento({ a, n, dados, anamnese }: { a: Alongamento; n: numbe
 
   async function mudarVideo() {
     const chave = `alongamento:${a.id}`
-    const novo = prompt('Cola o link do vídeo (YouTube ou Vimeo). Deixa vazio para remover.', dados.videos[chave] ?? '')
+    const novo = prompt(t('Cola o link do vídeo (YouTube ou Vimeo). Deixa vazio para remover.'), dados.videos[chave] ?? '')
     if (novo === null) return
     const videos = { ...dados.videos }
     if (novo.trim() === '') delete videos[chave]
     else if (lerVideo(novo)) videos[chave] = novo.trim()
-    else return alert('Link não aceite. Usa um link do YouTube ou do Vimeo.')
+    else return alert(t('Link não aceite. Usa um link do YouTube ou do Vimeo.'))
     await db.gravar('videos', videos)
   }
 
@@ -96,20 +97,20 @@ function CartaoAlongamento({ a, n, dados, anamnese }: { a: Alongamento; n: numbe
         <Corpo ex={{ grupoPrincipal: a.grupo, gruposSecundarios: a.gruposSecundarios }} sexo={anamnese.sexo} compacto />
         <div>
           <h3 id={`al-${a.id}`}>{n}. {a.nome}</h3>
-          <p className="secundario">{REPETICOES} × {SEGUNDOS} s{a.lados === 2 ? ' por lado' : ''} · <span className="chip">{NOMES_GRUPOS[a.grupo]}</span></p>
+          <p className="secundario">{REPETICOES} × {SEGUNDOS} s{a.lados === 2 ? ` ${t('por lado')}` : ''} · <span className="chip">{NOMES_GRUPOS[a.grupo]}</span></p>
         </div>
       </div>
       <ol>{a.passos.map((p) => <li key={p}>{p}</li>)}</ol>
       {a.cuidados.length > 0 && <p className="secundario">{a.cuidados.join('. ')}.</p>}
-      {fimEm && <Temporizador fimEm={fimEm} fechar={() => setFimEm(null)} rotulos={['Manter', a.lados === 2 ? 'Muda de lado' : 'Solta devagar']} />}
+      {fimEm && <Temporizador fimEm={fimEm} fechar={() => setFimEm(null)} rotulos={[t('Manter'), a.lados === 2 ? t('Muda de lado') : t('Solta devagar')]} />}
       <div className="linha">
-        <button className="primario" onClick={() => setFimEm(Date.now() + SEGUNDOS * 1000)}>Manter {SEGUNDOS} s</button>
+        <button className="primario" onClick={() => setFimEm(Date.now() + SEGUNDOS * 1000)}>{t('Manter {s} s', { s: SEGUNDOS })}</button>
         {video ? (
-          <button onClick={() => setVerVideo(true)}>▶ Ver vídeo</button>
+          <button onClick={() => setVerVideo(true)}>▶ {t('Ver vídeo')}</button>
         ) : (
-          <a className="botao" href={pesquisaYoutube(`alongamento ${a.nome}`, 'como fazer')} target="_blank" rel="noopener noreferrer">Procurar no YouTube</a>
+          <a className="botao" href={pesquisaYoutube(`${t('alongamento')} ${a.nome}`, t('como fazer'))} target="_blank" rel="noopener noreferrer">{t('Procurar no YouTube')}</a>
         )}
-        <button onClick={mudarVideo} aria-label={`Mudar vídeo de ${a.nome}`}>Mudar vídeo</button>
+        <button onClick={mudarVideo} aria-label={t('Mudar vídeo de {nome}', { nome: a.nome })}>{t('Mudar vídeo')}</button>
       </div>
       {verVideo && video && <VideoModal video={video} titulo={a.nome} fechar={() => setVerVideo(false)} />}
     </section>
@@ -124,12 +125,12 @@ export function LembreteAlongamento({ dados, anamnese }: { dados: Dados; anamnes
   const lista = alongamentoDoTreino(feitos, catalogo, alongamentos, anamnese)
   if (lista.length === 0) return null
   return (
-    <div className="cartao ok-borda" role="region" aria-label="Lembrete de alongamento">
-      <h3>Hora de alongar 🧘</h3>
-      <p className="secundario">~{duracaoMin(lista)} min para os músculos que treinaste: {[...new Set(lista.map((a) => NOMES_GRUPOS[a.grupo]))].join(', ')}.</p>
+    <div className="cartao ok-borda" role="region" aria-label={t('Lembrete de alongamento')}>
+      <h3>{t('Hora de alongar')} 🧘</h3>
+      <p className="secundario">{t('~{min} min para os músculos que treinaste: {grupos}.', { min: duracaoMin(lista), grupos: [...new Set(lista.map((a) => NOMES_GRUPOS[a.grupo]))].join(', ') })}</p>
       <div className="linha">
-        <button className="primario" onClick={() => ir('/alongamento')}>Alongar agora</button>
-        <button onClick={() => db.sessoes.update(s.id, { alongamento: 'dispensado' })}>Hoje não</button>
+        <button className="primario" onClick={() => ir('/alongamento')}>{t('Alongar agora')}</button>
+        <button onClick={() => db.sessoes.update(s.id, { alongamento: 'dispensado' })}>{t('Hoje não')}</button>
       </div>
     </div>
   )

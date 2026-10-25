@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
+import { t } from '../i18n'
 
 /** Contagem baseada na hora de fim, para continuar certa se a app for para segundo plano. */
-export function Temporizador({ fimEm, fechar, rotulos = ['Descanso', 'Descanso terminado'] }: { fimEm: number; fechar: () => void; rotulos?: [string, string] }) {
+export function Temporizador({ fimEm, fechar, rotulos = [t('Descanso'), t('Descanso terminado')] }: { fimEm: number; fechar: () => void; rotulos?: [string, string] }) {
   const [agora, setAgora] = useState(Date.now())
   const restante = Math.max(0, Math.ceil((fimEm - agora) / 1000))
   useEffect(() => {
@@ -18,7 +19,7 @@ export function Temporizador({ fimEm, fechar, rotulos = ['Descanso', 'Descanso t
       <div className="linha">
         <span>{restante === 0 ? rotulos[1] : rotulos[0]}</span>
         <span className="numero">{mm}:{ss}</span>
-        <button onClick={fechar} style={{ flex: 'none' }}>{restante === 0 ? 'OK' : 'Saltar'}</button>
+        <button onClick={fechar} style={{ flex: 'none' }}>{restante === 0 ? 'OK' : t('Saltar')}</button>
       </div>
     </div>
   )

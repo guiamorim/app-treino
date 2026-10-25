@@ -1,0 +1,677 @@
+{
+ "supino-barra": {
+  "nome": "Barbell bench press",
+  "objetivo": "Chest strength and size with heavy loads. Requires good shoulder stability.",
+  "pontosChave": [
+   "Shoulder blades squeezed together and down",
+   "Grip slightly wider than shoulders, not too wide",
+   "Bar comes down to the lower chest, elbows at ~45° from the torso"
+  ]
+ },
+ "supino-halteres-neutro": {
+  "nome": "Dumbbell bench press, neutral grip",
+  "objetivo": "Trains the chest with less shoulder stress: the neutral grip keeps the elbows close to the torso.",
+  "pontosChave": [
+   "Palms facing each other",
+   "Elbows at ~30–45° from the torso",
+   "Lower until you feel a stretch in the chest, without pain"
+  ]
+ },
+ "supino-maquina": {
+  "nome": "Converging machine chest press",
+  "objetivo": "Chest on a guided path; lets you add load with little risk.",
+  "pontosChave": [
+   "Set the seat so the handles are at mid-chest height",
+   "Back and shoulder blades against the pad",
+   "Do not lock the elbows at the top"
+  ]
+ },
+ "supino-inclinado-barra": {
+  "nome": "Incline barbell bench press",
+  "objetivo": "Emphasis on the upper chest.",
+  "pontosChave": [
+   "Bench at 30°",
+   "Bar comes down to the upper chest",
+   "Shoulder blades squeezed together"
+  ]
+ },
+ "supino-inclinado-halteres": {
+  "nome": "Incline dumbbell press, neutral grip",
+  "objetivo": "Upper chest with less shoulder stress.",
+  "pontosChave": [
+   "Bench at 30°",
+   "Palms facing each other",
+   "Controlled descent"
+  ]
+ },
+ "flexoes": {
+  "nome": "Push-ups",
+  "objetivo": "Chest and triceps with no equipment; the shoulder moves freely because the shoulder blades are not pinned.",
+  "pontosChave": [
+   "Body in a straight line from head to feet",
+   "Elbows at ~45° from the torso",
+   "If it is too hard, put your hands on a bench"
+  ]
+ },
+ "remada-cabo-sentado": {
+  "nome": "Seated cable row (V-handle)",
+  "objetivo": "Back thickness and posture: horizontal pulling balances chest work.",
+  "pontosChave": [
+   "Torso upright, no swinging",
+   "Pull the handle to your abdomen",
+   "Squeeze the shoulder blades at the end"
+  ]
+ },
+ "remada-halter-unilateral": {
+  "nome": "One-arm dumbbell row",
+  "objetivo": "Back with bench support, which protects the lower back and helps fix side-to-side differences.",
+  "pontosChave": [
+   "Hand and knee on the bench, neutral back",
+   "Pull the dumbbell towards your hip",
+   "Lower until you feel a good stretch"
+  ]
+ },
+ "puxada-frente": {
+  "nome": "Lat pulldown",
+  "objetivo": "Back width (lats) with a vertical pull.",
+  "pontosChave": [
+   "Grip shoulder-width or slightly wider",
+   "Pull the bar to the top of your chest",
+   "Do not pull behind the neck"
+  ]
+ },
+ "puxada-neutra": {
+  "nome": "Close-grip pulldown (neutral grip)",
+  "objetivo": "Lats with a neutral grip, usually more comfortable for shoulders and elbows.",
+  "pontosChave": [
+   "Chest slightly up",
+   "Pull to chin/chest",
+   "Controlled return"
+  ]
+ },
+ "elevacao-lateral": {
+  "nome": "Dumbbell lateral raise",
+  "objetivo": "Side delts (shoulder width) with a light load.",
+  "pontosChave": [
+   "Light load, no swinging",
+   "Raise to shoulder height, not above",
+   "Arms slightly in front of the body"
+  ]
+ },
+ "face-pull": {
+  "nome": "Rope face pull",
+  "objetivo": "Rear delts and external rotators: helps balance the shoulder for people who do a lot of pressing.",
+  "pontosChave": [
+   "Pulley at face height",
+   "Pull the rope towards your eyes, separating your hands",
+   "Elbows high, rotate the arms out at the end"
+  ]
+ },
+ "crucifixo-invertido": {
+  "nome": "Dumbbell reverse fly",
+  "objetivo": "Rear delts and upper back.",
+  "pontosChave": [
+   "Torso leaning forward, neutral back",
+   "Open the arms with elbows slightly bent",
+   "Light load"
+  ]
+ },
+ "curl-halteres": {
+  "nome": "Alternating dumbbell curl",
+  "objetivo": "Biceps.",
+  "pontosChave": [
+   "Elbows close to the torso",
+   "Turn the palm up as you lift",
+   "Lower slowly"
+  ]
+ },
+ "curl-martelo": {
+  "nome": "Dumbbell hammer curl",
+  "objetivo": "Biceps and brachialis, with a neutral grip that is kinder to the wrist.",
+  "pontosChave": [
+   "Palms facing each other",
+   "Elbows fixed",
+   "No torso swinging"
+  ]
+ },
+ "triceps-corda": {
+  "nome": "Rope triceps pushdown",
+  "objetivo": "Triceps.",
+  "pontosChave": [
+   "Elbows tucked to the torso",
+   "Spread the rope ends at the bottom",
+   "Only the forearm moves"
+  ]
+ },
+ "triceps-polia": {
+  "nome": "Bar triceps pushdown",
+  "objetivo": "Triceps with a heavier load than the rope.",
+  "pontosChave": [
+   "Elbows fixed at your sides",
+   "Extend fully",
+   "Controlled return"
+  ]
+ },
+ "triceps-halteres-deitado": {
+  "nome": "Dumbbell skull crusher",
+  "objetivo": "Triceps with dumbbells, lying on a bench.",
+  "pontosChave": [
+   "Arms vertical",
+   "Bend only the elbows, dumbbells beside the head",
+   "Moderate load"
+  ]
+ },
+ "leg-press": {
+  "nome": "45° leg press",
+  "objetivo": "Leg strength and size with the spine supported.",
+  "pontosChave": [
+   "Lower back always against the seat",
+   "Knees in line with the feet",
+   "Do not lock the knees at the top"
+  ]
+ },
+ "agachamento-goblet": {
+  "nome": "Dumbbell goblet squat",
+  "objetivo": "Squat with the weight in front: makes it easier to keep the torso upright and learn the pattern.",
+  "pontosChave": [
+   "Dumbbell against your chest",
+   "Sit down between your legs, torso upright",
+   "Knees follow the direction of the feet"
+  ]
+ },
+ "agachamento-bulgaro": {
+  "nome": "Dumbbell Bulgarian split squat",
+  "objetivo": "One leg at a time: balance, glutes and quads with little load on the spine.",
+  "pontosChave": [
+   "Back foot on a bench",
+   "Lower straight down",
+   "Start with body weight only"
+  ]
+ },
+ "extensao-pernas": {
+  "nome": "Leg extension",
+  "objetivo": "Isolates the quads.",
+  "pontosChave": [
+   "Knee lined up with the machine's axis",
+   "Lift until straight, lower slowly",
+   "No momentum"
+  ]
+ },
+ "peso-morto-romeno": {
+  "nome": "Barbell Romanian deadlift",
+  "objetivo": "Hamstrings and glutes through the hip hinge.",
+  "pontosChave": [
+   "Neutral back from start to finish",
+   "Push the hips back, knees slightly bent",
+   "Bar always close to the legs"
+  ]
+ },
+ "peso-morto-romeno-halteres": {
+  "nome": "Dumbbell Romanian deadlift",
+  "objetivo": "Hamstrings and glutes with dumbbells.",
+  "pontosChave": [
+   "Neutral back",
+   "Hips back",
+   "Dumbbells close to the legs"
+  ]
+ },
+ "leg-curl-deitado": {
+  "nome": "Lying leg curl",
+  "objetivo": "Isolates the hamstrings.",
+  "pontosChave": [
+   "Hips pressed into the bench",
+   "Bend the knees all the way",
+   "Slow descent"
+  ]
+ },
+ "leg-curl-sentado": {
+  "nome": "Seated leg curl",
+  "objetivo": "Hamstrings in a lengthened position (seated).",
+  "pontosChave": [
+   "Knee lined up with the axis",
+   "Lock the thighs in firmly",
+   "Controlled descent"
+  ]
+ },
+ "hip-thrust": {
+  "nome": "Hip thrust",
+  "objetivo": "Glutes with heavy loads and little demand on the lower back.",
+  "pontosChave": [
+   "Shoulder blades on the bench",
+   "Chin down, lift until the hips are in line",
+   "1 s pause at the top"
+  ]
+ },
+ "ponte-gluteos": {
+  "nome": "Glute bridge",
+  "objetivo": "Glutes on the floor, no equipment.",
+  "pontosChave": [
+   "Feet close to the glutes",
+   "Lift the hips by squeezing the glutes",
+   "Do not arch the lower back"
+  ]
+ },
+ "gemeos-pe": {
+  "nome": "Standing calf raise",
+  "objetivo": "Calves.",
+  "pontosChave": [
+   "Lower until the heel is well stretched",
+   "1 s pause at the top",
+   "No bouncing"
+  ]
+ },
+ "prancha": {
+  "nome": "Plank",
+  "objetivo": "Core stability: learning to keep a neutral spine under effort.",
+  "pontosChave": [
+   "Forearms under the shoulders",
+   "Squeeze glutes and abs",
+   "Stop when the lower back starts to sag"
+  ]
+ },
+ "dead-bug": {
+  "nome": "Dead bug",
+  "objetivo": "Core control with the lower back protected on the floor.",
+  "pontosChave": [
+   "Lower back pressed into the floor",
+   "Slowly extend the opposite arm and leg",
+   "Breathe out as you extend"
+  ]
+ },
+ "crucifixo-halteres": {
+  "nome": "Dumbbell fly",
+  "objetivo": "Isolates the chest with a controlled stretch, without help from the triceps.",
+  "pontosChave": [
+   "Elbows slightly bent and fixed",
+   "Lower only until you feel a stretch, with no shoulder pain",
+   "Bring the dumbbells together over the chest in an arc"
+  ]
+ },
+ "crucifixo-maquina": {
+  "nome": "Machine fly (pec deck)",
+  "objetivo": "Isolates the chest on a guided path with little stability demand.",
+  "pontosChave": [
+   "Seat set so the hands are at chest height",
+   "Shoulder blades against the pad",
+   "Close the arms without banging the wrists"
+  ]
+ },
+ "crucifixo-cabo": {
+  "nome": "Cable crossover",
+  "objetivo": "Isolates the chest with constant tension through the movement.",
+  "pontosChave": [
+   "One foot forward for stability",
+   "Elbows slightly bent",
+   "Bring the hands together in front of the chest, controlling the return"
+  ]
+ },
+ "supino-inclinado-maquina": {
+  "nome": "Incline machine press",
+  "objetivo": "Upper chest on a guided path; a good alternative to the incline barbell press.",
+  "pontosChave": [
+   "Handles at upper-chest height",
+   "Shoulder blades together",
+   "Press without locking the elbows"
+  ]
+ },
+ "paralelas": {
+  "nome": "Parallel bar dips",
+  "objetivo": "Lower chest and triceps with body weight.",
+  "pontosChave": [
+   "Torso leaning slightly forward",
+   "Lower until the shoulders reach elbow height, no further",
+   "No shoulder pain; if it hurts, stop"
+  ]
+ },
+ "flexoes-inclinadas": {
+  "nome": "Incline push-ups (hands on a bench)",
+  "objetivo": "An easier push-up, useful to get started or to train at home.",
+  "pontosChave": [
+   "Hands on a stable bench or table",
+   "Body in a straight line from head to heels",
+   "Chest close to the support"
+  ]
+ },
+ "remada-curvada-barra": {
+  "nome": "Bent-over barbell row",
+  "objetivo": "Back thickness with heavy loads; requires a stable lower back.",
+  "pontosChave": [
+   "Torso at ~45°, neutral back",
+   "Pull the bar to your navel",
+   "Do not swing the torso"
+  ]
+ },
+ "remada-maquina": {
+  "nome": "Chest-supported machine row",
+  "objetivo": "Back without loading the lower back: the chest is supported.",
+  "pontosChave": [
+   "Chest against the pad",
+   "Pull the elbows back and squeeze the shoulder blades",
+   "Return slowly, arms straight"
+  ]
+ },
+ "elevacoes": {
+  "nome": "Pull-ups",
+  "objetivo": "Vertical pull with body weight; a great measure of relative strength.",
+  "pontosChave": [
+   "Grip shoulder-width or slightly wider",
+   "Start with arms straight and shoulder blades down",
+   "Chin over the bar without swinging"
+  ]
+ },
+ "remada-invertida": {
+  "nome": "Inverted row (body under a bar or table)",
+  "objetivo": "Back with body weight; at home it can be done under a sturdy table.",
+  "pontosChave": [
+   "Body in a straight line",
+   "Pull your chest to the bar",
+   "The more horizontal the body, the harder it is"
+  ]
+ },
+ "pullover-cabo": {
+  "nome": "Straight-arm cable pulldown",
+  "objetivo": "Isolates the lats without help from the biceps.",
+  "pontosChave": [
+   "Arms almost straight",
+   "Bring the bar to your thighs in an arc",
+   "Torso slightly leaning and still"
+  ]
+ },
+ "hiperextensao": {
+  "nome": "45° back extension",
+  "objetivo": "Posterior chain: glutes, hamstrings and lower back.",
+  "pontosChave": [
+   "Hips supported just below the hip bone",
+   "Lower with a neutral back",
+   "Rise until the body is in line, without overextending"
+  ]
+ },
+ "encolhimentos": {
+  "nome": "Dumbbell shrugs",
+  "objetivo": "Upper traps.",
+  "pontosChave": [
+   "Arms straight at your sides",
+   "Lift the shoulders towards the ears",
+   "1 s pause at the top, without rolling the shoulders"
+  ]
+ },
+ "desenvolvimento-halteres": {
+  "nome": "Seated dumbbell shoulder press",
+  "objetivo": "Shoulder strength and size with an overhead movement.",
+  "pontosChave": [
+   "Backrest almost vertical",
+   "Dumbbells at ear level, elbows slightly forward",
+   "Press without arching the lower back"
+  ]
+ },
+ "desenvolvimento-maquina": {
+  "nome": "Machine shoulder press",
+  "objetivo": "Overhead pressing on a guided path.",
+  "pontosChave": [
+   "Handles at shoulder height",
+   "Back against the pad",
+   "Press without locking the elbows"
+  ]
+ },
+ "press-landmine": {
+  "nome": "Single-arm landmine press",
+  "objetivo": "Pressing up and forward, on a path that is usually kinder to the shoulder.",
+  "pontosChave": [
+   "Bar end in a corner or holder",
+   "Press up and forward",
+   "Torso braced, no twisting"
+  ]
+ },
+ "elevacao-lateral-cabo": {
+  "nome": "Cable lateral raise",
+  "objetivo": "Side delts with constant tension.",
+  "pontosChave": [
+   "Low pulley, cable crossing in front of the body",
+   "Raise to shoulder height",
+   "Elbow slightly bent"
+  ]
+ },
+ "elevacao-frontal": {
+  "nome": "Dumbbell front raise",
+  "objetivo": "Front delts; usually already well worked by pressing.",
+  "pontosChave": [
+   "Raise to shoulder height",
+   "No torso swinging",
+   "Lower slowly"
+  ]
+ },
+ "curl-barra": {
+  "nome": "Barbell curl",
+  "objetivo": "Biceps with heavier loads.",
+  "pontosChave": [
+   "Elbows close to the torso",
+   "Lift without swinging",
+   "Use an EZ bar if your wrist bothers you"
+  ]
+ },
+ "curl-cabo": {
+  "nome": "Low-pulley cable curl",
+  "objetivo": "Biceps with constant tension.",
+  "pontosChave": [
+   "Elbows fixed",
+   "Lift to full contraction",
+   "Lower over 2 s"
+  ]
+ },
+ "curl-concentrado": {
+  "nome": "Concentration curl",
+  "objetivo": "Isolated biceps, with no way to swing.",
+  "pontosChave": [
+   "Seated, elbow against the inner thigh",
+   "Lift slowly",
+   "Extend fully at the bottom"
+  ]
+ },
+ "curl-inclinado": {
+  "nome": "Incline dumbbell curl",
+  "objetivo": "Biceps in a lengthened position.",
+  "pontosChave": [
+   "Bench at ~60°",
+   "Arms hanging behind the torso",
+   "Do not move the elbows forward"
+  ]
+ },
+ "triceps-frances": {
+  "nome": "Overhead dumbbell triceps extension",
+  "objetivo": "Long head of the triceps in a lengthened position.",
+  "pontosChave": [
+   "Dumbbell held with both hands",
+   "Elbows pointing forward",
+   "Lower behind the head only as far as is comfortable"
+  ]
+ },
+ "triceps-corda-acima": {
+  "nome": "Overhead cable triceps extension",
+  "objetivo": "Triceps in a lengthened position, with constant tension.",
+  "pontosChave": [
+   "Back to the pulley, rope behind the head",
+   "Elbows fixed",
+   "Extend to in front of the head"
+  ]
+ },
+ "fundos-banco": {
+  "nome": "Bench dips",
+  "objetivo": "Triceps with body weight, no equipment.",
+  "pontosChave": [
+   "Hands on the bench at hip width",
+   "Lower to ~90° at the elbows",
+   "Shoulders away from the ears"
+  ]
+ },
+ "supino-fechado": {
+  "nome": "Close-grip bench press",
+  "objetivo": "Triceps with heavier loads.",
+  "pontosChave": [
+   "Hands at shoulder width",
+   "Elbows close to the torso",
+   "Bar to the lower chest"
+  ]
+ },
+ "agachamento-barra": {
+  "nome": "Barbell back squat",
+  "objetivo": "The basic leg exercise; requires technique and mobility.",
+  "pontosChave": [
+   "Bar on the traps, feet shoulder-width apart",
+   "Lower with a braced torso as far as you can keep a neutral back",
+   "Knees in line with the feet"
+  ]
+ },
+ "agachamento-hack": {
+  "nome": "Hack squat machine",
+  "objetivo": "Quads with heavy loads and the back supported.",
+  "pontosChave": [
+   "Back against the pad",
+   "Feet in the middle of the platform",
+   "Lower under control, without lifting the heels"
+  ]
+ },
+ "afundos": {
+  "nome": "Dumbbell walking lunges",
+  "objetivo": "Legs one side at a time, with balance.",
+  "pontosChave": [
+   "Long stride",
+   "Back knee almost touches the floor",
+   "Torso upright"
+  ]
+ },
+ "step-up": {
+  "nome": "Dumbbell step-up",
+  "objetivo": "Legs one side at a time, with little load on the lower back.",
+  "pontosChave": [
+   "Bench at knee height",
+   "Push with the top leg, without bouncing off the bottom one",
+   "Lower slowly"
+  ]
+ },
+ "agachamento-peso-corporal": {
+  "nome": "Bodyweight squat",
+  "objetivo": "Legs at home, no equipment.",
+  "pontosChave": [
+   "Feet shoulder-width apart",
+   "Lower as if sitting on a chair",
+   "Weight on the heels and mid-foot"
+  ]
+ },
+ "peso-morto-barra": {
+  "nome": "Conventional deadlift",
+  "objetivo": "Strength for the whole posterior chain; requires careful technique.",
+  "pontosChave": [
+   "Bar close to the shins",
+   "Neutral back, chest up",
+   "Push the floor away and extend hips and knees together"
+  ]
+ },
+ "peso-morto-unilateral": {
+  "nome": "Single-leg dumbbell Romanian deadlift",
+  "objetivo": "Hamstrings and glutes with less load and more balance.",
+  "pontosChave": [
+   "Standing leg slightly bent",
+   "Hips go back, free leg rises behind",
+   "Neutral back"
+  ]
+ },
+ "abducao-maquina": {
+  "nome": "Machine hip abduction",
+  "objetivo": "Glute medius, important for hip and knee stability.",
+  "pontosChave": [
+   "Back against the pad",
+   "Open the legs under control",
+   "1 s pause when open"
+  ]
+ },
+ "kickback-cabo": {
+  "nome": "Cable glute kickback",
+  "objetivo": "Isolates the glute max.",
+  "pontosChave": [
+   "Ankle strap on the low pulley",
+   "Take the leg back without arching the lower back",
+   "Squeeze the glute at the end"
+  ]
+ },
+ "ponte-gluteos-unilateral": {
+  "nome": "Single-leg glute bridge",
+  "objetivo": "Glutes with no equipment, one leg at a time.",
+  "pontosChave": [
+   "Lying on your back, one foot on the floor and the other leg straight",
+   "Lift the hips until in line with the torso",
+   "1 s pause at the top"
+  ]
+ },
+ "gemeos-sentado": {
+  "nome": "Seated calf raise",
+  "objetivo": "Calves with the knee bent (more soleus).",
+  "pontosChave": [
+   "Pad over the knees",
+   "Lower until well stretched",
+   "Lift and pause 1 s"
+  ]
+ },
+ "gemeos-leg-press": {
+  "nome": "Leg press calf raise",
+  "objetivo": "Calves with the leg straight, with a stable load and no weight on the shoulders.",
+  "pontosChave": [
+   "Only the balls of the feet on the platform",
+   "Knees almost straight, not locked",
+   "Full range and a pause at the top"
+  ]
+ },
+ "prancha-lateral": {
+  "nome": "Side plank",
+  "objetivo": "Side core muscles and hip stability.",
+  "pontosChave": [
+   "Forearm under the shoulder",
+   "Body in a straight line",
+   "Do not let the hips drop"
+  ]
+ },
+ "pallof": {
+  "nome": "Cable Pallof press",
+  "objetivo": "Anti-rotation core: resisting the torso from twisting.",
+  "pontosChave": [
+   "Side-on to the pulley, cable at chest height",
+   "Press the hands straight out",
+   "Keep the torso from twisting"
+  ]
+ },
+ "elevacao-pernas": {
+  "nome": "Lying leg raise",
+  "objetivo": "Lower abs.",
+  "pontosChave": [
+   "Lower back pressed into the floor",
+   "Lift the legs to 90°",
+   "Lower slowly without arching"
+  ]
+ },
+ "abdominal-cabo": {
+  "nome": "Kneeling cable crunch",
+  "objetivo": "Abs with progressive load.",
+  "pontosChave": [
+   "Rope next to the head",
+   "Curl the torso, bringing the elbows to the thighs",
+   "Do not pull with the arms"
+  ]
+ },
+ "bird-dog": {
+  "nome": "Bird dog",
+  "objetivo": "Lower-back stability and coordination; safe for people with lower-back pain.",
+  "pontosChave": [
+   "On all fours",
+   "Extend the opposite arm and leg",
+   "Torso still, without rotating the hips"
+  ]
+ },
+ "farmer-walk": {
+  "nome": "Farmer's walk",
+  "objetivo": "Grip, traps and core while walking with a load.",
+  "pontosChave": [
+   "Heavy dumbbells at your sides",
+   "Torso upright, shoulders back",
+   "Short, controlled steps"
+  ]
+ }
+}

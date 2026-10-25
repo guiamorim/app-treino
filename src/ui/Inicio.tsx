@@ -11,6 +11,7 @@ import { LembreteAlongamento } from './Alongamento'
 import { NovidadesInicio } from './Atualizacao'
 import { textoFase, TrocasProximoBloco } from './Fase'
 import { ir } from './rota'
+import { t } from '../i18n'
 
 const somaDias = (d: Date, n: number) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n)
 const horas = (h: number) => `${kg(Math.round(h * 10) / 10)} h`
@@ -64,41 +65,41 @@ export function Inicio({ dados, plano, anamnese }: { dados: Dados; plano: Plano;
       <NovidadesInicio dados={dados} />
       <LembreteAlongamento dados={dados} anamnese={anamnese} />
       <button className="cartao proximo" onClick={() => ir('/hoje')}>
-        <span className="secundario">Próximo treino</span>
+        <span className="secundario">{t('Próximo treino')}</span>
         <span className="titulo">{proximo.nome} · ~{proximo.duracaoEstimadaMin} min</span>
         <span className="secundario">{textoFase(plano, semana)}</span>
       </button>
       <TrocasProximoBloco plano={plano} semana={semana} />
-      <button className="largo" onClick={() => ir('/alongamento')}>🧘 Alongamentos</button>
+      <button className="largo" onClick={() => ir('/alongamento')}>🧘 {t('Alongamentos')}</button>
 
-      <h2>Esta semana</h2>
+      <h2>{t('Esta semana')}</h2>
       <div className="cartao indicadores">
-        <Indicador valor={`${treinosSemana}/${meta}`} nome="treinos" />
-        <Indicador valor={horas(horasTreino(s, semanaIni, semanaFim))} nome="de treino" />
-        <Indicador valor={variacao === null ? '–' : `${variacao > 0 ? '+' : ''}${variacao}%`} nome="volume vs anterior" />
+        <Indicador valor={`${treinosSemana}/${meta}`} nome={t('treinos')} />
+        <Indicador valor={horas(horasTreino(s, semanaIni, semanaFim))} nome={t('de treino')} />
+        <Indicador valor={variacao === null ? '–' : `${variacao > 0 ? '+' : ''}${variacao}%`} nome={t('volume vs anterior')} />
       </div>
 
-      <h2>Este mês</h2>
+      <h2>{t('Este mês')}</h2>
       <div className="cartao indicadores">
-        <Indicador valor={String(treinosEntre(s, mesIni, mesFim))} nome="treinos" />
-        <Indicador valor={horas(horasTreino(s, mesIni, mesFim))} nome="de treino" />
-        <Indicador valor={String(recordesMes)} nome={recordesMes === 1 ? 'recorde' : 'recordes'} />
+        <Indicador valor={String(treinosEntre(s, mesIni, mesFim))} nome={t('treinos')} />
+        <Indicador valor={horas(horasTreino(s, mesIni, mesFim))} nome={t('de treino')} />
+        <Indicador valor={String(recordesMes)} nome={recordesMes === 1 ? t('recorde') : t('recordes')} />
       </div>
 
-      <h2>Constância</h2>
+      <h2>{t('Constância')}</h2>
       <div className="cartao indicadores">
-        <Indicador valor={`🔥 ${sequencia}`} nome={sequencia === 1 ? 'semana seguida' : 'semanas seguidas'} />
-        <Indicador valor={`${Math.round((ad.feitas / ad.planeadas) * 100)}%`} nome="aderência 4 semanas" />
-        <Indicador valor={peso === null ? '–' : `${peso > 0 ? '+' : ''}${kg(peso)} kg`} nome="peso em 4 semanas" />
+        <Indicador valor={`🔥 ${sequencia}`} nome={sequencia === 1 ? t('semana seguida') : t('semanas seguidas')} />
+        <Indicador valor={`${Math.round((ad.feitas / ad.planeadas) * 100)}%`} nome={t('aderência 4 semanas')} />
+        <Indicador valor={peso === null ? '–' : `${peso > 0 ? '+' : ''}${kg(peso)} kg`} nome={t('peso em 4 semanas')} />
       </div>
 
-      <h2>Conquistas <span className="secundario">{obtidas} de {lista.length}</span></h2>
+      <h2>{t('Conquistas')} <span className="secundario">{t('{n} de {total}', { n: obtidas, total: lista.length })}</span></h2>
       <ul className="conquistas">
         {lista.map((c) => (
           <li key={c.id} className={c.obtida ? 'obtida' : undefined} title={c.descricao}>
             <span aria-hidden="true">{c.icone}</span>
             <span>{c.nome}</span>
-            <span className="visualmente-oculto">{c.obtida ? 'obtida' : 'por obter'}: {c.descricao}</span>
+            <span className="visualmente-oculto">{c.obtida ? t('obtida') : t('por obter')}: {c.descricao}</span>
           </li>
         ))}
       </ul>

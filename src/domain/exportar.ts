@@ -1,4 +1,5 @@
 // F17: ficha de treino e histórico em PDF e Excel; F15 (v1.5): relatório de fotos para o PT.
+import { m, locale, t, traduzido } from '../i18n'
 import type { Catalogo } from './catalogo'
 import { compararFotos } from './fotos'
 import { gerarPdf, type SecaoPdf } from './pdf'
@@ -6,6 +7,7 @@ import { semanaDoPlano, treinoEfetivo } from './plano'
 import {
   INFO_MEDIDAS,
   MEDIDAS_CM,
+  NOMES_AREAS,
   NOMES_GRUPOS,
   type Anamnese,
   type FotoAvaliacao,
@@ -26,7 +28,7 @@ export interface DadosExportacao {
   perfil: Perfil
 }
 
-const num = (n: number) => String(Math.round(n * 10) / 10).replace('.', ',')
+const num = (n: number) => (Math.round(n * 10) / 10).toLocaleString(locale(), { useGrouping: false })
 /** «2026-10-20» ou ISO completo → «20/10/2026». */
 export const dataPt = (iso: string) => iso.slice(0, 10).split('-').reverse().join('/')
 const porData = <T extends { data: string }>(a: T, b: T) => a.data.localeCompare(b.data)
@@ -40,13 +42,13 @@ function treinosAtuais(plano: Plano, agora: string) {
 }
 
 export function folhaFicha(plano: Plano, catalogo: Catalogo, agora: string): Folha {
-  const linhas = treinosAtuais(plano, agora).flatMap((t) =>
-    t.prescricoes.map((p, i) => {
+  const linhas = treinosAtuais(plano, agora).flatMap((tr) =>
+    tr.prescricoes.map((p, i) => {
       const ex = catalogo.get(p.exercicioId)
-      return [t.nome, i + 1, ex?.nome ?? p.exercicioId, ex ? NOMES_GRUPOS[ex.grupoPrincipal] : undefined, p.series, `${p.faixa[0]}–${p.faixa[1]}`, ex?.medida === 'segundos' ? 'segundos' : 'reps', `${p.rir[0]}–${p.rir[1]}`, p.descansoSeg, p.nota]
+      return [tr.nome, i + 1, ex?.nome ?? p.exercicioId, ex ? NOMES_GRUPOS[ex.grupoPrincipal] : undefined, p.series, `${p.faixa[0]}–${p.faixa[1]}`, ex?.medida === 'segundos' ? t('segundos') : 'reps', `${p.rir[0]}–${p.rir[1]}`, p.descansoSeg, p.nota]
     }),
   )
-  return { nome: 'Ficha', cabecalho: ['Treino', 'Ordem', 'Exercício', 'Grupo principal', 'Séries', 'Repetições', 'Unidade', 'RIR', 'Descanso (s)', 'Nota'], linhas }
+  return { nome: t('Ficha'), cabecalho: [t('Treino'), t('Ordem'), t('Exercício'), t('Grupo principal'), t('Séries'), t('Repetições'), t('Unidade'), 'RIR', t('Descanso (s)'), t('Nota')], linhas }
 }
 
 export function folhaHistorico(sessoes: Sessao[], plano: Plano | null, catalogo: Catalogo): Folha {
@@ -55,13 +57,13 @@ export function folhaHistorico(sessoes: Sessao[], plano: Plano | null, catalogo:
       e.series.map((x, i) => [s.inicio.slice(0, 10), nomeTreino(plano, s.treinoId), catalogo.get(e.exercicioId)?.nome ?? e.exercicioId, i + 1, x.carga, x.reps, x.rir, e.dor]),
     ),
   )
-  return { nome: 'Histórico', cabecalho: ['Data', 'Treino', 'Exercício', 'Série', 'Carga (kg)', 'Reps', 'RIR', 'Dor (0–10)'], linhas }
+  return { nome: t('Histórico'), cabecalho: [t('Data'), t('Treino'), t('Exercício'), t('Série'), t('Carga (kg)'), 'Reps', 'RIR', t('Dor (0–10)')], linhas }
 }
 
 export function folhaMedicoes(medicoes: Medicao[]): Folha {
   return {
-    nome: 'Medições',
-    cabecalho: ['Data', 'Peso (kg)', ...MEDIDAS_CM.map((k) => `${INFO_MEDIDAS[k].nome} (cm)`)],
+    nome: t('Medições'),
+    cabecalho: [t('Data'), t('Peso (kg)'), ...MEDIDAS_CM.map((k) => `${INFO_MEDIDAS[k].nome} (cm)`)],
     linhas: [...medicoes].sort(porData).map((m) => [m.data, m.pesoKg, ...MEDIDAS_CM.map((k) => m[k])]),
   }
 }
@@ -70,28 +72,28 @@ export function excelFichaHistorico(d: DadosExportacao, catalogo: Catalogo, agor
   return gerarXlsx([...(d.plano ? [folhaFicha(d.plano, catalogo, agora)] : []), folhaHistorico(d.sessoes, d.plano, catalogo), folhaMedicoes(d.medicoes)])
 }
 
-const subtitulo = (d: DadosExportacao, agora: string) => `${d.perfil.nome ? `${d.perfil.nome} · ` : ''}Exportado em ${dataPt(agora)}`
+const subtitulo = (d: DadosExportacao, agora: string) => `${d.perfil.nome ? `${d.perfil.nome} · ` : ''}${t('Exportado em {data}', { data: dataPt(agora) })}`
 
 export function pdfFicha(d: DadosExportacao, catalogo: Catalogo, agora: string): Uint8Array<ArrayBuffer> {
   const secoes: SecaoPdf[] = d.plano
-    ? treinosAtuais(d.plano, agora).map((t) => ({
-        titulo: `${t.nome} (cerca de ${t.duracaoEstimadaMin} min)`,
+    ? treinosAtuais(d.plano, agora).map((tr) => ({
+        titulo: t('{treino} (cerca de {min} min)', { treino: tr.nome, min: tr.duracaoEstimadaMin }),
         linhas: [
-          ...t.prescricoes.map((p, i) => {
+          ...tr.prescricoes.map((p, i) => {
             const ex = catalogo.get(p.exercicioId)
             const unidade = ex?.medida === 'segundos' ? 's' : 'reps'
-            return `${i + 1}. ${ex?.nome ?? p.exercicioId} (${ex ? NOMES_GRUPOS[ex.grupoPrincipal] : ''}): ${p.series} × ${p.faixa[0]}–${p.faixa[1]} ${unidade} · RIR ${p.rir[0]}–${p.rir[1]} · descanso ${p.descansoSeg} s${p.nota ? ` · ${p.nota}` : ''}`
+            return `${i + 1}. ${ex?.nome ?? p.exercicioId} (${ex ? NOMES_GRUPOS[ex.grupoPrincipal] : ''}): ${p.series} × ${p.faixa[0]}–${p.faixa[1]} ${unidade} · RIR ${p.rir[0]}–${p.rir[1]} · ${t('descanso {s} s', { s: p.descansoSeg })}${p.nota ? ` · ${p.nota}` : ''}`
           }),
-          ...(t.cardioMin ? [`Cardio: ${t.cardioMin} min`] : []),
+          ...(tr.cardioMin ? [t('Cardio {min} min', { min: tr.cardioMin })] : []),
         ],
       }))
-    : [{ titulo: 'Sem plano', linhas: ['Preenche a anamnese para gerar o plano.'] }]
-  if (d.plano?.avisos.length) secoes.push({ titulo: 'Avisos', linhas: d.plano.avisos.map((a) => `• ${a}`) })
-  return gerarPdf('Ficha de treino', subtitulo(d, agora), secoes)
+    : [{ titulo: t('Sem plano'), linhas: [t('Preenche a anamnese para gerar o plano.')] }]
+  if (d.plano?.avisos.length) secoes.push({ titulo: t('Avisos'), linhas: d.plano.avisos.map((a) => `• ${a}`) })
+  return gerarPdf(t('Ficha de treino'), subtitulo(d, agora), secoes)
 }
 
 const textoMedicao = (m: Medicao) =>
-  [m.pesoKg !== undefined && `peso ${num(m.pesoKg)} kg`, ...MEDIDAS_CM.map((k) => m[k] !== undefined && `${INFO_MEDIDAS[k].nome.toLowerCase()} ${num(m[k])} cm`)].filter(Boolean).join(' · ')
+  [m.pesoKg !== undefined && `${t('peso')} ${num(m.pesoKg)} kg`, ...MEDIDAS_CM.map((k) => m[k] !== undefined && `${INFO_MEDIDAS[k].nome.toLowerCase()} ${num(m[k])} cm`)].filter(Boolean).join(' · ')
 
 export function pdfHistorico(d: DadosExportacao, catalogo: Catalogo, agora: string): Uint8Array<ArrayBuffer> {
   const sessoes = sessoesPorData(d.sessoes).filter((s) => s.exercicios.some((e) => e.series.length > 0))
@@ -103,16 +105,16 @@ export function pdfHistorico(d: DadosExportacao, catalogo: Catalogo, agora: stri
         const ex = catalogo.get(e.exercicioId)
         const semCarga = ex?.incrementoKg === 0
         const series = e.series.map((x) => `${semCarga ? '' : `${num(x.carga)} kg × `}${x.reps}${x.rir !== undefined ? ` (RIR ${x.rir})` : ''}`).join(', ')
-        return `${ex?.nome ?? e.exercicioId}: ${series}${e.dor ? ` · dor ${e.dor}/10` : ''}`
+        return `${ex?.nome ?? e.exercicioId}: ${series}${e.dor ? ` · ${t('dor')} ${e.dor}/10` : ''}`
       }),
   }))
-  if (secoes.length === 0) secoes.push({ titulo: 'Sem treinos registados', linhas: [] })
-  if (d.medicoes.length) secoes.push({ titulo: 'Medições', linhas: [...d.medicoes].sort(porData).map((m) => `${dataPt(m.data)}: ${textoMedicao(m)}`) })
-  return gerarPdf('Histórico de treino', subtitulo(d, agora), secoes)
+  if (secoes.length === 0) secoes.push({ titulo: t('Sem treinos registados'), linhas: [] })
+  if (d.medicoes.length) secoes.push({ titulo: t('Medições'), linhas: [...d.medicoes].sort(porData).map((m) => `${dataPt(m.data)}: ${textoMedicao(m)}`) })
+  return gerarPdf(t('Histórico de treino'), subtitulo(d, agora), secoes)
 }
 
-const NOMES_POSES: Record<Pose, string> = { frente: 'Frente', lado: 'Lado', costas: 'Costas' }
-const OBJETIVOS: Record<Anamnese['objetivo'], string> = { recomposicao: 'recomposição corporal', hipertrofia: 'hipertrofia', forca: 'força', saude: 'saúde geral' }
+const NOMES_POSES: Record<Pose, string> = traduzido({ frente: m('Frente'), lado: m('Lado'), costas: m('Costas') })
+const OBJETIVOS: Record<Anamnese['objetivo'], string> = traduzido({ recomposicao: m('recomposição corporal'), hipertrofia: m('hipertrofia'), forca: m('força'), saude: m('saúde geral') })
 
 export function base64ParaBytes(dataUrl: string): Uint8Array<ArrayBuffer> {
   const b = atob(dataUrl.slice(dataUrl.indexOf(',') + 1))
@@ -130,10 +132,10 @@ export function pdfRelatorioPt(d: DadosExportacao, catalogo: Catalogo, mesAntes:
   const secoes: SecaoPdf[] = []
   if (a) {
     secoes.push({
-      titulo: 'Contexto',
+      titulo: t('Contexto'),
       linhas: [
-        `${a.idade} anos · ${a.alturaCm} cm · objetivo: ${OBJETIVOS[a.objetivo]} · ${a.diasPorSemana} dias por semana, ${a.duracaoMin} min`,
-        ...(a.restricoes.length ? [`Dores ou limitações: ${a.restricoes.map((r) => `${r.area} ${r.intensidade}/10`).join(', ')}`] : []),
+        t('{idade} anos · {altura} cm · objetivo: {objetivo} · {dias} dias por semana, {min} min', { idade: a.idade, altura: a.alturaCm, objetivo: OBJETIVOS[a.objetivo], dias: a.diasPorSemana, min: a.duracaoMin }),
+        ...(a.restricoes.length ? [`${t('Dores ou limitações:')} ${a.restricoes.map((r) => `${NOMES_AREAS[r.area]} ${r.intensidade}/10`).join(', ')}`] : []),
       ],
     })
   }
@@ -147,16 +149,16 @@ export function pdfRelatorioPt(d: DadosExportacao, catalogo: Catalogo, mesAntes:
     secoes.push({
       titulo: NOMES_POSES[pose],
       imagens: lados.map((l) => ({ jpeg: base64ParaBytes(l.foto.imagem), legenda: dataPt(l.foto.data) })),
-      linhas: lados.map((l) => `${dataPt(l.foto.data)}: ${l.medicao ? textoMedicao(l.medicao) : 'sem medição até 7 dias da foto'}${l.foto.nota ? ` · ${l.foto.nota}` : ''}`),
+      linhas: lados.map((l) => `${dataPt(l.foto.data)}: ${l.medicao ? textoMedicao(l.medicao) : t('sem medição até 7 dias da foto')}${l.foto.nota ? ` · ${l.foto.nota}` : ''}`),
     })
   }
   const dif = compararFotos(d.fotos, d.medicoes, mesAntes, mesDepois, 'frente').diferencas
-  const difs = [dif.pesoKg !== undefined && `peso ${dif.pesoKg > 0 ? '+' : ''}${num(dif.pesoKg)} kg`, ...MEDIDAS_CM.map((k) => dif[k] !== undefined && `${INFO_MEDIDAS[k].nome.toLowerCase()} ${dif[k]! > 0 ? '+' : ''}${num(dif[k]!)} cm`)].filter(Boolean)
+  const difs = [dif.pesoKg !== undefined && `${t('peso')} ${dif.pesoKg > 0 ? '+' : ''}${num(dif.pesoKg)} kg`, ...MEDIDAS_CM.map((k) => dif[k] !== undefined && `${INFO_MEDIDAS[k].nome.toLowerCase()} ${dif[k]! > 0 ? '+' : ''}${num(dif[k]!)} cm`)].filter(Boolean)
   const medicoes = d.medicoes.filter((m) => m.data >= inicio && m.data <= fim).sort(porData)
   secoes.push({
-    titulo: 'Números do período',
+    titulo: t('Números do período'),
     linhas: [
-      difs.length ? `Diferença (fotos de frente): ${difs.join(' · ')}` : 'Sem medições perto das duas datas para calcular a diferença.',
+      difs.length ? `${t('Diferença (fotos de frente):')} ${difs.join(' · ')}` : t('Sem medições perto das duas datas para calcular a diferença.'),
       ...medicoes.map((m) => `${dataPt(m.data)}: ${textoMedicao(m)}`),
     ],
   })
@@ -164,10 +166,10 @@ export function pdfRelatorioPt(d: DadosExportacao, catalogo: Catalogo, mesAntes:
   const series = treinos.reduce((n, s) => n + s.exercicios.reduce((m, e) => m + e.series.length, 0), 0)
   const dores = treinos.flatMap((s) => s.exercicios.filter((e) => (e.dor ?? 0) >= 4).map((e) => `${dataPt(s.inicio)} ${catalogo.get(e.exercicioId)?.nome ?? e.exercicioId} ${e.dor}/10`))
   secoes.push({
-    titulo: 'Treino no período',
-    linhas: [`${treinos.length} treinos registados, ${series} séries.`, ...(dores.length ? [`Dor de 4/10 ou mais: ${dores.join('; ')}`] : [])],
+    titulo: t('Treino no período'),
+    linhas: [t('{treinos} treinos registados, {series} séries.', { treinos: treinos.length, series }), ...(dores.length ? [`${t('Dor de 4/10 ou mais:')} ${dores.join('; ')}`] : [])],
   })
-  secoes.push({ titulo: 'Notas do personal trainer', linhas: ['', '', '', ''] })
+  secoes.push({ titulo: t('Notas do personal trainer'), linhas: ['', '', '', ''] })
   const nome = d.perfil.nome ? `${d.perfil.nome} · ` : ''
-  return gerarPdf('Avaliação física: relatório para o PT', `${nome}${dataPt(inicio)} a ${dataPt(fim > agora ? agora : fim)} · gerado em ${dataPt(agora)}`, secoes)
+  return gerarPdf(t('Avaliação física: relatório para o PT'), nome + t('{inicio} a {fim} · gerado em {agora}', { inicio: dataPt(inicio), fim: dataPt(fim > agora ? agora : fim), agora: dataPt(agora) }), secoes)
 }
