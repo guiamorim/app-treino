@@ -2,7 +2,7 @@
 
 **English** · [Português](especificacao-v1.md)
 
-Date: 2026-10-20 · Version 1.6 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.6)
+Date: 2026-10-20 · Version 1.7 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.7)
 
 The Portuguese version is the reference used for the domain names in the code. Both versions must stay in sync.
 
@@ -158,6 +158,24 @@ RIR = reps in reserve: how many more reps you could still have done at the end o
 - Restrictions: a stretch contraindicated for an area marked as painful is not shown. In the 2nd and 3rd trimester of pregnancy, stretches lying on the back or front are not shown.
 - Reminder: after finishing a workout, Today and Home show "Hora de alongar" (time to stretch), with the estimated time, until I choose "Feito" (done) or "Hoje não" (not today), which is saved in the session (and in the backup). It only appears for workouts finished in the last 12 hours. It is an in-app notice; there are still no notifications (F13).
 
+### F20. Updates and what's new (v1.7)
+- The app checks for a new version when it opens and every time it comes back to the foreground. On the iPhone the installed app often stays in memory, so checking only on open was not enough.
+- The new version downloads in the background and waits. When it is ready, a "Nova versão disponível: X" (new version available) notice appears at the top of every screen (except while logging an exercise, so a set is not interrupted), with the summary of what changes and the buttons "Atualizar agora" (update now) and "Depois" (later).
+  - "Atualizar agora" activates the new version and reloads the app. The data stays, because it is on the device and each set is saved when completed.
+  - "Depois" hides the notice until the app opens again. If the app is closed completely, the new version takes over on the next open.
+  - Offline, or with an invalid what's-new file, the notice appears without a summary ("Correções e melhorias.", fixes and improvements).
+- In "Mais", an "Atualizações" (updates) card:
+  - the installed version;
+  - "Procurar atualizações" (check for updates), with the result: "Já tens a versão mais recente." (you have the latest version), "Nova versão pronta." (new version ready, and the button becomes "Atualizar agora") or "Sem ligação à internet. Tenta mais tarde." (offline, try later);
+  - "Em preparação" (in preparation): what is being built or studied and has not reached the app yet;
+  - "Novidades de cada versão" (what's new in each version): the history with each version's summary.
+- After updating, Home shows "Novidades da versão X" (what's new in version X) once, with what changed since the last version seen, until I tap "Fechar" (close). The version seen is kept only on the device (it is not part of the backup).
+  - It does not appear on a fresh install: for someone who has just arrived nothing has changed.
+  - Someone who used the app before 1.7 sees the 1.7 notes.
+- The summary comes from `src/novidades.json`, which every change with new features updates. The newest version in that file is the app version and must match `package.json`.
+- It is an in-app notice, visible while the app is open. There is no notification while the app is closed: on the iPhone that needs push notifications and a server (F13).
+- Moving from 1.6: 1.6 has no notice, so 1.7 takes over on its own on the next open, like earlier versions; from then on new versions wait for "Atualizar agora".
+
 ### F14. Blocks and next change (v1.2, rules in section 3.7)
 - On Home and on Today's workout: current phase (re-adaptation, week N of M of the block, or deload) and the next change with its date: end of re-adaptation (full sets), deload week (half the sets), or new block (isolation exercises rotate, listing what changes).
 
@@ -244,7 +262,7 @@ For each Prescription with range [min, max]:
 - Works offline after the first visit.
 - Opens in under 2 s on a recent iPhone.
 - Light and dark mode, touch targets ≥ 44 px, text readable with the phone on the machine's holder.
-- No analytics, no trackers, no network calls except videos.
+- No analytics, no trackers, no network calls except videos and, on the app's own origin, the service worker and the what's-new file (F20).
 
 ## 6. Security
 - Content Security Policy: `default-src 'self'`; `frame-src` only `https://www.youtube-nocookie.com` and `https://player.vimeo.com`; `img-src 'self' https://i.ytimg.com data: blob:` (v1.4: `blob:` to read the chosen photo before re-encoding it).
@@ -266,7 +284,8 @@ docs/             market analysis and methodology (PT and EN)
 src/domain/       pure TypeScript: plan, progression, reports (TDD, no UI dependencies)
 src/data/         IndexedDB via Dexie, export/import
 src/ui/           React
-src/catalog/      exercicios.json (versioned catalogue)
+src/catalog/      exercicios.json and alongamentos.json (versioned catalogues)
+src/novidades.json  what's new in each version and what is in preparation (F20)
 tests/e2e/        Playwright: anamnesis → plan → session → report
 ```
 Rule: every acceptance criterion in section 2 has at least one test carrying its code (e.g. `F4`, `3.2`).

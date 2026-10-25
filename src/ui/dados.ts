@@ -18,6 +18,8 @@ export interface Dados {
   ultimaExportacao?: string
   fotos: FotoAvaliacao[]
   perfil: Perfil
+  /** F20: última versão cujas novidades foram vistas (fica só no dispositivo). */
+  versaoVista?: string
 }
 
 export function useDados(): Dados | undefined {
@@ -30,6 +32,7 @@ export function useDados(): Dados | undefined {
     ultimaExportacao: await db.ler<string>('ultimaExportacao'),
     fotos: await db.fotos.orderBy('data').toArray(),
     perfil: (await db.ler<Perfil>('perfil')) ?? {},
+    versaoVista: await db.ler<string>('versaoVista'),
   }))
 }
 

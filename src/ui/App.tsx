@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { db } from '../data/db'
 import { useDados } from './dados'
 import { useRota } from './rota'
 import { AnamneseEcra } from './AnamneseEcra'
@@ -9,6 +11,8 @@ import { Medicoes } from './Medicoes'
 import { Mais } from './Mais'
 import { Fotos } from './Fotos'
 import { AlongamentoEcra } from './Alongamento'
+import { AvisoAtualizacao } from './Atualizacao'
+import { VERSAO } from './versao'
 
 const SEPARADORES = [
   { rota: 'inicio', nome: 'Início', icone: '🏠' },
@@ -22,6 +26,11 @@ const SEPARADORES = [
 export function App() {
   const dados = useDados()
   const rota = useRota()
+  const instalacaoNova = !!dados && !dados.plano && dados.versaoVista === undefined
+  // F20: numa instalação nova não há novidades a mostrar; fica registada a versão atual.
+  useEffect(() => {
+    if (instalacaoNova) db.gravar('versaoVista', VERSAO)
+  }, [instalacaoNova])
   if (!dados) return <p className="secundario">A carregar…</p>
   if (!dados.anamnese || !dados.plano || rota.ecra === 'anamnese') return <AnamneseEcra dados={dados} />
 
@@ -29,6 +38,7 @@ export function App() {
   return (
     <>
       <main>
+        {rota.ecra !== 'exercicio' && <AvisoAtualizacao />}
         {rota.ecra === 'inicio' && <Inicio dados={dados} plano={dados.plano} anamnese={dados.anamnese} />}
         {rota.ecra === 'hoje' && <Hoje dados={dados} plano={dados.plano} anamnese={dados.anamnese} />}
         {rota.ecra === 'exercicio' && <ExercicioEcra dados={dados} plano={dados.plano} prescricaoId={rota.prescricaoId} />}

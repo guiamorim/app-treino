@@ -310,3 +310,43 @@ test('F19: lembrete de alongamento no fim do treino, alongamento do treino e por
   await expect(page.getByRole('heading', { name: /^(Bom dia|Boa tarde|Boa noite)$/ })).toBeVisible()
   await expect(page.getByRole('region', { name: 'Lembrete de alongamento' })).toHaveCount(0)
 })
+
+test('F20: versão, procurar atualizações, novidades depois de atualizar', async ({ page }) => {
+  await preencherAnamnese(page)
+  await expect(page.getByRole('heading', { name: 'Superior A' })).toBeVisible()
+
+  // Instalação nova: sem cartão de novidades.
+  await page.goto('./#/inicio')
+  await expect(page.getByRole('region', { name: 'Novidades' })).toHaveCount(0)
+
+  // Mais: versão instalada, procura sem versão nova, em preparação e histórico.
+  await page.goto('./#/mais')
+  await expect(page.getByText('Versão instalada: 1.7.0')).toBeVisible()
+  await page.getByRole('button', { name: 'Procurar atualizações' }).click()
+  await expect(page.getByText('Já tens a versão mais recente.')).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Em preparação' })).toBeVisible()
+  await page.getByText('Novidades de cada versão', { exact: true }).click()
+  await expect(page.getByText(/Alongamentos do treino do dia/)).toBeVisible()
+
+  // Quem vinha da 1.6 vê as novidades da 1.7 uma vez no Início.
+  // Texto em vez de função: a configuração de TypeScript dos testes não inclui os tipos do navegador.
+  await page.evaluate(`new Promise((fim, erro) => {
+    const pedido = indexedDB.open('app-treino')
+    pedido.onsuccess = () => {
+      const t = pedido.result.transaction('valores', 'readwrite')
+      t.objectStore('valores').put({ chave: 'versaoVista', valor: '1.6.0' })
+      t.oncomplete = () => fim()
+      t.onerror = () => erro(t.error)
+    }
+  })`)
+  await page.goto('./#/inicio')
+  await page.reload()
+  const cartao = page.getByRole('region', { name: 'Novidades' })
+  await expect(cartao.getByRole('heading', { name: /Novidades da versão 1\.7\.0/ })).toBeVisible()
+  await expect(cartao.getByText(/Aviso de versão nova/)).toBeVisible()
+  await cartao.getByRole('button', { name: 'Fechar' }).click()
+  await expect(cartao).toHaveCount(0)
+  await page.reload()
+  await expect(page.getByRole('heading', { name: /Bom dia|Boa tarde|Boa noite|Olá/ }).first()).toBeVisible()
+  await expect(page.getByRole('region', { name: 'Novidades' })).toHaveCount(0)
+})

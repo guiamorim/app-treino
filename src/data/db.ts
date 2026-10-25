@@ -3,7 +3,7 @@ import type { Anamnese, FotoAvaliacao, Medicao, Perfil, Plano, Sessao } from '..
 import { lerCopia, type Copia } from '../domain/copia'
 
 interface Valor {
-  chave: 'anamnese' | 'plano' | 'videos' | 'ultimaExportacao' | 'perfil'
+  chave: 'anamnese' | 'plano' | 'videos' | 'ultimaExportacao' | 'perfil' | 'versaoVista'
   valor: unknown
 }
 

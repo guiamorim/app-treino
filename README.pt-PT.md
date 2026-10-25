@@ -23,6 +23,12 @@ npm run test:e2e   # testes ponta a ponta num iPhone simulado (build de produç�
 npm run build      # gera dist/ com service worker e Content Security Policy
 ```
 
+## Publicar uma versão nova
+
+1. Acrescenta a versão no topo de `src/novidades.json`, com a data e um resumo curto do que muda (é o que aparece no aviso «Nova versão disponível» e no Início depois de atualizar). Atualiza «Em preparação» se for o caso.
+2. Usa o mesmo número em `package.json` (um teste confirma que são iguais).
+3. Depois de juntar ao ramo principal, o GitHub Pages publica e a app instalada mostra o aviso quando volta a abrir ou ao primeiro plano.
+
 ## Organização
 
 ```
@@ -32,6 +38,7 @@ src/domain/       regras puras em TypeScript, escritas com TDD: plano, blocos, p
 src/data/         IndexedDB (Dexie), exportação e importação
 src/ui/           ecrãs React
 src/catalog/      catálogos de exercícios e de alongamentos (validado por esquema nos testes e ao arrancar)
+src/novidades.json  novidades de cada versão e o que está em preparação, mostradas na app
 tests/e2e/        Playwright
 ```
 

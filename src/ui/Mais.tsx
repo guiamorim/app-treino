@@ -6,6 +6,7 @@ import { agoraIso, catalogo, dataCurta, diasDesde, hojeIso, type Dados } from '.
 import { descarregar, paraExportacao, TIPO_PDF, TIPO_XLSX } from './ficheiros'
 import { ir } from './rota'
 import { reduzirImagem } from './imagem'
+import { CartaoAtualizacoes } from './Atualizacao'
 
 export function Mais({ dados }: { dados: Dados }) {
   const ficheiro = useRef<HTMLInputElement>(null)
@@ -64,6 +65,7 @@ export function Mais({ dados }: { dados: Dados }) {
         {mensagem && <p role="status">{mensagem}</p>}
       </div>
 
+      <CartaoAtualizacoes />
       <div className="cartao">
         <h3>Sobre</h3>
         <p className="secundario">

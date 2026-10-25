@@ -23,6 +23,12 @@ npm run test:e2e   # end-to-end tests on a simulated iPhone (production build)
 npm run build      # builds dist/ with service worker and Content Security Policy
 ```
 
+## Releasing a new version
+
+1. Add the version at the top of `src/novidades.json`, with the date and a short summary of what changes (this is what the "Nova versão disponível" notice and Home show after updating). Update "Em preparação" (in preparation) if needed.
+2. Use the same number in `package.json` (a test checks they match).
+3. Once merged into the main branch, GitHub Pages publishes it and the installed app shows the notice the next time it opens or comes to the foreground.
+
 ## Layout
 
 ```
@@ -32,6 +38,7 @@ src/domain/       pure TypeScript rules, written with TDD: plan, blocks, progres
 src/data/         IndexedDB (Dexie), export and import
 src/ui/           React screens
 src/catalog/      exercise and stretch catalogues (schema-validated in tests and at startup)
+src/novidades.json  what's new in each version and what is in preparation, shown in the app
 tests/e2e/        Playwright
 ```
 

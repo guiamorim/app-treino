@@ -2,7 +2,7 @@
 
 [English](specification-v1.en.md) · **Português**
 
-Data: 2026-10-20 · Versão 1.6 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.6)
+Data: 2026-10-20 · Versão 1.7 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.7)
 
 ## 0. Decisões fechadas
 
@@ -154,6 +154,24 @@ Estes nomes são usados iguais na especificação, no código e na interface.
 - Restrições: um alongamento com contraindicação numa zona marcada com dor não aparece. No 2.º e 3.º trimestre de gravidez, os alongamentos deitado de costas ou de barriga não aparecem.
 - Lembrete: depois de terminar um treino, o ecrã Hoje e o Início mostram «Hora de alongar», com o tempo estimado, até eu escolher «Feito» ou «Hoje não», o que fica guardado na sessão (e na cópia de segurança). Só aparece para treinos terminados nas últimas 12 horas. É um aviso dentro da app; continua a não haver notificações (F13).
 
+### F20. Atualizações e novidades (v1.7)
+- A app procura uma versão nova quando abre e sempre que volta ao primeiro plano. No iPhone a app instalada fica muitas vezes em memória, por isso procurar só na abertura não chegava.
+- A versão nova descarrega em segundo plano e fica à espera. Quando está pronta, aparece no topo de qualquer ecrã (menos no registo de um exercício, para não interromper uma série) o aviso «Nova versão disponível: X», com o resumo do que muda e os botões «Atualizar agora» e «Depois».
+  - «Atualizar agora» ativa a versão nova e recarrega a app. Os dados ficam, porque estão no dispositivo e cada série é gravada ao concluir.
+  - «Depois» esconde o aviso até a app voltar a abrir. Se a app for fechada por completo, a versão nova entra na abertura seguinte.
+  - Sem internet ou com o ficheiro de novidades inválido, o aviso aparece sem resumo («Correções e melhorias.»).
+- Em «Mais», cartão «Atualizações»:
+  - a versão instalada;
+  - «Procurar atualizações», com o resultado: «Já tens a versão mais recente.», «Nova versão pronta.» (e o botão passa a «Atualizar agora») ou «Sem ligação à internet. Tenta mais tarde.»;
+  - «Em preparação»: o que está a ser feito ou em estudo e ainda não chegou à app;
+  - «Novidades de cada versão»: o histórico com o resumo de cada versão.
+- Depois de atualizar, o Início mostra uma vez «Novidades da versão X» com o que mudou desde a última versão vista, até eu tocar em «Fechar». A versão vista fica só no dispositivo (não entra na cópia de segurança).
+  - Numa instalação nova não aparece: para quem acabou de chegar não há nada que tenha mudado.
+  - Quem já usava a app antes da 1.7 vê as novidades da 1.7.
+- O resumo vem de `src/novidades.json`, que cada alteração com funcionalidades novas atualiza. A versão mais recente desse ficheiro é a versão da app e tem de ser igual à do `package.json`.
+- É um aviso dentro da app, visível com a app aberta. Não há notificação com a app fechada: no iPhone isso exige notificações push e um servidor (F13).
+- Passagem da 1.6: a 1.6 não tem o aviso, por isso a 1.7 entra sozinha na abertura seguinte, como as versões anteriores; a partir daí as versões novas esperam pelo «Atualizar agora».
+
 ### F14. Blocos e próxima mudança (v1.2, regras na secção 3.7)
 - No Início e no Treino de hoje: fase atual (readaptação, semana N de M do bloco, ou descarga) e a próxima mudança com data: fim da readaptação (séries completas), semana de descarga (metade das séries), ou novo bloco (troca dos exercícios isolados, com a lista do que muda).
 
@@ -240,7 +258,7 @@ Para cada Prescrição com faixa [mín, máx]:
 - Funciona offline depois da primeira abertura.
 - Abre em menos de 2 s num iPhone recente.
 - Modo claro e escuro, alvos de toque ≥ 44 px, texto legível com o telemóvel no suporte da máquina.
-- Sem analytics, sem rastreadores, sem chamadas de rede exceto vídeos.
+- Sem analytics, sem rastreadores, sem chamadas de rede exceto vídeos e, na própria origem da app, o service worker e o ficheiro de novidades (F20).
 
 ## 6. Segurança
 - Content Security Policy: `default-src 'self'`; `frame-src` só `https://www.youtube-nocookie.com` e `https://player.vimeo.com`; `img-src 'self' https://i.ytimg.com data: blob:` (v1.4: `blob:` para ler a foto escolhida antes de a recodificar).
@@ -262,7 +280,8 @@ docs/             análise de mercado e metodologia (PT e EN)
 src/domain/       TypeScript puro: plano, progressão, relatórios (TDD, sem dependências de UI)
 src/data/         IndexedDB via Dexie, exportação/importação
 src/ui/           React
-src/catalog/      exercicios.json (catálogo versionado)
+src/catalog/      exercicios.json e alongamentos.json (catálogos versionados)
+src/novidades.json  novidades de cada versão e o que está em preparação (F20)
 tests/e2e/        Playwright: anamnese → plano → sessão → relatório
 ```
 Regra: cada critério de aceitação da secção 2 tem pelo menos um teste com o seu código (ex.: `F4`, `3.2`).
