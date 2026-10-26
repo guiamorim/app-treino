@@ -546,5 +546,11 @@
   "Se o vídeo não tocar aqui, o autor bloqueou a incorporação: usa «Abrir no YouTube».": "Si el vídeo no se reproduce aquí, el autor ha bloqueado la inserción: usa «Abrir en YouTube».",
   "Os anúncios são do YouTube e a app não os pode remover. Sem anúncios: YouTube Premium (em «Abrir no YouTube») ou um link do Vimeo.": "Los anuncios son de YouTube y la app no puede quitarlos. Sin anuncios: YouTube Premium (en «Abrir en YouTube») o un enlace de Vimeo.",
   "O ficheiro não é uma imagem.": "El archivo no es una imagen.",
-  "Não foi possível processar a imagem.": "No se ha podido procesar la imagen."
+  "Não foi possível processar a imagem.": "No se ha podido procesar la imagen.",
+  "{n} exercício(s) do teu plano deixaram de existir e foram retirados. Para os substituir, gera um plano novo em «Mais».": "{n} ejercicio(s) de tu plan ya no existen y se han quitado. Para sustituirlos, genera un plan nuevo en «Más».",
+  "{dor} de 10": "{dor} de 10",
+  "Algo correu mal": "Algo ha ido mal",
+  "Os teus dados continuam guardados neste dispositivo. Exporta uma cópia de segurança antes de tentar outra coisa.": "Tus datos siguen guardados en este dispositivo. Exporta una copia de seguridad antes de intentar otra cosa.",
+  "Recarregar": "Recargar",
+  "Detalhes do erro": "Detalles del error"
 }

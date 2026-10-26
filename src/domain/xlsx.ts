@@ -81,7 +81,8 @@ export function zipSemCompressao(ficheiros: { nome: string; dados: Uint8Array }[
 }
 
 const xml = (s: string) =>
-  // Remove caracteres de controlo que o XML não aceita.
+  // Remove caracteres de controlo que o XML não aceita (o padrão tem de os conter de propósito).
+  // oxlint-disable-next-line no-control-regex
   s.replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g, '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 
 function coluna(i: number): string {

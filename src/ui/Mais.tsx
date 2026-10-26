@@ -58,7 +58,7 @@ export function Mais({ dados }: { dados: Dados }) {
           {t('Os dados existem só neste dispositivo.')} {dados.ultimaExportacao ? t('Última cópia: {data}.', { data: dataCurta(dados.ultimaExportacao) }) : t('Ainda não fizeste nenhuma cópia.')}
           {dias > 14 && ` ${t('Recomenda-se uma cópia a cada 2 semanas (guarda-a no iCloud Drive ou envia-a por email para ti).')}`}
         </p>
-        {dados.fotos.length > 0 && <p className="secundario">{t('A cópia inclui as tuas {n} fotos de avaliação: guarda-a num sítio privado.', { n: dados.fotos.length })}</p>}
+        {dados.numFotos > 0 && <p className="secundario">{t('A cópia inclui as tuas {n} fotos de avaliação: guarda-a num sítio privado.', { n: dados.numFotos })}</p>}
         <button className="primario largo" onClick={exportar}>{t('Exportar cópia (JSON)')}</button>
         <div className="linha" style={{ marginTop: 8 }}>
           <button onClick={() => descarregar(`${t('treino-historico')}-${hojeIso()}.csv`, paraCsv(dados.sessoes, catalogo), 'text/csv')}>{t('Exportar histórico (CSV)')}</button>

@@ -4,12 +4,15 @@ export default defineConfig({
   testDir: 'tests/e2e',
   timeout: 30_000,
   use: {
-    ...devices['iPhone 13'],
-    browserName: 'chromium',
     baseURL: 'http://localhost:4173/app-treino/',
     locale: 'pt-PT',
     timezoneId: 'Europe/Lisbon',
   },
+  // F22.7: o mesmo iPhone com o motor do Chrome e com o do Safari (WebKit), que é o que a app usa no iPhone.
+  projects: [
+    { name: 'iphone-chromium', use: { ...devices['iPhone 13'], browserName: 'chromium' } },
+    { name: 'iphone-webkit', use: { ...devices['iPhone 13'] } },
+  ],
   webServer: {
     command: 'npm run build && npx vite preview --port 4173 --strictPort',
     url: 'http://localhost:4173/app-treino/',

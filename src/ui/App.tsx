@@ -13,6 +13,9 @@ import { Fotos } from './Fotos'
 import { AlongamentoEcra } from './Alongamento'
 import { AvisoAtualizacao } from './Atualizacao'
 import { VERSAO } from './versao'
+import { Temporizador } from './Temporizador'
+import { terminarDescanso, useDescanso } from './descanso'
+import { treinoADecorrer, useEcraLigado } from './ecraLigado'
 import { m, t } from '../i18n'
 
 const SEPARADORES = [
@@ -27,6 +30,8 @@ const SEPARADORES = [
 export function App() {
   const dados = useDados()
   const rota = useRota()
+  const descanso = useDescanso()
+  useEcraLigado(!!dados && treinoADecorrer(dados.sessoes))
   const instalacaoNova = !!dados && !dados.plano && dados.versaoVista === undefined
   // F20: numa instalação nova não há novidades a mostrar; fica registada a versão atual.
   useEffect(() => {
@@ -39,6 +44,7 @@ export function App() {
   return (
     <>
       <main>
+        {descanso && <Temporizador fimEm={descanso} fechar={terminarDescanso} />}
         {rota.ecra !== 'exercicio' && <AvisoAtualizacao />}
         {rota.ecra === 'inicio' && <Inicio dados={dados} plano={dados.plano} anamnese={dados.anamnese} />}
         {rota.ecra === 'hoje' && <Hoje dados={dados} plano={dados.plano} anamnese={dados.anamnese} />}

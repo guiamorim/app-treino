@@ -3,9 +3,10 @@ import { db } from '../data/db'
 import { pdfRelatorioPt } from '../domain/exportar'
 import { compararFotos, fotosPorMes } from '../domain/fotos'
 import { INFO_MEDIDAS, MEDIDAS_CM, POSES, type FotoAvaliacao, type Medicao, type Pose } from '../domain/types'
-import { agoraIso, catalogo, dataCurta, diasDesde, hojeIso, kg, novoId, type Dados } from './dados'
+import { agoraIso, catalogo, dataCurta, diasDesde, hojeIso, kg, novoId, useFotos, type Dados } from './dados'
 import { descarregar, paraExportacao, TIPO_PDF } from './ficheiros'
 import { reduzirImagem } from './imagem'
+import { Janela } from './Janela'
 import { locale, m, t, traduzido } from '../i18n'
 
 const NOMES_POSES: Record<Pose, string> = traduzido({ frente: m('Frente'), lado: m('Lado'), costas: m('Costas') })
@@ -48,6 +49,12 @@ function GuiaFotos({ aberto }: { aberto: boolean }) {
 }
 
 export function Fotos({ dados }: { dados: Dados }) {
+  const fotos = useFotos()
+  if (!fotos) return <p className="secundario">{t('A carregar…')}</p>
+  return <FotosEcra dados={dados} fotos={fotos} />
+}
+
+function FotosEcra({ dados, fotos }: { dados: Dados; fotos: FotoAvaliacao[] }) {
   const ficheiro = useRef<HTMLInputElement>(null)
   const [data, setData] = useState(hojeIso())
   const [pose, setPose] = useState<Pose>('frente')
@@ -56,8 +63,8 @@ export function Fotos({ dados }: { dados: Dados }) {
   const [aGravar, setAGravar] = useState(false)
   const [aberta, setAberta] = useState<FotoAvaliacao | null>(null)
 
-  const meses = fotosPorMes(dados.fotos)
-  const ultima = dados.fotos.map((f) => f.data).sort().at(-1)
+  const meses = fotosPorMes(fotos)
+  const ultima = fotos.map((f) => f.data).sort().at(-1)
   const dias = diasDesde(ultima)
 
   const [mesAntes, setMesAntes] = useState(meses.at(-1)?.mes ?? '')
@@ -65,7 +72,7 @@ export function Fotos({ dados }: { dados: Dados }) {
   const [poseComparar, setPoseComparar] = useState<Pose>('frente')
   const antes = mesAntes || meses.at(-1)?.mes || ''
   const depois = mesDepois || meses[0]?.mes || ''
-  const comp = meses.length >= 2 ? compararFotos(dados.fotos, dados.medicoes, antes, depois, poseComparar) : { diferencas: {} }
+  const comp = meses.length >= 2 ? compararFotos(fotos, dados.medicoes, antes, depois, poseComparar) : { diferencas: {} }
 
   async function adicionar(f: File) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(data)) return setErro(t('Data inválida.'))
@@ -91,7 +98,7 @@ export function Fotos({ dados }: { dados: Dados }) {
           {ultima ? t('Última foto há {n} dias.', { n: Math.floor(dias) }) : t('Ainda sem fotos.')} {t('Tira-as com a mesma luz, à mesma hora e à mesma distância, para a comparação ser justa.')}
         </p>
       )}
-      <GuiaFotos aberto={dados.fotos.length === 0} />
+      <GuiaFotos aberto={fotos.length === 0} />
 
       <div className="cartao">
         <div className="linha">
@@ -147,7 +154,7 @@ export function Fotos({ dados }: { dados: Dados }) {
             </div>
             {Object.keys(comp.diferencas).length > 0 && <p role="status">{t('Diferença:')} {textoDiferencas(comp.diferencas)}</p>}
             {comp.antes && comp.depois && !(comp.antes.medicao && comp.depois.medicao) && <p className="secundario">{t('Regista o peso e as medidas em Medições perto da data das fotos para veres a diferença.')}</p>}
-            <button className="largo" style={{ marginTop: 8 }} onClick={() => descarregar(`${t('relatorio-pt')}-${antes}-${depois}.pdf`, pdfRelatorioPt(paraExportacao(dados), catalogo, antes < depois ? antes : depois, antes < depois ? depois : antes, agoraIso()), TIPO_PDF)}>
+            <button className="largo" style={{ marginTop: 8 }} onClick={() => descarregar(`${t('relatorio-pt')}-${antes}-${depois}.pdf`, pdfRelatorioPt(paraExportacao(dados, fotos), catalogo, antes < depois ? antes : depois, antes < depois ? depois : antes, agoraIso()), TIPO_PDF)}>
               {t('Relatório para o PT (PDF)')}
             </button>
             <p className="secundario">{t('Fotos das três poses lado a lado, medidas e treinos do período, para enviares ao teu personal trainer. Contém as tuas fotos: partilha-o só com quem confias.')}</p>
@@ -172,14 +179,14 @@ export function Fotos({ dados }: { dados: Dados }) {
       ))}
 
       {aberta && (
-        <div className="modal" role="dialog" aria-modal="true" aria-label={t('Foto')} onClick={() => setAberta(null)}>
+        <Janela rotulo={t('Foto')} fechar={() => setAberta(null)}>
           <img className="foto-grande" src={aberta.imagem} alt={`${NOMES_POSES[aberta.pose]}, ${dataCurta(aberta.data)}`} />
           <p style={{ color: '#cbd5e1', textAlign: 'center' }}>{NOMES_POSES[aberta.pose]} · {dataCurta(aberta.data)}{aberta.nota ? ` · ${aberta.nota}` : ''}</p>
-          <div className="acoes" onClick={(e) => e.stopPropagation()}>
+          <div className="acoes">
             <button className="perigo" onClick={async () => { if (confirm(t('Apagar esta foto?'))) { await db.fotos.delete(aberta.id); setAberta(null) } }}>{t('Apagar')}</button>
             <button className="primario" onClick={() => setAberta(null)}>{t('Fechar')}</button>
           </div>
-        </div>
+        </Janela>
       )}
     </>
   )

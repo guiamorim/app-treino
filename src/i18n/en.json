@@ -546,5 +546,11 @@
   "Se o vídeo não tocar aqui, o autor bloqueou a incorporação: usa «Abrir no YouTube».": "If the video won't play here, its author has blocked embedding: use “Open in YouTube”.",
   "Os anúncios são do YouTube e a app não os pode remover. Sem anúncios: YouTube Premium (em «Abrir no YouTube») ou um link do Vimeo.": "The ads come from YouTube and the app can't remove them. No ads: YouTube Premium (via “Open in YouTube”) or a Vimeo link.",
   "O ficheiro não é uma imagem.": "The file isn't an image.",
-  "Não foi possível processar a imagem.": "Couldn't process the image."
+  "Não foi possível processar a imagem.": "Couldn't process the image.",
+  "{n} exercício(s) do teu plano deixaram de existir e foram retirados. Para os substituir, gera um plano novo em «Mais».": "{n} exercise(s) in your plan no longer exist and were removed. To replace them, generate a new plan in “More”.",
+  "{dor} de 10": "{dor} out of 10",
+  "Algo correu mal": "Something went wrong",
+  "Os teus dados continuam guardados neste dispositivo. Exporta uma cópia de segurança antes de tentar outra coisa.": "Your data is still saved on this device. Export a backup before trying anything else.",
+  "Recarregar": "Reload",
+  "Detalhes do erro": "Error details"
 }

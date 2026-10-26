@@ -6,4 +6,4 @@
 - **Domain language.** Code identifiers use the Portuguese domain terms from section 1 of the specification. The app UI is in European Portuguese, English and Spanish (F21).
 - **Releases.** A change with new features adds a version at the top of `src/novidades.json` (summary in European Portuguese with English and Spanish under `traducoes`, shown in the app) and bumps `package.json` to the same number (F20).
 - **Three UI languages.** Every new text shown in the app is written in Portuguese inside `t('…')` (or `m('…')` for constants) and gets its English and Spanish translation in `src/i18n/en.json` and `src/i18n/es.json` in the same change; new exercises and stretches also need entries in `src/catalog/i18n/`. The F21 test fails otherwise.
-- **Checks before pushing:** `npm run typecheck`, `npm test`, `npm run test:e2e`.
+- **Checks before pushing:** `npm run typecheck`, `npm run lint`, `npm test`, `npm run test:e2e` (Chromium and WebKit; CI runs both, and publishing waits for CI).

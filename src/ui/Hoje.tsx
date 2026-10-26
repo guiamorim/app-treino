@@ -60,7 +60,7 @@ export function Hoje({ dados, plano, anamnese }: { dados: Dados; plano: Plano; a
         <ul className="lista">
           {treino.prescricoes.map((p) => {
             const reg = sessao ? registoDe(sessao, p.id) : undefined
-            const ex = catalogo.get(reg?.exercicioId ?? p.exercicioId)!
+            const ex = (reg && catalogo.get(reg.exercicioId)) ?? catalogo.get(p.exercicioId)!
             const e = estadoExercicio(reg, p)
             const unidade = ex.medida === 'segundos' ? 's' : ''
             return (
