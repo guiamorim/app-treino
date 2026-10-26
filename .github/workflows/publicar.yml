@@ -1,6 +1,6 @@
 name: Publicar no GitHub Pages
 
-# Publica só depois de o CI (verificação de tipos, ESLint, testes de unidade e ponta a ponta) passar no main.
+# Publica só depois de o CI (verificação de tipos, oxlint, testes de unidade e ponta a ponta) passar no main.
 on:
   workflow_run:
     workflows: [CI]
