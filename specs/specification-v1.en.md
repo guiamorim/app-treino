@@ -2,7 +2,7 @@
 
 **English** · [Português](especificacao-v1.md)
 
-Date: 2026-10-20 · Version 1.9 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.9)
+Date: 2026-10-20 · Version 1.10 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.10)
 
 The Portuguese version is the reference used for the domain names in the code. Both versions must stay in sync.
 
@@ -185,8 +185,8 @@ RIR = reps in reserve: how many more reps you could still have done at the end o
 - The translations were written without review by a native translator.
 - The repository documentation stays in Portuguese and English.
 
-### F22. Robustness and comfort while training (v1.9)
-Improvements from the 2026-10-26 review.
+### F22. Robustness and comfort while training (v1.9 and v1.10)
+Improvements from the 2026-10-26 review. F22.9 to F22.13 shipped in v1.10.
 - **F22.1 The app never goes blank.**
   - An exercise in the plan that the catalogue does not know is removed from the plan shown, with the warning "N exercise(s) in your plan no longer exist and were removed. To replace them, generate a new plan in "More".". This can happen after a new catalogue version, or with a backup imported from a newer version.
   - If a screen fails for any other reason, "Algo correu mal" (something went wrong) appears, with "Export backup (JSON)", "Reload" and the error details. The backup reads the database directly, so it works even when the screen is broken.
@@ -208,6 +208,15 @@ Improvements from the 2026-10-26 review.
   - The code passes `oxlint` (correctness and React hooks rules; the rule that forbids reading the date while rendering is off, because the app shows dates relative to today).
   - Publishing to GitHub Pages only runs after CI passes on the main branch.
 - **F22.8 Photos kept separate.** Progress photos are read only on the screens that show them, not on every saved set.
+- **F22.9 Kilograms or pounds.**
+  - In "More" (and in the first questionnaire) you choose "kg" or "lb". The default is "lb" on a phone set to US English and "kg" everywhere else. The choice stays on this device only.
+  - Loads and body weight are shown and typed in the chosen unit: set logging, suggestions, last time, Reports, Measurements, Home, Photos, the questionnaire, PDF and Excel. Body measurements stay in centimetres.
+  - Data is always stored in kilograms, and so are the backup and the CSV. Changing the unit changes nothing that is already logged.
+  - In pounds, progression (section 4.1) uses steps of 5 lb where the exercise goes up 2 or 2.5 kg, 10 lb where it goes up 5 kg and 2.5 lb where it goes up 1 kg (always multiples of 2.5 lb, at least 2.5 lb). With a light load it goes up half, rounded to 2.5 lb. The 10% drop rounds to 0.5 lb.
+- **F22.10 Correcting a set.** Each logged set has "Edit" (✎): the row turns into load, reps (or seconds) and RIR fields, with "Save" and "Cancel". Values are validated as when logging.
+- **F22.11 Undoing a delete.** Deleting a set is immediate and shows "Set N deleted." with "Undo", which puts it back in the same place. The message goes away when the next set is logged or when leaving the exercise.
+- **F22.12 Languages on demand.** The English and Spanish translations and catalogues are only loaded when that language is chosen. They are then kept for offline use like the rest of the app.
+- **F22.13 Drawn icons.** The bottom bar uses line-drawn icons (SVG) instead of emoji, looking the same on every phone and taking the tab's text colour.
 
 ### F14. Blocks and next change (v1.2, rules in section 3.7)
 - On Home and on Today's workout: current phase (re-adaptation, week N of M of the block, or deload) and the next change with its date: end of re-adaptation (full sets), deload week (half the sets), or new block (isolation exercises rotate, listing what changes).
@@ -284,7 +293,7 @@ Target frequency: each major group 2×/week.
 ## 4. Progression rules (double progression)
 
 For each Prescription with range [min, max]:
-1. If every set in the last session reached max reps with RIR ≥ 1: increase the load by the exercise's increment (barbell lower body 5 kg; barbell upper body 2.5 kg; dumbbells 2 kg; machine 1 plate or 2.5 kg) and go back to min reps. (v1.3) If the increment is more than 10% of the current load, increase by half the increment (rounded to 0.25 kg, minimum 1 kg). E.g. a 6 kg dumbbell goes up 1 kg, not 2 kg. This mostly helps people using lighter loads.
+1. If every set in the last session reached max reps with RIR ≥ 1: increase the load by the exercise's increment (barbell lower body 5 kg; barbell upper body 2.5 kg; dumbbells 2 kg; machine 1 plate or 2.5 kg) and go back to min reps. (v1.3) If the increment is more than 10% of the current load, increase by half the increment (rounded to 0.25 kg, minimum 1 kg). E.g. a 6 kg dumbbell goes up 1 kg, not 2 kg. This mostly helps people using lighter loads. For pounds, see F22.9.
 2. Otherwise: keep the load and try +1 rep on the weakest set.
 3. If below min reps in 2 consecutive sessions: reduce the load by 10%.
 4. Pain ≥ 4: no load increase and a substitute is suggested. Pain ≥ 7: recommends stopping the exercise today and shows a warning to get assessed.

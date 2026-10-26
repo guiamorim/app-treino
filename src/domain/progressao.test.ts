@@ -1,5 +1,6 @@
-import { describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { sugerir } from './progressao'
+import { definirUnidade, KG_POR_LB, paraUnidade } from './unidades'
 import { catalogo } from './fixtures'
 import type { Prescricao, RegistoExercicio, Serie } from './types'
 
@@ -98,5 +99,35 @@ describe('F6 progressão (dupla progressão, secção 4)', () => {
     const lp = (carga: number) => [{ prescricaoId: p.id, exercicioId: 'leg-press', series: [s(carga, 12, 2), s(carga, 12, 2)] }]
     expect(sugerir({ prescricao: p, exercicio: legPress, readaptacao: false, historico: lp(30) }).carga).toBe(32.5)
     expect(sugerir({ prescricao: p, exercicio: legPress, readaptacao: false, historico: lp(60) }).carga).toBe(65)
+  })
+})
+
+describe('F22.9 progressão em libras', () => {
+  const lb = (n: number) => n * KG_POR_LB
+  const emLb = (r: { carga: number | null }) => paraUnidade(r.carga!, 'lb')
+  const topo = (cargaLb: number) => reg([s(lb(cargaLb), 12, 2), s(lb(cargaLb), 12, 2)])
+  beforeEach(() => definirUnidade('lb'))
+  afterEach(() => definirUnidade('kg'))
+
+  it('o incremento passa a libras redondas: 2 kg → 5 lb, 5 kg → 10 lb', () => {
+    const r = sugerir({ ...base, historico: [topo(50)] })
+    expect(emLb(r)).toBeCloseTo(55, 6)
+    expect(r.motivo).toMatch(/sobe para 55 lb/)
+    const legPress = catalogo.get('leg-press')!
+    const p: Prescricao = { ...pr, exercicioId: 'leg-press' }
+    const h = [{ prescricaoId: p.id, exercicioId: 'leg-press', series: [s(lb(200), 12, 2), s(lb(200), 12, 2)] }]
+    expect(emLb(sugerir({ prescricao: p, exercicio: legPress, readaptacao: false, historico: h }))).toBeCloseTo(210, 6)
+  })
+
+  it('com carga leve sobe metade, arredondada a 2,5 lb', () => {
+    const r = sugerir({ ...base, historico: [topo(20)] })
+    expect(emLb(r)).toBeCloseTo(22.5, 6)
+    expect(r.motivo).toMatch(/Subida de 2,5 lb/)
+  })
+
+  it('a descida de 10% arredonda a 0,5 lb e a mensagem de manter usa libras', () => {
+    const abaixo = reg([s(lb(137), 7), s(lb(137), 6)])
+    expect(emLb(sugerir({ ...base, historico: [abaixo, abaixo] }))).toBeCloseTo(123, 6)
+    expect(sugerir({ ...base, historico: [reg([s(lb(135), 10), s(lb(135), 9)])] }).motivo).toMatch(/Mantém 135 lb/)
   })
 })

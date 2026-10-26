@@ -1,6 +1,31 @@
 {
   "versoes": [
     {
+      "versao": "1.10.0",
+      "data": "2026-10-26",
+      "itens": [
+        "Podes usar libras em vez de quilos: escolhe em «Mais». O que já registaste não muda.",
+        "Cada série registada pode ser corrigida (✎), e apagar uma série mostra «Desfazer».",
+        "Ícones novos na barra de baixo, e a app só carrega as traduções do idioma que usas."
+      ],
+      "traducoes": {
+        "en": {
+          "itens": [
+            "You can use pounds instead of kilograms: choose it in “More”. What you have already logged does not change.",
+            "Every logged set can be edited (✎), and deleting a set shows “Undo”.",
+            "New icons in the bottom bar, and the app only loads the translations for the language you use."
+          ]
+        },
+        "es": {
+          "itens": [
+            "Puedes usar libras en vez de kilos: elígelo en «Más». Lo que ya registraste no cambia.",
+            "Cada serie registrada se puede corregir (✎), y borrar una serie muestra «Deshacer».",
+            "Iconos nuevos en la barra inferior, y la app solo carga las traducciones del idioma que usas."
+          ]
+        }
+      }
+    },
+    {
       "versao": "1.9.0",
       "data": "2026-10-26",
       "itens": [

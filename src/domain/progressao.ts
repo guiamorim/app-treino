@@ -1,5 +1,6 @@
 import { locale, t } from '../i18n'
 import type { Exercicio, Prescricao, RegistoExercicio } from './types'
+import { deUnidade, KG_POR_LB, paraUnidade, peso, unidadePeso, type UnidadePeso } from './unidades'
 
 export interface Sugestao {
   /** null quando ainda não há histórico. */
@@ -25,12 +26,25 @@ const DOR_SEM_SUBIDA = 4
 const DOR_PARAR = 7
 const INCREMENTO_RELATIVO_MAX = 0.1
 const INCREMENTO_MINIMO = 1
+/** F22.9: em libras, os passos são múltiplos de 2,5 lb (o disco mais pequeno comum). */
+const PASSO_LB = 2.5
 
-const arredondar = (kg: number) => Math.floor(kg * 2) / 2
-const fmt = (kg: number) => kg.toLocaleString(locale())
+/** Arredonda para baixo a 0,5 da unidade. */
+const arredondar = (kg: number, u: UnidadePeso) => deUnidade(Math.floor(paraUnidade(kg, u) * 2) / 2, u)
+const multiploLb = (lb: number) => Math.max(PASSO_LB, Math.round(lb / PASSO_LB) * PASSO_LB)
+
+/** Incremento na unidade: o do exercício em kg, ou o equivalente em libras redondas (2,5 kg → 5 lb). Com carga leve, metade. */
+function incremento(incrementoKg: number, carga: number, u: UnidadePeso): { valor: number; leve: boolean } {
+  const normal = u === 'kg' ? incrementoKg : multiploLb(incrementoKg / KG_POR_LB)
+  // v1.3: com cargas leves, o incremento normal seria um salto grande demais.
+  const leve = normal > paraUnidade(carga, u) * INCREMENTO_RELATIVO_MAX
+  if (!leve) return { valor: normal, leve }
+  return { valor: u === 'kg' ? Math.max(INCREMENTO_MINIMO, Math.round((normal / 2) * 4) / 4) : multiploLb(normal / 2), leve }
+}
 
 /** Especificação, secção 4 (dupla progressão). */
 export function sugerir({ prescricao, exercicio, historico, readaptacao, descarga }: Entrada): Sugestao {
+  const u = unidadePeso()
   const [min, max] = prescricao.faixa
   const comSeries = historico.filter((h) => h.series.length > 0)
   const ultima = comSeries.at(-1)
@@ -64,7 +78,7 @@ export function sugerir({ prescricao, exercicio, historico, readaptacao, descarg
   }
 
   if (descarga) {
-    return { carga, reps: min, subiu: false, motivo: carga > 0 ? t('Semana de descarga: mantém {carga} kg, faz menos séries e para longe da falha (RIR {a}–{b}).', { carga: fmt(carga), a: prescricao.rir[0], b: prescricao.rir[1] }) : t('Semana de descarga: faz menos séries e para longe da falha (RIR {a}–{b}).', { a: prescricao.rir[0], b: prescricao.rir[1] }) }
+    return { carga, reps: min, subiu: false, motivo: carga > 0 ? t('Semana de descarga: mantém {carga}, faz menos séries e para longe da falha (RIR {a}–{b}).', { carga: peso(carga), a: prescricao.rir[0], b: prescricao.rir[1] }) : t('Semana de descarga: faz menos séries e para longe da falha (RIR {a}–{b}).', { a: prescricao.rir[0], b: prescricao.rir[1] }) }
   }
 
   if (exercicio.medida === 'segundos') {
@@ -87,7 +101,7 @@ export function sugerir({ prescricao, exercicio, historico, readaptacao, descarg
 
   const duasAbaixo = comSeries.length >= 2 && comSeries.slice(-2).every((h) => h.series.some((s) => s.reps < min))
   if (duasAbaixo) {
-    return { carga: arredondar(carga * 0.9), reps: min, subiu: false, motivo: t('Ficaste abaixo de {min} {unidade} em 2 sessões seguidas: baixa a carga 10%.', { min, unidade }) }
+    return { carga: arredondar(carga * 0.9, u), reps: min, subiu: false, motivo: t('Ficaste abaixo de {min} {unidade} em 2 sessões seguidas: baixa a carga 10%.', { min, unidade }) }
   }
 
   if (noTopo && semFalha) {
@@ -97,15 +111,13 @@ export function sugerir({ prescricao, exercicio, historico, readaptacao, descarg
     if (exercicio.incrementoKg === 0) {
       return { carga, reps: max, subiu: false, motivo: t('Chegaste a {max} reps em todas as séries: aumenta a dificuldade (ex.: variação mais difícil ou mochila com peso).', { max }) }
     }
-    // v1.3: com cargas leves, o incremento normal seria um salto grande demais.
-    const leve = exercicio.incrementoKg > carga * INCREMENTO_RELATIVO_MAX
-    const incremento = leve ? Math.max(INCREMENTO_MINIMO, Math.round((exercicio.incrementoKg / 2) * 4) / 4) : exercicio.incrementoKg
-    const nova = carga + incremento
+    const inc = incremento(exercicio.incrementoKg, carga, u)
+    const nova = deUnidade(paraUnidade(carga, u) + inc.valor, u)
     return {
       carga: nova,
       reps: min,
       subiu: true,
-      motivo: t('Fizeste {max} reps em todas as séries: sobe para {nova} kg e volta a {min} reps.', { max, nova: fmt(nova), min }) + (leve ? ' ' + t('Subida de {kg} kg porque a carga ainda é leve.', { kg: fmt(incremento) }) : ''),
+      motivo: t('Fizeste {max} reps em todas as séries: sobe para {nova} e volta a {min} reps.', { max, nova: peso(nova), min }) + (inc.leve ? ' ' + t('Subida de {incremento} porque a carga ainda é leve.', { incremento: `${inc.valor.toLocaleString(locale())} ${u}` }) : ''),
     }
   }
 
@@ -113,5 +125,5 @@ export function sugerir({ prescricao, exercicio, historico, readaptacao, descarg
     return { carga, reps: max, subiu: false, motivo: t('Chegaste ao topo mas até à falha: repete esta carga com 1 rep de reserva antes de subir.') }
   }
 
-  return { carga, reps: Math.min(maisBaixa + 1, max), subiu: false, motivo: t('Mantém {carga} kg e tenta +1 rep na série mais fraca.', { carga: fmt(carga) }) }
+  return { carga, reps: Math.min(maisBaixa + 1, max), subiu: false, motivo: t('Mantém {carga} e tenta +1 rep na série mais fraca.', { carga: peso(carga) }) }
 }

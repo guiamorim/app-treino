@@ -5,6 +5,7 @@ import { gerarPdf, lerJpeg, quebrarLinha } from './pdf'
 import { gerarPlano } from './plano'
 import type { Sessao } from './types'
 import { crc32 } from './xlsx'
+import { definirUnidade } from './unidades'
 
 const AGORA = '2026-10-24T10:00:00.000Z'
 const plano = gerarPlano(perfilExemplo, catalogo, { id: 'p1', agora: '2026-10-01T08:00:00.000Z' })
@@ -93,6 +94,20 @@ describe('F17 exportar ficha e histórico', () => {
     expect(dec('xl/workbook.xml')).toContain('<sheet name="Ficha" sheetId="1" r:id="rId1"/><sheet name="Histórico" sheetId="2" r:id="rId2"/><sheet name="Medições" sheetId="3" r:id="rId3"/>')
     expect(dec('xl/worksheets/sheet2.xml')).toContain('<c r="E2"><v>20</v></c>')
     expect(dec('xl/worksheets/sheet3.xml')).toContain('<c r="B3"><v>88.5</v></c>')
+  })
+
+  it('F22.9 em libras: cabeçalhos e valores na unidade escolhida', () => {
+    definirUnidade('lb')
+    try {
+      const h = folhaHistorico([sessao], plano, catalogo)
+      expect(h.cabecalho[4]).toBe('Carga (lb)')
+      expect(h.linhas[0]![4]).toBeCloseTo(44.09, 2)
+      const m = folhaMedicoes([dados.medicoes[0]!])
+      expect(m.cabecalho[1]).toBe('Peso (lb)')
+      expect(m.linhas[0]![1]).toBeCloseTo(198.42, 2)
+    } finally {
+      definirUnidade('kg')
+    }
   })
 
   it('crc32 dá o valor de referência', () => {
