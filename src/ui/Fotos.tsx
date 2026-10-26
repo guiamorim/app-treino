@@ -3,9 +3,10 @@ import { db } from '../data/db'
 import { pdfRelatorioPt } from '../domain/exportar'
 import { compararFotos, fotosPorMes } from '../domain/fotos'
 import { INFO_MEDIDAS, MEDIDAS_CM, POSES, type FotoAvaliacao, type Medicao, type Pose } from '../domain/types'
-import { agoraIso, catalogo, dataCurta, diasDesde, hojeIso, kg, novoId, useFotos, type Dados } from './dados'
+import { agoraIso, catalogo, dataCurta, diasDesde, hojeIso, novoId, useFotos, type Dados } from './dados'
 import { descarregar, paraExportacao, TIPO_PDF } from './ficheiros'
 import { reduzirImagem } from './imagem'
+import { decimal, peso } from '../domain/unidades'
 import { Janela } from './Janela'
 import { locale, m, t, traduzido } from '../i18n'
 
@@ -13,16 +14,16 @@ const NOMES_POSES: Record<Pose, string> = traduzido({ frente: m('Frente'), lado:
 const MAX_LADO = 1280
 
 const nomeMes = (mes: string) => new Date(`${mes}-15T12:00:00`).toLocaleDateString(locale(), { month: 'long', year: 'numeric' })
-const sinal = (n: number, unidade: string) => `${n > 0 ? '+' : ''}${kg(n)} ${unidade}`
+const sinal = (n: number, unidade: string) => `${n > 0 ? '+' : ''}${decimal(n)} ${unidade}`
 
 const medidasTexto = (md: Medicao) => [
-  md.pesoKg !== undefined && `${kg(md.pesoKg)} kg`,
-  ...MEDIDAS_CM.map((k) => md[k] !== undefined && `${INFO_MEDIDAS[k].nome.toLowerCase()} ${kg(md[k])} cm`),
+  md.pesoKg !== undefined && peso(md.pesoKg),
+  ...MEDIDAS_CM.map((k) => md[k] !== undefined && `${INFO_MEDIDAS[k].nome.toLowerCase()} ${decimal(md[k])} cm`),
 ].filter(Boolean).join(' · ')
 
 function textoDiferencas(d: ReturnType<typeof compararFotos>['diferencas']) {
   return [
-    d.pesoKg !== undefined && sinal(d.pesoKg, 'kg'),
+    d.pesoKg !== undefined && `${d.pesoKg > 0 ? '+' : ''}${peso(d.pesoKg)}`,
     ...MEDIDAS_CM.map((k) => d[k] !== undefined && sinal(d[k], t('cm de {medida}', { medida: INFO_MEDIDAS[k].nome.toLowerCase() }))),
   ].filter(Boolean).join(' · ')
 }

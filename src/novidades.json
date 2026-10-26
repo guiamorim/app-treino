@@ -7,7 +7,10 @@
         "Fim do descanso com um som curto (com o telemóvel fora do silêncio) e ecrã sempre ligado durante o treino.",
         "O descanso continua visível se mudares de ecrã, e um toque duplo em «Concluir série» já não grava duas séries.",
         "A cópia de segurança e os PDF abrem a folha de partilha do iPhone, para guardares em Ficheiros, iCloud Drive ou enviares por email.",
-        "Mais contraste no modo escuro e nas caixas de texto, e a app já não fica em branco se algo correr mal: mostra o erro e deixa exportar a cópia."
+        "Mais contraste no modo escuro e nas caixas de texto, e a app já não fica em branco se algo correr mal: mostra o erro e deixa exportar a cópia.",
+        "Podes usar libras em vez de quilos: escolhe em «Mais». O que já registaste não muda.",
+        "Cada série registada pode ser corrigida (✎), e apagar uma série mostra «Desfazer».",
+        "Ícones novos na barra de baixo, e a app só carrega as traduções do idioma que usas."
       ],
       "traducoes": {
         "en": {
@@ -15,7 +18,10 @@
             "A short sound when your rest ends (with the phone off silent mode), and the screen stays on during your workout.",
             "The rest timer stays visible when you switch screens, and a double tap on “Complete set” no longer saves two sets.",
             "The backup and the PDFs open the iPhone share sheet, so you can save them to Files or iCloud Drive or email them.",
-            "More contrast in dark mode and in text boxes, and the app no longer goes blank if something goes wrong: it shows the error and lets you export your backup."
+            "More contrast in dark mode and in text boxes, and the app no longer goes blank if something goes wrong: it shows the error and lets you export your backup.",
+            "You can use pounds instead of kilograms: choose it in “More”. What you have already logged does not change.",
+            "Every logged set can be edited (✎), and deleting a set shows “Undo”.",
+            "New icons in the bottom bar, and the app only loads the translations for the language you use."
           ]
         },
         "es": {
@@ -23,7 +29,10 @@
             "Un sonido corto al terminar el descanso (con el móvil sin silencio) y la pantalla siempre encendida durante el entrenamiento.",
             "El descanso sigue visible si cambias de pantalla, y un doble toque en «Completar serie» ya no guarda dos series.",
             "La copia de seguridad y los PDF abren el menú de compartir del iPhone, para guardarlos en Archivos o iCloud Drive o enviarlos por correo.",
-            "Más contraste en modo oscuro y en los campos de texto, y la app ya no se queda en blanco si algo falla: muestra el error y deja exportar la copia."
+            "Más contraste en modo oscuro y en los campos de texto, y la app ya no se queda en blanco si algo falla: muestra el error y deja exportar la copia.",
+            "Puedes usar libras en vez de kilos: elígelo en «Más». Lo que ya registraste no cambia.",
+            "Cada serie registrada se puede corregir (✎), y borrar una serie muestra «Deshacer».",
+            "Iconos nuevos en la barra inferior, y la app solo carga las traducciones del idioma que usas."
           ]
         }
       }

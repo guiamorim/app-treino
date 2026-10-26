@@ -88,13 +88,17 @@ input[type='range'] { padding: 0; }
 .ok-borda { border-left: 4px solid var(--ok); }
 .numero { font-size: 2rem; font-weight: 700; font-variant-numeric: tabular-nums; }
 .series { display: grid; grid-template-columns: auto 1fr 1fr 1fr auto; gap: 6px 10px; align-items: center; font-variant-numeric: tabular-nums; }
+.acoes-serie { display: flex; gap: 6px; }
+.acoes-serie button { min-height: 40px; min-width: 40px; padding: 4px 10px; }
+.corrigir-serie { grid-column: 1 / -1; padding: 8px 0; border-top: 1px solid var(--linha); border-bottom: 1px solid var(--linha); }
+.corrigir-serie label { margin-top: 0; }
 .navegacao {
   position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: center;
   background: var(--cartao); border-top: 1px solid var(--linha); padding-bottom: env(safe-area-inset-bottom); z-index: 10;
 }
 .navegacao a { flex: 1; max-width: 160px; text-align: center; padding: 10px 4px 12px; text-decoration: none; color: var(--texto-2); font-size: 0.75rem; min-height: 56px; }
 .navegacao a[aria-current='page'] { color: var(--acento); font-weight: 700; }
-.navegacao .icone { display: block; font-size: 1.3rem; line-height: 1.3; }
+.navegacao .icone { display: block; width: 24px; height: 24px; margin: 2px auto 3px; }
 dialog.modal { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; border: 0; color: inherit; background: rgb(0 0 0 / 0.85); padding: 16px; }
 dialog.modal[open] { display: flex; flex-direction: column; justify-content: center; }
 dialog.modal::backdrop { background: transparent; }

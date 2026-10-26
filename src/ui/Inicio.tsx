@@ -6,7 +6,8 @@ import { semanaDoPlano, treinoEfetivo } from '../domain/plano'
 import { aderencia, inicioSemana } from '../domain/relatorios'
 import { proximoTreino } from '../domain/sessao'
 import type { Anamnese, Plano, Sessao } from '../domain/types'
-import { kg, type Dados } from './dados'
+import { decimal, peso as textoPeso } from '../domain/unidades'
+import type { Dados } from './dados'
 import { LembreteAlongamento } from './Alongamento'
 import { NovidadesInicio } from './Atualizacao'
 import { textoFase, TrocasProximoBloco } from './Fase'
@@ -14,7 +15,7 @@ import { ir } from './rota'
 import { t } from '../i18n'
 
 const somaDias = (d: Date, n: number) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n)
-const horas = (h: number) => `${kg(Math.round(h * 10) / 10)} h`
+const horas = (h: number) => `${decimal(Math.round(h * 10) / 10)} h`
 const volumeEntre = (sessoes: Sessao[], ini: Date, fim: Date) =>
   sessoes.filter((s) => Date.parse(s.inicio) >= ini.getTime() && Date.parse(s.inicio) < fim.getTime()).reduce((t, s) => t + volumeSessao(s), 0)
 
@@ -90,7 +91,7 @@ export function Inicio({ dados, plano, anamnese }: { dados: Dados; plano: Plano;
       <div className="cartao indicadores">
         <Indicador valor={`🔥 ${sequencia}`} nome={sequencia === 1 ? t('semana seguida') : t('semanas seguidas')} />
         <Indicador valor={`${Math.round((ad.feitas / ad.planeadas) * 100)}%`} nome={t('aderência 4 semanas')} />
-        <Indicador valor={peso === null ? '–' : `${peso > 0 ? '+' : ''}${kg(peso)} kg`} nome={t('peso em 4 semanas')} />
+        <Indicador valor={peso === null ? '–' : `${peso > 0 ? '+' : ''}${textoPeso(peso)}`} nome={t('peso em 4 semanas')} />
       </div>
 
       <h2>{t('Conquistas')} <span className="secundario">{t('{n} de {total}', { n: obtidas, total: lista.length })}</span></h2>

@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeAll, describe, expect, it } from 'vitest'
 import alongamentosPt from '../catalog/alongamentos.json'
 import exerciciosPt from '../catalog/exercicios.json'
 import alongamentosEn from '../catalog/i18n/alongamentos.en.json'
@@ -14,7 +14,7 @@ import { NOMES_GRUPOS } from '../domain/types'
 import novidades from '../novidades.json'
 import en from './en.json'
 import es from './es.json'
-import { definirIdioma, idiomaDoDispositivo, t } from '.'
+import { carregarIdioma, definirIdioma, idiomaDoDispositivo, t } from '.'
 
 /** Todas as frases marcadas com t('…') ou m('…') no código da app. */
 const codigo = import.meta.glob<string>(['../**/*.{ts,tsx}', '!../**/*.test.*'], { query: '?raw', import: 'default', eager: true })
@@ -31,7 +31,19 @@ const frases = frasesDoCodigo()
 
 afterEach(() => definirIdioma('pt'))
 
+// Corre antes do bloco F21, que carrega os dois dicionários.
+describe('F22.12 idiomas a pedido', () => {
+  it('sem o dicionário carregado a frase fica em português; depois de carregado, traduz', async () => {
+    definirIdioma('es')
+    expect(t('Série {n} de {total}', { n: 2, total: 3 })).toBe('Série 2 de 3')
+    await carregarIdioma('es')
+    expect(t('Série {n} de {total}', { n: 2, total: 3 })).toBe('Serie 2 de 3')
+  })
+})
+
 describe('F21 idiomas', () => {
+  beforeAll(() => Promise.all([carregarIdioma('en'), carregarIdioma('es')]))
+
   it.each([['en', en], ['es', es]] as const)('todas as frases da app têm tradução em %s, com as mesmas variáveis', (_, dic: Record<string, string>) => {
     const faltam = [...frases].filter((f) => !(f in dic))
     expect(faltam).toEqual([])

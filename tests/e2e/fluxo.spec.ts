@@ -456,3 +456,58 @@ test('F22: toque duplo grava uma série, o descanso continua noutros ecrãs, exe
   await page.getByRole('button', { name: 'Exportar cópia (JSON)' }).click()
   expect((await descarga).suggestedFilename()).toMatch(/^treino-\d{4}-\d{2}-\d{2}\.json$/)
 })
+
+test('F22.9–F22.13: libras, corrigir e desfazer séries, ícones desenhados', async ({ page }) => {
+  await preencherAnamnese(page)
+
+  // F22.13: seis ícones desenhados na barra de baixo, sem emojis.
+  await expect(page.getByRole('navigation').locator('svg.icone')).toHaveCount(6)
+
+  // F22.9: em libras, escreve-se e mostra-se em lb.
+  await page.getByRole('link', { name: 'Mais' }).click()
+  await page.getByRole('radio', { name: 'Libras (lb)' }).click()
+  await expect(page.getByRole('radio', { name: 'Libras (lb)' })).toHaveAttribute('aria-checked', 'true')
+  await page.getByRole('link', { name: 'Hoje' }).click()
+  await page.getByText('Supino com halteres, pega neutra').click()
+  await page.getByLabel('Carga (lb)').fill('35')
+  await page.getByLabel('Repetições').fill('10')
+  await page.getByRole('button', { name: 'Concluir série' }).click()
+  await page.getByRole('timer').getByRole('button', { name: 'Saltar' }).click()
+  const series = page.locator('.series')
+  await expect(series).toContainText('lb')
+  await expect(series).toContainText('35')
+
+  // F22.10: corrigir a série.
+  await page.getByRole('button', { name: 'Corrigir série 1' }).click()
+  const correcao = page.getByRole('form', { name: 'Corrigir série 1' })
+  await correcao.getByLabel('Repetições').fill('8')
+  await correcao.getByLabel('RIR').selectOption('2')
+  await correcao.getByRole('button', { name: 'Guardar' }).click()
+  await expect(correcao).toHaveCount(0)
+  await expect(series.locator(':scope > span').nth(3)).toHaveText('8')
+  await expect(series.locator(':scope > span').nth(4)).toHaveText('2')
+
+  // F22.11: apagar e desfazer.
+  await page.getByRole('button', { name: 'Apagar série 1' }).click()
+  await expect(page.getByRole('status').filter({ hasText: 'Série 1 apagada.' })).toBeVisible()
+  await expect(series).toHaveCount(0)
+  await page.getByRole('status').getByRole('button', { name: 'Desfazer' }).click()
+  await expect(series.locator(':scope > span').nth(3)).toHaveText('8')
+  await expect(page.getByText('Série 1 apagada.')).toHaveCount(0)
+
+  // Os dados ficam em quilos: em kg, as mesmas 35 lb aparecem como 15,9 kg.
+  await page.getByRole('link', { name: 'Mais' }).click()
+  await page.getByRole('radio', { name: 'Quilos (kg)' }).click()
+  await page.getByRole('link', { name: 'Hoje' }).click()
+  await page.getByText('Supino com halteres, pega neutra').click()
+  await expect(series).toContainText('15,9')
+})
+
+test.describe('F22.9: telemóvel em inglês dos Estados Unidos', () => {
+  test.use({ locale: 'en-US' })
+  test('a primeira abertura pede o peso em libras', async ({ page }) => {
+    await page.goto('./')
+    await expect(page.getByLabel('Weight (lb)')).toBeVisible()
+    await expect(page.getByRole('radio', { name: 'Pounds (lb)' })).toHaveAttribute('aria-checked', 'true')
+  })
+})

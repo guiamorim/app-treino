@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { aderencia, alvoVolume, inicioSemana, mediaMovel, progressaoExercicio, volumeSemanal } from '../domain/relatorios'
 import { GRUPOS_MUSCULARES, NOMES_GRUPOS } from '../domain/types'
-import { catalogo, dataCurta, kg, type Dados } from './dados'
+import { decimal, paraUnidade, peso, unidadePeso } from '../domain/unidades'
+import { catalogo, dataCurta, type Dados } from './dados'
 import { GraficoLinha } from './Grafico'
 import { t } from '../i18n'
 
@@ -36,15 +37,15 @@ function Progressao({ dados }: { dados: Dados }) {
         {feitos.map((e) => <option key={e.id} value={e.id}>{e.nome}</option>)}
       </select>
       <div className="cartao">
-        <h3>{comCarga ? t('1RM estimado (kg)') : ex.medida === 'segundos' ? t('Melhor tempo (s)') : t('Melhores repetições')}</h3>
+        <h3>{comCarga ? t('1RM estimado ({u})', { u: unidadePeso() }) : ex.medida === 'segundos' ? t('Melhor tempo (s)') : t('Melhores repetições')}</h3>
         <GraficoLinha
           titulo={ex.nome}
-          unidade={comCarga ? 'kg' : ex.medida === 'segundos' ? 's' : 'reps'}
+          unidade={comCarga ? unidadePeso() : ex.medida === 'segundos' ? 's' : 'reps'}
           pontos={pontos.map((p) => ({
             x: Date.parse(p.data),
-            y: comCarga ? Math.round((p.e1rm ?? 0) * 10) / 10 : p.melhor.reps,
+            y: comCarga ? Math.round(paraUnidade(p.e1rm ?? 0) * 10) / 10 : p.melhor.reps,
             destaque: p.recorde,
-            rotulo: `${dataCurta(p.data)}: ${kg(p.melhor.carga)} kg × ${p.melhor.reps}${p.recorde ? ` (${t('recorde')})` : ''}`,
+            rotulo: `${dataCurta(p.data)}: ${peso(p.melhor.carga)} × ${p.melhor.reps}${p.recorde ? ` (${t('recorde')})` : ''}`,
           }))}
         />
         <p className="secundario">{t('Pontos verdes = recorde pessoal ({n}).', { n: recordes })} {comCarga && t('1RM estimado pela fórmula de Epley, só com séries até 12 reps.')}</p>
@@ -61,7 +62,7 @@ function Progressao({ dados }: { dados: Dados }) {
           {[...pontos].reverse().slice(0, 10).map((p) => (
             <li key={p.data} className="linha" style={{ padding: '8px 0' }}>
               <span>{dataCurta(p.data)}</span>
-              <span>{p.melhor.carga ? `${kg(p.melhor.carga)} kg × ` : ''}{p.melhor.reps}</span>
+              <span>{p.melhor.carga ? `${peso(p.melhor.carga)} × ` : ''}{p.melhor.reps}</span>
               <span>{p.recorde ? '🏆' : ''}{p.dor ? ` ${t('dor')} ${p.dor}` : ''}</span>
             </li>
           ))}
@@ -102,7 +103,7 @@ function Semana({ dados }: { dados: Dados }) {
           const v = volume[g]
           return (
             <div key={g} style={{ margin: '10px 0' }}>
-              <div className="linha"><span>{NOMES_GRUPOS[g]}</span><span style={{ textAlign: 'right' }} className="secundario">{kg(v)} / {amin}–{amax}</span></div>
+              <div className="linha"><span>{NOMES_GRUPOS[g]}</span><span style={{ textAlign: 'right' }} className="secundario">{decimal(v)} / {amin}–{amax}</span></div>
               <div className="barra" aria-hidden="true">
                 <span className="alvo" style={{ left: `${(amin / escala) * 100}%`, width: `${((amax - amin) / escala) * 100}%` }} />
                 <span style={{ width: `${Math.min(100, (v / escala) * 100)}%`, background: v >= amin ? 'var(--ok)' : 'var(--acento)' }} />
@@ -114,12 +115,12 @@ function Semana({ dados }: { dados: Dados }) {
       </div>
 
       <div className="cartao">
-        <h3>{t('Peso (kg)')}</h3>
+        <h3>{t('Peso ({u})', { u: unidadePeso() })}</h3>
         <GraficoLinha
           titulo={t('Peso')}
-          unidade="kg"
-          pontos={pesos.map((p) => ({ x: Date.parse(p.data), y: p.media, rotulo: `${dataCurta(p.data)}: ${t('média')} ${kg(p.media)} kg` }))}
-          extra={pesos.map((p) => ({ x: Date.parse(p.data), y: p.valor }))}
+          unidade={unidadePeso()}
+          pontos={pesos.map((p) => ({ x: Date.parse(p.data), y: Math.round(paraUnidade(p.media) * 10) / 10, rotulo: `${dataCurta(p.data)}: ${t('média')} ${peso(p.media)}` }))}
+          extra={pesos.map((p) => ({ x: Date.parse(p.data), y: paraUnidade(p.valor) }))}
         />
         <p className="secundario">{t('Linha cheia = média de 7 dias; tracejado = pesagens.')}</p>
       </div>
@@ -127,7 +128,7 @@ function Semana({ dados }: { dados: Dados }) {
         <h3>{t('Cintura (cm)')}</h3>
         <GraficoLinha titulo={t('Cintura')} unidade="cm" pontos={cinturas.map((m) => ({ x: Date.parse(m.data), y: m.cinturaCm! }))} />
         {ultimaCintura !== undefined && primeiraCintura !== undefined && cinturas.length > 1 && (
-          <p>{ultimaCintura <= primeiraCintura ? '↓' : '↑'} {t('{cm} cm desde {data}', { cm: kg(Math.abs(ultimaCintura - primeiraCintura)), data: dataCurta(cinturas[0]!.data) })}</p>
+          <p>{ultimaCintura <= primeiraCintura ? '↓' : '↑'} {t('{cm} cm desde {data}', { cm: decimal(Math.abs(ultimaCintura - primeiraCintura)), data: dataCurta(cinturas[0]!.data) })}</p>
         )}
         <p className="secundario">{t('Para recomposição, a cintura diz mais do que o peso.')}</p>
       </div>
