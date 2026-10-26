@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { divisoesPossiveis, gerarPlano, prescricaoEfetiva, semanaDoPlano } from './plano'
+import { divisoesPossiveis, gerarPlano, planoNoCatalogo, prescricaoEfetiva, semanaDoPlano } from './plano'
 import { catalogo, perfilExemplo } from './fixtures'
 import type { Anamnese, GrupoMuscular, Plano } from './types'
 import { GRUPOS_GRANDES } from './types'
@@ -280,5 +280,31 @@ describe('3.3 fase de readaptação', () => {
     expect(semanaDoPlano(p, '2026-10-20T20:00:00.000Z')).toBe(1)
     expect(semanaDoPlano(p, '2026-10-27T09:00:00.000Z')).toBe(2)
     expect(semanaDoPlano(p, '2026-11-03T09:00:00.000Z')).toBe(3)
+  })
+})
+
+describe('F22.1 exercício que deixou de existir no catálogo', () => {
+  const plano = gerarPlano(perfilExemplo, catalogo, { id: 'p', agora: '2026-10-26T10:00:00.000Z' })
+
+  it('um plano só com exercícios conhecidos fica igual', () => {
+    expect(planoNoCatalogo(plano, catalogo)).toBe(plano)
+  })
+
+  it('retira a prescrição desconhecida, limpa alternativas desconhecidas e acrescenta um aviso', () => {
+    const tr = plano.treinos[0]!
+    const comAlternativas = tr.prescricoes.find((p) => p.alternativas)!
+    const estragado: Plano = {
+      ...plano,
+      treinos: [{
+        ...tr,
+        prescricoes: tr.prescricoes.map((p, i) =>
+          i === 0 ? { ...p, exercicioId: 'nao-existe' } : p === comAlternativas ? { ...p, alternativas: [...p.alternativas!, 'tambem-nao'] } : p),
+      }, ...plano.treinos.slice(1)],
+    }
+    const r = planoNoCatalogo(estragado, catalogo)
+    expect(r.treinos[0]!.prescricoes).toHaveLength(tr.prescricoes.length - 1)
+    expect(r.treinos[0]!.prescricoes.flatMap((p) => [p.exercicioId, ...(p.alternativas ?? [])]).every((id) => catalogo.has(id))).toBe(true)
+    expect(r.treinos.slice(1)).toEqual(plano.treinos.slice(1))
+    expect(r.avisos.at(-1)).toMatch(/^1 exercício\(s\) do teu plano deixaram de existir/)
   })
 })

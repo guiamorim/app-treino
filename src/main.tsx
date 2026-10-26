@@ -1,12 +1,15 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { App } from './ui/App'
+import { ProtecaoErros } from './ui/Erro'
 import { registarTrabalhador } from './ui/versao'
 import './ui/estilo.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <ProtecaoErros>
+      <App />
+    </ProtecaoErros>
   </StrictMode>,
 )
 

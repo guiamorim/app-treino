@@ -1,4 +1,4 @@
-import { m, t } from '../i18n'
+import { t } from '../i18n'
 import { estadoBloco, exercicioNoBloco, SEMANAS_BLOCO } from './blocos'
 import { obter, type Catalogo } from './catalogo'
 import { DIVISOES, MODELOS, MODELOS_ESCOLHA, type Modelo } from './modelos'
@@ -273,4 +273,28 @@ export function planoNoIdioma(plano: Plano, a: Anamnese | undefined, catalogo: C
       }
     }),
   }
+}
+
+/**
+ * F22.1: o plano só com exercícios que o catálogo conhece. Um exercício que deixou de existir (versão nova
+ * do catálogo, ou cópia importada de uma versão mais recente) sai do plano com um aviso, em vez de bloquear a app.
+ */
+export function planoNoCatalogo(plano: Plano, catalogo: Catalogo): Plano {
+  let retirados = 0
+  const treinos = plano.treinos.map((tr) => {
+    const prescricoes = tr.prescricoes.flatMap((p) => {
+      if (!catalogo.has(p.exercicioId)) {
+        retirados++
+        return []
+      }
+      if (!p.alternativas?.some((id) => !catalogo.has(id))) return [p]
+      const { alternativas, ...resto } = p
+      const conhecidas = alternativas.filter((id) => catalogo.has(id))
+      return [conhecidas.length > 1 ? { ...resto, alternativas: conhecidas } : resto]
+    })
+    return prescricoes.length === tr.prescricoes.length && prescricoes.every((p, i) => p === tr.prescricoes[i]) ? tr : { ...tr, prescricoes }
+  })
+  if (treinos.every((tr, i) => tr === plano.treinos[i])) return plano
+  const aviso = t('{n} exercício(s) do teu plano deixaram de existir e foram retirados. Para os substituir, gera um plano novo em «Mais».', { n: retirados })
+  return { ...plano, treinos, avisos: retirados > 0 ? [...plano.avisos, aviso] : plano.avisos }
 }

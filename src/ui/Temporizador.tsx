@@ -9,9 +9,10 @@ export function Temporizador({ fimEm, fechar, rotulos = [t('Descanso'), t('Desca
     const id = setInterval(() => setAgora(Date.now()), 250)
     return () => clearInterval(id)
   }, [])
+  const acabou = restante === 0
   useEffect(() => {
-    if (restante === 0) navigator.vibrate?.([300, 150, 300])
-  }, [restante === 0])
+    if (acabou) navigator.vibrate?.([300, 150, 300])
+  }, [acabou])
   const mm = Math.floor(restante / 60)
   const ss = String(restante % 60).padStart(2, '0')
   return (

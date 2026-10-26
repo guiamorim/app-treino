@@ -2,7 +2,7 @@
 
 **English** · [Português](especificacao-v1.md)
 
-Date: 2026-10-20 · Version 1.8 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.8)
+Date: 2026-10-20 · Version 1.9 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.9)
 
 The Portuguese version is the reference used for the domain names in the code. Both versions must stay in sync.
 
@@ -185,6 +185,30 @@ RIR = reps in reserve: how many more reps you could still have done at the end o
 - The translations were written without review by a native translator.
 - The repository documentation stays in Portuguese and English.
 
+### F22. Robustness and comfort while training (v1.9)
+Improvements from the 2026-10-26 review.
+- **F22.1 The app never goes blank.**
+  - An exercise in the plan that the catalogue does not know is removed from the plan shown, with the warning "N exercise(s) in your plan no longer exist and were removed. To replace them, generate a new plan in "More".". This can happen after a new catalogue version, or with a backup imported from a newer version.
+  - If a screen fails for any other reason, "Algo correu mal" (something went wrong) appears, with "Export backup (JSON)", "Reload" and the error details. The backup reads the database directly, so it works even when the screen is broken.
+- **F22.2 One tap, one save.** While a set or exercise change is being saved, the "Complete set", "Finish exercise", "Skip", "Undo", "One more set" and delete-set buttons are disabled. A double tap saves only once.
+- **F22.3 End of rest on the iPhone.**
+  - Three short beeps play when the rest ends. The sound is scheduled when the rest starts and only plays with the app open and the phone off silent mode. Vibration still works where the browser supports it; iPhone Safari does not.
+  - During a workout in progress (opened in the last 3 hours and not finished), the screen stays on where the browser allows it (iOS 16.4 or later). There are still no notifications while the app is closed (F13).
+- **F22.4 The rest timer is not lost.** The rest timer shows at the top of every tab until it ends or is skipped; it no longer disappears when you change screen.
+- **F22.5 Sharing files on the phone.** On a touch screen, the backup and the exports (PDF, Excel, CSV) open the system share sheet: Files, iCloud Drive, email. If the browser cannot share files, or refuses, the file downloads as before. Cancelling the share downloads nothing.
+- **F22.6 Contrast and accessibility.**
+  - In dark mode the accent blue becomes a light blue with dark text on it (7:1). The green for "done" and "Rest over" gets dark text.
+  - The borders of text boxes and selects reach at least 3:1.
+  - Buttons react to touch (they get lighter), with no movement when the system asks for reduced motion.
+  - Keyboard focus has a visible outline.
+  - The video and photo windows use `<dialog>`: the rest of the app becomes inert, Esc closes, and focus returns to the button that opened them.
+  - The pain sliders announce "N out of 10".
+- **F22.7 Checks.**
+  - The end-to-end tests run on the simulated iPhone with both the Chrome engine and the Safari engine (WebKit).
+  - The code passes `oxlint` (correctness and React hooks rules; the rule that forbids reading the date while rendering is off, because the app shows dates relative to today).
+  - Publishing to GitHub Pages only runs after CI passes on the main branch.
+- **F22.8 Photos kept separate.** Progress photos are read only on the screens that show them, not on every saved set.
+
 ### F14. Blocks and next change (v1.2, rules in section 3.7)
 - On Home and on Today's workout: current phase (re-adaptation, week N of M of the block, or deload) and the next change with its date: end of re-adaptation (full sets), deload week (half the sets), or new block (isolation exercises rotate, listing what changes).
 
@@ -280,7 +304,7 @@ For each Prescription with range [min, max]:
 - No data content is ever inserted as HTML.
 - Import validated by schema (Zod). Photos accepted only as `data:image/jpeg;base64,` and with a size limit.
 - (v1.4) Photos are re-encoded on the device before saving, which strips EXIF metadata (including GPS). They never leave the device except in the backup the person exports.
-- Continuous integration: typecheck, unit and end-to-end tests, `npm audit`; Dependabot enabled. GitHub secret scanning applies to public repositories. Main branch protection: **not yet configured**.
+- Continuous integration: typecheck, `oxlint`, unit and end-to-end tests (Chromium and WebKit), `npm audit`; publishing only runs after CI passes (v1.9); Dependabot enabled. GitHub secret scanning applies to public repositories. Main branch protection: **not yet configured**.
 - Personal data never enters the repository: the anamnesis is filled in on the phone and tests use a fictitious profile. That is why the repository can be public.
 
 ## 7. Out of scope for v1

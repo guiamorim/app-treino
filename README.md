@@ -18,8 +18,10 @@ Specification: [specs/specification-v1.en.md](specs/specification-v1.en.md) · M
 ```bash
 npm ci
 npm run dev        # local server
+npm run lint       # oxlint (correctness and React hooks rules)
 npm test           # unit tests (domain and data)
-npm run test:e2e   # end-to-end tests on a simulated iPhone (production build)
+npx playwright install chromium webkit   # once, for the end-to-end tests
+npm run test:e2e   # end-to-end tests on a simulated iPhone, Chrome and Safari engines (production build)
 npm run build      # builds dist/ with service worker and Content Security Policy
 ```
 
@@ -27,7 +29,7 @@ npm run build      # builds dist/ with service worker and Content Security Polic
 
 1. Add the version at the top of `src/novidades.json`, with the date and a short summary of what changes (this is what the "Nova versão disponível" notice and Home show after updating). Update "Em preparação" (in preparation) if needed.
 2. Use the same number in `package.json` (a test checks they match). Add the English and Spanish summary under `traducoes`.
-3. Once merged into the main branch, GitHub Pages publishes it and the installed app shows the notice the next time it opens or comes to the foreground.
+3. Once merged into the main branch and CI passes, GitHub Pages publishes it and the installed app shows the notice the next time it opens or comes to the foreground.
 
 ## Layout
 

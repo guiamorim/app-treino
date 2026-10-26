@@ -1,4 +1,7 @@
+import { readFileSync } from 'node:fs'
 import { expect, test, type Page } from '@playwright/test'
+
+const VERSAO: string = JSON.parse(readFileSync('package.json', 'utf8')).version
 
 async function preencherAnamnese(page: Page) {
   await page.goto('./')
@@ -86,6 +89,13 @@ test('F5: vídeo abre num leitor dentro da app, com o domínio sem cookies', asy
   await expect(page.getByRole('link', { name: 'Abrir no YouTube' })).toHaveAttribute('href', 'https://www.youtube.com/watch?v=3m7-E2Bcotk')
   await page.getByRole('button', { name: 'Fechar' }).click()
   await expect(page.locator('.modal')).toHaveCount(0)
+
+  // F22.6: Esc fecha a janela e o foco volta ao botão que a abriu.
+  await page.getByRole('button', { name: '▶ Ver vídeo' }).click()
+  await expect(page.getByRole('dialog')).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(page.getByRole('dialog')).toHaveCount(0)
+  await expect(page.getByRole('button', { name: '▶ Ver vídeo' })).toBeFocused()
 })
 
 test('F9 e F10: medições, exportação e importação inválida', async ({ page }) => {
@@ -321,14 +331,14 @@ test('F20: versão, procurar atualizações, novidades depois de atualizar', asy
 
   // Mais: versão instalada, procura sem versão nova, em preparação e histórico.
   await page.goto('./#/mais')
-  await expect(page.getByText('Versão instalada: 1.8.0')).toBeVisible()
+  await expect(page.getByText(`Versão instalada: ${VERSAO}`)).toBeVisible()
   await page.getByRole('button', { name: 'Procurar atualizações' }).click()
   await expect(page.getByText('Já tens a versão mais recente.')).toBeVisible()
   await expect(page.getByRole('heading', { name: 'Em preparação' })).toBeVisible()
   await page.getByText('Novidades de cada versão', { exact: true }).click()
   await expect(page.getByText(/Alongamentos do treino do dia/)).toBeVisible()
 
-  // Quem vinha da 1.6 vê as novidades da 1.7 e da 1.8 uma vez no Início.
+  // Quem vinha da 1.6 vê uma vez no Início as novidades de todas as versões desde então.
   // Texto em vez de função: a configuração de TypeScript dos testes não inclui os tipos do navegador.
   await page.evaluate(`new Promise((fim, erro) => {
     const pedido = indexedDB.open('app-treino')
@@ -342,7 +352,7 @@ test('F20: versão, procurar atualizações, novidades depois de atualizar', asy
   await page.goto('./#/inicio')
   await page.reload()
   const cartao = page.getByRole('region', { name: 'Novidades' })
-  await expect(cartao.getByRole('heading', { name: /Novidades da versão 1\.8\.0/ })).toBeVisible()
+  await expect(cartao.getByRole('heading', { name: `Novidades da versão ${VERSAO}` })).toBeVisible()
   await expect(cartao.getByText(/em português, inglês e espanhol/)).toBeVisible()
   await expect(cartao.getByText(/Aviso de versão nova/)).toBeVisible()
   await cartao.getByRole('button', { name: 'Fechar' }).click()
@@ -394,4 +404,55 @@ test.describe('F21: telemóvel em inglês', () => {
     await expect(page.getByLabel('Height (cm)')).toBeVisible()
     await expect(page.getByRole('radio', { name: 'English' })).toHaveAttribute('aria-checked', 'true')
   })
+})
+
+/** Altera um registo guardado na base de dados da app (texto em vez de função: ver o teste F20). */
+const alterarNaBase = (page: Page, loja: string, chave: string, codigo: string) =>
+  page.evaluate(`new Promise((fim, erro) => {
+    const pedido = indexedDB.open('app-treino')
+    pedido.onsuccess = () => {
+      const tx = pedido.result.transaction('${loja}', 'readwrite')
+      const loja = tx.objectStore('${loja}')
+      const g = loja.get('${chave}')
+      g.onsuccess = () => { const v = g.result; ${codigo}; loja.put(v) }
+      tx.oncomplete = () => fim()
+      tx.onerror = () => erro(tx.error)
+    }
+  })`)
+
+test('F22: toque duplo grava uma série, o descanso continua noutros ecrãs, exercício desconhecido e ecrã de erro', async ({ page }) => {
+  await preencherAnamnese(page)
+  await page.getByText('Supino com halteres, pega neutra').click()
+  await page.getByLabel('Carga (kg)').fill('16')
+
+  // F22.2: um toque duplo em «Concluir série» grava uma só série.
+  await page.getByRole('button', { name: 'Concluir série' }).dblclick()
+  await expect(page.getByRole('button', { name: /^Apagar série/ })).toHaveCount(1)
+
+  // F22.4: o descanso continua visível noutro separador.
+  await expect(page.getByRole('timer')).toBeVisible()
+  await page.getByRole('link', { name: 'Início' }).click()
+  await expect(page.getByRole('timer')).toBeVisible()
+  await page.getByRole('timer').getByRole('button', { name: 'Saltar' }).click()
+  await expect(page.getByRole('timer')).toHaveCount(0)
+
+  // F22.1: um exercício que o catálogo não conhece sai do plano com um aviso, sem bloquear a app.
+  await alterarNaBase(page, 'valores', 'plano', "v.valor.treinos[0].prescricoes[2].exercicioId = 'nao-existe'")
+  await page.goto('./#/hoje')
+  await page.reload()
+  await expect(page.getByRole('heading', { name: 'Superior A' })).toBeVisible()
+  await page.getByText(/avisos? sobre o teu plano/).click()
+  await expect(page.getByText(/1 exercício\(s\) do teu plano deixaram de existir/)).toBeVisible()
+
+  // F22.1: se um ecrã falhar, aparece o erro com «Exportar cópia» em vez de um ecrã em branco.
+  const sessoes = await page.evaluate(`new Promise((fim) => {
+    const pedido = indexedDB.open('app-treino')
+    pedido.onsuccess = () => { const g = pedido.result.transaction('sessoes').objectStore('sessoes').getAllKeys(); g.onsuccess = () => fim(g.result) }
+  })`) as string[]
+  await alterarNaBase(page, 'sessoes', sessoes[0]!, 'v.exercicios = null')
+  await page.reload()
+  await expect(page.getByRole('heading', { name: 'Algo correu mal' })).toBeVisible()
+  const descarga = page.waitForEvent('download')
+  await page.getByRole('button', { name: 'Exportar cópia (JSON)' }).click()
+  expect((await descarga).suggestedFilename()).toMatch(/^treino-\d{4}-\d{2}-\d{2}\.json$/)
 })

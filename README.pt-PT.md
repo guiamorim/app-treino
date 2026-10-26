@@ -18,8 +18,10 @@ Especificação: [specs/especificacao-v1.md](specs/especificacao-v1.md) · Anál
 ```bash
 npm ci
 npm run dev        # servidor local
+npm run lint       # oxlint (regras de correção e de hooks do React)
 npm test           # testes de unidade (domínio e dados)
-npm run test:e2e   # testes ponta a ponta num iPhone simulado (build de produção)
+npx playwright install chromium webkit   # uma vez, para os testes ponta a ponta
+npm run test:e2e   # testes ponta a ponta num iPhone simulado, motores do Chrome e do Safari (build de produção)
 npm run build      # gera dist/ com service worker e Content Security Policy
 ```
 
@@ -27,7 +29,7 @@ npm run build      # gera dist/ com service worker e Content Security Policy
 
 1. Acrescenta a versão no topo de `src/novidades.json`, com a data e um resumo curto do que muda (é o que aparece no aviso «Nova versão disponível» e no Início depois de atualizar). Atualiza «Em preparação» se for o caso.
 2. Usa o mesmo número em `package.json` (um teste confirma que são iguais). Acrescenta o resumo em inglês e espanhol em `traducoes`.
-3. Depois de juntar ao ramo principal, o GitHub Pages publica e a app instalada mostra o aviso quando volta a abrir ou ao primeiro plano.
+3. Depois de juntar ao ramo principal e o CI passar, o GitHub Pages publica e a app instalada mostra o aviso quando volta a abrir ou ao primeiro plano.
 
 ## Organização
 

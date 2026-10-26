@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { db } from '../data/db'
 import { estadoBloco } from '../domain/blocos'
 import { motivoIncompatibilidade, prescricaoEfetiva, semanaDoPlano } from '../domain/plano'
@@ -10,7 +10,7 @@ import { abrirSessao, alterarRegisto, sessaoAberta } from './acoes'
 import { agoraIso, catalogo, kg, type Dados } from './dados'
 import { ir } from './rota'
 import { Corpo } from './Corpo'
-import { Temporizador } from './Temporizador'
+import { iniciarDescanso, prepararSom } from './descanso'
 import { VideoModal } from './Video'
 import { t } from '../i18n'
 
@@ -24,7 +24,7 @@ export function ExercicioEcra({ dados, plano, prescricaoId }: { dados: Dados; pl
   }
   const sessao = sessaoAberta(dados.sessoes, plano, treino.id)
   const reg = sessao ? registoDe(sessao, p.id) : undefined
-  const ex = catalogo.get(reg?.exercicioId ?? prescricaoEfetiva(p, plano, semanaDoPlano(plano, agoraIso())).exercicioId)!
+  const ex = (reg && catalogo.get(reg.exercicioId)) ?? catalogo.get(prescricaoEfetiva(p, plano, semanaDoPlano(plano, agoraIso())).exercicioId)!
   return <Registo key={`${p.id}-${ex.id}`} dados={dados} plano={plano} treinoId={treino.id} prescricaoId={p.id} exercicioId={ex.id} />
 }
 
@@ -50,7 +50,6 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
   const [carga, setCarga] = useState(String(ultimaSerie?.carga ?? sugestao.carga ?? ''))
   const [reps, setReps] = useState(String(ultimaSerie?.reps ?? sugestao.reps))
   const [rir, setRir] = useState<number | undefined>(undefined)
-  const [descanso, setDescanso] = useState<number | null>(null)
   const [verVideo, setVerVideo] = useState(false)
   const [trocar, setTrocar] = useState(false)
   const [erro, setErro] = useState('')
@@ -64,22 +63,42 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
     .map((id) => catalogo.get(id)!)
     .filter((s) => dados.anamnese && !motivoIncompatibilidade(s, dados.anamnese))
 
+  // F22.2: um toque duplo não grava duas vezes. A referência bloqueia já; o estado desativa os botões.
+  const ocupado = useRef(false)
+  const [aGravar, setAGravar] = useState(false)
+  async function umaVez(acao: () => Promise<void>) {
+    if (ocupado.current) return
+    ocupado.current = true
+    setAGravar(true)
+    try {
+      await acao()
+    } finally {
+      ocupado.current = false
+      setAGravar(false)
+    }
+  }
+
   const alterar = async (f: Parameters<typeof alterarRegisto>[3]) => {
     const s = await abrirSessao(dados.sessoes, plano, treino.id)
     await alterarRegisto(s.id, p.id, ex.id, f)
   }
+  const gravar = (f: Parameters<typeof alterarRegisto>[3]) => umaVez(() => alterar(f))
 
-  async function concluirSerie() {
+  const concluirSerie = () => {
+    prepararSom()
+    return gravarSerie()
+  }
+  const gravarSerie = () => umaVez(async () => {
     const c = semCarga ? 0 : numero(carga)
     const r = numero(reps)
-    if (!(r > 0 && r <= 1000 && Number.isInteger(r))) return setErro(emSegundos ? t('Indica os segundos.') : t('Indica as repetições.'))
-    if (!(c >= 0 && c <= 1000)) return setErro(t('Indica a carga em kg.'))
+    if (!(r > 0 && r <= 1000 && Number.isInteger(r))) return void setErro(emSegundos ? t('Indica os segundos.') : t('Indica as repetições.'))
+    if (!(c >= 0 && c <= 1000)) return void setErro(t('Indica a carga em kg.'))
     setErro('')
     const serie: Serie = { carga: c, reps: r, ...(rir !== undefined ? { rir } : {}) }
     await alterar((x) => ({ ...x, series: [...x.series, serie] }))
     setRir(undefined)
-    if (series.length + 1 < ef.series) setDescanso(Date.now() + ef.descansoSeg * 1000)
-  }
+    if (series.length + 1 < ef.series) iniciarDescanso(ef.descansoSeg)
+  })
 
   function mudarDor(valor: number) {
     setDor(valor)
@@ -111,7 +130,6 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
 
   return (
     <>
-      {descanso && <Temporizador fimEm={descanso} fechar={() => setDescanso(null)} />}
       <button onClick={() => ir('/hoje')} style={{ marginTop: 12 }}>‹ {treino.nome}</button>
       <h1>{ex.nome}</h1>
       <p>
@@ -157,7 +175,7 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
           <div className="series">
             <strong>#</strong><strong>{semCarga ? '' : 'kg'}</strong><strong>{unidade}</strong><strong>RIR</strong><span />
             {series.map((s, i) => (
-              <Linha key={i} n={i + 1} s={s} semCarga={semCarga} apagar={() => alterar((x) => ({ ...x, series: x.series.filter((_, j) => j !== i), concluido: false }))} />
+              <Linha key={i} n={i + 1} s={s} semCarga={semCarga} apagar={() => gravar((x) => ({ ...x, series: x.series.filter((_, j) => j !== i), concluido: false }))} />
             ))}
           </div>
         </div>
@@ -166,13 +184,13 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
       {estado === 'saltado' ? (
         <div className="cartao">
           <p>{t('Exercício saltado.')}</p>
-          <button onClick={() => alterar((x) => ({ ...x, saltado: false }))}>{t('Desfazer')}</button>
+          <button disabled={aGravar} onClick={() => gravar((x) => ({ ...x, saltado: false }))}>{t('Desfazer')}</button>
         </div>
       ) : estado === 'feito' ? (
         <div className="cartao ok-borda">
           <p><strong>{t('Exercício feito')} ✓</strong></p>
           <div className="linha">
-            <button onClick={() => alterar((x) => ({ ...x, concluido: false, series: x.series }))} disabled={series.length >= ef.series}>{t('Mais uma série')}</button>
+            <button onClick={() => gravar((x) => ({ ...x, concluido: false, series: x.series }))} disabled={aGravar || series.length >= ef.series}>{t('Mais uma série')}</button>
             {proximo ? (
               <button className="primario" onClick={() => ir(`/exercicio/${encodeURIComponent(proximo.id)}`)}>{t('Próximo exercício')}</button>
             ) : (
@@ -198,17 +216,17 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
             ))}
           </div>
           {erro && <p role="alert" style={{ color: 'var(--perigo)' }}>{erro}</p>}
-          <button className="primario largo" style={{ marginTop: 12 }} onClick={concluirSerie}>{t('Concluir série')}</button>
+          <button className="primario largo" style={{ marginTop: 12 }} onClick={concluirSerie} disabled={aGravar}>{t('Concluir série')}</button>
           <div className="linha" style={{ marginTop: 8 }}>
-            {series.length > 0 && <button onClick={() => alterar((x) => ({ ...x, concluido: true }))}>{t('Terminar exercício')}</button>}
-            <button onClick={() => alterar((x) => ({ ...x, saltado: true }))}>{t('Saltar')}</button>
+            {series.length > 0 && <button disabled={aGravar} onClick={() => gravar((x) => ({ ...x, concluido: true }))}>{t('Terminar exercício')}</button>}
+            <button disabled={aGravar} onClick={() => gravar((x) => ({ ...x, saltado: true }))}>{t('Saltar')}</button>
           </div>
         </div>
       )}
 
       <div className="cartao">
         <label htmlFor="dor">{t('Dor ou desconforto neste exercício: {dor}/10', { dor })}</label>
-        <input id="dor" type="range" min={0} max={10} value={dor} onChange={(e) => mudarDor(Number(e.target.value))} />
+        <input id="dor" type="range" min={0} max={10} value={dor} aria-valuetext={t('{dor} de 10', { dor })} onChange={(e) => mudarDor(Number(e.target.value))} />
         {dor >= 7 && <p role="alert" style={{ color: 'var(--perigo)' }}>{t('Dor forte: para este exercício hoje e procura avaliação de um profissional de saúde.')}</p>}
         {dor >= 4 && dor < 7 && <p className="secundario">{t('Dor moderada: não subas a carga; considera trocar de exercício.')}</p>}
       </div>

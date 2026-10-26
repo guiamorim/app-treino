@@ -203,7 +203,7 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
             {r && (
               <>
                 <label htmlFor={`int-${area}`}>{t('Dor habitual: {n}/10', { n: r.intensidade })}</label>
-                <input id={`int-${area}`} type="range" min={0} max={10} value={r.intensidade} onChange={(e) => mudarRestricao(area, { intensidade: Number(e.target.value) })} />
+                <input id={`int-${area}`} type="range" min={0} max={10} value={r.intensidade} aria-valuetext={t('{dor} de 10', { dor: r.intensidade })} onChange={(e) => mudarRestricao(area, { intensidade: Number(e.target.value) })} />
                 <label className="opcao"><input type="checkbox" checked={r.avaliadaPorProfissional} onChange={(e) => mudarRestricao(area, { avaliadaPorProfissional: e.target.checked })} /> {t('Já foi avaliada por médico ou fisioterapeuta')}</label>
               </>
             )}

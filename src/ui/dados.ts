@@ -8,7 +8,7 @@ import exerciciosEn from '../catalog/i18n/exercicios.en.json'
 import exerciciosEs from '../catalog/i18n/exercicios.es.json'
 import { carregarAlongamentos, traduzirAlongamentos } from '../domain/alongamentos'
 import { carregarCatalogo, traduzirCatalogo } from '../domain/catalogo'
-import { planoNoIdioma } from '../domain/plano'
+import { planoNoCatalogo, planoNoIdioma } from '../domain/plano'
 import type { Anamnese, FotoAvaliacao, Medicao, Perfil, Plano, Sessao } from '../domain/types'
 import { definirIdioma, IDIOMAS, idiomaDoDispositivo, locale, type Idioma } from '../i18n'
 
@@ -38,7 +38,8 @@ export interface Dados {
   medicoes: Medicao[]
   videos: Record<string, string>
   ultimaExportacao?: string
-  fotos: FotoAvaliacao[]
+  /** Só o número: as fotos são pesadas e lêem-se nos ecrãs que as mostram (useFotos). */
+  numFotos: number
   perfil: Perfil
   /** F20: última versão cujas novidades foram vistas (fica só no dispositivo). */
   versaoVista?: string
@@ -55,16 +56,21 @@ export function useDados(): Dados | undefined {
     return {
       idioma,
       anamnese,
-      plano: plano && planoNoIdioma(plano, anamnese, catalogo),
+      plano: plano && planoNoCatalogo(planoNoIdioma(plano, anamnese, catalogo), catalogo),
       sessoes: await db.sessoes.orderBy('inicio').toArray(),
       medicoes: await db.medicoes.orderBy('data').toArray(),
       videos: (await db.ler<Record<string, string>>('videos')) ?? {},
       ultimaExportacao: await db.ler<string>('ultimaExportacao'),
-      fotos: await db.fotos.orderBy('data').toArray(),
+      numFotos: await db.fotos.count(),
       perfil: (await db.ler<Perfil>('perfil')) ?? {},
       versaoVista: await db.ler<string>('versaoVista'),
     }
   })
+}
+
+/** Fotos de avaliação, lidas à parte para não as reler a cada série gravada. */
+export function useFotos(): FotoAvaliacao[] | undefined {
+  return useLiveQuery(() => db.fotos.orderBy('data').toArray())
 }
 
 export const novoId = () => crypto.randomUUID()

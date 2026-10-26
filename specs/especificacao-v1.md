@@ -2,7 +2,7 @@
 
 [English](specification-v1.en.md) · **Português**
 
-Data: 2026-10-20 · Versão 1.8 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.8)
+Data: 2026-10-20 · Versão 1.9 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.9)
 
 ## 0. Decisões fechadas
 
@@ -181,6 +181,30 @@ Estes nomes são usados iguais na especificação, no código e na interface.
 - As traduções foram escritas sem revisão por um tradutor nativo.
 - A documentação do repositório continua em português e inglês.
 
+### F22. Robustez e conforto no treino (v1.9)
+Melhorias que saíram da revisão de 2026-10-26.
+- **F22.1 A app nunca fica em branco.**
+  - Um exercício do plano que o catálogo não conhece é retirado do plano mostrado, e aparece o aviso «N exercício(s) do teu plano deixaram de existir e foram retirados. Para os substituir, gera um plano novo em «Mais».». Pode acontecer por uma versão nova do catálogo, ou por uma cópia importada de uma versão mais recente.
+  - Se um ecrã falhar por outro motivo, aparece «Algo correu mal», com «Exportar cópia (JSON)», «Recarregar» e os detalhes do erro. A cópia lê a base de dados diretamente, por isso funciona mesmo com o ecrã avariado.
+- **F22.2 Um toque, uma gravação.** Enquanto uma série ou uma alteração ao exercício está a ser gravada, os botões «Concluir série», «Terminar exercício», «Saltar», «Desfazer», «Mais uma série» e apagar série ficam desativados. Um toque duplo grava uma só vez.
+- **F22.3 Fim do descanso no iPhone.**
+  - No fim do descanso tocam três bipes curtos. O som fica agendado quando o descanso começa e só toca com a app aberta e o telemóvel fora do modo silêncio. A vibração continua onde o navegador a suporta; o Safari do iPhone não a suporta.
+  - Durante um treino a decorrer (aberto nas últimas 3 horas e não terminado), o ecrã fica ligado, onde o navegador o permite (iOS 16.4 ou mais recente). Continua a não haver notificações com a app fechada (F13).
+- **F22.4 O descanso não se perde.** O temporizador de descanso aparece no topo de qualquer separador até terminar ou ser saltado; já não desaparece ao mudar de ecrã.
+- **F22.5 Partilhar ficheiros no telemóvel.** Num ecrã tátil, a cópia de segurança e as exportações (PDF, Excel, CSV) abrem a folha de partilha do sistema: Ficheiros, iCloud Drive, email. Se o navegador não partilhar ficheiros ou recusar, o ficheiro é descarregado como antes. Cancelar a partilha não descarrega nada.
+- **F22.6 Contraste e acessibilidade.**
+  - No modo escuro, o azul de destaque passa a azul claro com texto escuro por cima (7:1). O verde de «feito» e de «Descanso terminado» passa a ter texto escuro.
+  - As bordas das caixas de texto e listas passam a ter pelo menos 3:1.
+  - Os botões reagem ao toque (ficam mais claros), sem movimento quando o sistema pede menos movimento.
+  - O foco do teclado tem contorno visível.
+  - As janelas de vídeo e de foto usam `<dialog>`: o resto da app fica inerte, Esc fecha, e o foco volta ao botão que as abriu.
+  - As barras de dor anunciam «N de 10».
+- **F22.7 Verificações.**
+  - Os testes ponta a ponta correm no iPhone simulado com o motor do Chrome e com o do Safari (WebKit).
+  - O código passa no `oxlint` (regras de correção e de hooks do React; a regra que proíbe ler a data durante o desenho está desligada, porque a app mostra datas relativas a hoje).
+  - A publicação no GitHub Pages só corre depois de o CI passar no ramo principal.
+- **F22.8 Fotos à parte.** As fotos de avaliação só são lidas nos ecrãs que as mostram, e não a cada série gravada.
+
 ### F14. Blocos e próxima mudança (v1.2, regras na secção 3.7)
 - No Início e no Treino de hoje: fase atual (readaptação, semana N de M do bloco, ou descarga) e a próxima mudança com data: fim da readaptação (séries completas), semana de descarga (metade das séries), ou novo bloco (troca dos exercícios isolados, com a lista do que muda).
 
@@ -276,7 +300,7 @@ Para cada Prescrição com faixa [mín, máx]:
 - Nenhum conteúdo de dados inserido como HTML.
 - Importação validada por esquema (Zod). Fotos aceites só como `data:image/jpeg;base64,` e com tamanho limitado.
 - (v1.4) Fotos recodificadas no dispositivo antes de gravar, o que remove metadados EXIF (incluindo GPS). Não saem do dispositivo exceto na cópia de segurança que a pessoa exporta.
-- Integração contínua: typecheck, testes de unidade e ponta a ponta, `npm audit`; Dependabot ativo. A análise de segredos do GitHub aplica-se a repositórios públicos. Proteção do ramo principal: **por configurar**.
+- Integração contínua: typecheck, `oxlint`, testes de unidade e ponta a ponta (Chromium e WebKit), `npm audit`; a publicação só corre depois de o CI passar (v1.9); Dependabot ativo. A análise de segredos do GitHub aplica-se a repositórios públicos. Proteção do ramo principal: **por configurar**.
 - Dados pessoais nunca entram no repositório: a anamnese é preenchida no telemóvel e os testes usam um perfil fictício. Por isso o repositório pode ser público.
 
 ## 7. Fora da v1
