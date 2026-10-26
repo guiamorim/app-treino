@@ -18,6 +18,7 @@ import {
   type Sessao,
 } from './types'
 import { gerarXlsx, type Folha } from './xlsx'
+import { paraUnidade, unidadePeso } from './unidades'
 
 export interface DadosExportacao {
   anamnese: Anamnese | null
@@ -29,6 +30,9 @@ export interface DadosExportacao {
 }
 
 const num = (n: number) => (Math.round(n * 10) / 10).toLocaleString(locale(), { useGrouping: false })
+/** F22.9: pesos na unidade escolhida (os dados estão em quilos). */
+const pesoTxt = (kg: number) => `${num(paraUnidade(kg))} ${unidadePeso()}`
+const pesoCelula = (kg: number | undefined) => (kg === undefined ? undefined : Math.round(paraUnidade(kg) * 100) / 100)
 /** «2026-10-20» ou ISO completo → «20/10/2026». */
 export const dataPt = (iso: string) => iso.slice(0, 10).split('-').reverse().join('/')
 const porData = <T extends { data: string }>(a: T, b: T) => a.data.localeCompare(b.data)
@@ -54,17 +58,17 @@ export function folhaFicha(plano: Plano, catalogo: Catalogo, agora: string): Fol
 export function folhaHistorico(sessoes: Sessao[], plano: Plano | null, catalogo: Catalogo): Folha {
   const linhas = sessoesPorData(sessoes).flatMap((s) =>
     s.exercicios.flatMap((e) =>
-      e.series.map((x, i) => [s.inicio.slice(0, 10), nomeTreino(plano, s.treinoId), catalogo.get(e.exercicioId)?.nome ?? e.exercicioId, i + 1, x.carga, x.reps, x.rir, e.dor]),
+      e.series.map((x, i) => [s.inicio.slice(0, 10), nomeTreino(plano, s.treinoId), catalogo.get(e.exercicioId)?.nome ?? e.exercicioId, i + 1, pesoCelula(x.carga), x.reps, x.rir, e.dor]),
     ),
   )
-  return { nome: t('Histórico'), cabecalho: [t('Data'), t('Treino'), t('Exercício'), t('Série'), t('Carga (kg)'), 'Reps', 'RIR', t('Dor (0–10)')], linhas }
+  return { nome: t('Histórico'), cabecalho: [t('Data'), t('Treino'), t('Exercício'), t('Série'), t('Carga ({u})', { u: unidadePeso() }), 'Reps', 'RIR', t('Dor (0–10)')], linhas }
 }
 
 export function folhaMedicoes(medicoes: Medicao[]): Folha {
   return {
     nome: t('Medições'),
-    cabecalho: [t('Data'), t('Peso (kg)'), ...MEDIDAS_CM.map((k) => `${INFO_MEDIDAS[k].nome} (cm)`)],
-    linhas: [...medicoes].sort(porData).map((m) => [m.data, m.pesoKg, ...MEDIDAS_CM.map((k) => m[k])]),
+    cabecalho: [t('Data'), t('Peso ({u})', { u: unidadePeso() }), ...MEDIDAS_CM.map((k) => `${INFO_MEDIDAS[k].nome} (cm)`)],
+    linhas: [...medicoes].sort(porData).map((m) => [m.data, pesoCelula(m.pesoKg), ...MEDIDAS_CM.map((k) => m[k])]),
   }
 }
 
@@ -93,7 +97,7 @@ export function pdfFicha(d: DadosExportacao, catalogo: Catalogo, agora: string):
 }
 
 const textoMedicao = (m: Medicao) =>
-  [m.pesoKg !== undefined && `${t('peso')} ${num(m.pesoKg)} kg`, ...MEDIDAS_CM.map((k) => m[k] !== undefined && `${INFO_MEDIDAS[k].nome.toLowerCase()} ${num(m[k])} cm`)].filter(Boolean).join(' · ')
+  [m.pesoKg !== undefined && `${t('peso')} ${pesoTxt(m.pesoKg)}`, ...MEDIDAS_CM.map((k) => m[k] !== undefined && `${INFO_MEDIDAS[k].nome.toLowerCase()} ${num(m[k])} cm`)].filter(Boolean).join(' · ')
 
 export function pdfHistorico(d: DadosExportacao, catalogo: Catalogo, agora: string): Uint8Array<ArrayBuffer> {
   const sessoes = sessoesPorData(d.sessoes).filter((s) => s.exercicios.some((e) => e.series.length > 0))
@@ -104,7 +108,7 @@ export function pdfHistorico(d: DadosExportacao, catalogo: Catalogo, agora: stri
       .map((e) => {
         const ex = catalogo.get(e.exercicioId)
         const semCarga = ex?.incrementoKg === 0
-        const series = e.series.map((x) => `${semCarga ? '' : `${num(x.carga)} kg × `}${x.reps}${x.rir !== undefined ? ` (RIR ${x.rir})` : ''}`).join(', ')
+        const series = e.series.map((x) => `${semCarga ? '' : `${pesoTxt(x.carga)} × `}${x.reps}${x.rir !== undefined ? ` (RIR ${x.rir})` : ''}`).join(', ')
         return `${ex?.nome ?? e.exercicioId}: ${series}${e.dor ? ` · ${t('dor')} ${e.dor}/10` : ''}`
       }),
   }))
@@ -153,7 +157,7 @@ export function pdfRelatorioPt(d: DadosExportacao, catalogo: Catalogo, mesAntes:
     })
   }
   const dif = compararFotos(d.fotos, d.medicoes, mesAntes, mesDepois, 'frente').diferencas
-  const difs = [dif.pesoKg !== undefined && `${t('peso')} ${dif.pesoKg > 0 ? '+' : ''}${num(dif.pesoKg)} kg`, ...MEDIDAS_CM.map((k) => dif[k] !== undefined && `${INFO_MEDIDAS[k].nome.toLowerCase()} ${dif[k]! > 0 ? '+' : ''}${num(dif[k]!)} cm`)].filter(Boolean)
+  const difs = [dif.pesoKg !== undefined && `${t('peso')} ${dif.pesoKg > 0 ? '+' : ''}${pesoTxt(dif.pesoKg)}`, ...MEDIDAS_CM.map((k) => dif[k] !== undefined && `${INFO_MEDIDAS[k].nome.toLowerCase()} ${dif[k]! > 0 ? '+' : ''}${num(dif[k]!)} cm`)].filter(Boolean)
   const medicoes = d.medicoes.filter((m) => m.data >= inicio && m.data <= fim).sort(porData)
   secoes.push({
     titulo: t('Números do período'),

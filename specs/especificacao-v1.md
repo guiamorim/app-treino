@@ -2,7 +2,7 @@
 
 [English](specification-v1.en.md) · **Português**
 
-Data: 2026-10-20 · Versão 1.9 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.9)
+Data: 2026-10-20 · Versão 1.10 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.10)
 
 ## 0. Decisões fechadas
 
@@ -181,8 +181,8 @@ Estes nomes são usados iguais na especificação, no código e na interface.
 - As traduções foram escritas sem revisão por um tradutor nativo.
 - A documentação do repositório continua em português e inglês.
 
-### F22. Robustez e conforto no treino (v1.9)
-Melhorias que saíram da revisão de 2026-10-26.
+### F22. Robustez e conforto no treino (v1.9 e v1.10)
+Melhorias que saíram da revisão de 2026-10-26. F22.9 a F22.13 entraram na v1.10.
 - **F22.1 A app nunca fica em branco.**
   - Um exercício do plano que o catálogo não conhece é retirado do plano mostrado, e aparece o aviso «N exercício(s) do teu plano deixaram de existir e foram retirados. Para os substituir, gera um plano novo em «Mais».». Pode acontecer por uma versão nova do catálogo, ou por uma cópia importada de uma versão mais recente.
   - Se um ecrã falhar por outro motivo, aparece «Algo correu mal», com «Exportar cópia (JSON)», «Recarregar» e os detalhes do erro. A cópia lê a base de dados diretamente, por isso funciona mesmo com o ecrã avariado.
@@ -204,6 +204,15 @@ Melhorias que saíram da revisão de 2026-10-26.
   - O código passa no `oxlint` (regras de correção e de hooks do React; a regra que proíbe ler a data durante o desenho está desligada, porque a app mostra datas relativas a hoje).
   - A publicação no GitHub Pages só corre depois de o CI passar no ramo principal.
 - **F22.8 Fotos à parte.** As fotos de avaliação só são lidas nos ecrãs que as mostram, e não a cada série gravada.
+- **F22.9 Quilos ou libras.**
+  - Em «Mais» (e no questionário inicial) escolhe-se «kg» ou «lb». Por omissão é «lb» num telemóvel em inglês dos Estados Unidos e «kg» nos restantes. A escolha fica só neste dispositivo.
+  - Cargas e peso corporal aparecem e escrevem-se na unidade escolhida: registo de séries, sugestões, última vez, Relatórios, Medições, Início, Fotos, questionário, PDF e Excel. As medidas do corpo continuam em centímetros.
+  - Os dados ficam sempre guardados em quilos, e a cópia de segurança e o CSV também. Mudar de unidade não altera nada do que está registado.
+  - Em libras, a progressão (secção 4.1) usa incrementos de 5 lb onde o exercício sobe 2 ou 2,5 kg, 10 lb onde sobe 5 kg e 2,5 lb onde sobe 1 kg (sempre múltiplos de 2,5 lb, mínimo 2,5 lb). Com carga leve sobe metade, arredondada a 2,5 lb. A descida de 10% arredonda a 0,5 lb.
+- **F22.10 Corrigir uma série.** Cada série registada tem «Corrigir» (✎): a linha passa a campos de carga, repetições (ou segundos) e RIR, com «Guardar» e «Cancelar». Os valores são validados como ao registar.
+- **F22.11 Desfazer apagar.** Apagar uma série é imediato e mostra «Série N apagada.» com «Desfazer», que a repõe no mesmo lugar. A mensagem desaparece ao registar a série seguinte ou ao sair do exercício.
+- **F22.12 Idiomas a pedido.** As traduções e os catálogos em inglês e espanhol só são carregados quando esse idioma está escolhido. Ficam guardados para funcionar offline como o resto da app.
+- **F22.13 Ícones desenhados.** A barra de baixo usa ícones desenhados em linha (SVG) em vez de emojis, com o mesmo aspeto em qualquer telemóvel e na cor do texto do separador.
 
 ### F14. Blocos e próxima mudança (v1.2, regras na secção 3.7)
 - No Início e no Treino de hoje: fase atual (readaptação, semana N de M do bloco, ou descarga) e a próxima mudança com data: fim da readaptação (séries completas), semana de descarga (metade das séries), ou novo bloco (troca dos exercícios isolados, com a lista do que muda).
@@ -280,7 +289,7 @@ Frequência alvo: cada grupo principal 2×/semana.
 ## 4. Regras de progressão (dupla progressão)
 
 Para cada Prescrição com faixa [mín, máx]:
-1. Se todas as séries da última sessão chegaram a máx reps com RIR ≥ 1: sobe a carga pelo incremento do exercício (barra inferiores 5 kg; barra superiores 2,5 kg; halteres 2 kg; máquina 1 placa ou 2,5 kg) e volta a mín reps. (v1.3) Se o incremento for mais de 10% da carga atual, sobe metade do incremento (arredondado a 0,25 kg, mínimo 1 kg). Ex.: halter de 6 kg sobe 1 kg e não 2 kg. Isto ajuda sobretudo quem usa cargas mais leves.
+1. Se todas as séries da última sessão chegaram a máx reps com RIR ≥ 1: sobe a carga pelo incremento do exercício (barra inferiores 5 kg; barra superiores 2,5 kg; halteres 2 kg; máquina 1 placa ou 2,5 kg) e volta a mín reps. (v1.3) Se o incremento for mais de 10% da carga atual, sobe metade do incremento (arredondado a 0,25 kg, mínimo 1 kg). Ex.: halter de 6 kg sobe 1 kg e não 2 kg. Isto ajuda sobretudo quem usa cargas mais leves. Em libras, ver F22.9.
 2. Senão: mantém a carga e tenta +1 rep na série mais baixa.
 3. Se ficou abaixo de mín reps em 2 sessões seguidas: baixa a carga 10%.
 4. Dor ≥ 4: não sobe a carga e sugere substituto. Dor ≥ 7: recomenda parar o exercício hoje e mostra aviso para avaliação.

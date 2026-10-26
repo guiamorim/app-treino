@@ -1,7 +1,8 @@
 import { useState, type FormEvent } from 'react'
 import { db } from '../data/db'
 import { INFO_MEDIDAS, MEDIDAS_CM, type MedidaCm } from '../domain/types'
-import { dataCurta, diasDesde, hojeIso, kg, novoId, type Dados } from './dados'
+import { decimal, deUnidade, peso as textoPeso } from '../domain/unidades'
+import { dataCurta, diasDesde, hojeIso, novoId, type Dados } from './dados'
 import { t } from '../i18n'
 
 const EXTRAS = MEDIDAS_CM.filter((k) => k !== 'cinturaCm')
@@ -18,7 +19,9 @@ export function Medicoes({ dados }: { dados: Dados }) {
 
   async function guardar(e: FormEvent) {
     e.preventDefault()
-    const p = numero(peso)
+    // F22.9: escreve-se na unidade escolhida, guarda-se em quilos.
+    const escrito = numero(peso)
+    const p = escrito === undefined ? undefined : deUnidade(escrito)
     const valores = MEDIDAS_CM.map((k) => [k, numero(medidas[k])] as const).filter((x): x is readonly [MedidaCm, number] => x[1] !== undefined)
     if (p === undefined && valores.length === 0) return setErro(t('Indica o peso ou pelo menos uma medida.'))
     if (p !== undefined && !(p >= 20 && p <= 400)) return setErro(t('Peso inválido.'))
@@ -48,7 +51,7 @@ export function Medicoes({ dados }: { dados: Dados }) {
         <label htmlFor="data">{t('Data')}</label>
         <input id="data" type="date" value={data} max={hojeIso()} onChange={(e) => setData(e.target.value)} />
         <div className="linha">
-          <div><label htmlFor="peso">{t('Peso (kg)')}</label><input id="peso" inputMode="decimal" value={peso} onChange={(e) => setPeso(e.target.value)} /></div>
+          <div><label htmlFor="peso">{t('Peso ({u})', { u: dados.unidade })}</label><input id="peso" inputMode="decimal" value={peso} onChange={(e) => setPeso(e.target.value)} /></div>
           {campo('cinturaCm')}
         </div>
         <details style={{ marginTop: 8 }}>
@@ -66,13 +69,13 @@ export function Medicoes({ dados }: { dados: Dados }) {
         <div className="cartao">
           <ul className="lista">
             {[...dados.medicoes].reverse().map((m) => {
-              const extras = EXTRAS.filter((k) => m[k] !== undefined).map((k) => `${INFO_MEDIDAS[k].nome} ${kg(m[k]!)}`)
+              const extras = EXTRAS.filter((k) => m[k] !== undefined).map((k) => `${INFO_MEDIDAS[k].nome} ${decimal(m[k]!)}`)
               return (
                 <li key={m.id} style={{ padding: '6px 0' }}>
                   <div className="linha">
                     <span>{dataCurta(m.data)}</span>
-                    <span>{m.pesoKg !== undefined ? `${kg(m.pesoKg)} kg` : '–'}</span>
-                    <span>{m.cinturaCm !== undefined ? `${kg(m.cinturaCm)} cm` : '–'}</span>
+                    <span>{m.pesoKg !== undefined ? textoPeso(m.pesoKg) : '–'}</span>
+                    <span>{m.cinturaCm !== undefined ? `${decimal(m.cinturaCm)} cm` : '–'}</span>
                     <button style={{ flex: 'none', minHeight: 36 }} aria-label={t('Apagar medição de {data}', { data: dataCurta(m.data) })} onClick={() => confirm(t('Apagar esta medição?')) && db.medicoes.delete(m.id)}>✕</button>
                   </div>
                   {extras.length > 0 && <div className="secundario">{extras.join(' · ')} cm</div>}

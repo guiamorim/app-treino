@@ -16,15 +16,16 @@ import { VERSAO } from './versao'
 import { Temporizador } from './Temporizador'
 import { terminarDescanso, useDescanso } from './descanso'
 import { treinoADecorrer, useEcraLigado } from './ecraLigado'
+import { Icone } from './Icones'
 import { m, t } from '../i18n'
 
 const SEPARADORES = [
-  { rota: 'inicio', nome: m('Início'), icone: '🏠' },
-  { rota: 'hoje', nome: m('Hoje'), icone: '🏋️' },
-  { rota: 'relatorios', nome: m('Relatórios'), icone: '📈' },
-  { rota: 'medicoes', nome: m('Medições'), icone: '⚖️' },
-  { rota: 'fotos', nome: m('Fotos'), icone: '📷' },
-  { rota: 'mais', nome: m('Mais'), icone: '⋯' },
+  { rota: 'inicio', nome: m('Início') },
+  { rota: 'hoje', nome: m('Hoje') },
+  { rota: 'relatorios', nome: m('Relatórios') },
+  { rota: 'medicoes', nome: m('Medições') },
+  { rota: 'fotos', nome: m('Fotos') },
+  { rota: 'mais', nome: m('Mais') },
 ] as const
 
 export function App() {
@@ -58,7 +59,7 @@ export function App() {
       <nav className="navegacao" aria-label={t('Principal')}>
         {SEPARADORES.map((s) => (
           <a key={s.rota} href={`#/${s.rota}`} aria-current={ativo === s.rota ? 'page' : undefined}>
-            <span className="icone" aria-hidden="true">{s.icone}</span>
+            <Icone nome={s.rota} />
             {t(s.nome)}
           </a>
         ))}

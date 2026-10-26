@@ -6,7 +6,8 @@ import { AREAS, DIAS_POR_SEMANA, type Anamnese, type DiasPorSemana, type Divisao
 import { agoraIso, catalogo, novoId, type Dados } from './dados'
 import { ir } from './rota'
 import { m, t, traduzido } from '../i18n'
-import { CartaoIdioma } from './Idioma'
+import { CartaoIdioma, CartaoUnidade } from './Idioma'
+import { deUnidade, paraCampo } from '../domain/unidades'
 
 // Perguntas gerais do PAR-Q+ (versão 2023), adaptadas para português de Portugal.
 export const PERGUNTAS_PARQ = [
@@ -44,7 +45,7 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
   const [f, setF] = useState({
     idade: a?.idade.toString() ?? '',
     alturaCm: a?.alturaCm.toString() ?? '',
-    pesoKg: a?.pesoKg.toString() ?? '',
+    pesoKg: a ? paraCampo(a.pesoKg) : '',
     cinturaCm: a?.cinturaCm?.toString() ?? '',
     sexo: a?.sexo ?? 'masculino',
     objetivo: a?.objetivo ?? 'recomposicao',
@@ -85,10 +86,10 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
   async function guardar(e: FormEvent) {
     e.preventDefault()
     const num = (s: string) => Number(s.replace(',', '.'))
-    const idade = num(f.idade), alturaCm = num(f.alturaCm), pesoKg = num(f.pesoKg), cintura = num(f.cinturaCm)
+    const idade = num(f.idade), alturaCm = num(f.alturaCm), pesoKg = deUnidade(num(f.pesoKg)), cintura = num(f.cinturaCm)
     if (!(idade >= 14 && idade <= 110)) return setErro(t('Indica uma idade entre 14 e 110.'))
     if (!(alturaCm >= 100 && alturaCm <= 250)) return setErro(t('Indica a altura em centímetros (ex.: 175).'))
-    if (!(pesoKg >= 20 && pesoKg <= 400)) return setErro(t('Indica o peso em kg.'))
+    if (!(pesoKg >= 20 && pesoKg <= 400)) return setErro(t('Indica o peso em {u}.', { u: dados.unidade }))
     if (f.cinturaCm && !(cintura >= 30 && cintura <= 250)) return setErro(t('Indica a cintura em centímetros ou deixa em branco.'))
     if (!semDores && restricoes.length === 0) return setErro(t('Nas dores ou limitações, marca «Nenhuma» ou pelo menos uma zona.'))
     if (parq.some((x) => x === null)) return setErro(t('Responde a todas as perguntas de saúde (PAR-Q+).'))
@@ -121,6 +122,7 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
       <h1>{a ? t('Anamnese') : t('Bem-vindo')}</h1>
       {!a && <p className="secundario">{t('Responde a estas perguntas para gerar o teu plano. Os dados ficam só neste dispositivo.')}</p>}
       {!a && <CartaoIdioma idioma={dados.idioma} />}
+      {!a && <CartaoUnidade unidade={dados.unidade} />}
 
       <h2>{t('Sobre ti')}</h2>
       <div className="linha">
@@ -131,7 +133,7 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
       </div>
       <div className="linha">
         <div><label htmlFor="altura">{t('Altura (cm)')}</label><input id="altura" inputMode="decimal" {...campo('alturaCm')} /></div>
-        <div><label htmlFor="peso">{t('Peso (kg)')}</label><input id="peso" inputMode="decimal" {...campo('pesoKg')} /></div>
+        <div><label htmlFor="peso">{t('Peso ({u})', { u: dados.unidade })}</label><input id="peso" inputMode="decimal" {...campo('pesoKg')} /></div>
         <div><label htmlFor="cintura">{t('Cintura (cm)')}</label><input id="cintura" inputMode="decimal" placeholder={t('opcional')} {...campo('cinturaCm')} /></div>
       </div>
 
