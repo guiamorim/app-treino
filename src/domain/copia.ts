@@ -44,6 +44,7 @@ const anamnese = z.strictObject({
   enfase: z.enum(ENFASES).optional(),
   divisao: z.enum(DIVISOES_TREINO).optional(),
   gravidez: z.enum(GRAVIDEZ).optional(),
+  diasTreino: z.array(inteiro(0, 6)).max(7).optional(),
 })
 
 const faixa = z.tuple([z.number().int().min(0), z.number().int().min(0)])

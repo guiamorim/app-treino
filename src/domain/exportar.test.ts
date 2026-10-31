@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { excelFichaHistorico, folhaFicha, folhaHistorico, folhaMedicoes, pdfFicha, pdfHistorico, pdfRelatorioPt, type DadosExportacao } from './exportar'
+import { excelFichaHistorico, folhaFicha, folhaHistorico, folhaMedicoes, pdfDia, pdfFicha, pdfHistorico, pdfMes, pdfRelatorioPt, pdfSemana, type DadosExportacao } from './exportar'
 import { catalogo, perfilExemplo } from './fixtures'
 import { gerarPdf, lerJpeg, quebrarLinha } from './pdf'
 import { gerarPlano } from './plano'
@@ -168,3 +168,38 @@ describe('F15 v1.5 relatório para o PT', () => {
     expect(() => lerJpeg(new Uint8Array([0x89, 0x50, 0x4e, 0x47]))).toThrow()
   })
 })
+
+describe('F25.4 PDF do dia, da semana e do mês', () => {
+  const comDias: DadosExportacao = { ...dados, anamnese: { ...perfilExemplo, diasTreino: [0, 2, 4, 5] } }
+
+  it('dia: o próximo treino, com sugestão da última vez e espaços para escrever', () => {
+    const pdf = texto(pdfDia(dados, catalogo, AGORA))
+    xrefValida(pdf)
+    expect(pdf).toContain('Treino do dia')
+    // Há um treino a meio (Superior A): é esse o do dia.
+    expect(pdf).toContain(plano.treinos[0]!.nome)
+    expect(pdf).toContain('Sugest')
+    expect(pdf).toContain('______')
+  })
+
+  it('semana: com dias escolhidos, os treinos dos próximos 7 dias com data; sem dias, a rotação', () => {
+    const com = texto(pdfSemana(comDias, catalogo, AGORA))
+    xrefValida(com)
+    // 24/10/2026 é sábado: sábado, segunda, quarta e sexta.
+    expect(com.match(/\/10 \\267 /g)).toHaveLength(4)
+    const sem = texto(pdfSemana(dados, catalogo, AGORA))
+    expect(sem).toContain('Treino 1 \\267 ')
+    expect(sem).toContain('Treino 4 \\267 ')
+    // A sugestão só aparece na primeira vez de cada exercício.
+    const exercicios = new Set(plano.treinos.flatMap((tr) => tr.prescricoes.map((p) => p.exercicioId)))
+    expect(sem.match(/Sugest/g)!.length).toBeLessThanOrEqual(exercicios.size)
+  })
+
+  it('mês: 4 semanas com a fase de cada uma', () => {
+    const pdf = texto(pdfMes(comDias, catalogo, AGORA))
+    xrefValida(pdf)
+    expect(pdf.match(/Semana de /g)).toHaveLength(4)
+    expect(pdf).toContain('bloco 1, semana')
+  })
+})
+

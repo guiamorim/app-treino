@@ -2,7 +2,7 @@
 
 [English](specification-v1.en.md) · **Português**
 
-Data: 2026-10-20 · Versão 1.12 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.12)
+Data: 2026-10-20 · Versão 1.13 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.13)
 
 ## 0. Decisões fechadas
 
@@ -231,6 +231,19 @@ Segunda fase do estudo de 2026-10-31. Cada exercício diz como se conta o peso, 
 - **F24.3 Registos guardam a forma.** Cada exercício registado numa sessão guarda como se contou o peso. A sugestão de carga só compara sessões contadas da mesma forma. Os registos anteriores à v1.12 contam como a forma por omissão do exercício (nos halteres, o peso de um halter).
 - **F24.4 Discos por lado.** Nos exercícios com barra, «Escrever discos por lado» troca o campo por «Discos por lado». A app soma a barra e mostra, por exemplo, «20 kg barra + 2 × 15 kg = 50 kg». Guarda-se sempre o total, para a progressão e os recordes compararem valores iguais. O peso da barra escolhe-se em «Mais»: 20, 15 ou 10 kg (45, 35 ou 25 lb em libras); 20 kg por omissão.
 - **F24.5 Exportações e cópia.** O histórico em Excel e o CSV têm a coluna da forma de contar. A cópia de segurança leva as escolhas por exercício e o peso da barra; as cópias anteriores continuam válidas.
+
+### F25. Dias de treino, calendário e PDF do dia, da semana e do mês (v1.13)
+Terceira fase do estudo de 2026-10-31.
+- **F25.1 Dias de treino.** Na anamnese, por baixo de «Dias por semana», escolho opcionalmente os dias da semana em que treino (seg a dom). Se escolher, têm de ser tantos como os dias por semana. Mudar os dias não gera um plano novo. As cópias anteriores continuam válidas.
+- **F25.2 Previsão.** Com dias escolhidos, a rotação do plano é posta nesses dias a partir do próximo treino (F3). Se hoje é dia de treino e ainda não terminei um treino hoje, o próximo treino é o de hoje. Se treinar noutro dia, a previsão reajusta-se sozinha, porque parte sempre do último treino feito. Sem dias escolhidos, não há datas: aparece a lista «Próximos treinos» pela ordem da rotação.
+- **F25.3 Calendário.** Em «Relatórios», o separador «Calendário» mostra o mês, com os meses anterior e seguinte. Cada dia marca o treino feito (✓), o treino previsto (nome curto), o dia de hoje e as semanas de descarga. Tocar num dia mostra:
+  - dia passado ou hoje com treino feito: o treino, os exercícios com todas as séries (carga, repetições, RIR ou reserva), a dor, a duração e o alongamento;
+  - hoje por fazer ou a meio: o que falta, com o botão para continuar o treino;
+  - dia seguinte com treino previsto: o treino tal como será nessa semana (séries × faixa, RIR, descanso).
+- **F25.4 PDF do dia, da semana e do mês.** Em «Mais» e no calendário. Saem no idioma da app.
+  - Dia: o treino de hoje (ou o próximo), com séries × faixa, RIR ou reserva, descanso, a sugestão de carga, a última vez e espaços em branco para escrever carga e repetições à mão.
+  - Semana: os próximos 7 dias com datas (com dias escolhidos) ou os próximos treinos da rotação (sem dias), com espaços para escrever. Só o primeiro treino de cada exercício leva sugestão de carga, porque as seguintes dependem do que fizer.
+  - Mês: 4 semanas a partir desta, com a fase de cada uma (readaptação, bloco e semana, descarga), os treinos e os exercícios, e as trocas de exercício quando começa um bloco novo. Sem cargas.
 
 ### F14. Blocos e próxima mudança (v1.2, regras na secção 3.7)
 - No Início e no Treino de hoje: fase atual (readaptação, semana N de M do bloco, ou descarga) e a próxima mudança com data: fim da readaptação (séries completas), semana de descarga (metade das séries), ou novo bloco (troca dos exercícios isolados, com a lista do que muda).

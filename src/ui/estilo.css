@@ -189,3 +189,16 @@ figure.frase figcaption::before { content: '— '; }
 }
 /* F24.4: caixa «Escrever discos por lado», com a área de toque da linha inteira. */
 .escolha-lado { display: flex; align-items: center; gap: 10px; min-height: 44px; font-weight: 400; }
+/* F25.1: dias de treino. */
+.dias-treino { gap: 4px; flex-wrap: nowrap; }
+.dias-treino button { min-height: 44px; min-width: 0; padding: 4px 2px; font-size: 0.85rem; }
+/* F25.3: calendário do mês. */
+.calendario { display: grid; gap: 4px; margin-top: 8px; }
+.cal-semana { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
+.cal-dia { min-height: 48px; min-width: 0; padding: 4px 0; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.cal-dia small { font-size: 0.7rem; color: var(--texto-2); min-height: 0.8rem; }
+.cal-dia.feito small { color: var(--ok); font-weight: 700; }
+.cal-dia.descarga { background: var(--suave); }
+.cal-dia.hoje { border: 2px solid var(--acento); }
+.cal-dia.escolhido { background: var(--acento); color: var(--acento-texto); }
+.cal-dia.escolhido small { color: inherit; }

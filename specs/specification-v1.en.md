@@ -2,7 +2,7 @@
 
 **English** · [Português](especificacao-v1.md)
 
-Date: 2026-10-20 · Version 1.12 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.12)
+Date: 2026-10-20 · Version 1.13 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.13)
 
 The Portuguese version is the reference used for the domain names in the code. Both versions must stay in sync.
 
@@ -235,6 +235,19 @@ Second phase of the 2026-10-31 study. Each exercise says how its weight is count
 - **F24.3 Records keep the way.** Each exercise logged in a session keeps how its weight was counted. The load suggestion only compares sessions counted the same way. Records from before v1.12 count as the exercise's default way (for dumbbells, the weight of one dumbbell).
 - **F24.4 Plates per side.** On barbell exercises, "Enter plates per side" swaps the field for "Plates per side". The app adds the bar and shows, for example, "20 kg bar + 2 × 15 kg = 50 kg". The total is always what is stored, so progression and records compare like with like. The bar weight is chosen in "More": 20, 15 or 10 kg (45, 35 or 25 lb in pounds); 20 kg by default.
 - **F24.5 Exports and backup.** The Excel history and the CSV have a column for the way of counting. The backup carries the per-exercise choices and the bar weight; older backups stay valid.
+
+### F25. Training days, calendar and PDF of the day, week and month (v1.13)
+Third phase of the 2026-10-31 study.
+- **F25.1 Training days.** In the anamnesis, below "Days per week", I can choose the weekdays I train on (Mon to Sun). If I choose, there must be as many as the days per week. Changing the days does not generate a new plan. Older backups stay valid.
+- **F25.2 Forecast.** With days chosen, the plan's rotation is placed on those days starting from the next workout (F3). If today is a training day and I have not finished a workout today, the next workout is today's. If I train on another day, the forecast readjusts itself, because it always starts from the last workout done. Without days chosen there are no dates: a "Next workouts" list shows in rotation order.
+- **F25.3 Calendar.** In "Reports", the "Calendar" tab shows the month, with the previous and next months. Each day marks the workout done (✓), the planned workout (short name), today and deload weeks. Tapping a day shows:
+  - a past day or today with a workout done: the workout, the exercises with every set (load, reps, RIR or reserve), pain, duration and stretching;
+  - today, not done or half done: what is left, with the button to continue the workout;
+  - a later day with a planned workout: the workout as it will be that week (sets × range, RIR, rest).
+- **F25.4 PDF of the day, week and month.** In "More" and in the calendar. In the app's language.
+  - Day: today's workout (or the next one), with sets × range, RIR or reserve, rest, the load suggestion, the last time and blank spaces to write load and reps by hand.
+  - Week: the next 7 days with dates (with days chosen) or the next workouts in the rotation (without days), with spaces to write. Only each exercise's first workout carries a load suggestion, because the later ones depend on what I do.
+  - Month: 4 weeks from this one, with each week's phase (re-adaptation, block and week, deload), the workouts and exercises, and the exercise swaps when a new block starts. No loads.
 
 ### F14. Blocks and next change (v1.2, rules in section 3.7)
 - On Home and on Today's workout: current phase (re-adaptation, week N of M of the block, or deload) and the next change with its date: end of re-adaptation (full sets), deload week (half the sets), or new block (isolation exercises rotate, listing what changes).

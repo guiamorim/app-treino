@@ -5,7 +5,7 @@ import { divisoesPossiveis, gerarPlano } from '../domain/plano'
 import { AREAS, DIAS_POR_SEMANA, type Anamnese, type DiasPorSemana, type DivisaoTreino, type Enfase, type Gravidez, type Area, type Restricao } from '../domain/types'
 import { agoraIso, catalogo, novoId, type Dados } from './dados'
 import { ir } from './rota'
-import { m, t, traduzido } from '../i18n'
+import { locale, m, t, traduzido } from '../i18n'
 import { CartaoIdioma, CartaoUnidade } from './Idioma'
 import { deUnidade, paraCampo } from '../domain/unidades'
 
@@ -40,6 +40,9 @@ const NOMES_DIVISOES: Record<DivisaoTreino, string> = traduzido({
 
 const NOMES_AREAS: Record<Area, string> = traduzido({ ombro: m('Ombro'), joelho: m('Joelho'), lombar: m('Lombar'), punho: m('Punho'), anca: m('Anca'), cotovelo: m('Cotovelo') })
 
+/** Nomes curtos dos dias, de segunda a domingo, no idioma da app (2026-11-02 é segunda-feira). */
+const NOMES_DIAS = () => Array.from({ length: 7 }, (_, d) => new Date(2026, 10, 2 + d, 12).toLocaleDateString(locale(), { weekday: 'short' }).replace('.', '').slice(0, 3))
+
 export function AnamneseEcra({ dados }: { dados: Dados }) {
   const a = dados.anamnese
   const [f, setF] = useState({
@@ -63,6 +66,9 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
   const [semDores, setSemDores] = useState(!!a && a.restricoes.length === 0)
   const [parq, setParq] = useState<(boolean | null)[]>(a?.parq ?? PERGUNTAS_PARQ.map(() => null))
   const [erro, setErro] = useState('')
+  // F25.1: dias da semana em que treina (opcional).
+  const [diasTreino, setDiasTreino] = useState<number[]>(a?.diasTreino ?? [])
+  const alternarDia = (d: number) => setDiasTreino((x) => (x.includes(d) ? x.filter((y) => y !== d) : [...x, d].sort()))
   const dias = Number(f.diasPorSemana) as DiasPorSemana
   const possiveis = divisoesPossiveis(dias)
   // Se os dias mudarem e o modelo deixar de servir, volta ao automático.
@@ -93,6 +99,7 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
     if (f.cinturaCm && !(cintura >= 30 && cintura <= 250)) return setErro(t('Indica a cintura em centímetros ou deixa em branco.'))
     if (!semDores && restricoes.length === 0) return setErro(t('Nas dores ou limitações, marca «Nenhuma» ou pelo menos uma zona.'))
     if (parq.some((x) => x === null)) return setErro(t('Responde a todas as perguntas de saúde (PAR-Q+).'))
+    if (diasTreino.length > 0 && diasTreino.length !== Number(f.diasPorSemana)) return setErro(t('Escolhe {n} dias da semana, ou nenhum.', { n: f.diasPorSemana }))
 
     const nova: Anamnese = {
       idade, alturaCm, pesoKg,
@@ -109,10 +116,14 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
       enfase: f.enfase as Enfase,
       ...(divisao !== 'automatico' ? { divisao } : {}),
       ...(f.sexo === 'feminino' ? { gravidez: f.gravidez as Gravidez } : {}),
+      ...(diasTreino.length ? { diasTreino } : {}),
     }
     await db.gravar('anamnese', nova)
     // F1.3: alterar a anamnese pergunta antes de substituir o plano; o histórico mantém-se.
-    const gerar = !dados.plano || confirm(t('Gerar um novo plano com estes dados? O histórico de treinos mantém-se.'))
+    // F25.1: mudar só os dias de treino não mexe no plano.
+    const semDias = (x: Anamnese) => JSON.stringify({ ...x, diasTreino: undefined })
+    const soDias = !!a && semDias(a) === semDias(nova)
+    const gerar = !dados.plano || (!soDias && confirm(t('Gerar um novo plano com estes dados? O histórico de treinos mantém-se.')))
     if (gerar) await db.gravar('plano', gerarPlano(nova, catalogo, { id: novoId(), agora: agoraIso() }))
     ir('/hoje')
   }
@@ -171,6 +182,13 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
           <select id="duracao" {...campo('duracaoMin')}>{[45, 60, 75].map((d) => <option key={d} value={d}>{d}</option>)}</select>
         </div>
       </div>
+      <label id="titulo-dias-treino">{t('Em que dias treinas? (opcional)')}</label>
+      <div className="linha dias-treino" role="group" aria-labelledby="titulo-dias-treino">
+        {NOMES_DIAS().map((nome, d) => (
+          <button key={d} type="button" aria-pressed={diasTreino.includes(d)} className={diasTreino.includes(d) ? 'primario' : ''} onClick={() => alternarDia(d)}>{nome}</button>
+        ))}
+      </div>
+      <p className="secundario">{t('Com os dias escolhidos, o calendário mostra os próximos treinos.')}</p>
       <label htmlFor="divisao">{t('Modelo de treino')}</label>
       <select id="divisao" value={divisao} onChange={(e) => setF({ ...f, divisao: e.target.value as DivisaoTreino })}>
         {possiveis.map((d) => <option key={d} value={d}>{NOMES_DIVISOES[d]}</option>)}

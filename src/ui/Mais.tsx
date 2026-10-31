@@ -8,6 +8,7 @@ import { ir } from './rota'
 import { reduzirImagem } from './imagem'
 import { CartaoAtualizacoes } from './Atualizacao'
 import { t } from '../i18n'
+import { BotoesPdfPlano } from './Calendario'
 import { CartaoBarra, CartaoIdioma, CartaoUnidade } from './Idioma'
 
 export function Mais({ dados }: { dados: Dados }) {
@@ -51,6 +52,8 @@ export function Mais({ dados }: { dados: Dados }) {
           <button disabled={!dados.plano} onClick={() => descarregar(`${t('ficha-treino')}-${hojeIso()}.pdf`, pdfFicha(paraExportacao(dados), catalogo, agoraIso()), TIPO_PDF)}>{t('Ficha (PDF)')}</button>
           <button onClick={() => descarregar(`${t('historico-treino')}-${hojeIso()}.pdf`, pdfHistorico(paraExportacao(dados), catalogo, agoraIso()), TIPO_PDF)}>{t('Histórico (PDF)')}</button>
         </div>
+        <p className="secundario" style={{ marginTop: 12 }}>{t('Treino para levar no papel, com espaço para escrever:')}</p>
+        <BotoesPdfPlano dados={dados} />
         <button className="largo" style={{ marginTop: 8 }} onClick={() => descarregar(`${t('treino')}-${hojeIso()}.xlsx`, excelFichaHistorico(paraExportacao(dados), catalogo, agoraIso()), TIPO_XLSX)}>{t('Ficha, histórico e medições (Excel)')}</button>
       </div>
 
