@@ -112,6 +112,8 @@ export interface Anamnese {
   enfase?: Enfase
   /** Secção 3.4.1; só com sexo feminino. */
   gravidez?: Gravidez
+  /** F25.1 (v1.13): dias da semana em que treina, 0 = segunda … 6 = domingo. */
+  diasTreino?: number[]
 }
 
 export interface Prescricao {

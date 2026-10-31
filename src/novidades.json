@@ -1,6 +1,31 @@
 {
   "versoes": [
     {
+      "versao": "1.13.0",
+      "data": "2026-10-31",
+      "itens": [
+        "Na anamnese podes escolher os dias em que treinas; a app põe a rotação nesses dias e reajusta-se se treinares noutro dia.",
+        "Novo separador «Calendário» nos Relatórios: vês o que fizeste em cada dia, com todas as séries, e o que está previsto para os dias seguintes.",
+        "PDF do dia, da semana e do mês, com espaço para escrever carga e repetições à mão (em «Mais» e no calendário)."
+      ],
+      "traducoes": {
+        "en": {
+          "itens": [
+            "In the questionnaire you can choose the days you train; the app places the rotation on those days and readjusts if you train on another day.",
+            "New “Calendar” tab in Reports: see what you did each day, with every set, and what is planned for the days ahead.",
+            "PDF of the day, week and month, with space to write load and reps by hand (in “More” and in the calendar)."
+          ]
+        },
+        "es": {
+          "itens": [
+            "En la anamnesis puedes elegir los días en que entrenas; la app pone la rotación en esos días y se reajusta si entrenas otro día.",
+            "Nueva pestaña «Calendario» en Informes: ves lo que hiciste cada día, con todas las series, y lo previsto para los días siguientes.",
+            "PDF del día, de la semana y del mes, con espacio para escribir carga y repeticiones a mano (en «Más» y en el calendario)."
+          ]
+        }
+      }
+    },
+    {
       "versao": "1.12.0",
       "data": "2026-10-31",
       "itens": [

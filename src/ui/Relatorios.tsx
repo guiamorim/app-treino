@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Calendario } from './Calendario'
 import { aderencia, alvoVolume, inicioSemana, mediaMovel, progressaoExercicio, volumeSemanal } from '../domain/relatorios'
 import { GRUPOS_MUSCULARES, NOMES_GRUPOS } from '../domain/types'
 import { decimal, paraUnidade, peso, unidadePeso } from '../domain/unidades'
@@ -7,15 +8,16 @@ import { GraficoLinha } from './Grafico'
 import { t } from '../i18n'
 
 export function Relatorios({ dados }: { dados: Dados }) {
-  const [aba, setAba] = useState<'progressao' | 'semana'>('progressao')
+  const [aba, setAba] = useState<'progressao' | 'semana' | 'calendario'>('progressao')
   return (
     <>
       <h1>{t('Relatórios')}</h1>
       <div className="abas" role="tablist">
         <button role="tab" aria-selected={aba === 'progressao'} onClick={() => setAba('progressao')}>{t('Progressão')}</button>
         <button role="tab" aria-selected={aba === 'semana'} onClick={() => setAba('semana')}>{t('Semana')}</button>
+        <button role="tab" aria-selected={aba === 'calendario'} onClick={() => setAba('calendario')}>{t('Calendário')}</button>
       </div>
-      {aba === 'progressao' ? <Progressao dados={dados} /> : <Semana dados={dados} />}
+      {aba === 'progressao' ? <Progressao dados={dados} /> : aba === 'semana' ? <Semana dados={dados} /> : dados.plano ? <Calendario dados={dados} plano={dados.plano} /> : null}
     </>
   )
 }

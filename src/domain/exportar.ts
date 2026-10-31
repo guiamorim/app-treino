@@ -17,12 +17,17 @@ import {
   type Pose,
   type RegistoExercicio,
   type Sessao,
+  type TreinoModelo,
   type Serie,
 } from './types'
 import { gerarXlsx, type Folha } from './xlsx'
 import { paraUnidade, unidadePeso } from './unidades'
 import { MAIS_DE_60, reservaAlvo, textoReserva } from './reserva'
-import { nomeTipoCarga, tipoPadrao } from './carga'
+import { mesmaForma, nomeTipoCarga, tipoCarga, tipoPadrao, type TipoCarga } from './carga'
+import { estadoBloco, trocasDoBloco } from './blocos'
+import { diaLocal, meioDia, previsao, proximosTreinos, segundaDaSemana, somarDias } from './calendario'
+import { sugerir } from './progressao'
+import { historicoExercicio, proximoTreino } from './sessao'
 
 /** F23.1: a ficha pede reserva em segundos nos exercícios por tempo, RIR nos restantes. */
 const alvoEsforco = (p: { rir: [number, number] }, emSegundos: boolean) => {
@@ -45,6 +50,8 @@ export interface DadosExportacao {
   medicoes: Medicao[]
   fotos: FotoAvaliacao[]
   perfil: Perfil
+  /** F24.2: forma de contar escolhida por exercício (para a sugestão nos PDF do dia e da semana). */
+  tiposCarga?: Record<string, TipoCarga>
 }
 
 const num = (n: number) => (Math.round(n * 10) / 10).toLocaleString(locale(), { useGrouping: false })
@@ -194,4 +201,106 @@ export function pdfRelatorioPt(d: DadosExportacao, catalogo: Catalogo, mesAntes:
   secoes.push({ titulo: t('Notas do personal trainer'), linhas: ['', '', '', ''] })
   const nome = d.perfil.nome ? `${d.perfil.nome} · ` : ''
   return gerarPdf(t('Avaliação física: relatório para o PT'), nome + t('{inicio} a {fim} · gerado em {agora}', { inicio: dataPt(inicio), fim: dataPt(fim > agora ? agora : fim), agora: dataPt(agora) }), secoes)
+}
+
+// F25.4: PDF do dia, da semana e do mês.
+
+const nomeDia = (dia: string) => new Date(meioDia(dia)).toLocaleDateString(locale(), { weekday: 'short', day: '2-digit', month: '2-digit' })
+
+function textoFase(plano: Plano, semana: number): string {
+  const e = estadoBloco(plano, semana)
+  if (e.fase === 'readaptacao') return t('readaptação')
+  if (e.fase === 'descarga') return t('bloco {b}, semana de descarga', { b: e.bloco })
+  return t('bloco {b}, semana {s} de {n}', { b: e.bloco, s: e.semanaNoBloco, n: e.semanasBloco })
+}
+
+/** Linhas de um treino; com `sugeridos`, sugere a carga só na primeira vez de cada exercício; com `escrever`, deixa espaços para a mão. */
+function linhasTreino(tr: TreinoModelo, d: DadosExportacao, catalogo: Catalogo, semana: number, opts: { sugeridos?: Set<string>; escrever: boolean }): string[] {
+  const plano = d.plano!
+  const descarga = estadoBloco(plano, semana).fase === 'descarga'
+  return tr.prescricoes.flatMap((p, i) => {
+    const ex = catalogo.get(p.exercicioId)
+    const emSegundos = ex?.medida === 'segundos'
+    const unidade = emSegundos ? 's' : 'reps'
+    const linhas = [`${i + 1}. ${ex?.nome ?? p.exercicioId}: ${p.series} × ${p.faixa[0]}–${p.faixa[1]} ${unidade} · ${alvoEsforco(p, emSegundos)} · ${t('descanso {s} s', { s: p.descansoSeg })}`]
+    if (!ex) return linhas
+    const tipo = tipoCarga(ex, d.tiposCarga ?? {})
+    const semCarga = ex.incrementoKg === 0 || tipo === 'corporal'
+    if (opts.sugeridos && !opts.sugeridos.has(ex.id)) {
+      opts.sugeridos.add(ex.id)
+      const historico = mesmaForma(historicoExercicio(d.sessoes, ex.id), ex, tipo)
+      const s = sugerir({ prescricao: p, exercicio: semCarga ? { ...ex, incrementoKg: 0 } : ex, historico, readaptacao: plano.readaptacao, descarga })
+      const ultima = historico.at(-1)
+      const sugestao = `${t('Sugestão:')} ${s.carga !== null && !semCarga ? `${pesoTxt(s.carga)} × ` : ''}${s.reps} ${unidade}`
+      const antes = ultima ? ` · ${t('Última vez:')} ${semCarga ? '' : `${pesoTxt(ultima.series[0]!.carga)} × `}${ultima.series.map((x) => x.reps).join(', ')}` : ''
+      linhas.push(`    ${sugestao}${antes}`)
+    }
+    if (opts.escrever) linhas.push(`    ${Array.from({ length: p.series }, () => (semCarga ? '____' : '______ × ____')).join('    ')}`)
+    return linhas
+  })
+}
+
+const semPlano = (): SecaoPdf[] => [{ titulo: t('Sem plano'), linhas: [t('Preenche a anamnese para gerar o plano.')] }]
+const treinoDoPlano = (plano: Plano, id: string, semana: number) => treinoEfetivo(plano.treinos.find((x) => x.id === id) ?? plano.treinos[0]!, plano, semana)
+
+/** O treino de hoje (ou o próximo), com sugestão, última vez e espaços para escrever. */
+export function pdfDia(d: DadosExportacao, catalogo: Catalogo, agora: string): Uint8Array<ArrayBuffer> {
+  if (!d.plano) return gerarPdf(t('Treino do dia'), subtitulo(d, agora), semPlano())
+  const semana = semanaDoPlano(d.plano, agora)
+  const tr = treinoDoPlano(d.plano, proximoTreino(d.plano, d.sessoes).treinoId, semana)
+  const secao = {
+    titulo: `${nomeDia(diaLocal(agora))} · ${tr.nome} (${textoFase(d.plano, semana)})`,
+    linhas: [...linhasTreino(tr, d, catalogo, semana, { sugeridos: new Set(), escrever: true }), ...(tr.cardioMin ? [t('Cardio {min} min', { min: tr.cardioMin })] : [])],
+  }
+  return gerarPdf(t('Treino do dia'), subtitulo(d, agora), [secao])
+}
+
+/** Os próximos 7 dias (com dias de treino) ou os próximos treinos da rotação; sugestão só na primeira vez de cada exercício. */
+export function pdfSemana(d: DadosExportacao, catalogo: Catalogo, agora: string): Uint8Array<ArrayBuffer> {
+  if (!d.plano) return gerarPdf(t('Treinos da semana'), subtitulo(d, agora), semPlano())
+  const plano = d.plano
+  const hoje = diaLocal(agora)
+  const sugeridos = new Set<string>()
+  const datados = previsao(plano, d.sessoes, d.anamnese?.diasTreino, hoje, somarDias(hoje, 6))
+  const itens = datados.length
+    ? datados.map((x) => ({ titulo: nomeDia(x.dia), treinoId: x.treinoId, semana: semanaDoPlano(plano, meioDia(x.dia)) }))
+    : proximosTreinos(plano, d.sessoes, d.anamnese?.diasPorSemana ?? plano.treinos.length).map((id, i) => ({ titulo: t('Treino {n}', { n: i + 1 }), treinoId: id, semana: semanaDoPlano(plano, agora) }))
+  const secoes: SecaoPdf[] = itens.map((x) => {
+    const tr = treinoDoPlano(plano, x.treinoId, x.semana)
+    return { titulo: `${x.titulo} · ${tr.nome} (${textoFase(plano, x.semana)})`, linhas: [...linhasTreino(tr, d, catalogo, x.semana, { sugeridos, escrever: true }), ...(tr.cardioMin ? [t('Cardio {min} min', { min: tr.cardioMin })] : [])] }
+  })
+  return gerarPdf(t('Treinos da semana'), subtitulo(d, agora), secoes)
+}
+
+/** 4 semanas a partir desta: fase, treinos e exercícios, e as trocas quando começa um bloco. Sem cargas. */
+export function pdfMes(d: DadosExportacao, catalogo: Catalogo, agora: string): Uint8Array<ArrayBuffer> {
+  if (!d.plano) return gerarPdf(t('Plano do mês'), subtitulo(d, agora), semPlano())
+  const plano = d.plano
+  const hoje = diaLocal(agora)
+  const inicio = segundaDaSemana(hoje)
+  const datados = previsao(plano, d.sessoes, d.anamnese?.diasTreino, hoje, somarDias(inicio, 27))
+  const porSemana = d.anamnese?.diasPorSemana ?? plano.treinos.length
+  const rotacao = proximosTreinos(plano, d.sessoes, porSemana * 4)
+  const secoes: SecaoPdf[] = [0, 1, 2, 3].map((w) => {
+    const seg = somarDias(inicio, 7 * w)
+    const dom = somarDias(seg, 6)
+    const semana = semanaDoPlano(plano, meioDia(seg < hoje ? hoje : seg))
+    const e = estadoBloco(plano, semana)
+    const trocas = e.semanaNoBloco === 1 ? trocasDoBloco(plano, e.bloco) : []
+    const itens = datados.length
+      ? datados.filter((x) => x.dia >= seg && x.dia <= dom).map((x) => ({ quando: nomeDia(x.dia), treinoId: x.treinoId }))
+      : rotacao.slice(w * porSemana, (w + 1) * porSemana).map((id) => ({ quando: '•', treinoId: id }))
+    return {
+      titulo: `${t('Semana de {a} a {b}', { a: dataPt(seg), b: dataPt(dom) })} · ${textoFase(plano, semana)}`,
+      linhas: [
+        ...trocas.map((x) => t('Bloco novo, {treino}: {de} → {para}', { treino: x.treino, de: catalogo.get(x.de)?.nome ?? x.de, para: catalogo.get(x.para)?.nome ?? x.para })),
+        ...itens.map((x) => {
+          const tr = treinoDoPlano(plano, x.treinoId, semana)
+          const exercicios = tr.prescricoes.map((p) => `${catalogo.get(p.exercicioId)?.nome ?? p.exercicioId} ${p.series}×${p.faixa[0]}–${p.faixa[1]}`).join('; ')
+          return `${x.quando} ${tr.nome}: ${exercicios}`
+        }),
+      ],
+    }
+  })
+  return gerarPdf(t('Plano do mês'), subtitulo(d, agora), secoes)
 }

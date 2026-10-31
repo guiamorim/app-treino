@@ -36,4 +36,5 @@ export const paraExportacao = (d: Dados, fotos: FotoAvaliacao[] = []): DadosExpo
   medicoes: d.medicoes,
   fotos,
   perfil: d.perfil,
+  tiposCarga: d.tiposCarga,
 })

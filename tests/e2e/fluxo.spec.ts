@@ -579,3 +579,48 @@ test('F24: rótulo da carga por equipamento, escolha da forma de contar e discos
   // Depois da série, o campo continua em discos por lado.
   await expect(page.getByLabel('Discos por lado (kg)')).toHaveValue('10')
 })
+
+test('F25: dias de treino, calendário com o dia de hoje e PDF do dia', async ({ page }) => {
+  await preencherAnamnese(page)
+  // F25.1: hoje e os três dias seguintes; mudar só os dias não pede para gerar um plano novo.
+  let pediuPlano = false
+  page.on('dialog', (d) => { pediuPlano = true; void d.dismiss() })
+  await page.getByRole('link', { name: 'Mais' }).click()
+  await page.getByRole('button', { name: 'Editar anamnese e gerar novo plano' }).click()
+  const hoje = (new Date().getDay() + 6) % 7
+  const dias = page.getByRole('group', { name: 'Em que dias treinas? (opcional)' }).getByRole('button')
+  await dias.nth(hoje).click()
+  await page.getByRole('button', { name: 'Guardar' }).click()
+  await expect(page.getByRole('alert')).toHaveText('Escolhe 4 dias da semana, ou nenhum.')
+  for (const d of [1, 2, 3]) await dias.nth((hoje + d) % 7).click()
+  await page.getByRole('button', { name: 'Guardar' }).click()
+  await expect(page.getByRole('heading', { name: 'Superior A' })).toBeVisible()
+  expect(pediuPlano).toBe(false)
+
+  // F25.3: o calendário abre no dia de hoje, com o treino previsto.
+  await page.getByRole('link', { name: 'Relatórios' }).click()
+  await page.getByRole('tab', { name: 'Calendário' }).click()
+  const celulaHoje = page.locator('[aria-current="date"]')
+  await expect(celulaHoje).toHaveAttribute('aria-label', /treino previsto: Superior A/)
+  await expect(page.getByText('Hoje: Superior A')).toBeVisible()
+  await expect(page.getByText(/Supino com halteres, pega neutra: 2 × 6–10 reps/)).toBeVisible()
+  // Navegar entre meses e voltar.
+  await page.getByRole('button', { name: 'Mês seguinte' }).click()
+  await page.getByRole('button', { name: 'Mês anterior' }).click()
+
+  // F25.4: PDF do dia.
+  const descarga = page.waitForEvent('download')
+  await page.getByRole('button', { name: 'Dia (PDF)' }).click()
+  expect((await descarga).suggestedFilename()).toMatch(/^treino-do-dia-\d{4}-\d{2}-\d{2}\.pdf$/)
+
+  // F25.3: depois de uma série, o dia de hoje fica «a meio», com o que falta.
+  await page.getByRole('link', { name: 'Hoje' }).click()
+  await page.getByText('Supino com halteres, pega neutra').click()
+  await page.getByLabel('Carga (kg por halter)').fill('16')
+  await page.getByRole('button', { name: 'Concluir série' }).click()
+  await page.getByRole('link', { name: 'Relatórios' }).click()
+  await page.getByRole('tab', { name: 'Calendário' }).click()
+  await expect(page.getByText('Treino a meio: Superior A')).toBeVisible()
+  await expect(page.getByText(/Supino com halteres, pega neutra: 16 kg × 6/)).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Continuar treino' })).toBeVisible()
+})
