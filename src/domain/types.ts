@@ -43,7 +43,7 @@ export const NOMES_AREAS: Record<Area, string> = traduzido({
 })
 
 /** «barra» é a barra com discos; «barra-fixa» e «paralelas» (v1.16) são os apoios de peso corporal. */
-export const EQUIPAMENTOS = ['barra', 'halteres', 'maquina', 'cabo', 'peso-corporal', 'barra-fixa', 'paralelas'] as const
+export const EQUIPAMENTOS = ['barra', 'halteres', 'maquina', 'cabo', 'peso-corporal', 'barra-fixa', 'paralelas', 'elasticos', 'caneleiras'] as const
 export type Equipamento = (typeof EQUIPAMENTOS)[number]
 
 export type TipoExercicio = 'composto' | 'isolado'
@@ -76,6 +76,7 @@ export type DiasPorSemana = (typeof DIAS_POR_SEMANA)[number]
 
 export type Objetivo = 'recomposicao' | 'hipertrofia' | 'forca' | 'saude'
 export type Experiencia = 'iniciante' | 'regresso' | 'intermedio'
+/** Resumo do equipamento; desde a v1.17 manda a lista `equipamentos` (F28). */
 export type AcessoEquipamento = 'ginasio' | 'halteres' | 'casa'
 export type Sexo = 'masculino' | 'feminino' | 'outro'
 export const GRAVIDEZ = ['nao', 'gravida-1t', 'gravida-2t3t', 'pos-parto'] as const
@@ -115,6 +116,13 @@ export interface Anamnese {
   gravidez?: Gravidez
   /** F25.1 (v1.13): dias da semana em que treina, 0 = segunda … 6 = domingo. */
   diasTreino?: number[]
+  /**
+   * F28.1 (v1.17): equipamento que tem, sem o peso do corpo (que conta sempre). Sem este campo (anamneses
+   * anteriores), vale o resumo em `equipamento` (F28.3).
+   */
+  equipamentos?: Equipamento[]
+  /** F28.2: halter mais pesado que tem, em kg. */
+  halteresMaxKg?: number
 }
 
 export interface Prescricao {

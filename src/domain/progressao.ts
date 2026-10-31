@@ -19,6 +19,8 @@ export interface Entrada {
   readaptacao: boolean
   /** Secção 4.6: semana de descarga. */
   descarga?: boolean
+  /** F28.2: carga mais alta que a pessoa tem (halter mais pesado), em kg. */
+  cargaMaxKg?: number
 }
 
 const PASSO_SEGUNDOS = 5
@@ -43,7 +45,7 @@ function incremento(incrementoKg: number, carga: number, u: UnidadePeso): { valo
 }
 
 /** Especificação, secção 4 (dupla progressão). */
-export function sugerir({ prescricao, exercicio, historico, readaptacao, descarga }: Entrada): Sugestao {
+export function sugerir({ prescricao, exercicio, historico, readaptacao, descarga, cargaMaxKg }: Entrada): Sugestao {
   const u = unidadePeso()
   const [min, max] = prescricao.faixa
   const comSeries = historico.filter((h) => h.series.length > 0)
@@ -113,6 +115,9 @@ export function sugerir({ prescricao, exercicio, historico, readaptacao, descarg
     }
     const inc = incremento(exercicio.incrementoKg, carga, u)
     const nova = deUnidade(paraUnidade(carga, u) + inc.valor, u)
+    if (cargaMaxKg !== undefined && nova > cargaMaxKg + 0.01) {
+      return { carga, reps: max, subiu: false, motivo: t('Já usas o halter mais pesado que tens: em vez de subir a carga, desce em 3 s em cada repetição, ou faz mais repetições com uma perna ou um braço de cada vez.') }
+    }
     return {
       carga: nova,
       reps: min,

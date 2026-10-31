@@ -708,3 +708,34 @@ test('F27: criar o meu plano a partir do atual, com aviso de dor, sem readaptaç
   await expect(page.getByLabel('Readaptação no início (2 séries, RIR 3–4)')).toHaveValue('0')
   await expect(page.getByLabel(/Semana de descarga no fim de cada bloco/)).not.toBeChecked()
 })
+
+test('F28: lista de equipamento, só barra fixa e halteres até 20 kg', async ({ page }) => {
+  await page.goto('./')
+  await expect(page.getByRole('heading', { name: 'Bem-vindo' })).toBeVisible()
+  await page.getByLabel('Idade').fill('45')
+  await page.getByLabel('Altura (cm)').fill('175')
+  await page.getByLabel('Peso (kg)').fill('85')
+  await page.getByLabel('Dias por semana').selectOption('4')
+  // Por omissão está tudo marcado; «Só o peso do corpo» desmarca tudo.
+  await expect(page.getByLabel('Máquinas de musculação')).toBeChecked()
+  await page.getByRole('button', { name: 'Só o peso do corpo' }).click()
+  await expect(page.getByLabel('Máquinas de musculação')).not.toBeChecked()
+  await expect(page.getByLabel(/Halter mais pesado/)).toHaveCount(0)
+  await page.getByLabel('Barra fixa (elevações)').check()
+  await page.getByLabel('Halteres').check()
+  await page.getByLabel(/Halter mais pesado/).fill('20')
+  await page.getByLabel('Nenhuma').check()
+  for (let i = 0; i < 7; i++) await page.locator(`input[name="parq-${i}"]`).nth(1).check()
+  await page.getByRole('button', { name: 'Gerar o meu plano' }).click()
+
+  await expect(page.getByRole('heading', { name: 'Superior A' })).toBeVisible()
+  await expect(page.getByText('Elevações na barra')).toBeVisible()
+  await expect(page.getByText('Remada sentada no cabo (triângulo)')).toHaveCount(0)
+
+  // A anamnese volta a abrir com a lista e o halter mais pesado.
+  await page.getByRole('link', { name: 'Mais' }).click()
+  await page.getByRole('button', { name: 'Editar anamnese e gerar novo plano' }).click()
+  await expect(page.getByLabel('Barra fixa (elevações)')).toBeChecked()
+  await expect(page.getByLabel('Polias (cabos)')).not.toBeChecked()
+  await expect(page.getByLabel(/Halter mais pesado/)).toHaveValue('20')
+})

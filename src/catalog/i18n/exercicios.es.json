@@ -736,5 +736,50 @@
    "Rodillas por encima de los tobillos",
    "Respira con normalidad; para si te duele la rodilla"
   ]
+ },
+ "puxada-elastico": {
+  "nome": "Jalón con banda elástica",
+  "objetivo": "Tirón vertical en casa: la banda anclada en lo alto de una puerta (con anclaje propio) hace de polea.",
+  "pontosChave": [
+   "Banda bien anclada en lo alto de la puerta, puerta cerrada y abriendo hacia el otro lado",
+   "Lleva los codos hacia abajo y atrás, pecho arriba",
+   "Para hacerlo más difícil, banda más fuerte o alejarse de la puerta"
+  ]
+ },
+ "face-pull-elastico": {
+  "nome": "Face pull con banda elástica",
+  "objetivo": "Parte posterior del hombro y rotadores con banda, para equilibrar el empuje y proteger el hombro.",
+  "pontosChave": [
+   "Banda anclada a la altura de la cara",
+   "Tira hacia la cara, manos separándose y codos altos",
+   "Pausa de 1 s atrás, sin encoger los hombros"
+  ]
+ },
+ "curl-elastico": {
+  "nome": "Curl de bíceps con banda elástica",
+  "objetivo": "Bíceps en casa sin mancuernas: la banda se endurece al final del movimiento.",
+  "pontosChave": [
+   "Pisa la banda con los dos pies",
+   "Codos pegados al tronco",
+   "Baja despacio, sin balancear el cuerpo"
+  ]
+ },
+ "abducao-caneleira": {
+  "nome": "Abducción de cadera tumbado de lado (tobillera)",
+  "objetivo": "Glúteo medio, que estabiliza la cadera y la rodilla. La tobillera lo hace más difícil.",
+  "pontosChave": [
+   "Tumbado de lado, cuerpo en línea recta",
+   "Sube la pierna de arriba un poco hacia atrás, pie paralelo al suelo",
+   "Sin rotar la cadera hacia atrás; al llegar al tope del rango, tobillera más pesada"
+  ]
+ },
+ "coice-gluteo": {
+  "nome": "Patada de glúteo en cuadrupedia (tobillera)",
+  "objetivo": "Glúteo mayor aislado, en casa. La tobillera lo hace más difícil.",
+  "pontosChave": [
+   "A cuatro patas, manos bajo los hombros",
+   "Empuja el talón hacia el techo con la rodilla a 90°",
+   "Sin arquear la zona lumbar; para cuando el muslo queda alineado con el tronco"
+  ]
  }
 }

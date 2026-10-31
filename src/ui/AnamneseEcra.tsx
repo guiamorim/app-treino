@@ -1,8 +1,8 @@
 import { useState, type FormEvent } from 'react'
 import { db } from '../data/db'
 import { MODELOS_ESCOLHA } from '../domain/modelos'
-import { divisoesPossiveis, gerarPlano } from '../domain/plano'
-import { AREAS, DIAS_POR_SEMANA, type Anamnese, type DiasPorSemana, type DivisaoTreino, type Enfase, type Gravidez, type Area, type Restricao } from '../domain/types'
+import { divisoesPossiveis, EQUIPAMENTOS_ESCOLHA, equipamentoDisponivel, gerarPlano, resumoEquipamento } from '../domain/plano'
+import { AREAS, DIAS_POR_SEMANA, type Anamnese, type DiasPorSemana, type DivisaoTreino, type Enfase, type Gravidez, type Area, type Equipamento, type Restricao } from '../domain/types'
 import { agoraIso, catalogo, novoId, type Dados } from './dados'
 import { ir } from './rota'
 import { locale, m, t, traduzido } from '../i18n'
@@ -27,6 +27,18 @@ const DICA_DIAS: Record<number, string> = traduzido({
   5: m('Superior e inferior, A e B, mais corpo inteiro.'),
   6: m('A/B/C duas vezes: empurrar, puxar e pernas.'),
   7: m('A/B/C duas vezes e 1 dia de recuperação ativa (treinar força 7 dias seguidos não é recomendável).'),
+})
+
+// F28.1 (v1.17): equipamento que se pode marcar.
+const NOMES_EQUIPAMENTO: Record<(typeof EQUIPAMENTOS_ESCOLHA)[number], string> = traduzido({
+  barra: m('Barra com discos e suporte'),
+  halteres: m('Halteres'),
+  'barra-fixa': m('Barra fixa (elevações)'),
+  paralelas: m('Paralelas ou argolas'),
+  maquina: m('Máquinas de musculação'),
+  cabo: m('Polias (cabos)'),
+  elasticos: m('Elásticos de resistência'),
+  caneleiras: m('Caneleiras'),
 })
 
 // 3.1 (v1.5): modelo de treino escolhido pela pessoa.
@@ -55,12 +67,15 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
     diasPorSemana: String(a?.diasPorSemana ?? 3),
     duracaoMin: String(a?.duracaoMin ?? 60),
     experiencia: a?.experiencia ?? 'regresso',
-    equipamento: a?.equipamento ?? 'ginasio',
+    halteresMaxKg: a?.halteresMaxKg ? paraCampo(a.halteresMaxKg) : '',
     aceitaCardio: a?.aceitaCardio ?? true,
     enfase: a?.enfase ?? 'equilibrado',
     gravidez: a?.gravidez ?? 'nao',
     divisao: a?.divisao ?? 'automatico',
   })
+  // F28.1: lista de equipamento; uma anamnese antiga abre com a lista que valia (F28.3).
+  const [equipamentos, setEquipamentos] = useState<Equipamento[]>(a ? equipamentoDisponivel(a).filter((q) => q !== 'peso-corporal') : [...EQUIPAMENTOS_ESCOLHA])
+  const alternarEquipamento = (q: Equipamento) => setEquipamentos((x) => (x.includes(q) ? x.filter((y) => y !== q) : EQUIPAMENTOS_ESCOLHA.filter((y) => y === q || x.includes(y))))
   const [restricoes, setRestricoes] = useState<Restricao[]>(a?.restricoes ?? [])
   // F1 (v1.2): «Nenhuma» é uma resposta explícita, para não confundir com «esqueci-me de responder».
   const [semDores, setSemDores] = useState(!!a && a.restricoes.length === 0)
@@ -100,6 +115,9 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
     if (!semDores && restricoes.length === 0) return setErro(t('Nas dores ou limitações, marca «Nenhuma» ou pelo menos uma zona.'))
     if (parq.some((x) => x === null)) return setErro(t('Responde a todas as perguntas de saúde (PAR-Q+).'))
     if (diasTreino.length > 0 && diasTreino.length !== Number(f.diasPorSemana)) return setErro(t('Escolhe {n} dias da semana, ou nenhum.', { n: f.diasPorSemana }))
+    const comHalteres = equipamentos.includes('halteres')
+    const halteresMaxKg = comHalteres && f.halteresMaxKg.trim() ? deUnidade(num(f.halteresMaxKg)) : undefined
+    if (halteresMaxKg !== undefined && !(halteresMaxKg >= 0.5 && halteresMaxKg <= 200)) return setErro(t('Indica o halter mais pesado em {u}, ou deixa em branco.', { u: dados.unidade }))
 
     const nova: Anamnese = {
       idade, alturaCm, pesoKg,
@@ -109,7 +127,9 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
       diasPorSemana: Number(f.diasPorSemana) as Anamnese['diasPorSemana'],
       duracaoMin: Number(f.duracaoMin) as Anamnese['duracaoMin'],
       experiencia: f.experiencia as Anamnese['experiencia'],
-      equipamento: f.equipamento as Anamnese['equipamento'],
+      equipamento: resumoEquipamento(equipamentos),
+      equipamentos,
+      ...(halteresMaxKg !== undefined ? { halteresMaxKg } : {}),
       restricoes,
       aceitaCardio: f.aceitaCardio,
       parq: parq as boolean[],
@@ -204,12 +224,23 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
         <option value="regresso">{t('A regressar após paragem')}</option>
         <option value="intermedio">{t('Treino regularmente há mais de 1 ano')}</option>
       </select>
-      <label htmlFor="equipamento">{t('Onde treinas')}</label>
-      <select id="equipamento" {...campo('equipamento')}>
-        <option value="ginasio">{t('Ginásio completo')}</option>
-        <option value="halteres">{t('Só halteres')}</option>
-        <option value="casa">{t('Em casa, sem equipamento')}</option>
-      </select>
+      <fieldset className="equipamento">
+        <legend>{t('Que equipamento tens')}</legend>
+        <p className="secundario">{t('O peso do corpo conta sempre. Marca o que tens onde treinas.')}</p>
+        <div className="linha">
+          <button type="button" onClick={() => setEquipamentos([...EQUIPAMENTOS_ESCOLHA])}>{t('Ginásio completo')}</button>
+          <button type="button" onClick={() => setEquipamentos([])}>{t('Só o peso do corpo')}</button>
+        </div>
+        {EQUIPAMENTOS_ESCOLHA.map((q) => (
+          <label key={q} className="opcao"><input type="checkbox" checked={equipamentos.includes(q)} onChange={() => alternarEquipamento(q)} /> {NOMES_EQUIPAMENTO[q]}</label>
+        ))}
+        {equipamentos.includes('halteres') && (
+          <>
+            <label htmlFor="halteresMaxKg">{t('Halter mais pesado que tens ({u}, opcional)', { u: dados.unidade })}</label>
+            <input id="halteresMaxKg" inputMode="decimal" {...campo('halteresMaxKg')} />
+          </>
+        )}
+      </fieldset>
       <label className="opcao"><input type="checkbox" checked={f.aceitaCardio} onChange={(e) => setF({ ...f, aceitaCardio: e.target.checked })} /> {t('Aceito 10 min de cardio no fim de alguns treinos')}</label>
 
       <h2>{t('Dores ou limitações')}</h2>
