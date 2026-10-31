@@ -959,6 +959,8 @@ test('F33: registo no topo do exercício, 5 separadores e conquistas resumidas',
 })
 
 test.describe('F34: reportar ou sugerir', () => {
+  // No WebKit, um pedido de uma página controlada pelo service worker não passa por page.route e chegava ao serviço real.
+  test.use({ serviceWorkers: 'block' })
   test('F34.1–F34.4: do exercício, envia só os campos previstos, confirma e espera 60 s', async ({ page }) => {
     const enviados: Record<string, string>[] = []
     const consola: string[] = []
