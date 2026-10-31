@@ -19,7 +19,7 @@ interface Parametros {
 }
 
 // Especificação, secção 3.2.
-const PARAMETROS: Record<Objetivo, Record<TipoExercicio, Parametros>> = {
+export const PARAMETROS: Record<Objetivo, Record<TipoExercicio, Parametros>> = {
   recomposicao: {
     composto: { faixa: [6, 10], rir: [1, 3], descansoSeg: 120 },
     isolado: { faixa: [10, 15], rir: [1, 3], descansoSeg: 60 },
@@ -169,26 +169,40 @@ function gerarTreino(m: Modelo, a: Anamnese, catalogo: Catalogo, conservador: bo
   }
 }
 
-export function gerarPlano(a: Anamnese, catalogo: Catalogo, opts: { id: string; agora: string }): Plano {
+/**
+ * Avisos que dependem só da pessoa (PAR-Q+, gravidez, dor nunca avaliada). No plano próprio (F27.4) não dizem
+ * que o plano é conservador nem que trocou exercícios, porque as escolhas são do utilizador.
+ */
+export function avisosAnamnese(a: Anamnese, proprio = false): string[] {
   const avisos: string[] = []
   const gravidez = gravidezAtiva(a)
-  const parq = a.parq.some(Boolean)
-  const conservador = parq || gravidez !== 'nao'
-  if (parq) {
-    avisos.push(t('Respondeste «sim» a pelo menos uma pergunta do PAR-Q+. Consulta um médico antes de aumentar a intensidade. O plano foi gerado em modo conservador.'))
+  if (a.parq.some(Boolean)) {
+    avisos.push(proprio
+      ? t('Respondeste «sim» a pelo menos uma pergunta do PAR-Q+. Consulta um médico antes de aumentar a intensidade.')
+      : t('Respondeste «sim» a pelo menos uma pergunta do PAR-Q+. Consulta um médico antes de aumentar a intensidade. O plano foi gerado em modo conservador.'))
   }
   if (gravidez === 'gravida-1t' || gravidez === 'gravida-2t3t') {
-    avisos.push(t('Gravidez: treina com acompanhamento do teu médico ou obstetra. Plano conservador; para se sentires dor, tonturas, falta de ar invulgar, contrações ou perdas de sangue ou líquido.')
-      + (gravidez === 'gravida-2t3t' ? ' ' + t('A partir do 2.º trimestre, os exercícios deitado de costas ou de barriga para baixo foram trocados.') : ''))
+    avisos.push(proprio
+      ? t('Gravidez: treina com acompanhamento do teu médico ou obstetra; para se sentires dor, tonturas, falta de ar invulgar, contrações ou perdas de sangue ou líquido.')
+      : t('Gravidez: treina com acompanhamento do teu médico ou obstetra. Plano conservador; para se sentires dor, tonturas, falta de ar invulgar, contrações ou perdas de sangue ou líquido.')
+        + (gravidez === 'gravida-2t3t' ? ' ' + t('A partir do 2.º trimestre, os exercícios deitado de costas ou de barriga para baixo foram trocados.') : ''))
   }
   if (gravidez === 'pos-parto') {
-    avisos.push(t('Pós-parto: retoma com autorização do teu médico ou obstetra e, idealmente, avaliação do pavimento pélvico e da diástase por fisioterapeuta. Plano conservador.'))
+    avisos.push(proprio
+      ? t('Pós-parto: retoma com autorização do teu médico ou obstetra e, idealmente, avaliação do pavimento pélvico e da diástase por fisioterapeuta.')
+      : t('Pós-parto: retoma com autorização do teu médico ou obstetra e, idealmente, avaliação do pavimento pélvico e da diástase por fisioterapeuta. Plano conservador.'))
   }
   for (const r of a.restricoes) {
     if (!r.avaliadaPorProfissional) {
       avisos.push(t('A dor no {area} nunca foi avaliada. Recomenda-se avaliação por médico ou fisioterapeuta.', { area: NOMES_AREAS[r.area] }))
     }
   }
+  return avisos
+}
+
+export function gerarPlano(a: Anamnese, catalogo: Catalogo, opts: { id: string; agora: string }): Plano {
+  const avisos = avisosAnamnese(a)
+  const conservador = a.parq.some(Boolean) || gravidezAtiva(a) !== 'nao'
   const divisao = a.divisao ?? 'automatico'
   let ids = DIVISOES[a.diasPorSemana]
   if (divisao !== 'automatico') {
@@ -254,6 +268,8 @@ export function treinoEfetivo(t: TreinoModelo, plano: Plano, semana: number): Tr
  * Uma nota só é trocada quando o exercício gerado agora é o mesmo do plano guardado.
  */
 export function planoNoIdioma(plano: Plano, a: Anamnese | undefined, catalogo: Catalogo): Plano {
+  // F27: os treinos do plano próprio ficam como o utilizador os escreveu; só os avisos da pessoa mudam de idioma.
+  if (plano.proprio) return a ? { ...plano, avisos: avisosAnamnese(a, true) } : plano
   const novo = a ? gerarPlano(a, catalogo, { id: plano.id, agora: plano.criadoEm }) : undefined
   return {
     ...plano,

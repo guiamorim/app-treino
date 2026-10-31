@@ -669,3 +669,42 @@ test('F26: criar um exercício próprio, usá-lo em «Substituir exercício» e 
   await page.getByRole('tab', { name: 'Calendário' }).click()
   await expect(page.getByText(/Supino no banco do meu ginásio: 18 kg × 6/)).toBeVisible()
 })
+
+test('F27: criar o meu plano a partir do atual, com aviso de dor, sem readaptação nem descarga', async ({ page }) => {
+  await preencherAnamnese(page)
+  await page.getByRole('link', { name: 'Mais' }).click()
+  await page.getByRole('button', { name: 'Criar o meu plano' }).click()
+  await expect(page.getByRole('heading', { name: 'Criar o meu plano' })).toBeVisible()
+
+  // F27.2: validação do nome, renomear, juntar e tirar exercícios.
+  const primeiro = page.getByLabel('Nome do treino').first()
+  await primeiro.fill('')
+  await page.getByRole('button', { name: 'Guardar o meu plano' }).click()
+  await expect(page.getByRole('alert')).toHaveText('Dá um nome a cada treino.')
+  await primeiro.fill('Peito e costas')
+  const treino = page.getByRole('region', { name: 'Peito e costas' })
+  await treino.getByLabel('Juntar exercício').selectOption('supino-barra')
+  // F27.4: o editor mostra porque as regras o evitariam, mas deixa escolher.
+  await expect(treino.getByText('As regras evitariam este exercício por causa do ombro.')).toBeVisible()
+  await treino.getByLabel('Séries').selectOption('4')
+  await treino.getByRole('button', { name: 'Tirar Supino com halteres, pega neutra' }).click()
+
+  // F27.3: sem readaptação e sem descarga, com blocos de 4 semanas.
+  await page.getByLabel('Readaptação no início (2 séries, RIR 3–4)').selectOption({ label: 'Sem readaptação' })
+  await page.getByLabel(/Semana de descarga no fim de cada bloco/).uncheck()
+  await page.getByLabel('Duração de cada bloco').selectOption({ label: '4 semanas' })
+  page.once('dialog', (d) => void d.accept())
+  await page.getByRole('button', { name: 'Guardar o meu plano' }).click()
+
+  await expect(page.getByRole('heading', { name: 'Peito e costas' })).toBeVisible()
+  await expect(page.getByText(/Bloco 1, semana 1 de 4 · Bloco 2 a partir de/)).toBeVisible()
+  await expect(page.getByRole('button', { name: /Supino reto com barra/ })).toContainText('4 × 6–10')
+  await expect(page.getByText('Supino com halteres, pega neutra')).toHaveCount(0)
+
+  // O plano próprio fica marcado em «Mais» e volta a abrir no editor.
+  await page.getByRole('link', { name: 'Mais' }).click()
+  await expect(page.getByText('Estás a usar um plano criado por ti.')).toBeVisible()
+  await page.getByRole('button', { name: 'Editar o meu plano' }).click()
+  await expect(page.getByLabel('Readaptação no início (2 séries, RIR 3–4)')).toHaveValue('0')
+  await expect(page.getByLabel(/Semana de descarga no fim de cada bloco/)).not.toBeChecked()
+})

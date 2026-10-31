@@ -43,7 +43,9 @@ export function Mais({ dados }: { dados: Dados }) {
 
       <div className="cartao">
         <h3>{t('O teu plano')}</h3>
-        <button className="largo" onClick={() => ir('/anamnese')}>{t('Editar anamnese e gerar novo plano')}</button>
+        {dados.plano?.proprio && <p className="secundario">{t('Estás a usar um plano criado por ti.')}</p>}
+        <button className="largo" onClick={() => ir('/meu-plano')} disabled={!dados.plano}>{dados.plano?.proprio ? t('Editar o meu plano') : t('Criar o meu plano')}</button>
+        <button className="largo" style={{ marginTop: 8 }} onClick={() => ir('/anamnese')}>{t('Editar anamnese e gerar novo plano')}</button>
       </div>
       <CartaoProprios dados={dados} />
 

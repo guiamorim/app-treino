@@ -1,6 +1,31 @@
 {
   "versoes": [
     {
+      "versao": "1.15.0",
+      "data": "2026-10-31",
+      "itens": [
+        "Podes criar o teu próprio plano em «Mais» › «Criar o meu plano»: começa pelo plano atual e mudas os treinos, os exercícios (do catálogo ou teus), as séries, as repetições, o RIR e o descanso.",
+        "A readaptação e a semana de descarga vêm ligadas, mas podes escolher as semanas de readaptação, desligar a descarga e mudar a duração dos blocos.",
+        "A sugestão de carga, o registo, o calendário, os relatórios e as exportações funcionam igual com o teu plano."
+      ],
+      "traducoes": {
+        "en": {
+          "itens": [
+            "You can create your own plan in “More” › “Create my plan”: start from your current plan and change the workouts, exercises (catalogue or your own), sets, reps, RIR and rest.",
+            "Re-adaptation and the deload week are on, but you can choose the re-adaptation weeks, turn the deload off and change the block length.",
+            "The load suggestion, logging, calendar, reports and exports work the same with your plan."
+          ]
+        },
+        "es": {
+          "itens": [
+            "Puedes crear tu propio plan en «Más» › «Crear mi plan»: empiezas por el plan actual y cambias los entrenamientos, los ejercicios (del catálogo o tuyos), las series, las repeticiones, el RIR y el descanso.",
+            "La readaptación y la semana de descarga vienen activadas, pero puedes elegir las semanas de readaptación, desactivar la descarga y cambiar la duración de los bloques.",
+            "La sugerencia de carga, el registro, el calendario, los informes y las exportaciones funcionan igual con tu plan."
+          ]
+        }
+      }
+    },
+    {
       "versao": "1.14.0",
       "data": "2026-10-31",
       "itens": [

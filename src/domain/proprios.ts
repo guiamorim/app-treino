@@ -83,9 +83,9 @@ export function lerProprios(dados: unknown): ExercicioProprio[] {
 
 export const temRegistos = (id: string, sessoes: readonly Sessao[]) => sessoes.some((s) => s.exercicios.some((e) => e.exercicioId === id && e.series.length > 0))
 
-/** F26.4: sem registos, sai da lista; com registos, fica arquivado. */
-export function apagarProprio(proprios: readonly ExercicioProprio[], id: string, sessoes: readonly Sessao[]): ExercicioProprio[] {
-  if (!temRegistos(id, sessoes)) return proprios.filter((p) => p.id !== id)
+/** F26.4: sem registos, sai da lista; com registos ou no plano (F27.5), fica arquivado. */
+export function apagarProprio(proprios: readonly ExercicioProprio[], id: string, sessoes: readonly Sessao[], noPlano = false): ExercicioProprio[] {
+  if (!noPlano && !temRegistos(id, sessoes)) return proprios.filter((p) => p.id !== id)
   return proprios.map((p) => (p.id === id ? { ...p, arquivado: true } : p))
 }
 

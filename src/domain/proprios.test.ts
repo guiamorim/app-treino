@@ -79,6 +79,8 @@ describe('F26 exercícios personalizados', () => {
   it('F26.4 sem registos apaga; com registos arquiva e o nome continua no catálogo', () => {
     expect(apagarProprio([remada, pranchaBola], remada.id, [])).toEqual([pranchaBola])
     expect(apagarProprio([remada], remada.id, [sessao(remada.id, [])])).toEqual([])
+    // F27.5: no plano, arquiva mesmo sem registos.
+    expect(apagarProprio([remada], remada.id, [], true)).toEqual([{ ...remada, arquivado: true }])
     const arquivados = apagarProprio([remada], remada.id, [sessao(remada.id)])
     expect(arquivados).toEqual([{ ...remada, arquivado: true }])
     expect(juntarProprios(catalogo, arquivados).get(remada.id)?.nome).toBe(remada.nome)

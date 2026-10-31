@@ -123,7 +123,7 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
     // F25.1: mudar só os dias de treino não mexe no plano.
     const semDias = (x: Anamnese) => JSON.stringify({ ...x, diasTreino: undefined })
     const soDias = !!a && semDias(a) === semDias(nova)
-    const gerar = !dados.plano || (!soDias && confirm(t('Gerar um novo plano com estes dados? O histórico de treinos mantém-se.')))
+    const gerar = !dados.plano || (!soDias && confirm(dados.plano.proprio ? t('Gerar um novo plano com estes dados substitui o plano que criaste. O histórico de treinos mantém-se.') : t('Gerar um novo plano com estes dados? O histórico de treinos mantém-se.')))
     if (gerar) await db.gravar('plano', gerarPlano(nova, catalogo, { id: novoId(), agora: agoraIso() }))
     ir('/hoje')
   }

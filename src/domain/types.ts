@@ -146,6 +146,12 @@ export interface Plano {
   readaptacao: boolean
   /** Secção 3.7: semanas de cada bloco, descarga incluída. Planos antigos não têm (vale 5). */
   semanasBloco?: number
+  /** F27: plano criado pelo utilizador (não é gerado de novo nem traduzido). */
+  proprio?: boolean
+  /** F27.3: semanas de readaptação; sem valor, 2 se `readaptacao`, senão 0. */
+  semanasReadaptacao?: number
+  /** F27.3: `false` tira a semana de descarga do fim de cada bloco. */
+  descarga?: boolean
   treinos: TreinoModelo[]
   avisos: string[]
 }

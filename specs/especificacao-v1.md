@@ -2,7 +2,7 @@
 
 [English](specification-v1.en.md) · **Português**
 
-Data: 2026-10-20 · Versão 1.14 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.14)
+Data: 2026-10-20 · Versão 1.15 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.15)
 
 ## 0. Decisões fechadas
 
@@ -253,9 +253,17 @@ Quarta fase do estudo de 2026-10-31 (entrega A do plano próprio).
   - O incremento por omissão vem da forma de contar: 2 kg por halter, 2,5 kg no total ou na máquina, nenhum só com o corpo.
   - Não são traduzidos: ficam como os escrevi, em qualquer idioma da app.
 - **F26.2 Onde entram.** Juntam-se ao catálogo: o ecrã do exercício, a sugestão de carga (secção 4), o volume semanal (o grupo principal conta 1 série, os secundários 0,5), o desenho dos músculos, os alongamentos do treino, o histórico e as exportações tratam-nos como os do catálogo. O plano gerado pelas regras (secção 3) nunca os escolhe.
-- **F26.3 Usar no treino.** Em «Substituir exercício» aparecem também os meus exercícios com o mesmo grupo principal e a mesma medida. O editor de plano (fase 5) vai permitir pô-los no plano.
+- **F26.3 Usar no treino.** Em «Substituir exercício» aparecem também os meus exercícios com o mesmo grupo principal e a mesma medida. No plano próprio (F27) também se podem escolher.
 - **F26.4 Apagar.** Um exercício sem registos é apagado. Um exercício com registos é arquivado, depois de confirmar: sai da lista e de «Substituir exercício», mas o histórico, os relatórios e as exportações continuam a mostrar o nome. Se já tiver registos, a medida não pode mudar, para não misturar repetições com segundos.
 - **F26.5 Cópia.** Os exercícios personalizados entram na cópia de segurança (F10). As cópias anteriores continuam válidas.
+
+### F27. Plano próprio (v1.15)
+Quinta fase do estudo de 2026-10-31 (entrega B).
+- **F27.1 Criar.** Em «Mais», «Criar o meu plano» abre o editor com o plano atual como ponto de partida: os mesmos treinos e exercícios (os do bloco atual), séries, faixa, RIR e descanso. Num plano próprio, o botão é «Editar o meu plano».
+- **F27.2 Editar.** Posso mudar o nome e a ordem dos treinos, juntar treinos (até 7) e apagá-los, e em cada treino juntar exercícios do catálogo ou meus (F26), mudar a ordem, apagá-los e mudar séries (1–10), faixa de repetições ou segundos, RIR (0–5) e descanso. Um exercício acabado de juntar vem com os valores das regras do meu objetivo (secção 3.2): 3 séries, a faixa e o RIR do composto ou isolado e o descanso. Cada treino precisa de nome e de pelo menos um exercício (até 20).
+- **F27.3 Readaptação e descarga.** Vêm ligadas por omissão: 2 semanas de readaptação (2 séries, RIR 3–4) e uma semana de descarga no fim de cada bloco (metade das séries, RIR 3–4), com o bloco do meu objetivo. Posso escolher 0 a 4 semanas de readaptação, desligar a descarga e escolher blocos de 3 a 8 semanas. Guardar mantém a contagem das semanas e a rotação dos treinos; com «Recomeçar a contagem hoje», a readaptação e os blocos contam a partir de hoje.
+- **F27.4 Diferenças em relação ao plano gerado.** Não há troca de exercícios entre blocos. Os nomes ficam como os escrevi, em qualquer idioma. Os avisos da anamnese (PAR-Q+, gravidez, dor nunca avaliada) continuam, sem dizer que o plano é conservador. Ao juntar um exercício que as regras evitariam (dor, gravidez, equipamento), o editor mostra o motivo, mas deixa escolher. Gerar um plano novo a partir da anamnese substitui o plano próprio, depois de confirmar.
+- **F27.5 Exercícios próprios no plano.** Apagar um exercício próprio que está no plano arquiva-o (F26.4), para o plano continuar a funcionar.
 
 ### F14. Blocos e próxima mudança (v1.2, regras na secção 3.7)
 - No Início e no Treino de hoje: fase atual (readaptação, semana N de M do bloco, ou descarga) e a próxima mudança com data: fim da readaptação (séries completas), semana de descarga (metade das séries), ou novo bloco (troca dos exercícios isolados, com a lista do que muda).

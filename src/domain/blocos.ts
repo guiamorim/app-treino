@@ -17,7 +17,9 @@ export interface EstadoBloco {
   semanasBloco: number
 }
 
-const offset = (p: Plano) => (p.readaptacao ? SEMANAS_READAPTACAO : 0)
+/** F27.3: o plano próprio escolhe as semanas de readaptação; os gerados têm 2 ou nenhuma. */
+export const semanasReadaptacao = (p: Plano) => p.semanasReadaptacao ?? (p.readaptacao ? SEMANAS_READAPTACAO : 0)
+const offset = semanasReadaptacao
 
 export function estadoBloco(plano: Plano, semana: number): EstadoBloco {
   const semanasBloco = plano.semanasBloco ?? SEMANAS_BLOCO_ANTIGO
@@ -26,7 +28,7 @@ export function estadoBloco(plano: Plano, semana: number): EstadoBloco {
   const semanaNoBloco = (s % semanasBloco) + 1
   return {
     semana,
-    fase: semanaNoBloco === semanasBloco ? 'descarga' : 'progressao',
+    fase: semanaNoBloco === semanasBloco && plano.descarga !== false ? 'descarga' : 'progressao',
     bloco: Math.floor(s / semanasBloco) + 1,
     semanaNoBloco,
     semanasBloco,
@@ -75,6 +77,11 @@ export function proximaMudanca(plano: Plano, semana: number): Mudanca {
   if (e.fase === 'readaptacao') {
     const s = offset(plano) + 1
     return { tipo: 'fim-readaptacao', semana: s, data: data(s), bloco: 1 }
+  }
+  // F27.3: sem descarga, a mudança seguinte é o bloco novo.
+  if (e.fase === 'progressao' && plano.descarga === false) {
+    const s = semana + (e.semanasBloco - e.semanaNoBloco) + 1
+    return { tipo: 'novo-bloco', semana: s, data: data(s), bloco: e.bloco + 1 }
   }
   if (e.fase === 'progressao') {
     const s = semana + (e.semanasBloco - e.semanaNoBloco)

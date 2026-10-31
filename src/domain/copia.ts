@@ -56,6 +56,9 @@ const plano = z.strictObject({
   conservador: z.boolean(),
   readaptacao: z.boolean(),
   semanasBloco: inteiro(2, 12).optional(),
+  proprio: z.boolean().optional(),
+  semanasReadaptacao: inteiro(0, 8).optional(),
+  descarga: z.boolean().optional(),
   avisos: z.array(z.string().max(500)).max(50),
   treinos: z.array(z.strictObject({
     id,
