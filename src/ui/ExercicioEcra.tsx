@@ -6,6 +6,7 @@ import { sugerir } from '../domain/progressao'
 import { estadoExercicio, historicoExercicio, registoDe } from '../domain/sessao'
 import { NOMES_AREAS, NOMES_GRUPOS, NOMES_NIVEIS, type Plano, type Serie } from '../domain/types'
 import { AvisoResponsabilidade } from './AvisoResponsabilidade'
+import { BotaoReportar } from './Reportar'
 import { lerVideo, pesquisaYoutube } from '../domain/video'
 import { abrirSessao, alterarRegisto, sessaoAberta } from './acoes'
 import { admitePesoExtra, incrementoDaForma, mesmaForma, nomeTipoCarga, rotuloCarga, semCarga as semCargaDe, tipoCarga, tiposCarga, totalComBarra, type TipoCarga } from '../domain/carga'
@@ -379,6 +380,7 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
           )}
         </div>
       )}
+      <BotaoReportar tipo="exercicio" id={ex.id} />
       <AvisoResponsabilidade />
     </>
   )

@@ -14,7 +14,8 @@ export default defineConfig({
     { name: 'iphone-webkit', use: { ...devices['iPhone 13'] } },
   ],
   webServer: {
-    command: 'npm run build && npx vite preview --port 4173 --strictPort',
+    // F34.4: chave falsa só para estes testes, que intercetam o envio; a publicação constrói sem ela.
+    command: 'VITE_CHAVE_REPORTES=chave-de-teste npm run build && npx vite preview --port 4173 --strictPort',
     url: 'http://localhost:4173/app-treino/',
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,

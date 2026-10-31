@@ -51,7 +51,7 @@ Each test carries the code of the specification criterion it checks (e.g. `F4`, 
 
 ## Security
 
-- No server, no accounts, no analytics: health data never leaves the device.
+- No server, no accounts, no analytics: health data never leaves the device. The only thing sent out is a report or suggestion (F34), when the person taps "Send", through a form service (Web3Forms) that forwards it by email.
 - Strict Content Security Policy; videos only from `youtube-nocookie.com` and `player.vimeo.com`, in a sandboxed iframe.
 - Video links and imported files are validated (domain allowlist and Zod schema) before use.
 - CI with `npm audit`, tests and Dependabot.

@@ -11,7 +11,7 @@ const CSP = [
   "style-src 'self'",
   "img-src 'self' data: blob: https://i.ytimg.com",
   "frame-src https://www.youtube-nocookie.com https://player.vimeo.com",
-  "connect-src 'self'",
+  "connect-src 'self' https://api.web3forms.com",
   "manifest-src 'self'",
   "worker-src 'self'",
   "object-src 'none'",

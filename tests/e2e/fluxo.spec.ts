@@ -917,7 +917,7 @@ test.describe('5. ecrã estreito', () => {
       }
       const encontrados: string[] = []
       const ver = async (onde: string) => { for (const x of await problemas(page)) encontrados.push(`${onde}: ${x}`) }
-      for (const rota of ['hoje', 'inicio', 'relatorios', 'medicoes', 'fotos', 'mais', 'calistenia', 'nivelamento', 'meu-plano', 'alongamento', 'anamnese', 'meu-exercicio/novo']) {
+      for (const rota of ['hoje', 'inicio', 'relatorios', 'medicoes', 'fotos', 'mais', 'calistenia', 'nivelamento', 'meu-plano', 'alongamento', 'anamnese', 'meu-exercicio/novo', 'reportar']) {
         await page.goto(`./#/${rota}`)
         await expect(page.locator('h1').first()).toBeVisible()
         await ver(rota)
@@ -956,4 +956,73 @@ test('F33: registo no topo do exercício, 5 separadores e conquistas resumidas',
   await expect(tecnica).toHaveAttribute('open', '')
   expect(registo!.y).toBeLessThan((await tecnica.boundingBox())!.y)
   await expect(tecnica.getByRole('img', { name: /Músculos trabalhados/ })).toBeVisible()
+})
+
+test.describe('F34: reportar ou sugerir', () => {
+  // No WebKit, um pedido de uma página controlada pelo service worker não passa por page.route e chegava ao serviço real.
+  test.use({ serviceWorkers: 'block' })
+  test('F34.1–F34.4: do exercício, envia só os campos previstos, confirma e espera 60 s', async ({ page }) => {
+    const enviados: Record<string, string>[] = []
+    const consola: string[] = []
+    page.on('console', (m) => consola.push(m.text()))
+    page.on('requestfailed', (r) => consola.push(`falhou ${r.method()} ${r.url()}: ${r.failure()?.errorText}`))
+    // O pedido é de outra origem: o WebKit faz a verificação CORS (e a pré-verificação) mesmo com a resposta simulada.
+    const cors = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Content-Type, Accept', 'Access-Control-Allow-Methods': 'POST, OPTIONS' }
+    await page.route('https://api.web3forms.com/submit', async (r) => {
+      if (r.request().method() === 'OPTIONS') return r.fulfill({ status: 204, headers: cors })
+      enviados.push(r.request().postDataJSON())
+      await r.fulfill({ status: 200, contentType: 'application/json', headers: cors, body: '{"success":true}' })
+    })
+    await preencherAnamnese(page)
+    await page.getByText('Supino com halteres, pega neutra').click()
+    await page.getByRole('button', { name: 'Reportar um problema neste exercício' }).click()
+    await expect(page.getByRole('heading', { name: 'Reportar ou sugerir' })).toBeVisible()
+    await expect(page.getByText('Supino com halteres, pega neutra')).toBeVisible()
+    await expect(page.getByText(/Nunca os teus dados de saúde/)).toBeVisible()
+
+    await page.getByRole('button', { name: 'Enviar', exact: true }).click()
+    await expect(page.getByRole('alert')).toHaveText('Escolhe um motivo.')
+    await page.getByLabel('Outro').check()
+    await page.getByRole('button', { name: 'Enviar', exact: true }).click()
+    await expect(page.getByRole('alert')).toHaveText('Descreve o problema ou a sugestão.')
+
+    await page.getByLabel('Vídeo incorreto').check()
+    await page.getByLabel('Descrição (opcional)').fill('O vídeo mostra outro exercício.')
+    await page.getByRole('button', { name: 'Enviar', exact: true }).click()
+    await expect(page.getByRole('status').or(page.getByRole('alert'))).toBeVisible()
+    await expect(page.getByRole('alert'), `pedidos intercetados: ${enviados.length}; consola: ${consola.join(' | ')}`).toHaveCount(0)
+    await expect(page.getByRole('status')).toContainText('Obrigado! O reporte foi enviado.')
+    expect(enviados).toHaveLength(1)
+    const corpo = enviados[0]!
+    expect(Object.keys(corpo).sort()).toEqual(['access_key', 'botcheck', 'descricao', 'from_name', 'idioma', 'motivo', 'sobre', 'subject', 'tipo', 'versao', 'video'])
+    expect(corpo).toMatchObject({ access_key: 'chave-de-teste', tipo: 'exercicio', motivo: 'Vídeo incorreto', descricao: 'O vídeo mostra outro exercício.', versao: VERSAO, idioma: 'pt', botcheck: '' })
+    expect(corpo.sobre).toContain('Supino com halteres, pega neutra')
+    await expect(page.getByLabel('Descrição (opcional)')).toHaveValue('')
+
+    await page.getByLabel('Instrução pouco clara').check()
+    await page.getByRole('button', { name: 'Enviar', exact: true }).click()
+    await expect(page.getByRole('alert')).toHaveText('Acabaste de enviar um reporte. Espera um minuto antes de enviar outro.')
+    expect(enviados).toHaveLength(1)
+  })
+
+  test('F34.4: sem rede ou com erro, avisa e mantém o texto; F34.1 a partir do treino e de Mais', async ({ page }) => {
+    await page.route('https://api.web3forms.com/submit', (r) => r.fulfill({ status: 500, body: '' }))
+    await preencherAnamnese(page)
+    await page.getByRole('button', { name: 'Reportar um problema neste treino' }).click()
+    await expect(page.getByRole('heading', { name: 'Reportar ou sugerir' })).toBeVisible()
+    await expect(page.locator('main p').filter({ hasText: 'Superior A' })).toBeVisible()
+    await expect(page.getByLabel('Duração ou volume desadequado')).toBeVisible()
+    await page.getByLabel('Duração ou volume desadequado').check()
+    await page.getByLabel('Descrição (opcional)').fill('Demora mais de uma hora.')
+    await page.getByRole('button', { name: 'Enviar', exact: true }).click()
+    await expect(page.getByRole('alert')).toContainText('Não foi possível enviar.')
+    await expect(page.getByLabel('Descrição (opcional)')).toHaveValue('Demora mais de uma hora.')
+
+    await page.getByRole('link', { name: 'Mais' }).click()
+    await page.getByRole('button', { name: 'Reportar ou sugerir' }).click()
+    await expect(page.getByLabel('Sugestão')).toBeVisible()
+    await expect(page.getByLabel('Tradução incorreta')).toBeVisible()
+    await page.getByLabel('Sugestão').check()
+    await expect(page.getByLabel('Descrição', { exact: true })).toBeVisible()
+  })
 })

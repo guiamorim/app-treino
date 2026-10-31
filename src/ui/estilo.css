@@ -237,3 +237,6 @@ figure.frase figcaption::before { content: '— '; }
 /* F28.1: lista de equipamento na anamnese, sem a moldura do fieldset. */
 fieldset.equipamento { border: 0; padding: 0; margin: 12px 0 0; min-width: 0; }
 fieldset.equipamento legend { padding: 0; font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; }
+
+/* F34.1: botão discreto para reportar, no fim dos ecrãs do exercício e do treino. */
+button.reportar { margin-top: 16px; min-height: 44px; font-size: 0.85rem; color: var(--texto-2); background: transparent; border-style: dashed; }
