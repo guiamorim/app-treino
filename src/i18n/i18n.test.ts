@@ -10,7 +10,7 @@ import { catalogo, perfilExemplo } from '../domain/fixtures'
 import { carregarNovidades, novidadesNoIdioma } from '../domain/novidades'
 import { gerarPlano, planoNoIdioma } from '../domain/plano'
 import { traduzirCatalogo } from '../domain/catalogo'
-import { NOMES_GRUPOS } from '../domain/types'
+import { INFO_MEDIDAS, NOMES_GRUPOS } from '../domain/types'
 import novidades from '../novidades.json'
 import en from './en.json'
 import es from './es.json'
@@ -65,6 +65,8 @@ describe('F21 idiomas', () => {
     definirIdioma('en')
     expect(t('Série {n} de {total}', { n: 2, total: 3 })).toBe('Set 2 of 3')
     expect(NOMES_GRUPOS.peito).toBe('Chest')
+    expect(INFO_MEDIDAS.cinturaCm.nome).toBe('Waist')
+    expect(INFO_MEDIDAS.cinturaCm.max).toBe(250)
     definirIdioma('es')
     expect(NOMES_GRUPOS.peito).toBe('Pecho')
   })

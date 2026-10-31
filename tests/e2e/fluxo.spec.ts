@@ -461,7 +461,7 @@ test('F22.9–F22.13: libras, corrigir e desfazer séries, ícones desenhados', 
   await preencherAnamnese(page)
 
   // F22.13: seis ícones desenhados na barra de baixo, sem emojis.
-  await expect(page.getByRole('navigation').locator('svg.icone')).toHaveCount(6)
+  await expect(page.getByRole('navigation').locator('svg.icone')).toHaveCount(5)
 
   // F22.9: em libras, escreve-se e mostra-se em lb.
   await page.getByRole('link', { name: 'Mais' }).click()
@@ -651,7 +651,7 @@ test('F26: criar um exercício próprio, usá-lo em «Substituir exercício» e 
   await page.getByRole('button', { name: 'Substituir exercício' }).click()
   await page.getByRole('button', { name: /Supino no banco do meu ginásio/ }).click()
   await expect(page.getByRole('heading', { name: 'Supino no banco do meu ginásio' })).toBeVisible()
-  await page.getByText('Como fazer').click()
+  // F33.1: na primeira vez, «Músculos, técnica e vídeo» já vem aberto.
   await expect(page.getByText('Descer devagar')).toBeVisible()
   await page.getByLabel('Carga (kg por halter)').fill('18')
   await page.getByRole('button', { name: 'Concluir série' }).click()
@@ -927,4 +927,33 @@ test.describe('5. ecrã estreito', () => {
       expect(encontrados).toEqual([])
     })
   }
+})
+
+test('F33: registo no topo do exercício, 5 separadores e conquistas resumidas', async ({ page }) => {
+  await preencherAnamnese(page)
+  await expect(page.locator('ul button.item').first()).toBeVisible()
+
+  // F33.2: 5 separadores; as fotos estão dentro de «Medições».
+  await expect(page.locator('nav.navegacao a')).toHaveCount(5)
+  await page.getByRole('link', { name: 'Medições' }).click()
+  await page.getByRole('link', { name: 'Fotos' }).click()
+  await expect(page.getByRole('heading', { name: 'Fotos' })).toBeVisible()
+  await expect(page.locator('nav.navegacao a[aria-current="page"]')).toHaveText('Medições')
+  await page.getByRole('link', { name: 'Medidas' }).click()
+  await expect(page.getByRole('heading', { name: 'Medições' })).toBeVisible()
+
+  // F33.3: as 3 seguintes por obter e «Ver todas».
+  await page.getByRole('link', { name: 'Início' }).click()
+  await expect(page.locator('.conquistas li')).toHaveCount(3)
+  await page.getByRole('button', { name: 'Ver todas (12)' }).click()
+  await expect(page.locator('.conquistas li')).toHaveCount(12)
+
+  // F33.1: o registo vem antes dos músculos e da técnica, que estão abertos na primeira vez.
+  await page.getByRole('link', { name: 'Hoje' }).click()
+  await page.locator('ul button.item').first().click()
+  const registo = await page.getByRole('button', { name: 'Concluir série' }).boundingBox()
+  const tecnica = page.locator('details', { hasText: 'Músculos, técnica e vídeo' })
+  await expect(tecnica).toHaveAttribute('open', '')
+  expect(registo!.y).toBeLessThan((await tecnica.boundingBox())!.y)
+  await expect(tecnica.getByRole('img', { name: /Músculos trabalhados/ })).toBeVisible()
 })

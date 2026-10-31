@@ -44,6 +44,7 @@ export function Medicoes({ dados }: { dados: Dados }) {
   return (
     <>
       <h1>{t('Medições')}</h1>
+      <AbasCorpo ativa="medicoes" />
       {dias > 7 && (
         <p className="cartao aviso">{ultima ? t('Última medição há {n} dias.', { n: Math.floor(dias) }) : t('Ainda sem medições.')} {t('Pesa-te de manhã, em jejum, e mede a cintura à altura do umbigo.')}</p>
       )}
@@ -86,5 +87,15 @@ export function Medicoes({ dados }: { dados: Dados }) {
         </div>
       )}
     </>
+  )
+}
+
+/** F33.2: «Medições» e «Fotos» partilham o mesmo separador da barra de baixo. */
+export function AbasCorpo({ ativa }: { ativa: 'medicoes' | 'fotos' }) {
+  return (
+    <nav className="abas" aria-label={t('Medições e fotos')}>
+      <a className="botao" href="#/medicoes" aria-current={ativa === 'medicoes' ? 'page' : undefined}>{t('Medidas')}</a>
+      <a className="botao" href="#/fotos" aria-current={ativa === 'fotos' ? 'page' : undefined}>{t('Fotos')}</a>
+    </nav>
   )
 }

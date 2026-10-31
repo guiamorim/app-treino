@@ -1,4 +1,5 @@
-import { conquistas, recordesPessoais, sequenciaSemanal, volumeSessao } from '../domain/conquistas'
+import { useState } from 'react'
+import { conquistas, conquistasVisiveis, recordesPessoais, sequenciaSemanal, volumeSessao } from '../domain/conquistas'
 import { fraseDoDia } from '../domain/frases'
 import { saudacao } from '../domain/perfil'
 import { horasTreino, inicioMes, tendenciaPeso, treinosEntre } from '../domain/painel'
@@ -47,6 +48,8 @@ export function Inicio({ dados, plano, anamnese }: { dados: Dados; plano: Plano;
   const ad = aderencia(s, meta, agora)
   const peso = tendenciaPeso(dados.medicoes)
   const lista = conquistas(s, plano, meta, agora)
+  const [todas, setTodas] = useState(false)
+  const visiveis = conquistasVisiveis(lista)
   const obtidas = lista.filter((c) => c.obtida).length
   const semana = semanaDoPlano(plano, agora.toISOString())
   const frase = fraseDoDia(agora)
@@ -95,8 +98,9 @@ export function Inicio({ dados, plano, anamnese }: { dados: Dados; plano: Plano;
       </div>
 
       <h2>{t('Conquistas')} <span className="secundario">{t('{n} de {total}', { n: obtidas, total: lista.length })}</span></h2>
+      {/* F33.3: as obtidas e as 3 seguintes por obter; as restantes com «Ver todas». */}
       <ul className="conquistas">
-        {lista.map((c) => (
+        {lista.filter((c) => todas || visiveis.has(c.id)).map((c) => (
           <li key={c.id} className={c.obtida ? 'obtida' : undefined} title={c.descricao}>
             <span aria-hidden="true">{c.icone}</span>
             <span>{c.nome}</span>
@@ -104,6 +108,11 @@ export function Inicio({ dados, plano, anamnese }: { dados: Dados; plano: Plano;
           </li>
         ))}
       </ul>
+      {visiveis.size < lista.length && (
+        <button className="largo" style={{ marginTop: 8 }} aria-expanded={todas} onClick={() => setTodas(!todas)}>
+          {todas ? t('Ver menos') : t('Ver todas ({n})', { n: lista.length })}
+        </button>
+      )}
     </>
   )
 }

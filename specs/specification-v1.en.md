@@ -2,7 +2,7 @@
 
 **English** · [Português](especificacao-v1.md)
 
-Date: 2026-10-20 · Version 1.21 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.21)
+Date: 2026-10-20 · Version 1.22 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.22)
 
 The Portuguese version is the reference used for the domain names in the code. Both versions must stay in sync.
 
@@ -317,6 +317,12 @@ Fifth phase of the calisthenics and home training feasibility study (2026-10-31)
 - **F32.5 Phase per pattern.** In "Relatórios" › "Degraus" (reports › rungs), a card with the six patterns: the current exercise, the level (F31.1), "degrau n de total" (rung n of total) and what is missing for the next one (top of the range in every set in 2 sessions in a row and at least 14 days on the rung, with the days left). The overall level is that of the weakest pattern (lowest level; on a tie, the one lower on its ladder), marked as the priority. The level is guidance, not a diagnosis.
 - **F32.6 Rung timeline.** On the same tab, for each pattern with logged workouts, a chart with the highest rung done in each session and the list of rung changes, with the date.
 - **F32.7 Repeat the test.** When a block (F14) has passed since the last test, the phase card and the "Hoje" (today) screen (with calisthenics) suggest repeating it. The backup stores the last test.
+
+### F33. UI review (v1.22)
+
+- **F33.1 Exercise screen.** Right after the name come today's suggestion, the logged sets and the "Série n de m" (set n of m) card, so I can log without scrolling. The muscle drawing, the goal, the key points, the cautions and the video sit in "Músculos, técnica e vídeo" (muscles, technique and video), which is open while the exercise has no logs and closed afterwards. The ladder (F30.2) comes before that block.
+- **F33.2 Bottom bar with 5 tabs.** "Fotos" (photos) no longer has its own tab and moves inside "Medições" (measurements), with two buttons at the top: "Medidas" (measurements) and "Fotos". The photos address stays the same. In English, the tab is called "Body" and in Spanish "Cuerpo", so it does not repeat the name of the "Medidas" button.
+- **F33.3 Achievements on Home.** The achievements earned and the next 3 to earn are shown; the rest are under "Ver todas (n)" (see all).
 
 ### F14. Blocks and next change (v1.2, rules in section 3.7)
 - On Home and on Today's workout: current phase (re-adaptation, week N of M of the block, or deload) and the next change with its date: end of re-adaptation (full sets), deload week (half the sets), or new block (isolation exercises rotate, listing what changes).

@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { db } from '../data/db'
 import { pdfRelatorioPt } from '../domain/exportar'
+import { AbasCorpo } from './Medicoes'
 import { compararFotos, fotosPorMes } from '../domain/fotos'
 import { INFO_MEDIDAS, MEDIDAS_CM, POSES, type FotoAvaliacao, type Medicao, type Pose } from '../domain/types'
 import { agoraIso, catalogo, dataCurta, diasDesde, hojeIso, novoId, useFotos, type Dados } from './dados'
@@ -93,6 +94,7 @@ function FotosEcra({ dados, fotos }: { dados: Dados; fotos: FotoAvaliacao[] }) {
   return (
     <>
       <h1>{t('Fotos')}</h1>
+      <AbasCorpo ativa="fotos" />
       <p className="secundario">{t('Fotos de avaliação para comparares mês a mês. Ficam só neste dispositivo.')}</p>
       {dias > 30 && (
         <p className="cartao aviso">
