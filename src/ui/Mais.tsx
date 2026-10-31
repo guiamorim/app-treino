@@ -12,6 +12,7 @@ import { BotoesPdfPlano } from './Calendario'
 import { CartaoBarra, CartaoIdioma, CartaoUnidade } from './Idioma'
 import { CartaoProprios } from './ExerciciosProprios'
 import { CartaoFerias } from './Ferias'
+import { CartaoParabens } from './Parabens'
 
 export function Mais({ dados }: { dados: Dados }) {
   const ficheiro = useRef<HTMLInputElement>(null)
@@ -41,6 +42,7 @@ export function Mais({ dados }: { dados: Dados }) {
       <CartaoUnidade unidade={dados.unidade} />
       <CartaoBarra barraKg={dados.barraKg} unidade={dados.unidade} />
       <PerfilCartao dados={dados} />
+      <CartaoParabens ligado={dados.parabens} />
 
       <div className="cartao">
         <h3>{t('O teu plano')}</h3>

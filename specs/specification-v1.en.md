@@ -2,7 +2,7 @@
 
 **English** · [Português](especificacao-v1.md)
 
-Date: 2026-10-20 · Version 1.23 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.23)
+Date: 2026-10-20 · Version 1.24 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.24)
 
 The Portuguese version is the reference used for the domain names in the code. Both versions must stay in sync.
 
@@ -330,6 +330,13 @@ Fifth phase of the calisthenics and home training feasibility study (2026-10-31)
 - **F34.2 Reasons.** Exercise: wrong video, video not explanatory enough, unclear instructions, exercise not suitable for me, other. Workout: unclear instructions, unsuitable duration or volume, missing or extra exercise, other. General: suggestion, app bug, wrong translation, other. Choosing a reason is required. The description is required for "other", "suggestion" and "app bug", and has at most 1000 characters. A reply email is optional and, if filled in, must be valid.
 - **F34.3 What is sent.** Only the reason, the description, the reply email (if filled in), the exercise or workout (id and name), the current video link for video reasons, the app version and the language. Never the anamnesis, measurements, photos, training logs or the profile name. The screen says this before sending.
 - **F34.4 Sending without showing the destination.** The "Send" button posts the report over HTTPS to a form service (Web3Forms), which forwards it by email. The app only holds a public access key; the destination address is stored in the service and does not appear in the app or in the repository. It includes a hidden anti-bot field. After sending, a confirmation appears and the form is cleared; there is a minimum gap of 60 s between sends. Offline or on a service error, a warning appears and the text is kept to try again. While no key is configured, the screen says reports are not active yet and the button is disabled.
+
+### F35. Clarity, installing and encouragement (v1.24)
+
+- **F35.1 Chosen equipment.** In the equipment list (F28.1, also for holidays), the shortcut that matches the current choice is highlighted ("Full gym" with everything ticked, "Body weight only" with nothing ticked), and a line below says what is chosen: full gym, body weight only, or "n of 8 items of equipment".
+- **F35.2 Add to home screen.** While the app is not opened from the home screen, Home (at the top) and Today (after the exercise list) show a card "Add the app to your home screen" with the reason (full screen, works offline, and the browser may delete data from sites not opened for a while, but not from home-screen apps). On iPhone and iPad it shows the Safari steps (Share → "Add to Home Screen"); in browsers that allow it, an "Install" button opens the browser's own prompt; elsewhere, a pointer to the browser menu. "Not now" closes the card for good. The choice stays on the device only.
+- **F35.3 More phrases.** The phrase-of-the-day list (F13) has at least 110 phrases, with no duplicates. The new ones with an author have their source work noted in the code.
+- **F35.4 Congratulations.** When a workout is finished, a congratulations window shows: a title that varies from workout to workout, the sets logged and the duration (if between 1 and 240 minutes), the weekly workout goal when this workout completes it, the personal records set in this workout and the achievements (F12) earned with it. It is on by default and can be turned off in "Mais" (more), "Mensagens de parabéns" (congratulation messages). A workout finished with no sets logged does not show the window. The choice stays on the device only.
 
 ### F14. Blocks and next change (v1.2, rules in section 3.7)
 - On Home and on Today's workout: current phase (re-adaptation, week N of M of the block, or deload) and the next change with its date: end of re-adaptation (full sets), deload week (half the sets), or new block (isolation exercises rotate, listing what changes).

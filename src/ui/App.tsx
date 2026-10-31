@@ -7,6 +7,7 @@ import { CalisteniaEcra } from './Calistenia'
 import { NivelamentoEcra } from './Nivelamento'
 import { PlanoProprio } from './PlanoProprio'
 import { ReportarEcra } from './Reportar'
+import { instalada, SugestaoInstalar } from './Instalar'
 import { AnamneseEcra } from './AnamneseEcra'
 import { Hoje } from './Hoje'
 import { Inicio } from './Inicio'
@@ -51,6 +52,7 @@ export function App() {
       <main>
         {descanso && <Temporizador fimEm={descanso} fechar={terminarDescanso} />}
         {rota.ecra !== 'exercicio' && <AvisoAtualizacao />}
+        {rota.ecra === 'inicio' && !dados.instalacaoVista && !instalada() && <SugestaoInstalar />}
         {rota.ecra === 'inicio' && <Inicio dados={dados} plano={dados.plano} anamnese={dados.anamnese} />}
         {rota.ecra === 'hoje' && <Hoje dados={dados} plano={dados.plano} anamnese={dados.anamnese} />}
         {rota.ecra === 'exercicio' && <ExercicioEcra dados={dados} plano={dados.plano} prescricaoId={rota.prescricaoId} />}

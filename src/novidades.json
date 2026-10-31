@@ -1,6 +1,34 @@
 {
   "versoes": [
     {
+      "versao": "1.24.0",
+      "data": "2026-10-31",
+      "itens": [
+        "Na anamnese, os botões «Ginásio completo» e «Só o peso do corpo» ficam destacados quando estão escolhidos, e uma linha diz o que escolheste.",
+        "Na primeira utilização, a app sugere pô-la no ecrã principal do telemóvel e explica porquê.",
+        "A frase do dia tem agora 117 frases.",
+        "Ao terminar um treino aparece uma mensagem de parabéns com as séries, os recordes e as conquistas desse treino. Podes desligá-la em Mais."
+      ],
+      "traducoes": {
+        "en": {
+          "itens": [
+            "In the anamnesis, the “Full gym” and “Body weight only” buttons are highlighted when chosen, and a line says what you chose.",
+            "On first use, the app suggests adding it to your phone's home screen and explains why.",
+            "The phrase of the day now has 117 phrases.",
+            "When you finish a workout, a congratulations message shows that workout's sets, records and achievements. You can turn it off in More."
+          ]
+        },
+        "es": {
+          "itens": [
+            "En la anamnesis, los botones «Gimnasio completo» y «Solo el peso del cuerpo» se destacan cuando están elegidos, y una línea dice lo que has elegido.",
+            "En el primer uso, la app sugiere añadirla a la pantalla de inicio del móvil y explica por qué.",
+            "La frase del día tiene ahora 117 frases.",
+            "Al terminar un entrenamiento aparece un mensaje de enhorabuena con las series, los récords y los logros de ese entrenamiento. Puedes desactivarlo en Más."
+          ]
+        }
+      }
+    },
+    {
       "versao": "1.23.0",
       "data": "2026-10-31",
       "itens": [

@@ -8,7 +8,7 @@ import type { Nivelamento } from '../domain/nivelamento'
 import type { Degraus } from '../domain/escadas'
 
 interface Valor {
-  chave: 'anamnese' | 'plano' | 'videos' | 'ultimaExportacao' | 'perfil' | 'versaoVista' | 'idioma' | 'unidade' | 'tiposCarga' | 'barraKg' | 'exerciciosProprios' | 'ferias' | 'degraus' | 'nivelamento'
+  chave: 'anamnese' | 'plano' | 'videos' | 'ultimaExportacao' | 'perfil' | 'versaoVista' | 'idioma' | 'unidade' | 'tiposCarga' | 'barraKg' | 'exerciciosProprios' | 'ferias' | 'degraus' | 'nivelamento' | 'parabens' | 'instalacaoVista'
   valor: unknown
 }
 

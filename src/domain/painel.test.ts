@@ -55,5 +55,8 @@ describe('F13 frase do dia', () => {
       if (f.autor !== undefined) expect(f.autor.trim()).not.toBe('')
     }
     expect(FRASES.filter((f) => f.autor).length).toBeGreaterThanOrEqual(10)
+    // F35.3 (v1.24): base alargada, sem frases repetidas.
+    expect(FRASES.length).toBeGreaterThanOrEqual(110)
+    expect(new Set(FRASES.map((f) => f.texto)).size).toBe(FRASES.length)
   })
 })

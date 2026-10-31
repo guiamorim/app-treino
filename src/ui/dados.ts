@@ -74,6 +74,10 @@ export interface Dados {
   degraus: Degraus
   /** F32: o último teste de nivelamento. */
   nivelamento?: Nivelamento
+  /** F35.4: mensagem de parabéns ao terminar o treino (ligada por omissão; fica só no dispositivo). */
+  parabens: boolean
+  /** F35.2: a sugestão de instalar no ecrã principal já foi fechada (fica só no dispositivo). */
+  instalacaoVista: boolean
 }
 
 export function useDados(): Dados | undefined {
@@ -95,6 +99,8 @@ export function useDados(): Dados | undefined {
       ferias: await db.ler<Ferias>('ferias'),
       degraus: (await db.ler<Degraus>('degraus')) ?? {},
       nivelamento: await db.ler<Nivelamento>('nivelamento'),
+      parabens: (await db.ler<boolean>('parabens')) ?? true,
+      instalacaoVista: (await db.ler<boolean>('instalacaoVista')) ?? false,
     }
     const barraKg = await db.ler<number>('barraKg')
     // O idioma carrega-se depois das leituras: uma promessa de fora do Dexie a meio deixaria de fora da observação o que se lê a seguir.
