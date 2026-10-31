@@ -8,6 +8,7 @@ import { LembreteAlongamento } from './Alongamento'
 import { CartaoNivelamento } from './Nivelamento'
 import { textoFase } from './Fase'
 import { ir } from './rota'
+import { BotaoReportar } from './Reportar'
 import { m, t, traduzido } from '../i18n'
 
 const ICONES: Record<EstadoExercicio, string> = { 'por-fazer': '', 'em-curso': '•', feito: '✓', saltado: '–' }
@@ -106,6 +107,7 @@ export function Hoje({ dados, plano, anamnese }: { dados: Dados; plano: Plano; a
       {ultimaTerminada && (
         <p className="secundario">{t('Último treino: {treino}, {data}.', { treino: plano.treinos.find((x) => x.id === ultimaTerminada.treinoId)?.nome ?? t('plano anterior'), data: dataCurta(ultimaTerminada.inicio) })}</p>
       )}
+      <BotaoReportar tipo="treino" id={treino.id} />
     </>
   )
 }

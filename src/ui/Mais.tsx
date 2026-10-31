@@ -83,6 +83,12 @@ export function Mais({ dados }: { dados: Dados }) {
 
       <CartaoAtualizacoes />
       <div className="cartao">
+        <h3>{t('Reportar ou sugerir')}</h3>
+        <p className="secundario">{t('Um vídeo errado, uma instrução pouco clara, um erro na app ou uma ideia: conta-nos.')}</p>
+        <button className="largo" onClick={() => ir('/reportar')}>{t('Reportar ou sugerir')}</button>
+      </div>
+
+      <div className="cartao">
         <h3>{t('Sobre')}</h3>
         <p className="secundario">
           {t('Plano gerado por regras baseadas em evidência (frequência 2×/semana por grupo, 8+ séries semanais nos grupos grandes, RIR 1–3, dupla progressão).')}{' '}

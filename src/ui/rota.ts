@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import type { TipoReporte } from '../domain/reporte'
 import { GRUPOS_MUSCULARES, type GrupoMuscular } from '../domain/types'
 
 export type Rota =
@@ -19,10 +20,14 @@ export type Rota =
   | { ecra: 'calistenia' }
   /** F32.2: teste de nivelamento. */
   | { ecra: 'nivelamento' }
+  /** F34.1: reportar ou sugerir, com o exercício ou o treino quando vem do botão desse ecrã. */
+  | { ecra: 'reportar'; tipo: TipoReporte; id?: string }
 
 export function lerRota(hash: string): Rota {
-  const [ecra, arg] = hash.replace(/^#\/?/, '').split('/')
+  const [ecra, arg, arg2] = hash.replace(/^#\/?/, '').split('/')
   switch (ecra) {
+    case 'reportar':
+      return (arg === 'exercicio' || arg === 'treino') && arg2 ? { ecra, tipo: arg, id: decodeURIComponent(arg2) } : { ecra, tipo: 'geral' }
     case 'exercicio':
       return arg ? { ecra: 'exercicio', prescricaoId: decodeURIComponent(arg) } : { ecra: 'hoje' }
     case 'alongamento':

@@ -2,7 +2,7 @@
 
 [English](specification-v1.en.md) · **Português**
 
-Data: 2026-10-20 · Versão 1.22 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.22)
+Data: 2026-10-20 · Versão 1.23 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.23)
 
 ## 0. Decisões fechadas
 
@@ -320,6 +320,13 @@ Quinta fase do estudo de viabilidade de calistenia e treino em casa (2026-10-31)
 - **F33.2 Barra de baixo com 5 separadores.** «Fotos» deixa de ter separador próprio e passa para dentro de «Medições», com dois botões no topo: «Medidas» e «Fotos». O endereço das fotos mantém-se. Em inglês, o separador chama-se «Body» e, em espanhol, «Cuerpo», para não repetir o nome do botão «Medidas».
 - **F33.3 Conquistas no Início.** Aparecem as conquistas obtidas e as 3 seguintes por obter; as restantes ficam em «Ver todas (n)».
 
+### F34. Reportar ou sugerir (v1.23)
+
+- **F34.1 Onde.** Em «Mais», «Reportar ou sugerir». No ecrã do exercício, um botão pequeno «Reportar um problema neste exercício». No treino de hoje, um botão pequeno «Reportar um problema neste treino». Os botões abrem o mesmo ecrã com o exercício ou o treino já indicado.
+- **F34.2 Motivos.** Exercício: vídeo incorreto, vídeo pouco explicativo, instrução pouco clara, exercício desadequado para mim, outro. Treino: instrução pouco clara, duração ou volume desadequado, exercício em falta ou a mais, outro. Geral: sugestão, erro na app, tradução incorreta, outro. Escolher um motivo é obrigatório. A descrição é obrigatória em «outro», «sugestão» e «erro na app», e tem no máximo 1000 caracteres. Um email para resposta é opcional e, se preenchido, tem de ser válido.
+- **F34.3 O que é enviado.** Só o motivo, a descrição, o email de resposta (se preenchido), o exercício ou o treino (id e nome), o link do vídeo atual nos motivos de vídeo, a versão da app e o idioma. Nunca a anamnese, as medições, as fotos, os registos de treino nem o nome do perfil. O ecrã diz isto antes de enviar.
+- **F34.4 Envio sem mostrar o destino.** O botão «Enviar» manda o reporte por HTTPS a um serviço de formulários (Web3Forms), que o reencaminha por email. A app só tem uma chave de acesso pública; o endereço de destino está guardado no serviço e não aparece na app nem no repositório. Inclui um campo escondido contra robôs. Depois de enviar, aparece uma confirmação e o formulário fica limpo; há um intervalo mínimo de 60 s entre envios. Sem rede ou com erro do serviço, aparece um aviso e o texto mantém-se para tentar de novo. Enquanto não houver chave configurada, o ecrã diz que os reportes ainda não estão ativos e o botão fica desativado.
+
 ### F14. Blocos e próxima mudança (v1.2, regras na secção 3.7)
 - No Início e no Treino de hoje: fase atual (readaptação, semana N de M do bloco, ou descarga) e a próxima mudança com data: fim da readaptação (séries completas), semana de descarga (metade das séries), ou novo bloco (troca dos exercícios isolados, com a lista do que muda).
 
@@ -416,10 +423,10 @@ Para cada Prescrição com faixa [mín, máx]:
 - Abre em menos de 2 s num iPhone recente.
 - Modo claro e escuro, alvos de toque ≥ 44 px, texto legível com o telemóvel no suporte da máquina.
 - Cabe em ecrãs de 320 px de largura (iPhone SE) ou mais, nos três idiomas: nenhum elemento sai do ecrã e nenhum botão tem o texto cortado (v1.21.1).
-- Sem analytics, sem rastreadores, sem chamadas de rede exceto vídeos e, na própria origem da app, o service worker e o ficheiro de novidades (F20).
+- Sem analytics, sem rastreadores, sem chamadas de rede exceto vídeos e, na própria origem da app, o service worker e o ficheiro de novidades (F20). A única exceção que envia dados é o reporte (F34), só quando a pessoa carrega em «Enviar».
 
 ## 6. Segurança
-- Content Security Policy: `default-src 'self'`; `frame-src` só `https://www.youtube-nocookie.com` e `https://player.vimeo.com`; `img-src 'self' https://i.ytimg.com data: blob:` (v1.4: `blob:` para ler a foto escolhida antes de a recodificar).
+- Content Security Policy: `default-src 'self'`; `connect-src 'self' https://api.web3forms.com` (v1.23, F34); `frame-src` só `https://www.youtube-nocookie.com` e `https://player.vimeo.com`; `img-src 'self' https://i.ytimg.com data: blob:` (v1.4: `blob:` para ler a foto escolhida antes de a recodificar).
 - Links de vídeo aceites só de youtube.com, youtu.be, m.youtube.com, vimeo.com; convertidos em URL de incorporação.
 - iframe com `sandbox="allow-scripts allow-same-origin allow-presentation"` e `referrerpolicy="strict-origin-when-cross-origin"`.
 - Nenhum conteúdo de dados inserido como HTML.

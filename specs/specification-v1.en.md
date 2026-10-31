@@ -2,7 +2,7 @@
 
 **English** · [Português](especificacao-v1.md)
 
-Date: 2026-10-20 · Version 1.22 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.22)
+Date: 2026-10-20 · Version 1.23 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.23)
 
 The Portuguese version is the reference used for the domain names in the code. Both versions must stay in sync.
 
@@ -324,6 +324,13 @@ Fifth phase of the calisthenics and home training feasibility study (2026-10-31)
 - **F33.2 Bottom bar with 5 tabs.** "Fotos" (photos) no longer has its own tab and moves inside "Medições" (measurements), with two buttons at the top: "Medidas" (measurements) and "Fotos". The photos address stays the same. In English, the tab is called "Body" and in Spanish "Cuerpo", so it does not repeat the name of the "Medidas" button.
 - **F33.3 Achievements on Home.** The achievements earned and the next 3 to earn are shown; the rest are under "Ver todas (n)" (see all).
 
+### F34. Report or suggest (v1.23)
+
+- **F34.1 Where.** In "Mais" (more), "Reportar ou sugerir" (report or suggest). On the exercise screen, a small button "Report a problem with this exercise". On today's workout, a small button "Report a problem with this workout". The buttons open the same screen with the exercise or workout already filled in.
+- **F34.2 Reasons.** Exercise: wrong video, video not explanatory enough, unclear instructions, exercise not suitable for me, other. Workout: unclear instructions, unsuitable duration or volume, missing or extra exercise, other. General: suggestion, app bug, wrong translation, other. Choosing a reason is required. The description is required for "other", "suggestion" and "app bug", and has at most 1000 characters. A reply email is optional and, if filled in, must be valid.
+- **F34.3 What is sent.** Only the reason, the description, the reply email (if filled in), the exercise or workout (id and name), the current video link for video reasons, the app version and the language. Never the anamnesis, measurements, photos, training logs or the profile name. The screen says this before sending.
+- **F34.4 Sending without showing the destination.** The "Send" button posts the report over HTTPS to a form service (Web3Forms), which forwards it by email. The app only holds a public access key; the destination address is stored in the service and does not appear in the app or in the repository. It includes a hidden anti-bot field. After sending, a confirmation appears and the form is cleared; there is a minimum gap of 60 s between sends. Offline or on a service error, a warning appears and the text is kept to try again. While no key is configured, the screen says reports are not active yet and the button is disabled.
+
 ### F14. Blocks and next change (v1.2, rules in section 3.7)
 - On Home and on Today's workout: current phase (re-adaptation, week N of M of the block, or deload) and the next change with its date: end of re-adaptation (full sets), deload week (half the sets), or new block (isolation exercises rotate, listing what changes).
 
@@ -420,10 +427,10 @@ For each Prescription with range [min, max]:
 - Opens in under 2 s on a recent iPhone.
 - Light and dark mode, touch targets ≥ 44 px, text readable with the phone on the machine's holder.
 - Fits screens 320 px wide (iPhone SE) or wider, in all three languages: no element goes off screen and no button has its text cut off (v1.21.1).
-- No analytics, no trackers, no network calls except videos and, on the app's own origin, the service worker and the what's-new file (F20).
+- No analytics, no trackers, no network calls except videos and, on the app's own origin, the service worker and the what's-new file (F20). The only exception that sends data is the report (F34), only when the person taps "Send".
 
 ## 6. Security
-- Content Security Policy: `default-src 'self'`; `frame-src` only `https://www.youtube-nocookie.com` and `https://player.vimeo.com`; `img-src 'self' https://i.ytimg.com data: blob:` (v1.4: `blob:` to read the chosen photo before re-encoding it).
+- Content Security Policy: `default-src 'self'`; `connect-src 'self' https://api.web3forms.com` (v1.23, F34); `frame-src` only `https://www.youtube-nocookie.com` and `https://player.vimeo.com`; `img-src 'self' https://i.ytimg.com data: blob:` (v1.4: `blob:` to read the chosen photo before re-encoding it).
 - Video links accepted only from youtube.com, youtu.be, m.youtube.com, vimeo.com; converted to embed URLs.
 - iframe with `sandbox="allow-scripts allow-same-origin allow-presentation"` and `referrerpolicy="strict-origin-when-cross-origin"`.
 - No data content is ever inserted as HTML.

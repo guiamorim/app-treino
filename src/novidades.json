@@ -1,6 +1,31 @@
 {
   "versoes": [
     {
+      "versao": "1.23.0",
+      "data": "2026-10-31",
+      "itens": [
+        "Novo «Reportar ou sugerir» em Mais: conta-nos um erro, uma tradução errada ou uma ideia, sem sair da app.",
+        "No fim de cada exercício e do treino de hoje há um botão pequeno para reportar um vídeo incorreto ou pouco explicativo, uma instrução pouco clara ou outro problema.",
+        "Só é enviado o que escreves, o exercício ou o treino, a versão e o idioma. Nunca os teus dados de saúde, medições, fotos ou registos."
+      ],
+      "traducoes": {
+        "en": {
+          "itens": [
+            "New “Report or suggest” in More: tell us about a bug, a wrong translation or an idea without leaving the app.",
+            "At the end of each exercise and of today's workout there is a small button to report a wrong or unclear video, unclear instructions or another problem.",
+            "Only what you write, the exercise or workout, the version and the language are sent. Never your health data, measurements, photos or logs."
+          ]
+        },
+        "es": {
+          "itens": [
+            "Nuevo «Informar o sugerir» en Más: cuéntanos un error, una traducción incorrecta o una idea sin salir de la app.",
+            "Al final de cada ejercicio y del entrenamiento de hoy hay un botón pequeño para informar de un vídeo incorrecto o poco explicativo, una instrucción poco clara u otro problema.",
+            "Solo se envía lo que escribes, el ejercicio o el entrenamiento, la versión y el idioma. Nunca tus datos de salud, medidas, fotos ni registros."
+          ]
+        }
+      }
+    },
+    {
       "versao": "1.22.0",
       "data": "2026-10-31",
       "itens": [

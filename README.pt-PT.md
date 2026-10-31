@@ -51,7 +51,7 @@ Cada teste tem o código do critério da especificação que verifica (ex.: `F4`
 
 ## Segurança
 
-- Sem servidor, sem contas, sem analytics: os dados de saúde nunca saem do dispositivo.
+- Sem servidor, sem contas, sem analytics: os dados de saúde nunca saem do dispositivo. A única coisa enviada é um reporte ou sugestão (F34), quando a pessoa carrega em «Enviar», através de um serviço de formulários (Web3Forms) que o reencaminha por email.
 - Content Security Policy restrita; vídeos só de `youtube-nocookie.com` e `player.vimeo.com`, em iframe com `sandbox`.
 - Links de vídeo e ficheiros importados validados (lista de domínios e esquema Zod) antes de serem usados.
 - CI com `npm audit`, testes e Dependabot.
