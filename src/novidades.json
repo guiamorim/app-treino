@@ -1,6 +1,31 @@
 {
   "versoes": [
     {
+      "versao": "1.14.0",
+      "data": "2026-10-31",
+      "itens": [
+        "Podes criar os teus exercícios em «Mais» › «Os meus exercícios»: nome, grupo muscular, repetições ou segundos, como contas o peso, como fazer e o link do vídeo.",
+        "Os teus exercícios aparecem em «Substituir exercício», junto dos do mesmo grupo, e contam na sugestão de carga, no volume semanal, no histórico e nas exportações.",
+        "Entram na cópia de segurança. Se apagares um exercício com registos, o histórico continua a mostrar o nome."
+      ],
+      "traducoes": {
+        "en": {
+          "itens": [
+            "You can create your own exercises in “More” › “My exercises”: name, muscle group, reps or seconds, how you count the weight, how to do it and the video link.",
+            "Your exercises appear in “Replace exercise”, next to those of the same group, and count in the load suggestion, weekly volume, history and exports.",
+            "They are included in the backup. If you delete an exercise that has records, the history still shows its name."
+          ]
+        },
+        "es": {
+          "itens": [
+            "Puedes crear tus ejercicios en «Más» › «Mis ejercicios»: nombre, grupo muscular, repeticiones o segundos, cómo cuentas el peso, cómo hacerlo y el enlace del vídeo.",
+            "Tus ejercicios aparecen en «Sustituir ejercicio», junto a los del mismo grupo, y cuentan en la sugerencia de carga, el volumen semanal, el historial y las exportaciones.",
+            "Se incluyen en la copia de seguridad. Si borras un ejercicio con registros, el historial sigue mostrando su nombre."
+          ]
+        }
+      }
+    },
+    {
       "versao": "1.13.0",
       "data": "2026-10-31",
       "itens": [

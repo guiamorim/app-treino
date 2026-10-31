@@ -624,3 +624,48 @@ test('F25: dias de treino, calendário com o dia de hoje e PDF do dia', async ({
   await expect(page.getByText(/Supino com halteres, pega neutra: 16 kg × 6/)).toBeVisible()
   await expect(page.getByRole('button', { name: 'Continuar treino' })).toBeVisible()
 })
+
+test('F26: criar um exercício próprio, usá-lo em «Substituir exercício» e arquivá-lo', async ({ page }) => {
+  await preencherAnamnese(page)
+  // F26.1: criar, com validação do nome e do link do vídeo.
+  await page.getByRole('link', { name: 'Mais' }).click()
+  await expect(page.getByText(/Ainda não criaste exercícios/)).toBeVisible()
+  await page.getByRole('button', { name: 'Novo exercício' }).click()
+  await page.getByRole('button', { name: 'Guardar' }).click()
+  await expect(page.getByRole('alert')).toHaveText('Indica o nome do exercício.')
+  await page.getByLabel('Nome').fill('Supino no banco do meu ginásio')
+  await page.getByLabel('Grupo muscular principal').selectOption({ label: 'Peito' })
+  await page.getByRole('group', { name: 'Grupos secundários (opcional)' }).getByRole('button', { name: 'Tríceps' }).click()
+  await expect(page.getByLabel('Incremento de carga (kg, opcional)')).toHaveAttribute('placeholder', '2')
+  await page.getByLabel('Como fazer (opcional, um ponto por linha)').fill('Pés no chão\nDescer devagar')
+  await page.getByLabel('Link do vídeo (opcional)').fill('https://exemplo.com/video.mp4')
+  await page.getByRole('button', { name: 'Guardar' }).click()
+  await expect(page.getByRole('alert')).toHaveText('Link não aceite. Usa um link do YouTube ou do Vimeo.')
+  await page.getByLabel('Link do vídeo (opcional)').fill('')
+  await page.getByRole('button', { name: 'Guardar' }).click()
+  await expect(page.getByRole('button', { name: /Supino no banco do meu ginásio/ })).toContainText('Peito · Repetições · Por halter')
+
+  // F26.3: aparece em «Substituir exercício» de um exercício de peito e regista-se como os outros.
+  await page.getByRole('link', { name: 'Hoje' }).click()
+  await page.getByText('Supino com halteres, pega neutra').click()
+  await page.getByRole('button', { name: 'Substituir exercício' }).click()
+  await page.getByRole('button', { name: /Supino no banco do meu ginásio/ }).click()
+  await expect(page.getByRole('heading', { name: 'Supino no banco do meu ginásio' })).toBeVisible()
+  await page.getByText('Como fazer').click()
+  await expect(page.getByText('Descer devagar')).toBeVisible()
+  await page.getByLabel('Carga (kg por halter)').fill('18')
+  await page.getByRole('button', { name: 'Concluir série' }).click()
+  await expect(page.locator('.series')).toContainText('18')
+
+  // F26.4: com registos, a medida fica fixa e apagar arquiva.
+  await page.getByRole('link', { name: 'Mais' }).click()
+  await page.getByRole('button', { name: /Supino no banco do meu ginásio/ }).click()
+  await expect(page.getByLabel('Medida')).toBeDisabled()
+  page.once('dialog', (d) => { expect(d.message()).toContain('Este exercício tem registos'); void d.accept() })
+  await page.getByRole('button', { name: 'Apagar exercício' }).click()
+  await expect(page.getByText(/Ainda não criaste exercícios/)).toBeVisible()
+  // O histórico continua a mostrar o nome.
+  await page.getByRole('link', { name: 'Relatórios' }).click()
+  await page.getByRole('tab', { name: 'Calendário' }).click()
+  await expect(page.getByText(/Supino no banco do meu ginásio: 18 kg × 6/)).toBeVisible()
+})

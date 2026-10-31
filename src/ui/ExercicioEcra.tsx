@@ -11,6 +11,7 @@ import { mesmaForma, nomeTipoCarga, rotuloCarga, tipoCarga, tiposCarga, totalCom
 import { RESERVAS, reservaAlvo, rotuloReserva, textoReserva } from '../domain/reserva'
 import { decimal, deUnidade, paraCampo, paraUnidade, peso, unidadePeso } from '../domain/unidades'
 import { agoraIso, catalogo, type Dados } from './dados'
+import { substitutosProprios } from '../domain/proprios'
 import { ir } from './rota'
 import { Corpo } from './Corpo'
 import { iniciarDescanso, prepararSom } from './descanso'
@@ -84,10 +85,14 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
 
   const linkVideo = dados.videos[ex.id] ?? ex.video
   const video = linkVideo ? lerVideo(linkVideo) : null
-  const substitutos = [...new Set([base.id, ...base.substitutos, ...ex.substitutos])]
-    .filter((id) => id !== ex.id)
-    .map((id) => catalogo.get(id)!)
-    .filter((s) => dados.anamnese && !motivoIncompatibilidade(s, dados.anamnese))
+  const substitutos = [
+    ...[...new Set([base.id, ...base.substitutos, ...ex.substitutos])]
+      .filter((id) => id !== ex.id)
+      .map((id) => catalogo.get(id)!)
+      .filter((s) => dados.anamnese && !motivoIncompatibilidade(s, dados.anamnese)),
+    // F26.3: os exercícios próprios do mesmo grupo e medida; quem os criou sabe se os pode fazer.
+    ...substitutosProprios(dados.proprios, base).filter((id) => id !== ex.id).map((id) => catalogo.get(id)!),
+  ]
 
   // F22.2: um toque duplo não grava duas vezes. A referência bloqueia já; o estado desativa os botões.
   const ocupado = useRef(false)
@@ -197,7 +202,7 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
         <span className="secundario">{ex.gruposSecundarios.map((g) => NOMES_GRUPOS[g]).join(' · ')}</span>
       </p>
       <Corpo ex={ex} sexo={dados.anamnese?.sexo} />
-      <p>{ex.objetivo}</p>
+      {ex.objetivo && <p>{ex.objetivo}</p>}
       {ef.nota && ex.id === ef.exercicioId && <p className="secundario">{ef.nota}</p>}
 
       <div className="linha">
@@ -210,11 +215,11 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
       </div>
       {verVideo && video && <VideoModal video={video} titulo={ex.nome} fechar={() => setVerVideo(false)} />}
 
-      <details className="cartao">
+      {(ex.pontosChave.length > 0 || ex.contraindicacoes.length > 0) && <details className="cartao">
         <summary>{t('Como fazer')}</summary>
         <ul>{ex.pontosChave.map((k) => <li key={k}>{k}</li>)}</ul>
         {ex.contraindicacoes.length > 0 && <p className="secundario">{t('Cuidado se tiveres dor em: {zonas}.', { zonas: ex.contraindicacoes.map((a) => NOMES_AREAS[a]).join(', ') })}</p>}
-      </details>
+      </details>}
 
       <div className={`cartao ${sugestao.alerta === 'parar' ? 'perigo-borda' : sugestao.alerta ? 'aviso' : ''}`}>
         <h3>{t('Hoje:')} {ef.series} × {ef.faixa[0]}–{ef.faixa[1]} {unidade} · {emSegundos ? t('reserva +{a}–{b} s', { a: reservaAlvo(ef.rir)[0], b: reservaAlvo(ef.rir)[1] }) : `RIR ${ef.rir[0]}–${ef.rir[1]}`}</h3>
@@ -326,7 +331,7 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
               {substitutos.map((s) => (
                 <li key={s.id}>
                   <button className="item" onClick={() => substituir(s.id)}>
-                    <span className="corpo"><span className="titulo">{s.nome}</span><br /><span className="secundario">{s.objetivo}</span></span>
+                    <span className="corpo"><span className="titulo">{s.nome}</span>{s.objetivo && <><br /><span className="secundario">{s.objetivo}</span></>}</span>
                   </button>
                 </li>
               ))}

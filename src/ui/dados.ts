@@ -5,6 +5,7 @@ import dadosCatalogo from '../catalog/exercicios.json'
 import { carregarAlongamentos, traduzirAlongamentos, type CatalogoAlongamentos } from '../domain/alongamentos'
 import { carregarCatalogo, traduzirCatalogo, type Catalogo } from '../domain/catalogo'
 import { planoNoCatalogo, planoNoIdioma } from '../domain/plano'
+import { juntarProprios, lerProprios, type ExercicioProprio } from '../domain/proprios'
 import type { Anamnese, FotoAvaliacao, Medicao, Perfil, Plano, Sessao } from '../domain/types'
 import { barrasKg, type TipoCarga } from '../domain/carga'
 import { definirUnidade, UNIDADES, unidadeDoDispositivo, type UnidadePeso } from '../domain/unidades'
@@ -24,14 +25,15 @@ const IMPORTAR = {
 export let catalogo = catalogoPt
 export let alongamentos = alongamentosPt
 
-export async function aplicarIdioma(i: Idioma) {
+/** F26.2: os exercícios próprios juntam-se ao catálogo do idioma, sem tradução. */
+export async function aplicarIdioma(i: Idioma, proprios: readonly ExercicioProprio[] = []) {
   if (i !== 'pt' && !CATALOGOS[i]) {
     const [[ex, al]] = await Promise.all([IMPORTAR[i](), carregarIdioma(i)])
     CATALOGOS[i] = traduzirCatalogo(catalogoPt, ex.default)
     ALONGAMENTOS[i] = traduzirAlongamentos(alongamentosPt, al.default)
   }
   definirIdioma(i)
-  catalogo = CATALOGOS[i]!
+  catalogo = juntarProprios(CATALOGOS[i]!, proprios)
   alongamentos = ALONGAMENTOS[i]!
 }
 
@@ -59,6 +61,8 @@ export interface Dados {
   tiposCarga: Record<string, TipoCarga>
   /** F24.4: peso da barra, em quilos. */
   barraKg: number
+  /** F26: exercícios criados pelo utilizador, incluindo os arquivados. */
+  proprios: ExercicioProprio[]
 }
 
 export function useDados(): Dados | undefined {
@@ -76,10 +80,11 @@ export function useDados(): Dados | undefined {
       perfil: (await db.ler<Perfil>('perfil')) ?? {},
       versaoVista: await db.ler<string>('versaoVista'),
       tiposCarga: (await db.ler<Record<string, TipoCarga>>('tiposCarga')) ?? {},
+      proprios: lerProprios(await db.ler('exerciciosProprios')),
     }
     const barraKg = await db.ler<number>('barraKg')
     // O idioma carrega-se depois das leituras: uma promessa de fora do Dexie a meio deixaria de fora da observação o que se lê a seguir.
-    await aplicarIdioma(idioma)
+    await aplicarIdioma(idioma, resto.proprios)
     definirUnidade(unidade)
     // F24.4: sem escolha, a barra olímpica na unidade (20 kg ou 45 lb).
     return { idioma, unidade, barraKg: barraKg ?? barrasKg(unidade)[0]!, anamnese, plano: plano && planoNoCatalogo(planoNoIdioma(plano, anamnese, catalogo), catalogo), ...resto }

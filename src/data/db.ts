@@ -2,9 +2,10 @@ import Dexie, { type EntityTable } from 'dexie'
 import type { Anamnese, FotoAvaliacao, Medicao, Perfil, Plano, Sessao } from '../domain/types'
 import { lerCopia, type Copia } from '../domain/copia'
 import type { TipoCarga } from '../domain/carga'
+import { lerProprios } from '../domain/proprios'
 
 interface Valor {
-  chave: 'anamnese' | 'plano' | 'videos' | 'ultimaExportacao' | 'perfil' | 'versaoVista' | 'idioma' | 'unidade' | 'tiposCarga' | 'barraKg'
+  chave: 'anamnese' | 'plano' | 'videos' | 'ultimaExportacao' | 'perfil' | 'versaoVista' | 'idioma' | 'unidade' | 'tiposCarga' | 'barraKg' | 'exerciciosProprios'
   valor: unknown
 }
 
@@ -45,6 +46,7 @@ export class BaseDados extends Dexie {
       fotos: await this.fotos.orderBy('data').toArray(),
       perfil: (await this.ler<Perfil>('perfil')) ?? {},
       carga: { barraKg: await this.ler<number>('barraKg'), tipos: (await this.ler<Record<string, TipoCarga>>('tiposCarga')) ?? {} },
+      exerciciosProprios: lerProprios(await this.ler('exerciciosProprios')),
     }
     await this.gravar('ultimaExportacao', agora)
     return copia
@@ -64,6 +66,7 @@ export class BaseDados extends Dexie {
       if (c.perfil) await this.gravar('perfil', c.perfil)
       if (c.carga?.barraKg !== undefined) await this.gravar('barraKg', c.carga.barraKg)
       if (c.carga?.tipos) await this.gravar('tiposCarga', c.carga.tipos)
+      if (c.exerciciosProprios) await this.gravar('exerciciosProprios', c.exerciciosProprios)
     })
   }
 }

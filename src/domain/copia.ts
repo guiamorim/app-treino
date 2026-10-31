@@ -4,6 +4,7 @@ import { AREAS, DIAS_POR_SEMANA, DIVISOES_TREINO, ENFASES, GRAVIDEZ, INFO_MEDIDA
 import { TIPOS_CARGA, type TipoCarga } from './carga'
 import type { Anamnese, FotoAvaliacao, Medicao, Perfil, Plano, Sessao } from './types'
 import { lerVideo } from './video'
+import { esquemaProprios, type ExercicioProprio } from './proprios'
 
 const inteiro = (min: number, max: number) => z.number().int().min(min).max(max)
 const data = z.string().min(10).max(40)
@@ -92,6 +93,7 @@ const esquemaCopia = z.strictObject({
   fotos: z.array(foto).max(2000).optional(),
   perfil: perfil.optional(),
   carga: z.strictObject({ barraKg: z.number().min(5).max(30).optional(), tipos: z.record(id, z.enum(TIPOS_CARGA)).optional() }).optional(),
+  exerciciosProprios: esquemaProprios.optional(),
 })
 
 export interface Copia {
@@ -109,6 +111,8 @@ export interface Copia {
   perfil?: Perfil
   /** F24 (v1.12): peso da barra e forma de contar escolhida por exercício. */
   carga?: { barraKg?: number; tipos?: Record<string, TipoCarga> }
+  /** F26 (v1.14): exercícios criados por ti. */
+  exerciciosProprios?: ExercicioProprio[]
 }
 
 /** F10.2: valida um ficheiro importado; lança erro se não for uma cópia válida. */
