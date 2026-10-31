@@ -6,7 +6,7 @@ import { inicioSemana, progressaoExercicio } from './relatorios'
 import type { Plano, Sessao } from './types'
 
 const SEMANA_MS = 7 * 86_400_000
-const chaveSemana = (iso: string) => inicioSemana(new Date(iso)).getTime()
+export const chaveSemana = (iso: string) => inicioSemana(new Date(iso)).getTime()
 
 /** Semanas seguidas com treinos terminados ≥ meta; a semana atual só conta quando cumprida. */
 export function sequenciaSemanal(sessoes: Sessao[], meta: number, agora: Date): number {

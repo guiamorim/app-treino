@@ -2,7 +2,7 @@
 
 [English](specification-v1.en.md) · **Português**
 
-Data: 2026-10-20 · Versão 1.23 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.23)
+Data: 2026-10-20 · Versão 1.24 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.24)
 
 ## 0. Decisões fechadas
 
@@ -326,6 +326,13 @@ Quinta fase do estudo de viabilidade de calistenia e treino em casa (2026-10-31)
 - **F34.2 Motivos.** Exercício: vídeo incorreto, vídeo pouco explicativo, instrução pouco clara, exercício desadequado para mim, outro. Treino: instrução pouco clara, duração ou volume desadequado, exercício em falta ou a mais, outro. Geral: sugestão, erro na app, tradução incorreta, outro. Escolher um motivo é obrigatório. A descrição é obrigatória em «outro», «sugestão» e «erro na app», e tem no máximo 1000 caracteres. Um email para resposta é opcional e, se preenchido, tem de ser válido.
 - **F34.3 O que é enviado.** Só o motivo, a descrição, o email de resposta (se preenchido), o exercício ou o treino (id e nome), o link do vídeo atual nos motivos de vídeo, a versão da app e o idioma. Nunca a anamnese, as medições, as fotos, os registos de treino nem o nome do perfil. O ecrã diz isto antes de enviar.
 - **F34.4 Envio sem mostrar o destino.** O botão «Enviar» manda o reporte por HTTPS a um serviço de formulários (Web3Forms), que o reencaminha por email. A app só tem uma chave de acesso pública; o endereço de destino está guardado no serviço e não aparece na app nem no repositório. Inclui um campo escondido contra robôs. Depois de enviar, aparece uma confirmação e o formulário fica limpo; há um intervalo mínimo de 60 s entre envios. Sem rede ou com erro do serviço, aparece um aviso e o texto mantém-se para tentar de novo. Enquanto não houver chave configurada, o ecrã diz que os reportes ainda não estão ativos e o botão fica desativado.
+
+### F35. Clareza, instalação e incentivo (v1.24)
+
+- **F35.1 Equipamento escolhido.** Na lista de equipamento (F28.1, também nas férias), o atalho que corresponde à escolha atual fica destacado («Ginásio completo» com tudo marcado, «Só o peso do corpo» sem nada marcado), e uma linha por baixo diz o que está escolhido: ginásio completo, só o peso do corpo, ou «n de 8 equipamentos».
+- **F35.2 Instalar no ecrã principal.** Enquanto a app não está aberta a partir do ecrã principal, o Início (no topo) e o Treino de hoje (depois da lista de exercícios) mostram um cartão «Põe a app no ecrã principal» com o motivo (ecrã inteiro, funciona sem internet, e o navegador pode apagar dados de sites não abertos há algum tempo, mas não os das apps no ecrã principal). No iPhone e no iPad mostra os passos do Safari (Partilhar → «Adicionar ao ecrã principal»); nos navegadores que o permitem, um botão «Instalar» abre o pedido do próprio navegador; nos outros, uma indicação para o menu do navegador. «Agora não» fecha o cartão de vez. A escolha fica só no dispositivo.
+- **F35.3 Mais frases.** A lista da frase do dia (F13) tem pelo menos 110 frases, sem repetidas. As novas com autor têm a obra de origem anotada no código.
+- **F35.4 Parabéns.** Ao terminar um treino aparece uma janela de parabéns com: um título que varia de treino para treino, as séries registadas e a duração (se for entre 1 e 240 minutos), a meta de treinos da semana quando este treino a cumpre, os recordes pessoais batidos neste treino e as conquistas (F12) obtidas com ele. Está ligada por omissão e pode ser desligada em «Mais» («Mensagens de parabéns»). Um treino terminado sem nenhuma série registada não mostra a janela. A escolha fica só no dispositivo.
 
 ### F14. Blocos e próxima mudança (v1.2, regras na secção 3.7)
 - No Início e no Treino de hoje: fase atual (readaptação, semana N de M do bloco, ou descarga) e a próxima mudança com data: fim da readaptação (séries completas), semana de descarga (metade das séries), ou novo bloco (troca dos exercícios isolados, com a lista do que muda).

@@ -28,6 +28,6 @@ export async function alterarRegisto(sessaoId: string, prescricaoId: string, exe
   })
 }
 
-export async function terminarSessao(sessaoId: string) {
-  await db.sessoes.update(sessaoId, { fim: agoraIso() })
+export async function terminarSessao(sessaoId: string, fim = agoraIso()) {
+  await db.sessoes.update(sessaoId, { fim })
 }

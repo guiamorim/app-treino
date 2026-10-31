@@ -66,6 +66,13 @@ test('F1–F4: anamnese gera o plano e registo um exercício', async ({ page }) 
   }
   await expect(page.getByText('Treino completo 🎉')).toBeVisible()
   await page.getByRole('button', { name: 'Terminar treino' }).click()
+  // F35.4: parabéns com as séries e a conquista obtida neste treino.
+  const parabens = page.getByRole('dialog', { name: 'Parabéns' })
+  await expect(parabens).toContainText(/série(s)? registada/)
+  await expect(parabens).toContainText('Nova conquista:')
+  await expect(parabens).toContainText('Primeiro treino')
+  await parabens.getByRole('button', { name: 'Continuar' }).click()
+  await expect(parabens).toHaveCount(0)
   await expect(page.getByRole('heading', { name: 'Inferior A' })).toBeVisible()
 
   // F7: relatório de progressão.
@@ -158,6 +165,8 @@ test('F11 e F12: o Início mostra o painel e as conquistas depois de um treino',
     await page.getByRole('button', { name: /‹ Superior A/ }).click()
   }
   await page.getByRole('button', { name: 'Terminar treino' }).click()
+  // F35.4: treino terminado sem séries registadas não dá parabéns.
+  await expect(page.getByRole('dialog', { name: 'Parabéns' })).toHaveCount(0)
 
   await page.getByRole('link', { name: 'Início' }).click()
   await expect(page.locator('.indicador').filter({ hasText: 'treinos' }).first()).toContainText('1/4')
@@ -292,6 +301,7 @@ test('F19: lembrete de alongamento no fim do treino, alongamento do treino e por
   }
   await expect(page.getByRole('region', { name: 'Lembrete de alongamento' })).toHaveCount(0)
   await page.getByRole('button', { name: 'Terminar treino' }).click()
+  await page.getByRole('dialog', { name: 'Parabéns' }).getByRole('button', { name: 'Continuar' }).click()
 
   // Lembrete no Hoje e no Início; o peito fica de fora por causa do ombro.
   const lembrete = page.getByRole('region', { name: 'Lembrete de alongamento' })
@@ -1025,4 +1035,46 @@ test.describe('F34: reportar ou sugerir', () => {
     await page.getByLabel('Sugestão').check()
     await expect(page.getByLabel('Descrição', { exact: true })).toBeVisible()
   })
+})
+
+test('F35: equipamento escolhido visível, sugestão de instalar e parabéns que se podem desligar', async ({ page }) => {
+  await page.goto('./')
+  // F35.1: numa anamnese nova vem tudo marcado, e o atalho correspondente fica destacado.
+  const completo = page.getByRole('button', { name: 'Ginásio completo' })
+  const corpo = page.getByRole('button', { name: 'Só o peso do corpo' })
+  await expect(completo).toHaveAttribute('aria-pressed', 'true')
+  await expect(page.getByText('Escolhido: ginásio completo, com todo o equipamento da lista.')).toBeVisible()
+  await corpo.click()
+  await expect(corpo).toHaveAttribute('aria-pressed', 'true')
+  await expect(completo).toHaveAttribute('aria-pressed', 'false')
+  await expect(page.getByText('Escolhido: só o peso do corpo, sem equipamento.')).toBeVisible()
+  await page.getByLabel('Halteres', { exact: true }).check()
+  await expect(page.getByText('Escolhido: 1 de 8 equipamentos.')).toBeVisible()
+  await completo.click()
+
+  await preencherAnamnese(page)
+  // F35.2: no iPhone, os passos do Safari; «Agora não» fecha de vez.
+  const instalar = page.getByRole('region', { name: 'Instalar a app' })
+  await expect(instalar).toContainText('Adicionar ao ecrã principal')
+  await instalar.getByRole('button', { name: 'Agora não' }).click()
+  await expect(instalar).toHaveCount(0)
+  await page.reload()
+  await expect(page.locator('ul button.item').first()).toBeVisible()
+  await expect(instalar).toHaveCount(0)
+
+  // F35.4: desligado em Mais, terminar o treino não mostra a janela.
+  await page.getByRole('link', { name: 'Mais' }).click()
+  const opcao = page.getByLabel('Mostrar parabéns ao terminar um treino e ao alcançar metas')
+  await expect(opcao).toBeChecked()
+  // A caixa reflete o valor guardado, que chega um instante depois do toque.
+  await opcao.click()
+  await expect(opcao).not.toBeChecked()
+  await page.getByRole('link', { name: 'Hoje' }).click()
+  await page.locator('ul button.item').first().click()
+  await page.getByRole('button', { name: 'Saltar', exact: true }).click()
+  await page.getByRole('button', { name: /‹ Superior A/ }).click()
+  page.once('dialog', (d) => d.accept())
+  await page.getByRole('button', { name: 'Terminar treino' }).click()
+  await expect(page.getByRole('heading', { name: 'Inferior A' })).toBeVisible()
+  await expect(page.getByRole('dialog', { name: 'Parabéns' })).toHaveCount(0)
 })

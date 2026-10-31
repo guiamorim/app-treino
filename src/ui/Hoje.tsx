@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { parabens as calcularParabens, type Parabens } from '../domain/parabens'
 import { semanaDoPlano, treinoEfetivo } from '../domain/plano'
 import { estadoExercicio, estadoSessao, proximoTreino, registoDe } from '../domain/sessao'
 import { NOMES_GRUPOS, type Anamnese, type EstadoExercicio, type Plano } from '../domain/types'
@@ -9,6 +10,8 @@ import { CartaoNivelamento } from './Nivelamento'
 import { textoFase } from './Fase'
 import { ir } from './rota'
 import { BotaoReportar } from './Reportar'
+import { JanelaParabens } from './Parabens'
+import { instalada, SugestaoInstalar } from './Instalar'
 import { m, t, traduzido } from '../i18n'
 
 const ICONES: Record<EstadoExercicio, string> = { 'por-fazer': '', 'em-curso': '•', feito: '✓', saltado: '–' }
@@ -17,6 +20,7 @@ const NOMES_ESTADO: Record<EstadoExercicio, string> = traduzido({ 'por-fazer': m
 export function Hoje({ dados, plano, anamnese }: { dados: Dados; plano: Plano; anamnese: Anamnese }) {
   const proximo = proximoTreino(plano, dados.sessoes)
   const [escolhido, setEscolhido] = useState<string | null>(null)
+  const [parabens, setParabens] = useState<Parabens | null>(null)
   const treinoId = escolhido ?? proximo.treinoId
   const semana = semanaDoPlano(plano, agoraIso())
   const treino = treinoEfetivo(plano.treinos.find((x) => x.id === treinoId) ?? plano.treinos[0]!, plano, semana)
@@ -32,8 +36,14 @@ export function Hoje({ dados, plano, anamnese }: { dados: Dados; plano: Plano; a
   async function terminar() {
     if (!sessao) return
     if (!estado?.completa && !confirm(t('Ainda há exercícios por fazer. Terminar o treino mesmo assim?'))) return
-    await terminarSessao(sessao.id)
+    const fim = agoraIso()
+    await terminarSessao(sessao.id, fim)
     setEscolhido(null)
+    // F35.4: as metas comparam o histórico sem e com este treino.
+    if (dados.parabens) {
+      const sessoes = dados.sessoes.map((x) => (x.id === sessao.id ? { ...x, fim } : x))
+      setParabens(calcularParabens(sessoes, sessao.id, dados.planoBase ?? plano, anamnese.diasPorSemana, new Date(fim)))
+    }
   }
 
   return (
@@ -95,6 +105,8 @@ export function Hoje({ dados, plano, anamnese }: { dados: Dados; plano: Plano; a
         </ul>
       </div>
 
+      {/* F35.2: no Treino de hoje, depois da lista, para não empurrar o treino para fora do ecrã. */}
+      {!dados.instalacaoVista && !instalada() && <SugestaoInstalar />}
       {sessao && !estado?.completa && <button className="largo" onClick={terminar}>{t('Terminar treino')}</button>}
       <button className="largo" style={{ marginTop: 8 }} onClick={() => ir('/alongamento')}>🧘 {t('Alongamentos')}</button>
 
@@ -108,6 +120,7 @@ export function Hoje({ dados, plano, anamnese }: { dados: Dados; plano: Plano; a
         <p className="secundario">{t('Último treino: {treino}, {data}.', { treino: plano.treinos.find((x) => x.id === ultimaTerminada.treinoId)?.nome ?? t('plano anterior'), data: dataCurta(ultimaTerminada.inicio) })}</p>
       )}
       <BotaoReportar tipo="treino" id={treino.id} />
+      {parabens && <JanelaParabens p={parabens} fechar={() => setParabens(null)} />}
     </>
   )
 }
