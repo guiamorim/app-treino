@@ -1,6 +1,25 @@
 {
   "versoes": [
     {
+      "versao": "1.21.1",
+      "data": "2026-10-31",
+      "itens": [
+        "Correções de ecrã em telemóveis pequenos: os separadores dos Relatórios e a escolha da pose nas Fotos já não ficam cortados, e os campos de data cabem nos cartões no iPhone."
+      ],
+      "traducoes": {
+        "en": {
+          "itens": [
+            "Screen fixes on small phones: the Reports tabs and the pose choice in Photos are no longer cut off, and date fields fit inside their cards on the iPhone."
+          ]
+        },
+        "es": {
+          "itens": [
+            "Correcciones de pantalla en móviles pequeños: las pestañas de Informes y la elección de la pose en Fotos ya no quedan cortadas, y los campos de fecha caben en las tarjetas en el iPhone."
+          ]
+        }
+      }
+    },
+    {
       "versao": "1.21.0",
       "data": "2026-10-31",
       "itens": [

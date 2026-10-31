@@ -884,3 +884,47 @@ test('F32: teste de nivelamento opcional, aplicado ao plano, e fase por padrão 
   await expect(page.getByText(/Último teste:/)).toBeVisible()
   await expect(page.getByText('Regista treinos para ver a linha temporal dos degraus.')).toBeVisible()
 })
+
+test.describe('5. ecrã estreito', () => {
+  // iPhone SE (1.ª geração), o ecrã mais estreito que a app suporta.
+  test.use({ viewport: { width: 320, height: 568 } })
+
+  async function problemas(page: Page): Promise<string[]> {
+    return page.evaluate(() => {
+      const g = globalThis as unknown as { document: { scrollingElement: { scrollWidth: number }; querySelectorAll: (s: string) => Iterable<{ tagName: string; textContent: string | null; scrollWidth: number; clientWidth: number; getBoundingClientRect: () => { left: number; right: number; width: number } }> }; innerWidth: number }
+      const largura = g.innerWidth
+      const r: string[] = []
+      if (g.document.scrollingElement.scrollWidth > largura + 1) r.push(`página com ${g.document.scrollingElement.scrollWidth} px`)
+      for (const el of g.document.querySelectorAll('button, a, select, input, label, summary, .chip, h1, h2, h3, li, p')) {
+        const b = el.getBoundingClientRect()
+        if (b.width === 0) continue
+        const nome = `${el.tagName.toLowerCase()} «${(el.textContent ?? '').trim().slice(0, 40)}»`
+        if (b.right > largura + 1 || b.left < -1) r.push(`fora do ecrã: ${nome}`)
+        if (['BUTTON', 'A'].includes(el.tagName) && el.scrollWidth > el.clientWidth + 1) r.push(`texto cortado: ${nome}`)
+      }
+      return [...new Set(r)]
+    })
+  }
+
+  for (const [idioma, nome] of [['pt', ''], ['en', 'English'], ['es', 'Español']] as const) {
+    test(`5. nada sai do ecrã nem fica cortado (${idioma})`, async ({ page }) => {
+      await preencherAnamnese(page)
+      await expect(page.locator('ul button.item').first()).toBeVisible()
+      if (nome) {
+        await page.goto('./#/mais')
+        await page.getByRole('radio', { name: nome }).click()
+        await expect(page.getByRole('radio', { name: nome })).toHaveAttribute('aria-checked', 'true')
+      }
+      const encontrados: string[] = []
+      const ver = async (onde: string) => { for (const x of await problemas(page)) encontrados.push(`${onde}: ${x}`) }
+      for (const rota of ['hoje', 'inicio', 'relatorios', 'medicoes', 'fotos', 'mais', 'calistenia', 'nivelamento', 'meu-plano', 'alongamento', 'anamnese', 'meu-exercicio/novo']) {
+        await page.goto(`./#/${rota}`)
+        await expect(page.locator('h1').first()).toBeVisible()
+        await ver(rota)
+        if (rota === 'relatorios') for (const aba of await page.getByRole('tab').all()) { await aba.click(); await ver(`${rota} › ${await aba.textContent()}`) }
+        if (rota === 'hoje') { await page.locator('ul button.item').first().click(); await expect(page.locator('h1').first()).toBeVisible(); await ver('exercício') }
+      }
+      expect(encontrados).toEqual([])
+    })
+  }
+})

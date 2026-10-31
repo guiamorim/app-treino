@@ -409,6 +409,7 @@ Para cada Prescrição com faixa [mín, máx]:
 - Funciona offline depois da primeira abertura.
 - Abre em menos de 2 s num iPhone recente.
 - Modo claro e escuro, alvos de toque ≥ 44 px, texto legível com o telemóvel no suporte da máquina.
+- Cabe em ecrãs de 320 px de largura (iPhone SE) ou mais, nos três idiomas: nenhum elemento sai do ecrã e nenhum botão tem o texto cortado (v1.21.1).
 - Sem analytics, sem rastreadores, sem chamadas de rede exceto vídeos e, na própria origem da app, o service worker e o ficheiro de novidades (F20).
 
 ## 6. Segurança

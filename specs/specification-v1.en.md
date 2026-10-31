@@ -413,6 +413,7 @@ For each Prescription with range [min, max]:
 - Works offline after the first visit.
 - Opens in under 2 s on a recent iPhone.
 - Light and dark mode, touch targets ≥ 44 px, text readable with the phone on the machine's holder.
+- Fits screens 320 px wide (iPhone SE) or wider, in all three languages: no element goes off screen and no button has its text cut off (v1.21.1).
 - No analytics, no trackers, no network calls except videos and, on the app's own origin, the service worker and the what's-new file (F20).
 
 ## 6. Security

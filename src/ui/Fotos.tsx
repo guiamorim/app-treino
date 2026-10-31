@@ -103,8 +103,8 @@ function FotosEcra({ dados, fotos }: { dados: Dados; fotos: FotoAvaliacao[] }) {
 
       <div className="cartao">
         <div className="linha">
-          <div><label htmlFor="foto-data">{t('Data')}</label><input id="foto-data" type="date" value={data} max={hojeIso()} onChange={(e) => setData(e.target.value)} /></div>
-          <div><label htmlFor="foto-pose">{t('Pose')}</label>
+          <div style={{ flex: 3, minWidth: 0 }}><label htmlFor="foto-data">{t('Data')}</label><input id="foto-data" type="date" value={data} max={hojeIso()} onChange={(e) => setData(e.target.value)} /></div>
+          <div style={{ flex: 2, minWidth: 0 }}><label htmlFor="foto-pose">{t('Pose')}</label>
             <select id="foto-pose" value={pose} onChange={(e) => setPose(e.target.value as Pose)}>
               {POSES.map((p) => <option key={p} value={p}>{NOMES_POSES[p]}</option>)}
             </select>
