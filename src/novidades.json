@@ -1,6 +1,31 @@
 {
   "versoes": [
     {
+      "versao": "1.18.0",
+      "data": "2026-10-31",
+      "itens": [
+        "Modo férias, em «Mais»: escolhes as datas e o equipamento que vais ter, e cada exercício que não dá para fazer passa a um parecido (ou só com o peso do corpo).",
+        "O teu plano não muda: no fim das férias volta tudo ao normal e a progressão continua de onde ficou.",
+        "Os PDF do dia, da semana e do mês saem com os exercícios das férias, para levares contigo."
+      ],
+      "traducoes": {
+        "en": {
+          "itens": [
+            "Holiday mode, in “More”: choose the dates and the equipment you will have, and each exercise you cannot do switches to a similar one (or body weight only).",
+            "Your plan does not change: when the holiday ends everything goes back to normal and progression continues where it left off.",
+            "The day, week and month PDFs come out with the holiday exercises, so you can take them with you."
+          ]
+        },
+        "es": {
+          "itens": [
+            "Modo vacaciones, en «Más»: eliges las fechas y el equipo que vas a tener, y cada ejercicio que no puedas hacer pasa a uno parecido (o solo con el peso del cuerpo).",
+            "Tu plan no cambia: al terminar las vacaciones todo vuelve a la normalidad y la progresión sigue donde se quedó.",
+            "Los PDF del día, de la semana y del mes salen con los ejercicios de las vacaciones, para llevarlos contigo."
+          ]
+        }
+      }
+    },
+    {
       "versao": "1.17.0",
       "data": "2026-10-31",
       "itens": [

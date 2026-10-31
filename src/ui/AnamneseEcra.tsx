@@ -7,6 +7,7 @@ import { agoraIso, catalogo, novoId, type Dados } from './dados'
 import { ir } from './rota'
 import { locale, m, t, traduzido } from '../i18n'
 import { CartaoIdioma, CartaoUnidade } from './Idioma'
+import { ListaEquipamento } from './Equipamento'
 import { deUnidade, paraCampo } from '../domain/unidades'
 
 // Perguntas gerais do PAR-Q+ (versão 2023), adaptadas para português de Portugal.
@@ -27,18 +28,6 @@ const DICA_DIAS: Record<number, string> = traduzido({
   5: m('Superior e inferior, A e B, mais corpo inteiro.'),
   6: m('A/B/C duas vezes: empurrar, puxar e pernas.'),
   7: m('A/B/C duas vezes e 1 dia de recuperação ativa (treinar força 7 dias seguidos não é recomendável).'),
-})
-
-// F28.1 (v1.17): equipamento que se pode marcar.
-const NOMES_EQUIPAMENTO: Record<(typeof EQUIPAMENTOS_ESCOLHA)[number], string> = traduzido({
-  barra: m('Barra com discos e suporte'),
-  halteres: m('Halteres'),
-  'barra-fixa': m('Barra fixa (elevações)'),
-  paralelas: m('Paralelas ou argolas'),
-  maquina: m('Máquinas de musculação'),
-  cabo: m('Polias (cabos)'),
-  elasticos: m('Elásticos de resistência'),
-  caneleiras: m('Caneleiras'),
 })
 
 // 3.1 (v1.5): modelo de treino escolhido pela pessoa.
@@ -75,7 +64,6 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
   })
   // F28.1: lista de equipamento; uma anamnese antiga abre com a lista que valia (F28.3).
   const [equipamentos, setEquipamentos] = useState<Equipamento[]>(a ? equipamentoDisponivel(a).filter((q) => q !== 'peso-corporal') : [...EQUIPAMENTOS_ESCOLHA])
-  const alternarEquipamento = (q: Equipamento) => setEquipamentos((x) => (x.includes(q) ? x.filter((y) => y !== q) : EQUIPAMENTOS_ESCOLHA.filter((y) => y === q || x.includes(y))))
   const [restricoes, setRestricoes] = useState<Restricao[]>(a?.restricoes ?? [])
   // F1 (v1.2): «Nenhuma» é uma resposta explícita, para não confundir com «esqueci-me de responder».
   const [semDores, setSemDores] = useState(!!a && a.restricoes.length === 0)
@@ -224,23 +212,13 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
         <option value="regresso">{t('A regressar após paragem')}</option>
         <option value="intermedio">{t('Treino regularmente há mais de 1 ano')}</option>
       </select>
-      <fieldset className="equipamento">
-        <legend>{t('Que equipamento tens')}</legend>
-        <p className="secundario">{t('O peso do corpo conta sempre. Marca o que tens onde treinas.')}</p>
-        <div className="linha">
-          <button type="button" onClick={() => setEquipamentos([...EQUIPAMENTOS_ESCOLHA])}>{t('Ginásio completo')}</button>
-          <button type="button" onClick={() => setEquipamentos([])}>{t('Só o peso do corpo')}</button>
-        </div>
-        {EQUIPAMENTOS_ESCOLHA.map((q) => (
-          <label key={q} className="opcao"><input type="checkbox" checked={equipamentos.includes(q)} onChange={() => alternarEquipamento(q)} /> {NOMES_EQUIPAMENTO[q]}</label>
-        ))}
-        {equipamentos.includes('halteres') && (
-          <>
-            <label htmlFor="halteresMaxKg">{t('Halter mais pesado que tens ({u}, opcional)', { u: dados.unidade })}</label>
-            <input id="halteresMaxKg" inputMode="decimal" {...campo('halteresMaxKg')} />
-          </>
-        )}
-      </fieldset>
+      <ListaEquipamento valor={equipamentos} mudar={setEquipamentos} titulo={t('Que equipamento tens')} nome="equipamento" />
+      {equipamentos.includes('halteres') && (
+        <>
+          <label htmlFor="halteresMaxKg">{t('Halter mais pesado que tens ({u}, opcional)', { u: dados.unidade })}</label>
+          <input id="halteresMaxKg" inputMode="decimal" {...campo('halteresMaxKg')} />
+        </>
+      )}
       <label className="opcao"><input type="checkbox" checked={f.aceitaCardio} onChange={(e) => setF({ ...f, aceitaCardio: e.target.checked })} /> {t('Aceito 10 min de cardio no fim de alguns treinos')}</label>
 
       <h2>{t('Dores ou limitações')}</h2>

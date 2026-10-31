@@ -10,8 +10,9 @@ import { abrirSessao, alterarRegisto, sessaoAberta } from './acoes'
 import { mesmaForma, nomeTipoCarga, rotuloCarga, tipoCarga, tiposCarga, totalComBarra, type TipoCarga } from '../domain/carga'
 import { RESERVAS, reservaAlvo, rotuloReserva, textoReserva } from '../domain/reserva'
 import { decimal, deUnidade, paraCampo, paraUnidade, peso, unidadePeso } from '../domain/unidades'
-import { agoraIso, catalogo, type Dados } from './dados'
+import { agoraIso, catalogo, hojeIso, type Dados } from './dados'
 import { substitutosProprios } from '../domain/proprios'
+import { anamneseEmFerias, feriasAtivas } from '../domain/ferias'
 import { ir } from './rota'
 import { Corpo } from './Corpo'
 import { iniciarDescanso, prepararSom } from './descanso'
@@ -85,11 +86,13 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
 
   const linkVideo = dados.videos[ex.id] ?? ex.video
   const video = linkVideo ? lerVideo(linkVideo) : null
+  // F29.3: nas férias, os substitutos seguem o equipamento das férias.
+  const anamneseAgora = dados.anamnese && feriasAtivas(dados.ferias, hojeIso()) ? anamneseEmFerias(dados.anamnese, dados.ferias!) : dados.anamnese
   const substitutos = [
     ...[...new Set([base.id, ...base.substitutos, ...ex.substitutos])]
       .filter((id) => id !== ex.id)
       .map((id) => catalogo.get(id)!)
-      .filter((s) => dados.anamnese && !motivoIncompatibilidade(s, dados.anamnese)),
+      .filter((s) => anamneseAgora && !motivoIncompatibilidade(s, anamneseAgora)),
     // F26.3: os exercícios próprios do mesmo grupo e medida; quem os criou sabe se os pode fazer.
     ...substitutosProprios(dados.proprios, base).filter((id) => id !== ex.id).map((id) => catalogo.get(id)!),
   ]

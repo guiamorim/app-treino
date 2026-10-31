@@ -56,7 +56,7 @@ export function App() {
         {rota.ecra === 'medicoes' && <Medicoes dados={dados} />}
         {rota.ecra === 'fotos' && <Fotos dados={dados} />}
         {rota.ecra === 'mais' && <Mais dados={dados} />}
-        {rota.ecra === 'meu-plano' && <PlanoProprio dados={dados} plano={dados.plano} anamnese={dados.anamnese} />}
+        {rota.ecra === 'meu-plano' && <PlanoProprio dados={dados} plano={dados.planoBase ?? dados.plano} anamnese={dados.anamnese} />}
         {rota.ecra === 'meu-exercicio' && <EditorProprio key={rota.id} dados={dados} id={rota.id} />}
         {rota.ecra === 'alongamento' && <AlongamentoEcra key={rota.grupo ?? ''} dados={dados} plano={dados.plano} anamnese={dados.anamnese} grupo={rota.grupo} />}
       </main>

@@ -2,7 +2,7 @@
 
 **English** · [Português](especificacao-v1.md)
 
-Date: 2026-10-20 · Version 1.17 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.17)
+Date: 2026-10-20 · Version 1.18 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.18)
 
 The Portuguese version is the reference used for the domain names in the code. Both versions must stay in sync.
 
@@ -278,6 +278,13 @@ Second phase of the calisthenics and home-training feasibility study (2026-10-31
 - **F28.4 Plan.** The plan only uses exercises with at least one ticked item or body weight (section 3.4). New exercises with bands (pulldown, face pull, biceps curl) and ankle weights (side-lying hip abduction, quadruped glute kickback) are added as the last substitutes of gym exercises. Bands and ankle weights have no logged load: progress is by reps and, at the top of the range, a heavier ankle weight or stronger band.
 - **F28.5 Warnings.** Without a pull-up bar, dumbbells, bands or pulleys: back and biceps warning (section 3.9). Without a barbell or machines and with the strength goal: strength warning.
 - **F28.6 Backup.** The backup keeps the list and the heaviest dumbbell; unknown equipment is rejected.
+
+### F29. Holiday mode (v1.18)
+Third phase of the calisthenics and home-training feasibility study (2026-10-31): keep training away from the gym, at home or outdoors, without losing the plan.
+- **F29.1 Book.** In "More", "Holiday mode" › "Book a holiday": start date (today or later), end date (same day or later) and the equipment I will have, with the same list as F28 (body weight only by default). It lasts at most 8 weeks; for longer, the app suggests generating a new plan. It is on from start to end, inclusive.
+- **F29.2 Adapt.** While it is on, each workout exercise (already with the current block's rotation) that cannot be done with the holiday equipment switches to the first compatible one: catalogue substitutes, then exercises of the same group and type, then of the same group, without repeating within the workout and with the same restriction and pregnancy rules. Sets and RIR stay; a replaced exercise (or one that loses its load) uses the body-weight range (section 3.9) or the catalogue's, and the note says "Holiday: replaces “…”". A position with no alternative is left out, with a warning. The saved plan does not change: logs stay in the same workout position, with the exercise actually done, and each exercise's progression continues from its own history.
+- **F29.3 During.** "Today", "Home", the calendar, the PDFs and "Replace exercise" use the adapted plan. The plan's first warning says until when. Editing the own plan (F27) always starts from the saved plan.
+- **F29.4 End.** At the end date, or with "End holiday" (or "Cancel holiday" if it has not started), the plan goes back to normal. The backup keeps the booked holiday.
 
 ### F14. Blocks and next change (v1.2, rules in section 3.7)
 - On Home and on Today's workout: current phase (re-adaptation, week N of M of the block, or deload) and the next change with its date: end of re-adaptation (full sets), deload week (half the sets), or new block (isolation exercises rotate, listing what changes).
