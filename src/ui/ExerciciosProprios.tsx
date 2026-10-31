@@ -8,6 +8,7 @@ import { deUnidade, paraCampo, unidadePeso } from '../domain/unidades'
 import { lerVideo } from '../domain/video'
 import { t } from '../i18n'
 import { novoId, type Dados } from './dados'
+import { noPlano } from '../domain/planoProprio'
 import { ir } from './rota'
 
 const numero = (s: string) => Number(s.replace(',', '.'))
@@ -102,11 +103,14 @@ function Formulario({ dados, atual }: { dados: Dados; atual?: ExercicioProprio }
 
   async function apagar() {
     if (!atual) return
-    const pergunta = temRegistos(atual.id, dados.sessoes)
-      ? t('Este exercício tem registos. Continua no histórico, mas sai da lista e de «Substituir exercício». Apagar?')
-      : t('Apagar «{nome}»?', { nome: atual.nome })
+    const emPlano = noPlano(dados.plano, atual.id)
+    const pergunta = emPlano
+      ? t('Este exercício está no teu plano e continua lá até o tirares no editor do plano. Sai desta lista. Apagar?')
+      : temRegistos(atual.id, dados.sessoes)
+        ? t('Este exercício tem registos. Continua no histórico, mas sai da lista e de «Substituir exercício». Apagar?')
+        : t('Apagar «{nome}»?', { nome: atual.nome })
     if (!confirm(pergunta)) return
-    await db.gravar('exerciciosProprios', apagarProprio(dados.proprios, atual.id, dados.sessoes))
+    await db.gravar('exerciciosProprios', apagarProprio(dados.proprios, atual.id, dados.sessoes, emPlano))
     ir('/mais')
   }
 

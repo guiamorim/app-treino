@@ -39,7 +39,7 @@ export function Hoje({ dados, plano, anamnese }: { dados: Dados; plano: Plano; a
       <LembreteAlongamento dados={dados} anamnese={anamnese} />
       <h1>{treino.nome}</h1>
       <p className="secundario">~{treino.duracaoEstimadaMin} min · {textoFase(plano, semana)}</p>
-      <p>{treino.sintese}</p>
+      {treino.sintese && <p>{treino.sintese}</p>}
 
       {plano.avisos.length > 0 && (
         <details className="cartao aviso">
