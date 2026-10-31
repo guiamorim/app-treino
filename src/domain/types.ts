@@ -53,7 +53,10 @@ export interface Exercicio {
   id: string
   nome: string
   grupoPrincipal: GrupoMuscular
+  /** Auxiliares 1 (F31.3). */
   gruposSecundarios: GrupoMuscular[]
+  /** F31.3 (v1.20): auxiliares 2, os que trabalham menos. */
+  gruposTerciarios?: GrupoMuscular[]
   tipo: TipoExercicio
   /** Basta ter um destes equipamentos para fazer o exercício. */
   equipamento: Equipamento[]
@@ -69,7 +72,17 @@ export interface Exercicio {
   video?: string
   /** Posição deitada (secção 3.4.1): evitada no 2.º e 3.º trimestres de gravidez. */
   deitado?: 'costas' | 'barriga'
+  /** F31.1 (v1.20): nível de dificuldade geral dos exercícios de calistenia. */
+  nivel?: Nivel
 }
+
+export const NIVEIS = [1, 2, 3, 4] as const
+export type Nivel = (typeof NIVEIS)[number]
+export const NOMES_NIVEIS: Record<Nivel, string> = traduzido({ 1: m('Base'), 2: m('Intermédio'), 3: m('Avançado'), 4: m('Competência') })
+
+/** F31.5 (v1.20): musculação (por omissão) ou calistenia. */
+export const ESTILOS = ['musculacao', 'calistenia'] as const
+export type Estilo = (typeof ESTILOS)[number]
 
 export const DIAS_POR_SEMANA = [2, 3, 4, 5, 6, 7] as const
 export type DiasPorSemana = (typeof DIAS_POR_SEMANA)[number]
@@ -123,6 +136,10 @@ export interface Anamnese {
   equipamentos?: Equipamento[]
   /** F28.2: halter mais pesado que tem, em kg. */
   halteresMaxKg?: number
+  /** F31.5 (v1.20): tipo de treino; sem valor, musculação. */
+  estilo?: Estilo
+  /** F31.6: com calistenia, inclui um exercício de competência nos treinos de corpo inteiro e superior. */
+  competencias?: boolean
 }
 
 export interface Prescricao {

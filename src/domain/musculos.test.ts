@@ -22,6 +22,13 @@ describe('F18 imagens dos músculos', () => {
     expect(r.has('chest')).toBe(false)
   })
 
+  it('F31.3 auxiliares 2 ainda mais claros; numa região partilhada, fica o destaque mais forte', () => {
+    expect(destaques({ grupoPrincipal: 'costas', gruposSecundarios: ['biceps'], gruposTerciarios: ['core', 'ombros'] })).toEqual({ costas: 'principal', biceps: 'secundario', core: 'terciario', ombros: 'terciario' })
+    const r = destaquesPorRegiao({ grupoPrincipal: 'ombros', gruposSecundarios: ['costas'], gruposTerciarios: ['costas', 'core'] })
+    expect(r.get('upper-back')).toEqual({ grupo: 'costas', destaque: 'secundario' })
+    expect(r.get('abs')).toEqual({ grupo: 'core', destaque: 'terciario' })
+  })
+
   it('todos os exercícios do catálogo têm o grupo principal visível', () => {
     for (const ex of carregarCatalogo(dados).values()) expect([...destaquesPorRegiao(ex).values()].some((x) => x.destaque === 'principal'), ex.id).toBe(true)
   })

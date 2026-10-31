@@ -8,6 +8,7 @@ export const esquemaExercicio = z.object({
   nome: z.string().min(1),
   grupoPrincipal: grupo,
   gruposSecundarios: z.array(grupo),
+  gruposTerciarios: z.array(grupo).optional(),
   tipo: z.enum(['composto', 'isolado']),
   equipamento: z.array(z.enum(EQUIPAMENTOS)).min(1),
   medida: z.enum(['reps', 'segundos']),
@@ -19,6 +20,7 @@ export const esquemaExercicio = z.object({
   substitutos: z.array(z.string()),
   video: z.string().url().optional(),
   deitado: z.enum(['costas', 'barriga']).optional(),
+  nivel: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4)]).optional(),
 })
 
 export type Catalogo = ReadonlyMap<string, Exercicio>

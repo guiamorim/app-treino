@@ -8,6 +8,10 @@ export interface Posicao {
   exercicioId: string
   /** Exercício principal do treino: recebe uma série extra. */
   principal?: boolean
+  /** F31.5 (v1.20): na calistenia, o degrau de partida de quem já tem experiência. */
+  intermedio?: string
+  /** F31.6: exercício de competência, só com a opção ligada. */
+  competencia?: boolean
 }
 
 export interface Modelo {
@@ -235,6 +239,121 @@ export const MODELOS: Record<string, Modelo> = {
     sintese: m('Dia leve para recuperar: caminhada tranquila e core sem esforço. Não é para cansar.'),
     posicoes: [{ exercicioId: 'dead-bug' }, { exercicioId: 'prancha' }],
   },
+}
+
+/**
+ * F31.5 (v1.20): modelos de calistenia. Cada posição é um padrão de movimento: o exercício é o degrau de partida
+ * de iniciantes e de quem regressa; `intermedio`, o de quem tem experiência. As competências só entram com a F31.6.
+ */
+export const MODELOS_CALISTENIA: Record<string, Modelo> = {
+  'cal-corpo-a': {
+    id: 'cal-corpo-a',
+    nome: m('Calistenia A'),
+    tipo: 'corpo',
+    sintese: m('Corpo inteiro com o peso do corpo: flexões, elevações, agachamento, ponte e core.'),
+    posicoes: [
+      { exercicioId: 'pino-parede-costas', competencia: true },
+      { exercicioId: 'flexoes-inclinadas', intermedio: 'flexoes-declinadas', principal: true },
+      { exercicioId: 'elevacoes-negativas', intermedio: 'elevacoes', principal: true },
+      { exercicioId: 'agachamento-peso-corporal', intermedio: 'agachamento-bulgaro' },
+      { exercicioId: 'ponte-gluteos', intermedio: 'hip-thrust-unilateral' },
+      { exercicioId: 'hollow-fletido', intermedio: 'hollow' },
+    ],
+  },
+  'cal-corpo-b': {
+    id: 'cal-corpo-b',
+    nome: m('Calistenia B'),
+    tipo: 'corpo',
+    sintese: m('Corpo inteiro com o peso do corpo: mergulhos, remada invertida, afundos, posteriores e core.'),
+    posicoes: [
+      { exercicioId: 'front-lever-encolhido', competencia: true },
+      { exercicioId: 'fundos-banco', intermedio: 'paralelas', principal: true },
+      { exercicioId: 'remada-invertida-alta', intermedio: 'remada-invertida-pes-elevados', principal: true },
+      { exercicioId: 'afundo-recuado', intermedio: 'pistol-assistido' },
+      { exercicioId: 'curl-deslizante', intermedio: 'nordico-negativo' },
+      { exercicioId: 'dead-bug', intermedio: 'elevacao-joelhos-barra' },
+    ],
+  },
+  'cal-corpo-c': {
+    id: 'cal-corpo-c',
+    nome: m('Calistenia C'),
+    tipo: 'corpo',
+    sintese: m('Corpo inteiro com o peso do corpo: empurrar na vertical, puxar, pernas a uma perna e core.'),
+    posicoes: [
+      { exercicioId: 'planche-lean', competencia: true },
+      { exercicioId: 'flexoes-pike', intermedio: 'flexoes-pike-elevadas', principal: true },
+      { exercicioId: 'remada-invertida', intermedio: 'elevacoes', principal: true },
+      { exercicioId: 'afundo-recuado', intermedio: 'agachamento-bulgaro' },
+      { exercicioId: 'ponte-gluteos-unilateral', intermedio: 'hip-thrust-unilateral' },
+      { exercicioId: 'prancha', intermedio: 'l-sit-encolhido' },
+    ],
+  },
+  'cal-superior-a': {
+    id: 'cal-superior-a',
+    nome: m('Calistenia superior A'),
+    tipo: 'superior',
+    sintese: m('Empurrar e puxar com o peso do corpo, na horizontal e na vertical.'),
+    posicoes: [
+      { exercicioId: 'pino-parede-costas', competencia: true },
+      { exercicioId: 'flexoes-inclinadas', intermedio: 'flexoes-declinadas', principal: true },
+      { exercicioId: 'elevacoes-negativas', intermedio: 'elevacoes', principal: true },
+      { exercicioId: 'flexoes-pike', intermedio: 'flexoes-pike-elevadas' },
+      { exercicioId: 'remada-invertida-alta', intermedio: 'remada-invertida-pes-elevados' },
+      { exercicioId: 'fundos-banco', intermedio: 'paralelas' },
+      { exercicioId: 'hollow-fletido', intermedio: 'hollow' },
+    ],
+  },
+  'cal-superior-b': {
+    id: 'cal-superior-b',
+    nome: m('Calistenia superior B'),
+    tipo: 'superior',
+    sintese: m('Tríceps, remada e ombros com o peso do corpo; core com as mãos no chão.'),
+    posicoes: [
+      { exercicioId: 'front-lever-encolhido', competencia: true },
+      { exercicioId: 'flexoes-joelhos', intermedio: 'flexoes-diamante', principal: true },
+      { exercicioId: 'remada-invertida', intermedio: 'remada-invertida-pes-elevados', principal: true },
+      { exercicioId: 'suspensao-ativa', intermedio: 'elevacoes' },
+      { exercicioId: 'flexoes-pike', intermedio: 'flexoes-pike-elevadas' },
+      { exercicioId: 'dead-bug', intermedio: 'l-sit-encolhido' },
+    ],
+  },
+  'cal-inferior-a': {
+    id: 'cal-inferior-a',
+    nome: m('Calistenia inferior A'),
+    tipo: 'inferior',
+    sintese: m('Pernas com o peso do corpo: agachamento, ponte, afundos e posteriores.'),
+    posicoes: [
+      { exercicioId: 'agachamento-peso-corporal', intermedio: 'agachamento-bulgaro', principal: true },
+      { exercicioId: 'ponte-gluteos', intermedio: 'hip-thrust-unilateral', principal: true },
+      { exercicioId: 'afundo-recuado', intermedio: 'pistol-assistido' },
+      { exercicioId: 'curl-deslizante', intermedio: 'nordico-negativo' },
+      { exercicioId: 'gemeos-pe' },
+      { exercicioId: 'dead-bug', intermedio: 'elevacao-joelhos-barra' },
+    ],
+  },
+  'cal-inferior-b': {
+    id: 'cal-inferior-b',
+    nome: m('Calistenia inferior B'),
+    tipo: 'inferior',
+    sintese: m('Pernas a uma perna com o peso do corpo, posteriores e core.'),
+    posicoes: [
+      { exercicioId: 'afundo-recuado', intermedio: 'pistol-assistido', principal: true },
+      { exercicioId: 'ponte-gluteos-unilateral', intermedio: 'hip-thrust-unilateral', principal: true },
+      { exercicioId: 'agachamento-peso-corporal', intermedio: 'agachamento-bulgaro' },
+      { exercicioId: 'curl-deslizante', intermedio: 'nordico-negativo' },
+      { exercicioId: 'cadeira-isometrica' },
+      { exercicioId: 'hollow-fletido', intermedio: 'hollow' },
+    ],
+  },
+}
+
+export const DIVISOES_CALISTENIA: Record<DiasPorSemana, string[]> = {
+  2: ['cal-corpo-a', 'cal-corpo-b'],
+  3: ['cal-corpo-a', 'cal-corpo-b', 'cal-corpo-c'],
+  4: ['cal-superior-a', 'cal-inferior-a', 'cal-superior-b', 'cal-inferior-b'],
+  5: ['cal-superior-a', 'cal-inferior-a', 'cal-superior-b', 'cal-inferior-b', 'cal-corpo-a'],
+  6: ['cal-superior-a', 'cal-inferior-a', 'cal-superior-b', 'cal-inferior-b', 'cal-corpo-a', 'cal-corpo-b'],
+  7: ['cal-superior-a', 'cal-inferior-a', 'cal-superior-b', 'cal-inferior-b', 'cal-corpo-a', 'cal-corpo-b', 'recuperacao'],
 }
 
 export const DIVISOES: Record<DiasPorSemana, string[]> = {

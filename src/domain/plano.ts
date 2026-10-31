@@ -1,7 +1,7 @@
 import { t } from '../i18n'
 import { estadoBloco, exercicioNoBloco, SEMANAS_BLOCO } from './blocos'
 import { obter, type Catalogo } from './catalogo'
-import { DIVISOES, MODELOS, MODELOS_ESCOLHA, type Modelo } from './modelos'
+import { DIVISOES, DIVISOES_CALISTENIA, MODELOS, MODELOS_CALISTENIA, MODELOS_ESCOLHA, type Modelo } from './modelos'
 import type { AcessoEquipamento, Anamnese, DiasPorSemana, DivisaoTreino, Enfase, Equipamento, Exercicio, GrupoMuscular, Objetivo, Plano, Prescricao, TipoExercicio, TreinoModelo } from './types'
 import { NOMES_AREAS, NOMES_GRUPOS } from './types'
 
@@ -40,6 +40,15 @@ export const PARAMETROS: Record<Objetivo, Record<TipoExercicio, Parametros>> = {
 
 /** Secção 3.9 (v1.16): faixas dos exercícios feitos só com o peso do corpo. */
 export const FAIXA_CORPORAL: Record<TipoExercicio, [number, number]> = { composto: [8, 20], isolado: [12, 25] }
+
+/** F31.5 (v1.20): faixas do plano de calistenia, salvo a faixa própria do exercício. */
+export function faixaCalistenia(objetivo: Objetivo, tipo: TipoExercicio): [number, number] {
+  if (tipo === 'isolado') return [10, 20]
+  return objetivo === 'forca' ? [4, 8] : [6, 15]
+}
+
+/** F31.5: sem valor, musculação. */
+export const emCalistenia = (a: Pick<Anamnese, 'estilo'>) => a.estilo === 'calistenia'
 
 /** F28.1: equipamento que se pode marcar (o peso do corpo conta sempre). */
 export const EQUIPAMENTOS_ESCOLHA: readonly Exclude<Equipamento, 'peso-corporal'>[] = ['barra', 'halteres', 'barra-fixa', 'paralelas', 'maquina', 'cabo', 'elasticos', 'caneleiras']
@@ -152,8 +161,12 @@ function gerarTreino(m: Modelo, a: Anamnese, catalogo: Catalogo, conservador: bo
   const tipos = new Map<string, TipoExercicio>()
   const semSubstituto: Exercicio[] = []
 
+  const calistenia = emCalistenia(a)
   m.posicoes.forEach((pos, i) => {
-    const base = obter(catalogo, pos.exercicioId)
+    // F31.6: as competências só entram com a opção ligada; F31.5: o degrau de partida segue a experiência.
+    if (pos.competencia && !(calistenia && a.competencias)) return
+    const partida = calistenia && pos.intermedio && a.experiencia === 'intermedio' && !conservador ? pos.intermedio : pos.exercicioId
+    const base = obter(catalogo, partida)
     const escolha = escolher(base, a, catalogo, usados)
     if (!escolha) {
       semSubstituto.push(base)
@@ -165,15 +178,17 @@ function gerarTreino(m: Modelo, a: Anamnese, catalogo: Catalogo, conservador: bo
     const id = `${m.id}-${i + 1}`
     const leve = m.tipo === 'recuperacao'
     tipos.set(id, ex.tipo)
-    prescricoes.push(aplicarEnfase({
+    const p: Prescricao = {
       id,
       exercicioId: ex.id,
       series: leve ? 2 : pos.principal && ex.tipo === 'composto' ? 4 : 3,
-      faixa: ex.faixaFixa ?? (soPesoCorporal(ex, a) ? FAIXA_CORPORAL[ex.tipo] : param.faixa),
+      faixa: ex.faixaFixa ?? (calistenia ? faixaCalistenia(a.objetivo, ex.tipo) : soPesoCorporal(ex, a) ? FAIXA_CORPORAL[ex.tipo] : param.faixa),
       rir: conservador || leve ? [3, 4] : param.rir,
       descansoSeg: param.descansoSeg,
       ...(nota ? { nota } : {}),
-    }, ex, a.enfase ?? 'equilibrado'))
+    }
+    // F31.5: na calistenia, a ênfase não se aplica.
+    prescricoes.push(calistenia ? p : aplicarEnfase(p, ex, a.enfase ?? 'equilibrado'))
   })
 
   // Secção 3.4: o volume de um exercício removido passa para outro do mesmo grupo.
@@ -243,8 +258,10 @@ export function gerarPlano(a: Anamnese, catalogo: Catalogo, opts: { id: string; 
   const avisos = avisosAnamnese(a)
   const conservador = a.parq.some(Boolean) || gravidezAtiva(a) !== 'nao'
   const divisao = a.divisao ?? 'automatico'
-  let ids = DIVISOES[a.diasPorSemana]
-  if (divisao !== 'automatico') {
+  const calistenia = emCalistenia(a)
+  let ids = calistenia ? DIVISOES_CALISTENIA[a.diasPorSemana] : DIVISOES[a.diasPorSemana]
+  // F31.5: na calistenia, a escolha de modelo não se aplica.
+  if (divisao !== 'automatico' && !calistenia) {
     const m = MODELOS_ESCOLHA[divisao]
     if (divisoesPossiveis(a.diasPorSemana).includes(divisao)) {
       ids = m.treinos(a.diasPorSemana)
@@ -255,7 +272,7 @@ export function gerarPlano(a: Anamnese, catalogo: Catalogo, opts: { id: string; 
       avisos.push(t('O modelo escolhido não serve para {dias} dias por semana; foi usado o modelo automático.', { dias: a.diasPorSemana }))
     }
   }
-  const treinos = ids.map((id) => gerarTreino(MODELOS[id]!, a, catalogo, conservador, avisos))
+  const treinos = ids.map((id) => gerarTreino((MODELOS[id] ?? MODELOS_CALISTENIA[id])!, a, catalogo, conservador, avisos))
   avisos.push(...avisosEquipamento(a))
   return {
     id: opts.id,

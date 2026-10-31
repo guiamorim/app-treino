@@ -34,9 +34,9 @@ describe('F30 progressão por variação', () => {
 
   it('F30.2 a posição salta os degraus que a pessoa não pode fazer', () => {
     const p = posicaoNaEscada(ex('flexoes'), catalogo, () => true)!
-    expect(p).toMatchObject({ degrau: 2, total: 4, anterior: { id: 'flexoes-inclinadas' }, seguinte: { id: 'flexoes-declinadas' } })
-    // Sem barra fixa, as elevações saem da escada de puxar.
-    const semBarra = posicaoNaEscada(ex('remada-invertida'), catalogo, (x) => !motivoIncompatibilidade(x, { ...casa, equipamentos: ['barra'] }))!
+    expect(p).toMatchObject({ degrau: 4, total: 9, anterior: { id: 'flexoes-joelhos' }, seguinte: { id: 'flexoes-declinadas' } })
+    // Sem barra fixa, os outros degraus de puxar na vertical saem da escada.
+    const semBarra = posicaoNaEscada(ex('elevacoes'), catalogo, (x) => !motivoIncompatibilidade(x, { ...casa, equipamentos: ['barra'] }))!
     expect(semBarra).toMatchObject({ degrau: 1, total: 1 })
     expect(semBarra.seguinte).toBeUndefined()
     expect(posicaoNaEscada(ex('supino-barra'), catalogo, () => true)).toBeUndefined()
