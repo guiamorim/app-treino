@@ -2,7 +2,7 @@
 import type { Objetivo, Plano } from './types'
 
 export const SEMANAS_BLOCO: Record<Objetivo, number> = { forca: 4, recomposicao: 5, hipertrofia: 5, saude: 6 }
-const SEMANAS_BLOCO_ANTIGO = 5
+export const SEMANAS_BLOCO_ANTIGO = 5
 const SEMANAS_READAPTACAO = 2
 
 export type Fase = 'readaptacao' | 'progressao' | 'descarga'

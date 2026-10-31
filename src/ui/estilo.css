@@ -137,7 +137,7 @@ dialog.modal::backdrop { background: transparent; }
 .grafico { width: 100%; height: auto; display: block; }
 .grafico text { fill: var(--texto-2); font-size: 11px; }
 .abas { display: flex; gap: 6px; margin: 12px 0; }
-.abas button { flex: 1; }
+.abas button { flex: 1; min-width: 0; padding-left: 2px; padding-right: 2px; font-size: 0.85rem; }
 .abas button[aria-selected='true'] { background: var(--acento); color: var(--acento-texto); border-color: var(--acento); }
 details > summary { cursor: pointer; min-height: 40px; display: flex; align-items: center; font-weight: 600; }
 .visualmente-oculto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }

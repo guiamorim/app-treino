@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Calendario } from './Calendario'
+import { DegrausRelatorio } from './Degraus'
 import { aderencia, alvoVolume, inicioSemana, mediaMovel, progressaoExercicio, volumeSemanal } from '../domain/relatorios'
 import { GRUPOS_MUSCULARES, NOMES_GRUPOS } from '../domain/types'
 import { decimal, paraUnidade, peso, unidadePeso } from '../domain/unidades'
@@ -8,7 +9,7 @@ import { GraficoLinha } from './Grafico'
 import { t } from '../i18n'
 
 export function Relatorios({ dados }: { dados: Dados }) {
-  const [aba, setAba] = useState<'progressao' | 'semana' | 'calendario'>('progressao')
+  const [aba, setAba] = useState<'progressao' | 'semana' | 'calendario' | 'degraus'>('progressao')
   return (
     <>
       <h1>{t('Relatórios')}</h1>
@@ -16,8 +17,13 @@ export function Relatorios({ dados }: { dados: Dados }) {
         <button role="tab" aria-selected={aba === 'progressao'} onClick={() => setAba('progressao')}>{t('Progressão')}</button>
         <button role="tab" aria-selected={aba === 'semana'} onClick={() => setAba('semana')}>{t('Semana')}</button>
         <button role="tab" aria-selected={aba === 'calendario'} onClick={() => setAba('calendario')}>{t('Calendário')}</button>
+        <button role="tab" aria-selected={aba === 'degraus'} onClick={() => setAba('degraus')}>{t('Degraus')}</button>
       </div>
-      {aba === 'progressao' ? <Progressao dados={dados} /> : aba === 'semana' ? <Semana dados={dados} /> : dados.plano ? <Calendario dados={dados} plano={dados.plano} /> : null}
+      {aba === 'progressao' && <Progressao dados={dados} />}
+      {aba === 'semana' && <Semana dados={dados} />}
+      {aba === 'calendario' && dados.plano && <Calendario dados={dados} plano={dados.plano} />}
+      {/* F32.5: a fase usa o plano sem as férias, com os degraus atuais. */}
+      {aba === 'degraus' && dados.planoBase && dados.anamnese && <DegrausRelatorio dados={dados} plano={dados.planoBase} anamnese={dados.anamnese} />}
     </>
   )
 }

@@ -48,6 +48,7 @@ export function Mais({ dados }: { dados: Dados }) {
         <button className="largo" onClick={() => ir('/meu-plano')} disabled={!dados.plano}>{dados.plano?.proprio ? t('Editar o meu plano') : t('Criar o meu plano')}</button>
         <button className="largo" style={{ marginTop: 8 }} onClick={() => ir('/anamnese')}>{t('Editar anamnese e gerar novo plano')}</button>
         <button className="largo" style={{ marginTop: 8 }} onClick={() => ir('/calistenia')}>{t('Calistenia: exercícios por nível')}</button>
+        <button className="largo" style={{ marginTop: 8 }} onClick={() => ir('/nivelamento')}>{t('Teste de nivelamento (opcional)')}</button>
       </div>
       <CartaoFerias dados={dados} />
       <CartaoProprios dados={dados} />

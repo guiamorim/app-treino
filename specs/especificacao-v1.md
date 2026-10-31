@@ -2,7 +2,7 @@
 
 [English](specification-v1.en.md) · **Português**
 
-Data: 2026-10-20 · Versão 1.20 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.20)
+Data: 2026-10-20 · Versão 1.21 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.21)
 
 ## 0. Decisões fechadas
 
@@ -303,6 +303,16 @@ Quinta fase do estudo de viabilidade de calistenia e treino em casa (2026-10-31)
 - **F31.6 Competências.** Com calistenia, «Incluir competências (pino, front lever, planche)» acrescenta no início de cada treino de corpo inteiro e superior um exercício de competência, no primeiro degrau da sua escada, com 3 séries. Fica desligado por omissão.
 - **F31.7 Aviso.** Em letra pequena, no fim do ecrã do exercício, no ecrã «Calistenia» e na anamnese quando a calistenia está escolhida: «As sugestões de exercícios e progressões desta app são de carácter geral e não substituem a orientação de um profissional qualificado. Recomenda-se o acompanhamento por um profissional especializado para aprender e consolidar a técnica de cada exercício. O programador e os responsáveis pela app não assumem responsabilidade por lesões ou danos resultantes da execução incorreta ou inadequada dos exercícios.»
 - **F31.8 Vídeos.** Os exercícios novos têm um vídeo público escolhido por pesquisa, quando foi encontrado um que corresponde ao exercício; posso sempre trocar o vídeo (F5). A cópia de segurança guarda o tipo de treino e as competências.
+
+### F32. Teste de nivelamento e fase por padrão (v1.21)
+
+- **F32.1 Padrões testados.** Seis padrões de movimento, cada um numa escada da F31.2 e com uma variação de referência: Empurrar (flexões), Puxar na vertical (elevações), Puxar na horizontal (remada invertida), Pernas, joelho (agachamento búlgaro), Pernas, anca (ponte a uma perna) e Core (hollow, em segundos). Só contam os degraus que posso fazer com o meu equipamento e as minhas restrições; se a referência não for possível, a referência é o degrau possível mais alto abaixo dela; sem nenhum, o padrão fica de fora. Um padrão que não está no meu plano também fica de fora.
+- **F32.2 Teste opcional.** Em «Mais» › «Teste de nivelamento (opcional)», e no ecrã «Hoje» enquanto o plano de calistenia não tem treinos registados nem teste. Leva 10–15 minutos: aquecer, uma série por padrão com o máximo de repetições limpas (ou segundos), parando quando só faltaria 1, e 2–3 minutos de descanso entre padrões. Posso saltar qualquer padrão. Com «sim» no PAR-Q+ ou gravidez, o ecrã recomenda falar com o médico antes. Sem teste, o plano começa nos degraus da F31.5 e ajusta-se com a regra 8 da secção 4. O aviso da F31.7 aparece no fim.
+- **F32.3 Colocação.** A faixa de cada variação é a do plano (F31.5). Na referência: no topo da faixa ou acima, fico um degrau acima (nunca mais do que um, por segurança); dentro da faixa, fico na referência; abaixo do mínimo, a app pede uma segunda série no degrau abaixo. Nessa segunda série: com o mínimo, fico nesse degrau; abaixo, fico no degrau a seguir para baixo (ou no primeiro).
+- **F32.4 Aplicar ao plano.** «Aplicar ao plano» muda o degrau (F30.2) dos exercícios do plano que estão na escada de cada padrão: o mais alto passa para o degrau do teste e os outros sobem ou descem o mesmo número de degraus, sem sair da escada. Os dias no degrau (regra 8) contam a partir da data do teste. O plano guardado não muda e o teste fica guardado (data e resultados).
+- **F32.5 Fase por padrão.** Em «Relatórios» › «Degraus», um cartão com os seis padrões: o exercício atual, o nível (F31.1), «degrau n de total» e o que falta para o seguinte (topo da faixa em todas as séries em 2 sessões seguidas e pelo menos 14 dias no degrau, com os dias que faltam). O nível geral é o do padrão mais fraco (nível mais baixo; em empate, o que está mais abaixo na escada), assinalado como prioridade. O nível é uma orientação, não um diagnóstico.
+- **F32.6 Linha temporal de degraus.** No mesmo separador, para cada padrão com treinos registados, um gráfico com o degrau mais alto feito em cada sessão e a lista das mudanças de degrau, com a data.
+- **F32.7 Repetir o teste.** Quando passou um bloco (F14) desde o último teste, o cartão da fase e o ecrã «Hoje» (com calistenia) propõem repeti-lo. A cópia de segurança guarda o último teste.
 
 ### F14. Blocos e próxima mudança (v1.2, regras na secção 3.7)
 - No Início e no Treino de hoje: fase atual (readaptação, semana N de M do bloco, ou descarga) e a próxima mudança com data: fim da readaptação (séries completas), semana de descarga (metade das séries), ou novo bloco (troca dos exercícios isolados, com a lista do que muda).
