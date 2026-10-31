@@ -1,4 +1,5 @@
 // F25.3: calendário com os treinos feitos e previstos, e o detalhe de cada dia.
+import { semCarga as semCargaDe } from '../domain/carga'
 import { useState } from 'react'
 import { faseDoDia, grelhaMes, meioDia, previsao, proximosTreinos, sessoesDoDia } from '../domain/calendario'
 import { pdfDia, pdfMes, pdfSemana } from '../domain/exportar'
@@ -156,7 +157,7 @@ function SessaoFeita({ s, plano, aMeio, semana }: { s: Sessao; plano: Plano; aMe
       <ul>
         {s.exercicios.filter((e) => e.series.length > 0).map((e) => {
           const ex = catalogo.get(e.exercicioId)
-          const semCarga = ex?.incrementoKg === 0 || e.tipoCarga === 'corporal'
+          const semCarga = semCargaDe(ex, e.tipoCarga)
           const series = e.series.map((x) => `${semCarga ? '' : `${peso(x.carga)} × `}${x.reps}${x.reservaSeg !== undefined ? ` (${textoReserva(x.reservaSeg)})` : x.rir !== undefined ? ` (RIR ${x.rir})` : ''}`).join(', ')
           return <li key={e.prescricaoId}>{ex?.nome ?? e.exercicioId}: {series}{e.dor ? ` · ${t('dor')} ${e.dor}/10` : ''}</li>
         })}

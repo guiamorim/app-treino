@@ -2,7 +2,7 @@
 
 **English** · [Português](especificacao-v1.md)
 
-Date: 2026-10-20 · Version 1.18 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.18)
+Date: 2026-10-20 · Version 1.19 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.19)
 
 The Portuguese version is the reference used for the domain names in the code. Both versions must stay in sync.
 
@@ -286,6 +286,17 @@ Third phase of the calisthenics and home-training feasibility study (2026-10-31)
 - **F29.3 During.** "Today", "Home", the calendar, the PDFs and "Replace exercise" use the adapted plan. The plan's first warning says until when. Editing the own plan (F27) always starts from the saved plan.
 - **F29.4 End.** At the end date, or with "End holiday" (or "Cancel holiday" if it has not started), the plan goes back to normal. The backup keeps the booked holiday.
 
+### F30. Progression by variation (v1.19)
+Fourth phase of the calisthenics and home training feasibility study (2026-10-31): in body-weight exercises, progress to a harder variation instead of adding kilos.
+- **F30.1 Ladders.** Some exercises are on a ladder of variations, from easiest to hardest: Push-ups (incline push-ups › push-ups › decline push-ups › diamond push-ups); Dips (bench › parallel bars); Pull (inverted row › pull-ups); Legs, knee (bodyweight squat › lunges › Bulgarian split squat); Legs, hip (glute bridge › single-leg bridge). The calisthenics catalogue (next phase) adds rungs and ladders.
+- **F30.2 Current rung.** When the exercise is done without load (or with extra weight, F30.6), the exercise screen shows "Escada «Flexões»: degrau 2 de 4" (ladder "Push-ups": rung 2 of 4) and the buttons "Mais fácil: …" (easier) and "Mais difícil: …" (harder). Rungs I cannot do (restrictions, pregnancy or equipment, including the holiday equipment) are skipped. The change is kept: from then on, in every workout and plan, that plan exercise shows in the chosen variation, with the note "Variação atual (o plano tinha «…»)." (current variation; the plan had "…"). The saved plan does not change, and editing the own plan starts from it. If I have already logged sets for that exercise today, the app asks for confirmation, because changing deletes them.
+- **F30.3 Moving up.** The suggestion (section 4, rule 8) says when to move to the next rung and shows the button "Passar para «…»" (move to "…"). Nothing changes until I tap it.
+- **F30.4 Smooth transition.** In the first session on a rung I moved up to, the suggestion says to do the 1st set in the new variation and, if I do not reach the bottom of the range, the remaining sets in the previous one.
+- **F30.5 Moving down.** Below the bottom of the range in 2 sessions in a row, the suggestion is to go back to the previous rung, with the button "Voltar a «…»" (go back to "…"). With no previous rung, it suggests an easier variation or a shorter range of motion (never "lower the load" on an exercise without load).
+- **F30.6 Extra weight.** In compound body-weight exercises counted in reps, "Como contas o peso?" (how do you count the weight?) has "Só o corpo" (body only, the default) and "Peso extra (colete ou mochila)" (extra weight, vest or backpack), with the label "Peso extra ({u})". On the last rung of a ladder, when it would move up, the suggestion is to add extra weight. With extra weight, double progression (section 4) applies with a 2.5 kg (5 lb) increment.
+- **F30.7 Default way of counting.** For an exercise that can be done with or without load (e.g. lunges), with no saved choice, the first way whose equipment I have applies (taking the holiday into account); with none, "Só o corpo". Logs from before v1.12 still count as in F24.3.
+- **F30.8 Backup.** The backup keeps each exercise's rung; earlier backups remain valid.
+
 ### F14. Blocks and next change (v1.2, rules in section 3.7)
 - On Home and on Today's workout: current phase (re-adaptation, week N of M of the block, or deload) and the next change with its date: end of re-adaptation (full sets), deload week (half the sets), or new block (isolation exercises rotate, listing what changes).
 
@@ -375,6 +386,7 @@ For each Prescription with range [min, max]:
 5. Re-adaptation phase: no load increase in the first 2 sessions of each exercise.
 6. (v1.2) Deload week: keep the last session's load, no increase.
 7. (v1.17) With dumbbells and the heaviest dumbbell entered (F28.2), the load does not go above it.
+8. (v1.19) Exercise without load on a ladder (F30): instead of rule 1, move to the next rung when every set reached max (reps or seconds) with RIR ≥ 1 in **2 sessions in a row** and it has been on the rung for at least **14 days** (counted from the rung change or, on the starting rung, from the first logged session). The jump between variations is bigger than +2 kg, and tendons and wrists adapt more slowly than muscle. If a session or days are still missing, the suggestion says how many. Instead of rule 3, move down a rung. Rules 4 to 6 apply as they are. On the last rung, switch to extra weight (F30.6).
 
 ## 5. Non-functional requirements
 - Works offline after the first visit.

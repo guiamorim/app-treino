@@ -2,7 +2,7 @@
 
 [English](specification-v1.en.md) · **Português**
 
-Data: 2026-10-20 · Versão 1.18 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.18)
+Data: 2026-10-20 · Versão 1.19 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.19)
 
 ## 0. Decisões fechadas
 
@@ -282,6 +282,17 @@ Terceira fase do estudo de viabilidade de calistenia e treino em casa (2026-10-3
 - **F29.3 Durante.** «Hoje», «Início», o calendário, os PDF e «Substituir exercício» usam o plano adaptado. O primeiro aviso do plano diz até quando dura. Editar o plano próprio (F27) parte sempre do plano guardado.
 - **F29.4 Terminar.** No fim da data, ou com «Terminar férias» (ou «Cancelar férias», se ainda não começou), o plano volta ao normal. A cópia de segurança guarda as férias marcadas.
 
+### F30. Progressão por variação (v1.19)
+Quarta fase do estudo de viabilidade de calistenia e treino em casa (2026-10-31): nos exercícios de peso corporal, progride-se para uma variação mais difícil em vez de subir quilos.
+- **F30.1 Escadas.** Alguns exercícios estão numa escada de variações, da mais fácil para a mais difícil: Flexões (flexões inclinadas › flexões › flexões declinadas › flexões diamante); Mergulhos (no banco › nas paralelas); Puxar (remada invertida › elevações); Pernas, joelho (agachamento com o peso do corpo › afundos › agachamento búlgaro); Pernas, anca (ponte de glúteos › ponte a uma perna). O catálogo de calistenia (fase seguinte) acrescenta degraus e escadas.
+- **F30.2 Degrau atual.** Quando o exercício é feito sem carga (ou com peso extra, F30.6), o ecrã do exercício mostra «Escada «Flexões»: degrau 2 de 4» e os botões «Mais fácil: …» e «Mais difícil: …». Os degraus que não posso fazer (restrições, gravidez ou equipamento, incluindo o das férias) são saltados. A mudança fica guardada: a partir daí, em todos os treinos e planos, esse exercício do plano aparece na variação escolhida, com a nota «Variação atual (o plano tinha «…»).». O plano guardado não muda, e editar o plano próprio parte dele. Se já registei séries nesse exercício hoje, a app pede confirmação, porque mudar apaga-as.
+- **F30.3 Subir.** A sugestão (secção 4, regra 8) diz quando passar ao degrau seguinte e mostra o botão «Passar para «…»». Nada muda sem eu tocar no botão.
+- **F30.4 Transição suave.** Na primeira sessão de um degrau a que subi, a sugestão diz para fazer a 1.ª série na variação nova e, se não chegar ao mínimo da faixa, as restantes na anterior.
+- **F30.5 Descer.** Abaixo do mínimo da faixa em 2 sessões seguidas, a sugestão é voltar ao degrau anterior, com o botão «Voltar a «…»». Sem degrau anterior, sugere uma variação mais fácil ou menos amplitude (nunca «baixa a carga» num exercício sem carga).
+- **F30.6 Peso extra.** Nos exercícios compostos de peso corporal contados em repetições, «Como contas o peso?» tem «Só o corpo» (por omissão) e «Peso extra (colete ou mochila)», com o rótulo «Peso extra ({u})». No último degrau de uma escada, quando subiria, a sugestão é acrescentar peso extra. Com peso extra vale a dupla progressão (secção 4) com incremento de 2,5 kg (5 lb).
+- **F30.7 Forma por omissão.** Num exercício que se pode fazer com carga ou sem ela (ex.: afundos), sem escolha guardada, vale a primeira forma cujo equipamento tenho (contando com as férias); sem nenhum, «Só o corpo». Os registos anteriores à v1.12 continuam a contar como na F24.3.
+- **F30.8 Cópia.** A cópia de segurança guarda o degrau de cada exercício; as cópias anteriores continuam válidas.
+
 ### F14. Blocos e próxima mudança (v1.2, regras na secção 3.7)
 - No Início e no Treino de hoje: fase atual (readaptação, semana N de M do bloco, ou descarga) e a próxima mudança com data: fim da readaptação (séries completas), semana de descarga (metade das séries), ou novo bloco (troca dos exercícios isolados, com a lista do que muda).
 
@@ -371,6 +382,7 @@ Para cada Prescrição com faixa [mín, máx]:
 5. Fase de readaptação: sem subida de carga nas primeiras 2 sessões de cada exercício.
 6. (v1.2) Semana de descarga: mantém a carga da última sessão, sem subida.
 7. (v1.17) Com halteres e o halter mais pesado indicado (F28.2), a carga não sobe acima dele.
+8. (v1.19) Exercício sem carga numa escada (F30): em vez da regra 1, passa ao degrau seguinte quando todas as séries chegaram a máx (reps ou segundos) com RIR ≥ 1 em **2 sessões seguidas** e está no degrau há pelo menos **14 dias** (contados desde a mudança de degrau ou, no degrau de origem, desde a primeira sessão registada). O salto entre variações é maior do que +2 kg, e tendões e punhos adaptam-se mais devagar do que o músculo. Se ainda falta uma sessão ou faltam dias, a sugestão diz quanto falta. Em vez da regra 3, desce um degrau. As regras 4 a 6 valem como estão. No último degrau, passa a peso extra (F30.6).
 
 ## 5. Requisitos não funcionais
 - Funciona offline depois da primeira abertura.

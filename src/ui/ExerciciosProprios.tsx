@@ -1,7 +1,7 @@
 // F26: lista e editor dos exercícios criados pelo utilizador.
 import { useState, type FormEvent } from 'react'
 import { db } from '../data/db'
-import { nomeTipoCarga, TIPOS_CARGA, type TipoCarga } from '../domain/carga'
+import { nomeTipoCarga, TIPOS_CARGA_PROPRIOS, type TipoCargaProprio } from '../domain/carga'
 import { apagarProprio, guardarProprio, incrementoPadrao, novoIdProprio, temRegistos, type ExercicioProprio } from '../domain/proprios'
 import { GRUPOS_MUSCULARES, NOMES_GRUPOS, type GrupoMuscular, type Medida } from '../domain/types'
 import { deUnidade, paraCampo, unidadePeso } from '../domain/unidades'
@@ -53,7 +53,7 @@ export function EditorProprio({ dados, id }: { dados: Dados; id: string }) {
 function Formulario({ dados, atual }: { dados: Dados; atual?: ExercicioProprio }) {
   const [nome, setNome] = useState(atual?.nome ?? '')
   const [medida, setMedida] = useState<Medida>(atual?.medida ?? 'reps')
-  const [tipo, setTipo] = useState<TipoCarga>(atual?.tipoCarga ?? 'halter')
+  const [tipo, setTipo] = useState<TipoCargaProprio>(atual?.tipoCarga ?? 'halter')
   const [grupo, setGrupo] = useState<GrupoMuscular | ''>(atual?.grupoPrincipal ?? '')
   const [secundarios, setSecundarios] = useState<GrupoMuscular[]>(atual?.gruposSecundarios ?? [])
   const [incremento, setIncremento] = useState(atual?.incrementoKg === undefined ? '' : paraCampo(atual.incrementoKg))
@@ -130,8 +130,8 @@ function Formulario({ dados, atual }: { dados: Dados; atual?: ExercicioProprio }
       {medidaFixa && <p className="secundario">{t('Já tem registos: a medida não pode mudar.')}</p>}
 
       <label htmlFor="proprio-carga">{t('Como contas o peso?')}</label>
-      <select id="proprio-carga" value={tipo} onChange={(e) => setTipo(e.target.value as TipoCarga)}>
-        {TIPOS_CARGA.map((x) => <option key={x} value={x}>{nomeTipoCarga(x)}</option>)}
+      <select id="proprio-carga" value={tipo} onChange={(e) => setTipo(e.target.value as TipoCargaProprio)}>
+        {TIPOS_CARGA_PROPRIOS.map((x) => <option key={x} value={x}>{nomeTipoCarga(x)}</option>)}
       </select>
 
       <label htmlFor="proprio-grupo">{t('Grupo muscular principal')}</label>

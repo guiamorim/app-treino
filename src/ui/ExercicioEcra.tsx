@@ -1,13 +1,14 @@
 import { useRef, useState, type FormEvent } from 'react'
 import { db } from '../data/db'
 import { estadoBloco } from '../domain/blocos'
-import { motivoIncompatibilidade, prescricaoEfetiva, semanaDoPlano } from '../domain/plano'
+import { equipamentoDisponivel, motivoIncompatibilidade, prescricaoEfetiva, semanaDoPlano } from '../domain/plano'
 import { sugerir } from '../domain/progressao'
 import { estadoExercicio, historicoExercicio, registoDe } from '../domain/sessao'
 import { NOMES_AREAS, NOMES_GRUPOS, type Plano, type Serie } from '../domain/types'
 import { lerVideo, pesquisaYoutube } from '../domain/video'
 import { abrirSessao, alterarRegisto, sessaoAberta } from './acoes'
-import { mesmaForma, nomeTipoCarga, rotuloCarga, tipoCarga, tiposCarga, totalComBarra, type TipoCarga } from '../domain/carga'
+import { admitePesoExtra, incrementoDaForma, mesmaForma, nomeTipoCarga, rotuloCarga, semCarga as semCargaDe, tipoCarga, tiposCarga, totalComBarra, type TipoCarga } from '../domain/carga'
+import { desdeQuando, diasEntre, mudarDegrau, posicaoNaEscada } from '../domain/escadas'
 import { RESERVAS, reservaAlvo, rotuloReserva, textoReserva } from '../domain/reserva'
 import { decimal, deUnidade, paraCampo, paraUnidade, peso, unidadePeso } from '../domain/unidades'
 import { agoraIso, catalogo, hojeIso, type Dados } from './dados'
@@ -59,15 +60,29 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
   const reg = sessao ? registoDe(sessao, p.id) : undefined
   const series = reg?.series ?? []
   const estado = estadoExercicio(reg, ef)
-  // F24: como se conta o peso; a sugestão só compara sessões contadas da mesma forma.
+  // F29.3: nas férias, os substitutos e o equipamento seguem o das férias.
+  const anamneseAgora = dados.anamnese && feriasAtivas(dados.ferias, hojeIso()) ? anamneseEmFerias(dados.anamnese, dados.ferias!) : dados.anamnese
+  const possivel = (x: typeof ex) => !anamneseAgora || !motivoIncompatibilidade(x, anamneseAgora)
+  // F24: como se conta o peso; a sugestão só compara sessões contadas da mesma forma. F30.7: por omissão, o equipamento que tenho.
   const tipos = tiposCarga(ex)
-  const tipo = tipoCarga(ex, dados.tiposCarga)
+  const tipo = tipoCarga(ex, dados.tiposCarga, anamneseAgora && equipamentoDisponivel(anamneseAgora))
+  const semCarga = semCargaDe(ex, tipo)
+  // F30.2: a escada aparece quando o exercício é feito sem carga ou com peso extra.
+  const posicao = semCarga || tipo === 'peso-extra' ? posicaoNaEscada(ex, catalogo, possivel) : undefined
+  const desde = posicao && desdeQuando(dados.degraus, ex.id, dados.sessoes)
   const historico = mesmaForma(historicoExercicio(dados.sessoes, ex.id, sessao?.id), ex, tipo)
   const descarga = estadoBloco(plano, semanaAtual).fase === 'descarga'
-  const sugestao = sugerir({ prescricao: ef, exercicio: tipo === 'corporal' ? { ...ex, incrementoKg: 0 } : ex, historico, readaptacao: plano.readaptacao, descarga, ...(tipo === 'halter' && dados.anamnese?.halteresMaxKg ? { cargaMaxKg: dados.anamnese.halteresMaxKg } : {}) })
+  const sugestao = sugerir({
+    prescricao: ef,
+    exercicio: { ...ex, incrementoKg: incrementoDaForma(ex, tipo) },
+    historico,
+    readaptacao: plano.readaptacao,
+    descarga,
+    ...(tipo === 'halter' && dados.anamnese?.halteresMaxKg ? { cargaMaxKg: dados.anamnese.halteresMaxKg } : {}),
+    ...(posicao ? { escada: { ...(posicao.anterior ? { anterior: posicao.anterior } : {}), ...(posicao.seguinte ? { seguinte: posicao.seguinte } : {}), ...(desde ? { diasNoDegrau: diasEntre(desde, hojeIso()) } : {}), pesoExtra: admitePesoExtra(ex) } } : {}),
+  })
   const ultima = historico.at(-1)
   const emSegundos = ex.medida === 'segundos'
-  const semCarga = ex.incrementoKg === 0 || tipo === 'corporal'
 
   const ultimaSerie = series.at(-1)
   const cargaInicial = ultimaSerie?.carga ?? sugestao.carga
@@ -86,13 +101,11 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
 
   const linkVideo = dados.videos[ex.id] ?? ex.video
   const video = linkVideo ? lerVideo(linkVideo) : null
-  // F29.3: nas férias, os substitutos seguem o equipamento das férias.
-  const anamneseAgora = dados.anamnese && feriasAtivas(dados.ferias, hojeIso()) ? anamneseEmFerias(dados.anamnese, dados.ferias!) : dados.anamnese
   const substitutos = [
     ...[...new Set([base.id, ...base.substitutos, ...ex.substitutos])]
       .filter((id) => id !== ex.id)
       .map((id) => catalogo.get(id)!)
-      .filter((s) => anamneseAgora && !motivoIncompatibilidade(s, anamneseAgora)),
+      .filter((s) => anamneseAgora && possivel(s)),
     // F26.3: os exercícios próprios do mesmo grupo e medida; quem os criou sabe se os pode fazer.
     ...substitutosProprios(dados.proprios, base).filter((id) => id !== ex.id).map((id) => catalogo.get(id)!),
   ]
@@ -190,6 +203,13 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
     setTrocar(false)
   }
 
+  /** F30.2: muda o degrau (fica guardado) e troca já o exercício de hoje. */
+  async function mudarVariacao(id: string) {
+    if (series.length > 0 && !confirm(t('Já registaste séries neste exercício. Trocar apaga-as. Continuar?'))) return
+    await db.gravar('degraus', mudarDegrau(dados.degraus, ex.id, id, hojeIso()))
+    if (reg) await alterarRegisto(sessao!.id, p.id, id, (x) => ({ prescricaoId: x.prescricaoId, exercicioId: id, series: [] }))
+  }
+
   const semana = semanaDoPlano(plano, agoraIso())
   const proximo = treino.prescricoes.find(
     (x) => x.id !== p.id && sessao && !['feito', 'saltado'].includes(estadoExercicio(registoDe(sessao, x.id), prescricaoEfetiva(x, plano, semana))),
@@ -230,6 +250,11 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
           <strong>{t('Sugestão:')} {sugestao.carga !== null && !semCarga ? `${peso(sugestao.carga)} × ` : ''}{sugestao.reps} {unidade}</strong>
         </p>
         <p className="secundario">{sugestao.motivo}</p>
+        {sugestao.variacao && (
+          <button className="primario largo" disabled={aGravar} onClick={() => void mudarVariacao(sugestao.variacao!.exercicioId)}>
+            {sugestao.variacao.sentido === 'subir' ? t('Passar para «{nome}»', { nome: sugestao.variacao.nome }) : t('Voltar a «{nome}»', { nome: sugestao.variacao.nome })}
+          </button>
+        )}
         {ultima && (
           <p className="secundario">
             {t('Última vez:')} {semCarga ? '' : `${peso(ultima.series[0]!.carga)} × `}{ultima.series.map((s) => s.reps).join(', ')}{ultima.dor ? ` · ${t('dor')} ${ultima.dor}/10` : ''}
@@ -237,6 +262,16 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
         )}
         <p className="secundario">{emSegundos ? t('Reserva = segundos que ainda aguentavas no fim da série.') : t('RIR = repetições que ainda conseguias fazer no fim da série. 0 = até à falha.')}</p>
       </div>
+
+      {posicao && posicao.total > 1 && (
+        <div className="cartao">
+          <p className="secundario">{t('Escada «{nome}»: degrau {n} de {total}', { nome: posicao.escada.nome, n: posicao.degrau, total: posicao.total })}</p>
+          <div className="linha">
+            {posicao.anterior && <button disabled={aGravar} onClick={() => void mudarVariacao(posicao.anterior!.id)}>{t('Mais fácil: {nome}', { nome: posicao.anterior.nome })}</button>}
+            {posicao.seguinte && <button disabled={aGravar} onClick={() => void mudarVariacao(posicao.seguinte!.id)}>{t('Mais difícil: {nome}', { nome: posicao.seguinte.nome })}</button>}
+          </div>
+        </div>
+      )}
 
       {series.length > 0 && (
         <div className="cartao">
