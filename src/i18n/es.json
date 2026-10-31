@@ -376,7 +376,6 @@
   "Hoje:": "Hoy:",
   "Sugestão:": "Sugerencia:",
   "Última vez:": "Última vez:",
-  "RIR = repetições que ainda conseguias fazer no fim da série.": "RIR = repeticiones que aún podías hacer al final de la serie.",
   "Exercício saltado.": "Ejercicio saltado.",
   "Desfazer": "Deshacer",
   "Exercício feito": "Ejercicio hecho",
@@ -557,5 +556,14 @@
   "Libras (lb)": "Libras (lb)",
   "Corrigir série {n}": "Corregir serie {n}",
   "Série {n} apagada.": "Serie {n} borrada.",
-  "Quilos ou libras": "Kilos o libras"
+  "Quilos ou libras": "Kilos o libras",
+  "reserva +{a}–{b} s": "reserva +{a}–{b} s",
+  "RIR ou reserva": "RIR o reserva",
+  "Reserva (s)": "Reserva (s)",
+  "0 (falha)": "0 (fallo)",
+  "Reserva = segundos que ainda aguentavas no fim da série.": "Reserva = segundos que aún aguantabas al final de la serie.",
+  "RIR = repetições que ainda conseguias fazer no fim da série. 0 = até à falha.": "RIR = repeticiones que aún podías hacer al final de la serie. 0 = hasta el fallo.",
+  "Reserva": "Reserva",
+  "Reserva (opcional)": "Reserva (opcional)",
+  "falha": "fallo"
 }

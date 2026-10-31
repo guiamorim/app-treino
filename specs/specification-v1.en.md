@@ -2,7 +2,7 @@
 
 **English** · [Português](especificacao-v1.md)
 
-Date: 2026-10-20 · Version 1.10 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.10)
+Date: 2026-10-20 · Version 1.11 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.11)
 
 The Portuguese version is the reference used for the domain names in the code. Both versions must stay in sync.
 
@@ -217,6 +217,16 @@ Improvements from the 2026-10-26 review. F22.9 to F22.13 shipped in v1.10.
 - **F22.11 Undoing a delete.** Deleting a set is immediate and shows "Set N deleted." with "Undo", which puts it back in the same place. The message goes away when the next set is logged or when leaving the exercise.
 - **F22.12 Languages on demand.** The English and Spanish translations and catalogues are only loaded when that language is chosen. They are then kept for offline use like the rest of the app.
 - **F22.13 Drawn icons.** The bottom bar uses line-drawn icons (SVG) instead of emoji, looking the same on every phone and taking the tab's text colour.
+
+### F23. Reserve, rest and landscape (v1.11)
+First phase of the 2026-10-31 study.
+- **F23.1 Reserve in seconds.** On exercises measured in time (plank, side plank, farmer's walk), instead of RIR you log the reserve: "+15", "+30", "+45", "+60" or "+" (more than 60 s), the seconds you could still have held. It is optional, like RIR.
+  - The plan asks for "reserve +15–30 s", and "+30–45 s" when the prescribed RIR starts at 3 (re-adaptation, deload, pregnancy, limitations).
+  - It is stored in its own field on the set, separate from RIR. Earlier backups stay valid.
+  - The sets table, PDF, Excel and CSV show the reserve in seconds. Older sets of these exercises keep their RIR, shown as "RIR N".
+- **F23.2 RIR 0 is failure.** On rep-based exercises RIR stays 0, 1, 2, 3, 4 or 5+, and 0 is shown as "0 (failure)". Progression still does not raise the load after a set to failure (section 4.1).
+- **F23.3 Visible rest timer.** The rest timer and the stretching timer sit fixed at the bottom of the screen, above the bottom bar, instead of under the iPhone status bar. The content gets extra space at the bottom so nothing is covered.
+- **F23.4 Portrait and landscape.** The installed app rotates with the phone. In landscape the content and the bottom bar respect the notch margins, the video fits the screen height and buttons keep their touch size.
 
 ### F14. Blocks and next change (v1.2, rules in section 3.7)
 - On Home and on Today's workout: current phase (re-adaptation, week N of M of the block, or deload) and the next change with its date: end of re-adaptation (full sets), deload week (half the sets), or new block (isolation exercises rotate, listing what changes).

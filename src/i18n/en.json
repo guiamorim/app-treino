@@ -376,7 +376,6 @@
   "Hoje:": "Today:",
   "Sugestão:": "Suggestion:",
   "Última vez:": "Last time:",
-  "RIR = repetições que ainda conseguias fazer no fim da série.": "RIR = reps you could still have done at the end of the set.",
   "Exercício saltado.": "Exercise skipped.",
   "Desfazer": "Undo",
   "Exercício feito": "Exercise done",
@@ -557,5 +556,14 @@
   "Libras (lb)": "Pounds (lb)",
   "Corrigir série {n}": "Edit set {n}",
   "Série {n} apagada.": "Set {n} deleted.",
-  "Quilos ou libras": "Kilograms or pounds"
+  "Quilos ou libras": "Kilograms or pounds",
+  "reserva +{a}–{b} s": "reserve +{a}–{b} s",
+  "RIR ou reserva": "RIR or reserve",
+  "Reserva (s)": "Reserve (s)",
+  "0 (falha)": "0 (failure)",
+  "Reserva = segundos que ainda aguentavas no fim da série.": "Reserve = seconds you could still have held at the end of the set.",
+  "RIR = repetições que ainda conseguias fazer no fim da série. 0 = até à falha.": "RIR = reps you could still have done at the end of the set. 0 = to failure.",
+  "Reserva": "Reserve",
+  "Reserva (opcional)": "Reserve (optional)",
+  "falha": "failure"
 }

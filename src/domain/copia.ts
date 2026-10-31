@@ -8,7 +8,7 @@ const inteiro = (min: number, max: number) => z.number().int().min(min).max(max)
 const data = z.string().min(10).max(40)
 const id = z.string().min(1).max(100)
 
-const serie = z.strictObject({ carga: z.number().min(0).max(1000), reps: inteiro(0, 1000), rir: inteiro(0, 10).optional() })
+const serie = z.strictObject({ carga: z.number().min(0).max(1000), reps: inteiro(0, 1000), rir: inteiro(0, 10).optional(), reservaSeg: inteiro(0, 600).optional() })
 const registo = z.strictObject({
   prescricaoId: id,
   exercicioId: id,
@@ -116,12 +116,12 @@ const csvCampo = (v: string | number | undefined) => {
 }
 
 export function paraCsv(sessoes: Sessao[], catalogo: Catalogo): string {
-  const linhas = ['data,treino,exercicio,serie,carga_kg,reps,rir,dor']
+  const linhas = ['data,treino,exercicio,serie,carga_kg,reps,rir,dor,reserva_s']
   for (const s of [...sessoes].sort((a, b) => a.inicio.localeCompare(b.inicio)))
     for (const e of s.exercicios)
       e.series.forEach((x, i) => {
         const nome = catalogo.get(e.exercicioId)?.nome ?? e.exercicioId
-        linhas.push([s.inicio, s.treinoId, nome, i + 1, x.carga, x.reps, x.rir, e.dor].map(csvCampo).join(','))
+        linhas.push([s.inicio, s.treinoId, nome, i + 1, x.carga, x.reps, x.rir, e.dor, x.reservaSeg].map(csvCampo).join(','))
       })
   return linhas.join('\n')
 }

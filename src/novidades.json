@@ -1,6 +1,31 @@
 {
   "versoes": [
     {
+      "versao": "1.11.0",
+      "data": "2026-10-31",
+      "itens": [
+        "Nos exercícios por tempo, como a prancha, registas a reserva em segundos (+15, +30, +45, +60 ou mais) em vez do RIR.",
+        "O RIR 0 aparece como «0 (falha)», para ficar claro que é ir até à falha.",
+        "O descanso entre séries fica fixo em baixo, sempre à vista, e a app roda para a horizontal."
+      ],
+      "traducoes": {
+        "en": {
+          "itens": [
+            "In timed exercises such as the plank, you log the reserve in seconds (+15, +30, +45, +60 or more) instead of RIR.",
+            "RIR 0 now shows as “0 (failure)”, to make clear it means going to failure.",
+            "The rest timer between sets stays fixed at the bottom, always in view, and the app rotates to landscape."
+          ]
+        },
+        "es": {
+          "itens": [
+            "En los ejercicios por tiempo, como la plancha, registras la reserva en segundos (+15, +30, +45, +60 o más) en vez del RIR.",
+            "El RIR 0 aparece como «0 (fallo)», para que quede claro que es llegar al fallo.",
+            "El descanso entre series queda fijo abajo, siempre a la vista, y la app gira a horizontal."
+          ]
+        }
+      }
+    },
+    {
       "versao": "1.10.0",
       "data": "2026-10-26",
       "itens": [
