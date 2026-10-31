@@ -525,7 +525,7 @@ test('F23: reserva em segundos na prancha, RIR 0 como falha, descanso à vista e
   await page.getByRole('button', { name: 'Concluir série' }).click()
   const temporizador = page.getByRole('timer')
   await expect(temporizador).toBeInViewport()
-  await page.mouse.wheel(0, 2000)
+  await page.evaluate('window.scrollTo(0, document.body.scrollHeight)')
   await expect(temporizador).toBeInViewport()
   const caixa = (await temporizador.boundingBox())!
   const nav = (await page.getByRole('navigation', { name: 'Principal' }).boundingBox())!
