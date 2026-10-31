@@ -961,6 +961,9 @@ test('F33: registo no topo do exercício, 5 separadores e conquistas resumidas',
 test.describe('F34: reportar ou sugerir', () => {
   test('F34.1–F34.4: do exercício, envia só os campos previstos, confirma e espera 60 s', async ({ page }) => {
     const enviados: Record<string, string>[] = []
+    const consola: string[] = []
+    page.on('console', (m) => consola.push(m.text()))
+    page.on('requestfailed', (r) => consola.push(`falhou ${r.method()} ${r.url()}: ${r.failure()?.errorText}`))
     // O pedido é de outra origem: o WebKit faz a verificação CORS (e a pré-verificação) mesmo com a resposta simulada.
     const cors = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Content-Type, Accept', 'Access-Control-Allow-Methods': 'POST, OPTIONS' }
     await page.route('https://api.web3forms.com/submit', async (r) => {
@@ -984,6 +987,8 @@ test.describe('F34: reportar ou sugerir', () => {
     await page.getByLabel('Vídeo incorreto').check()
     await page.getByLabel('Descrição (opcional)').fill('O vídeo mostra outro exercício.')
     await page.getByRole('button', { name: 'Enviar', exact: true }).click()
+    await expect(page.getByRole('status').or(page.getByRole('alert'))).toBeVisible()
+    await expect(page.getByRole('alert'), `pedidos intercetados: ${enviados.length}; consola: ${consola.join(' | ')}`).toHaveCount(0)
     await expect(page.getByRole('status')).toContainText('Obrigado! O reporte foi enviado.')
     expect(enviados).toHaveLength(1)
     const corpo = enviados[0]!
