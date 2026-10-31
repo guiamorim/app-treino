@@ -1,6 +1,31 @@
 {
   "versoes": [
     {
+      "versao": "1.21.0",
+      "data": "2026-10-31",
+      "itens": [
+        "Teste de nivelamento (opcional, 10–15 minutos), em «Mais» e no ecrã «Hoje» antes do primeiro treino de calistenia: uma série por padrão de movimento (empurrar, puxar, pernas e core) e a app põe cada um no degrau certo.",
+        "Em «Relatórios», o separador «Degraus» mostra a fase de cada padrão: o exercício atual, o nível, o degrau e o que falta para o seguinte. O padrão mais fraco aparece como prioridade.",
+        "A linha temporal mostra o degrau mais alto de cada treino e quando mudaste de degrau. Depois de cada bloco, a app propõe repetir o teste."
+      ],
+      "traducoes": {
+        "en": {
+          "itens": [
+            "Placement test (optional, 10–15 minutes), in “More” and on the “Today” screen before the first calisthenics workout: one set per movement pattern (push, pull, legs and core) and the app puts each one on the right rung.",
+            "In “Reports”, the “Rungs” tab shows the phase of each pattern: the current exercise, the level, the rung and what is missing for the next one. The weakest pattern is shown as the priority.",
+            "The timeline shows the highest rung of each workout and when you changed rung. After each block, the app suggests repeating the test."
+          ]
+        },
+        "es": {
+          "itens": [
+            "Prueba de nivel (opcional, 10–15 minutos), en «Más» y en la pantalla «Hoy» antes del primer entrenamiento de calistenia: una serie por patrón de movimiento (empujar, tirar, piernas y core) y la app pone cada uno en el peldaño correcto.",
+            "En «Informes», la pestaña «Peldaños» muestra la fase de cada patrón: el ejercicio actual, el nivel, el peldaño y lo que falta para el siguiente. El patrón más débil aparece como prioridad.",
+            "La línea temporal muestra el peldaño más alto de cada entrenamiento y cuándo cambiaste de peldaño. Después de cada bloque, la app propone repetir la prueba."
+          ]
+        }
+      }
+    },
+    {
       "versao": "1.20.0",
       "data": "2026-10-31",
       "itens": [

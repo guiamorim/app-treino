@@ -4,6 +4,7 @@ import { useDados } from './dados'
 import { useRota } from './rota'
 import { EditorProprio } from './ExerciciosProprios'
 import { CalisteniaEcra } from './Calistenia'
+import { NivelamentoEcra } from './Nivelamento'
 import { PlanoProprio } from './PlanoProprio'
 import { AnamneseEcra } from './AnamneseEcra'
 import { Hoje } from './Hoje'
@@ -44,7 +45,7 @@ export function App() {
   if (!dados) return <p className="secundario">{t('A carregar…')}</p>
   if (!dados.anamnese || !dados.plano || rota.ecra === 'anamnese') return <AnamneseEcra dados={dados} />
 
-  const ativo = rota.ecra === 'exercicio' ? 'hoje' : rota.ecra === 'meu-exercicio' || rota.ecra === 'meu-plano' || rota.ecra === 'calistenia' ? 'mais' : rota.ecra
+  const ativo = rota.ecra === 'exercicio' ? 'hoje' : rota.ecra === 'meu-exercicio' || rota.ecra === 'meu-plano' || rota.ecra === 'calistenia' || rota.ecra === 'nivelamento' ? 'mais' : rota.ecra
   return (
     <>
       <main>
@@ -59,6 +60,7 @@ export function App() {
         {rota.ecra === 'mais' && <Mais dados={dados} />}
         {rota.ecra === 'meu-plano' && <PlanoProprio dados={dados} plano={dados.planoBase ?? dados.plano} anamnese={dados.anamnese} />}
         {rota.ecra === 'calistenia' && <CalisteniaEcra dados={dados} />}
+        {rota.ecra === 'nivelamento' && <NivelamentoEcra dados={dados} plano={dados.planoBase ?? dados.plano} anamnese={dados.anamnese} />}
         {rota.ecra === 'meu-exercicio' && <EditorProprio key={rota.id} dados={dados} id={rota.id} />}
         {rota.ecra === 'alongamento' && <AlongamentoEcra key={rota.grupo ?? ''} dados={dados} plano={dados.plano} anamnese={dados.anamnese} grupo={rota.grupo} />}
       </main>

@@ -17,6 +17,8 @@ export type Rota =
   | { ecra: 'meu-plano' }
   /** F31.4: exercícios de calistenia por nível. */
   | { ecra: 'calistenia' }
+  /** F32.2: teste de nivelamento. */
+  | { ecra: 'nivelamento' }
 
 export function lerRota(hash: string): Rota {
   const [ecra, arg] = hash.replace(/^#\/?/, '').split('/')
@@ -35,6 +37,7 @@ export function lerRota(hash: string): Rota {
     case 'anamnese':
     case 'meu-plano':
     case 'calistenia':
+    case 'nivelamento':
       return { ecra }
     default:
       return { ecra: 'inicio' }

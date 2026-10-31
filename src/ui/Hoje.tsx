@@ -5,6 +5,7 @@ import { NOMES_GRUPOS, type Anamnese, type EstadoExercicio, type Plano } from '.
 import { abrirSessao, sessaoAberta, terminarSessao } from './acoes'
 import { agoraIso, catalogo, dataCurta, type Dados } from './dados'
 import { LembreteAlongamento } from './Alongamento'
+import { CartaoNivelamento } from './Nivelamento'
 import { textoFase } from './Fase'
 import { ir } from './rota'
 import { m, t, traduzido } from '../i18n'
@@ -37,6 +38,7 @@ export function Hoje({ dados, plano, anamnese }: { dados: Dados; plano: Plano; a
   return (
     <>
       <LembreteAlongamento dados={dados} anamnese={anamnese} />
+      <CartaoNivelamento dados={dados} plano={dados.planoBase ?? plano} anamnese={anamnese} />
       <h1>{treino.nome}</h1>
       <p className="secundario">~{treino.duracaoEstimadaMin} min · {textoFase(plano, semana)}</p>
       {treino.sintese && <p>{treino.sintese}</p>}

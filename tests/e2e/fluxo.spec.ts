@@ -833,3 +833,54 @@ test('F31: plano de calistenia com competências, níveis, músculos em três to
   await expect(page.getByText('Planche, degrau 5 de 5')).toBeVisible()
   await expect(page.locator('.letra-pequena')).toBeVisible()
 })
+
+test('F32: teste de nivelamento opcional, aplicado ao plano, e fase por padrão nos relatórios', async ({ page }) => {
+  await page.goto('./')
+  await page.getByLabel('Idade').fill('45')
+  await page.getByLabel('Altura (cm)').fill('175')
+  await page.getByLabel('Peso (kg)').fill('85')
+  await page.getByLabel('Tipo de treino').selectOption('calistenia')
+  await page.getByRole('button', { name: 'Só o peso do corpo' }).click()
+  await page.getByLabel('Barra fixa (elevações)').check()
+  await page.getByLabel('Nenhuma').check()
+  for (let i = 0; i < 7; i++) await page.locator(`input[name="parq-${i}"]`).nth(1).check()
+  await page.getByRole('button', { name: 'Gerar o meu plano' }).click()
+
+  // F32.2: o ecrã «Hoje» propõe o teste antes do primeiro treino.
+  await expect(page.getByRole('heading', { name: 'Calistenia A' })).toBeVisible()
+  await expect(page.getByText('Flexões inclinadas (mãos num banco)')).toBeVisible()
+  await page.getByRole('button', { name: 'Fazer o teste' }).click()
+  await expect(page.getByRole('heading', { name: 'Teste de nivelamento' })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Aplicar ao plano' })).toBeDisabled()
+
+  // F32.3: abaixo do mínimo, pede o degrau de baixo.
+  await page.getByLabel('Flexões de braços (repetições)').fill('3')
+  await page.getByRole('button', { name: 'Registar' }).first().click()
+  await page.getByLabel('Flexões de joelhos (repetições)').fill('8')
+  await page.getByRole('button', { name: 'Registar' }).first().click()
+  await expect(page.getByText('Ficas em «Flexões de joelhos» (degrau 3 de 9).')).toBeVisible()
+  // No topo da faixa, sobe um degrau.
+  await page.getByLabel('Elevações na barra (repetições)').fill('15')
+  await page.getByRole('button', { name: 'Registar' }).first().click()
+  await expect(page.getByText('Ficas em «Elevações ao peito» (degrau 4 de 7).')).toBeVisible()
+  await page.getByRole('button', { name: 'Saltar' }).first().click()
+  await expect(page.getByText('Saltado: o plano mantém este padrão como está.')).toBeVisible()
+  await expect(page.locator('.letra-pequena')).toBeVisible()
+  await page.getByRole('button', { name: 'Aplicar ao plano' }).click()
+  await expect(page.getByText('Teste guardado. O plano já mostra os degraus do teste.')).toBeVisible()
+
+  // F32.4: o plano mostra os degraus do teste e o cartão do teste deixa de aparecer.
+  await page.getByRole('link', { name: 'Hoje' }).click()
+  await expect(page.getByText('Flexões de joelhos').first()).toBeVisible()
+  await expect(page.getByText('Flexões inclinadas (mãos num banco)')).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'Fazer o teste' })).toHaveCount(0)
+
+  // F32.5: fase por padrão em «Relatórios».
+  await page.getByRole('link', { name: 'Relatórios' }).click()
+  await page.getByRole('tab', { name: 'Degraus' }).click()
+  await expect(page.getByRole('heading', { name: 'Fase por padrão' })).toBeVisible()
+  await expect(page.getByText(/^Nível geral: Base\. Prioridade: /)).toBeVisible()
+  await expect(page.getByText('Flexões de joelhos · Base · degrau 3 de 9')).toBeVisible()
+  await expect(page.getByText(/Último teste:/)).toBeVisible()
+  await expect(page.getByText('Regista treinos para ver a linha temporal dos degraus.')).toBeVisible()
+})

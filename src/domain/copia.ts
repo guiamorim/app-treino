@@ -7,6 +7,7 @@ import type { Anamnese, FotoAvaliacao, Medicao, Perfil, Plano, Sessao } from './
 import { lerVideo } from './video'
 import { esquemaProprios, type ExercicioProprio } from './proprios'
 import type { Ferias } from './ferias'
+import { PADROES, type Nivelamento } from './nivelamento'
 
 const inteiro = (min: number, max: number) => z.number().int().min(min).max(max)
 const data = z.string().min(10).max(40)
@@ -106,6 +107,10 @@ const esquemaCopia = z.strictObject({
   exerciciosProprios: esquemaProprios.optional(),
   ferias: z.strictObject({ inicio: dia, fim: dia, equipamentos: z.array(z.enum(EQUIPAMENTOS)).max(EQUIPAMENTOS.length) }).optional(),
   degraus: z.record(id, z.strictObject({ exercicioId: id, desde: dia })).optional(),
+  nivelamento: z.strictObject({
+    data: dia,
+    resultados: z.partialRecord(z.enum(PADROES), z.strictObject({ tentativas: z.array(z.strictObject({ exercicioId: id, valor: z.number().int().min(0).max(3600) })).max(2), exercicioId: id })),
+  }).optional(),
 })
 
 export interface Copia {
@@ -129,6 +134,8 @@ export interface Copia {
   ferias?: Ferias
   /** F30 (v1.19): variação atual de cada exercício do plano. */
   degraus?: Degraus
+  /** F32 (v1.21): o último teste de nivelamento. */
+  nivelamento?: Nivelamento
 }
 
 /** F10.2: valida um ficheiro importado; lança erro se não for uma cópia válida. */

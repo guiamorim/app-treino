@@ -254,9 +254,12 @@ function avisosEquipamento(a: Anamnese): string[] {
   return avisos
 }
 
+/** PAR-Q+ com «sim» ou gravidez: plano conservador (e F32.2: o teste recomenda falar com o médico antes). */
+export const modoConservador = (a: Anamnese) => a.parq.some(Boolean) || gravidezAtiva(a) !== 'nao'
+
 export function gerarPlano(a: Anamnese, catalogo: Catalogo, opts: { id: string; agora: string }): Plano {
   const avisos = avisosAnamnese(a)
-  const conservador = a.parq.some(Boolean) || gravidezAtiva(a) !== 'nao'
+  const conservador = modoConservador(a)
   const divisao = a.divisao ?? 'automatico'
   const calistenia = emCalistenia(a)
   let ids = calistenia ? DIVISOES_CALISTENIA[a.diasPorSemana] : DIVISOES[a.diasPorSemana]

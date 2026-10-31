@@ -7,6 +7,7 @@ import { carregarCatalogo, traduzirCatalogo, type Catalogo } from '../domain/cat
 import { planoNoCatalogo, planoNoIdioma, semanaDoPlano } from '../domain/plano'
 import { feriasAtivas, planoEmFerias, type Ferias } from '../domain/ferias'
 import { planoComDegraus, type Degraus } from '../domain/escadas'
+import type { Nivelamento } from '../domain/nivelamento'
 import { juntarProprios, lerProprios, type ExercicioProprio } from '../domain/proprios'
 import type { Anamnese, FotoAvaliacao, Medicao, Perfil, Plano, Sessao } from '../domain/types'
 import { barrasKg, type TipoCarga } from '../domain/carga'
@@ -71,6 +72,8 @@ export interface Dados {
   planoBase?: Plano
   /** F30: variação atual de cada exercício do plano. */
   degraus: Degraus
+  /** F32: o último teste de nivelamento. */
+  nivelamento?: Nivelamento
 }
 
 export function useDados(): Dados | undefined {
@@ -91,6 +94,7 @@ export function useDados(): Dados | undefined {
       proprios: lerProprios(await db.ler('exerciciosProprios')),
       ferias: await db.ler<Ferias>('ferias'),
       degraus: (await db.ler<Degraus>('degraus')) ?? {},
+      nivelamento: await db.ler<Nivelamento>('nivelamento'),
     }
     const barraKg = await db.ler<number>('barraKg')
     // O idioma carrega-se depois das leituras: uma promessa de fora do Dexie a meio deixaria de fora da observação o que se lê a seguir.
