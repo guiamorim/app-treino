@@ -2,7 +2,7 @@
 
 [English](specification-v1.en.md) · **Português**
 
-Data: 2026-10-20 · Versão 1.10 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.10)
+Data: 2026-10-20 · Versão 1.11 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.11)
 
 ## 0. Decisões fechadas
 
@@ -213,6 +213,16 @@ Melhorias que saíram da revisão de 2026-10-26. F22.9 a F22.13 entraram na v1.1
 - **F22.11 Desfazer apagar.** Apagar uma série é imediato e mostra «Série N apagada.» com «Desfazer», que a repõe no mesmo lugar. A mensagem desaparece ao registar a série seguinte ou ao sair do exercício.
 - **F22.12 Idiomas a pedido.** As traduções e os catálogos em inglês e espanhol só são carregados quando esse idioma está escolhido. Ficam guardados para funcionar offline como o resto da app.
 - **F22.13 Ícones desenhados.** A barra de baixo usa ícones desenhados em linha (SVG) em vez de emojis, com o mesmo aspeto em qualquer telemóvel e na cor do texto do separador.
+
+### F23. Reserva, descanso e ecrã na horizontal (v1.11)
+Primeira fase do estudo de 2026-10-31.
+- **F23.1 Reserva em segundos.** Nos exercícios medidos em tempo (prancha, prancha lateral, caminhada do agricultor), em vez do RIR regista-se a reserva: «+15», «+30», «+45», «+60» ou «+» (mais de 60 s), os segundos que ainda aguentarias. É opcional, como o RIR.
+  - A ficha pede «reserva +15–30 s», e «+30–45 s» quando o RIR pedido começa em 3 (readaptação, descarga, gravidez, limitações).
+  - Fica num campo próprio da série, separado do RIR. As cópias anteriores continuam válidas.
+  - A tabela de séries, o PDF, o Excel e o CSV mostram a reserva em segundos. Os registos antigos destes exercícios mantêm o RIR, mostrado como «RIR N».
+- **F23.2 RIR 0 é a falha.** Nos exercícios por repetições, o RIR continua 0, 1, 2, 3, 4 ou 5+, e o 0 aparece como «0 (falha)». A progressão continua a não subir a carga depois de uma série até à falha (secção 4.1).
+- **F23.3 Descanso visível.** O temporizador de descanso e o do alongamento ficam fixos no fundo do ecrã, por cima da barra de baixo, e não por baixo da barra de estado do iPhone. O conteúdo ganha espaço em baixo para nada ficar tapado.
+- **F23.4 Vertical e horizontal.** A app instalada roda com o telemóvel. Na horizontal, o conteúdo e a barra de baixo respeitam as margens do entalhe, o vídeo cabe na altura do ecrã e os botões mantêm o tamanho de toque.
 
 ### F14. Blocos e próxima mudança (v1.2, regras na secção 3.7)
 - No Início e no Treino de hoje: fase atual (readaptação, semana N de M do bloco, ou descarga) e a próxima mudança com data: fim da readaptação (séries completas), semana de descarga (metade das séries), ou novo bloco (troca dos exercícios isolados, com a lista do que muda).

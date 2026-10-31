@@ -40,6 +40,10 @@ body {
   -webkit-text-size-adjust: 100%;
 }
 #root { max-width: 640px; margin: 0 auto; min-height: 100dvh; padding: env(safe-area-inset-top) 16px calc(88px + env(safe-area-inset-bottom)); }
+/* F23.4: na horizontal, o entalhe fica de lado; o conteúdo afasta-se dele. */
+#root { padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
+/* F23.3: com o temporizador à vista, o fim da página não fica escondido por baixo dele. */
+body:has(.temporizador) #root { padding-bottom: calc(170px + env(safe-area-inset-bottom)); }
 h1 { font-size: 1.6rem; margin: 20px 0 4px; }
 h2 { font-size: 1.15rem; margin: 20px 0 8px; }
 h3 { font-size: 1rem; margin: 12px 0 4px; }
@@ -96,16 +100,22 @@ input[type='range'] { padding: 0; }
   position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: center;
   background: var(--cartao); border-top: 1px solid var(--linha); padding-bottom: env(safe-area-inset-bottom); z-index: 10;
 }
-.navegacao a { flex: 1; max-width: 160px; text-align: center; padding: 10px 4px 12px; text-decoration: none; color: var(--texto-2); font-size: 0.75rem; min-height: 56px; }
+.navegacao a { flex: 1; max-width: 160px; text-align: center; padding: 10px 4px 12px; text-decoration: none; color: var(--texto-2); font-size: 0.75rem; min-height: 70px; }
 .navegacao a[aria-current='page'] { color: var(--acento); font-weight: 700; }
 .navegacao .icone { display: block; width: 24px; height: 24px; margin: 2px auto 3px; }
 dialog.modal { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; border: 0; color: inherit; background: rgb(0 0 0 / 0.85); padding: 16px; }
 dialog.modal[open] { display: flex; flex-direction: column; justify-content: center; }
 dialog.modal::backdrop { background: transparent; }
-.modal .moldura { position: relative; width: 100%; max-width: 640px; margin: 0 auto; aspect-ratio: 16 / 9; background: #000; border-radius: 10px; overflow: hidden; }
+.modal .moldura { position: relative; width: 100%; max-width: min(640px, calc((100dvh - 120px) * 16 / 9)); margin: 0 auto; aspect-ratio: 16 / 9; background: #000; border-radius: 10px; overflow: hidden; }
 .modal iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
-.modal .acoes { max-width: 640px; margin: 12px auto 0; width: 100%; display: flex; gap: 8px; }
-.temporizador { position: sticky; top: 0; z-index: 5; text-align: center; }
+.modal .acoes { max-width: min(640px, calc((100dvh - 120px) * 16 / 9)); margin: 12px auto 0; width: 100%; display: flex; gap: 8px; }
+/* F23.3: fixo em baixo, logo acima da navegação, onde a barra de estado do iPhone não o tapa. */
+.temporizador {
+  position: fixed; z-index: 9; text-align: center; margin: 0 auto; max-width: 608px;
+  left: max(16px, env(safe-area-inset-left)); right: max(16px, env(safe-area-inset-right));
+  bottom: calc(70px + env(safe-area-inset-bottom) + 8px); /* 70 px = altura dos separadores da navegação */ box-shadow: 0 6px 24px rgb(0 0 0 / 0.35);
+}
+.temporizador .numero { font-size: 1.75rem; }
 .temporizador.fim { background: var(--ok); color: var(--ok-texto); border-color: var(--ok); }
 .barra { height: 10px; background: var(--linha); border-radius: 999px; position: relative; overflow: hidden; }
 .barra > span { position: absolute; inset: 0 auto 0 0; background: var(--acento); border-radius: 999px; }
@@ -165,3 +175,15 @@ figure.frase figcaption::before { content: '— '; }
 .grupos-escolha button { flex: none; min-height: 40px; padding: 6px 12px; }
 .alongamento-topo { display: flex; gap: 12px; align-items: flex-start; }
 .alongamento-topo > div:last-child { flex: 1; min-width: 0; }
+
+/* F23.1/F23.2: escolha de RIR ou reserva, com toques de 44 px. */
+.escolha-esforco { gap: 6px; }
+.escolha-esforco button { min-height: 44px; min-width: 44px; padding: 4px 6px; line-height: 1.1; display: inline-flex; flex-direction: column; align-items: center; justify-content: center; }
+.escolha-esforco button small { display: block; font-size: 0.7rem; font-weight: 400; }
+.navegacao { padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
+/* F23.4: na horizontal o ecrã é baixo; o descanso ocupa menos altura. */
+@media (orientation: landscape) and (max-height: 500px) {
+  .temporizador { padding: 6px 14px; }
+  .temporizador .numero { font-size: 1.4rem; }
+  body:has(.temporizador) #root { padding-bottom: calc(150px + env(safe-area-inset-bottom)); }
+}

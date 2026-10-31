@@ -16,9 +16,19 @@ import {
   type Plano,
   type Pose,
   type Sessao,
+  type Serie,
 } from './types'
 import { gerarXlsx, type Folha } from './xlsx'
 import { paraUnidade, unidadePeso } from './unidades'
+import { MAIS_DE_60, reservaAlvo, textoReserva } from './reserva'
+
+/** F23.1: a ficha pede reserva em segundos nos exercícios por tempo, RIR nos restantes. */
+const alvoEsforco = (p: { rir: [number, number] }, emSegundos: boolean) => {
+  if (!emSegundos) return `RIR ${p.rir[0]}–${p.rir[1]}`
+  const [a, b] = reservaAlvo(p.rir)
+  return t('reserva +{a}–{b} s', { a, b })
+}
+const esforcoSerie = (x: Serie) => (x.reservaSeg !== undefined ? ` (${textoReserva(x.reservaSeg)})` : x.rir !== undefined ? ` (RIR ${x.rir})` : '')
 
 export interface DadosExportacao {
   anamnese: Anamnese | null
@@ -49,19 +59,19 @@ export function folhaFicha(plano: Plano, catalogo: Catalogo, agora: string): Fol
   const linhas = treinosAtuais(plano, agora).flatMap((tr) =>
     tr.prescricoes.map((p, i) => {
       const ex = catalogo.get(p.exercicioId)
-      return [tr.nome, i + 1, ex?.nome ?? p.exercicioId, ex ? NOMES_GRUPOS[ex.grupoPrincipal] : undefined, p.series, `${p.faixa[0]}–${p.faixa[1]}`, ex?.medida === 'segundos' ? t('segundos') : 'reps', `${p.rir[0]}–${p.rir[1]}`, p.descansoSeg, p.nota]
+      return [tr.nome, i + 1, ex?.nome ?? p.exercicioId, ex ? NOMES_GRUPOS[ex.grupoPrincipal] : undefined, p.series, `${p.faixa[0]}–${p.faixa[1]}`, ex?.medida === 'segundos' ? t('segundos') : 'reps', ex?.medida === 'segundos' ? alvoEsforco(p, true) : `${p.rir[0]}–${p.rir[1]}`, p.descansoSeg, p.nota]
     }),
   )
-  return { nome: t('Ficha'), cabecalho: [t('Treino'), t('Ordem'), t('Exercício'), t('Grupo principal'), t('Séries'), t('Repetições'), t('Unidade'), 'RIR', t('Descanso (s)'), t('Nota')], linhas }
+  return { nome: t('Ficha'), cabecalho: [t('Treino'), t('Ordem'), t('Exercício'), t('Grupo principal'), t('Séries'), t('Repetições'), t('Unidade'), t('RIR ou reserva'), t('Descanso (s)'), t('Nota')], linhas }
 }
 
 export function folhaHistorico(sessoes: Sessao[], plano: Plano | null, catalogo: Catalogo): Folha {
   const linhas = sessoesPorData(sessoes).flatMap((s) =>
     s.exercicios.flatMap((e) =>
-      e.series.map((x, i) => [s.inicio.slice(0, 10), nomeTreino(plano, s.treinoId), catalogo.get(e.exercicioId)?.nome ?? e.exercicioId, i + 1, pesoCelula(x.carga), x.reps, x.rir, e.dor]),
+      e.series.map((x, i) => [s.inicio.slice(0, 10), nomeTreino(plano, s.treinoId), catalogo.get(e.exercicioId)?.nome ?? e.exercicioId, i + 1, pesoCelula(x.carga), x.reps, x.rir, e.dor, x.reservaSeg === MAIS_DE_60 ? '> 60' : x.reservaSeg]),
     ),
   )
-  return { nome: t('Histórico'), cabecalho: [t('Data'), t('Treino'), t('Exercício'), t('Série'), t('Carga ({u})', { u: unidadePeso() }), 'Reps', 'RIR', t('Dor (0–10)')], linhas }
+  return { nome: t('Histórico'), cabecalho: [t('Data'), t('Treino'), t('Exercício'), t('Série'), t('Carga ({u})', { u: unidadePeso() }), 'Reps', 'RIR', t('Dor (0–10)'), t('Reserva (s)')], linhas }
 }
 
 export function folhaMedicoes(medicoes: Medicao[]): Folha {
@@ -86,7 +96,7 @@ export function pdfFicha(d: DadosExportacao, catalogo: Catalogo, agora: string):
           ...tr.prescricoes.map((p, i) => {
             const ex = catalogo.get(p.exercicioId)
             const unidade = ex?.medida === 'segundos' ? 's' : 'reps'
-            return `${i + 1}. ${ex?.nome ?? p.exercicioId} (${ex ? NOMES_GRUPOS[ex.grupoPrincipal] : ''}): ${p.series} × ${p.faixa[0]}–${p.faixa[1]} ${unidade} · RIR ${p.rir[0]}–${p.rir[1]} · ${t('descanso {s} s', { s: p.descansoSeg })}${p.nota ? ` · ${p.nota}` : ''}`
+            return `${i + 1}. ${ex?.nome ?? p.exercicioId} (${ex ? NOMES_GRUPOS[ex.grupoPrincipal] : ''}): ${p.series} × ${p.faixa[0]}–${p.faixa[1]} ${unidade} · ${alvoEsforco(p, ex?.medida === 'segundos')} · ${t('descanso {s} s', { s: p.descansoSeg })}${p.nota ? ` · ${p.nota}` : ''}`
           }),
           ...(tr.cardioMin ? [t('Cardio {min} min', { min: tr.cardioMin })] : []),
         ],
@@ -108,7 +118,7 @@ export function pdfHistorico(d: DadosExportacao, catalogo: Catalogo, agora: stri
       .map((e) => {
         const ex = catalogo.get(e.exercicioId)
         const semCarga = ex?.incrementoKg === 0
-        const series = e.series.map((x) => `${semCarga ? '' : `${pesoTxt(x.carga)} × `}${x.reps}${x.rir !== undefined ? ` (RIR ${x.rir})` : ''}`).join(', ')
+        const series = e.series.map((x) => `${semCarga ? '' : `${pesoTxt(x.carga)} × `}${x.reps}${esforcoSerie(x)}`).join(', ')
         return `${ex?.nome ?? e.exercicioId}: ${series}${e.dor ? ` · ${t('dor')} ${e.dor}/10` : ''}`
       }),
   }))

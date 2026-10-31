@@ -511,3 +511,42 @@ test.describe('F22.9: telemóvel em inglês dos Estados Unidos', () => {
     await expect(page.getByRole('radio', { name: 'Pounds (lb)' })).toHaveAttribute('aria-checked', 'true')
   })
 })
+
+test('F23: reserva em segundos na prancha, RIR 0 como falha, descanso à vista e ecrã na horizontal', async ({ page }) => {
+  await preencherAnamnese(page)
+
+  // F23.2: o RIR 0 lê-se como «0 (falha)».
+  await page.getByText('Supino com halteres, pega neutra').click()
+  await expect(page.getByRole('radio', { name: '0 (falha)' })).toBeVisible()
+  await expect(page.getByText('0 = até à falha')).toBeVisible()
+
+  // F23.3: o descanso fica fixo em baixo, dentro do ecrã e acima da navegação, mesmo depois de deslizar.
+  await page.getByLabel('Carga (kg)').fill('16')
+  await page.getByRole('button', { name: 'Concluir série' }).click()
+  const temporizador = page.getByRole('timer')
+  await expect(temporizador).toBeInViewport()
+  await page.mouse.wheel(0, 2000)
+  await expect(temporizador).toBeInViewport()
+  const caixa = (await temporizador.boundingBox())!
+  const nav = (await page.getByRole('navigation', { name: 'Principal' }).boundingBox())!
+  expect(caixa.y + caixa.height).toBeLessThanOrEqual(nav.y)
+  await temporizador.getByRole('button', { name: 'Saltar' }).click()
+
+  // F23.1: na prancha escolhe-se a reserva em segundos, e a tabela mostra-a.
+  await page.getByRole('link', { name: 'Hoje' }).click()
+  await page.getByLabel('Fazer outro treino').selectOption({ label: 'Inferior A' })
+  await page.getByText('Prancha', { exact: true }).click()
+  await expect(page.getByText(/reserva \+15–30 s|reserva \+30–45 s/)).toBeVisible()
+  const reservas = page.getByRole('radiogroup', { name: 'Reserva (opcional)' }).getByRole('radio')
+  await expect(reservas).toHaveText(['+15', '+30', '+45', '+60', '+'])
+  await page.getByRole('radio', { name: '+30 s' }).click()
+  await page.getByRole('button', { name: 'Concluir série' }).click()
+  await expect(page.locator('.series').getByText('+30 s')).toBeVisible()
+
+  // F23.4: na horizontal, o descanso continua à vista e os botões não saem do ecrã.
+  await page.setViewportSize({ width: 844, height: 390 })
+  await expect(page.getByRole('timer')).toBeInViewport()
+  await expect(page.getByRole('button', { name: 'Concluir série' })).toBeVisible()
+  const largura = (await page.evaluate('document.documentElement.scrollWidth')) as number
+  expect(largura).toBeLessThanOrEqual(844)
+})

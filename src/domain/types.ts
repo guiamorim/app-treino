@@ -152,6 +152,8 @@ export interface Serie {
   carga: number
   reps: number
   rir?: number
+  /** F23.1: só nos exercícios por tempo; segundos que ainda aguentaria (61 = mais de 60). */
+  reservaSeg?: number
 }
 
 export interface RegistoExercicio {
