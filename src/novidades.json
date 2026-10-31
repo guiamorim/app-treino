@@ -1,6 +1,31 @@
 {
   "versoes": [
     {
+      "versao": "1.12.0",
+      "data": "2026-10-31",
+      "itens": [
+        "O campo da carga diz como se conta o peso: por halter, total com a barra, ou o que marca a máquina.",
+        "Nos exercícios que se fazem com mais de um equipamento, escolhes uma vez «Como contas o peso?», e a sugestão só compara treinos feitos da mesma forma.",
+        "Na barra podes escrever só os discos de cada lado; a app soma a barra (20, 15 ou 10 kg, a escolher em «Mais») e guarda o total."
+      ],
+      "traducoes": {
+        "en": {
+          "itens": [
+            "The load field says how the weight is counted: per dumbbell, total including the bar, or what the machine shows.",
+            "On exercises done with more than one piece of equipment, you choose “How do you count the weight?” once, and the suggestion only compares workouts done the same way.",
+            "On the barbell you can enter just the plates on each side; the app adds the bar (20, 15 or 10 kg, chosen in “More”) and saves the total."
+          ]
+        },
+        "es": {
+          "itens": [
+            "El campo de la carga dice cómo se cuenta el peso: por mancuerna, total con la barra, o lo que marca la máquina.",
+            "En los ejercicios que se hacen con más de un equipo, eliges una vez «¿Cómo cuentas el peso?», y la sugerencia solo compara entrenamientos hechos de la misma forma.",
+            "En la barra puedes escribir solo los discos de cada lado; la app suma la barra (20, 15 o 10 kg, a elegir en «Más») y guarda el total."
+          ]
+        }
+      }
+    },
+    {
       "versao": "1.11.0",
       "data": "2026-10-31",
       "itens": [

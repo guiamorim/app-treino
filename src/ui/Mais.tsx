@@ -8,7 +8,7 @@ import { ir } from './rota'
 import { reduzirImagem } from './imagem'
 import { CartaoAtualizacoes } from './Atualizacao'
 import { t } from '../i18n'
-import { CartaoIdioma, CartaoUnidade } from './Idioma'
+import { CartaoBarra, CartaoIdioma, CartaoUnidade } from './Idioma'
 
 export function Mais({ dados }: { dados: Dados }) {
   const ficheiro = useRef<HTMLInputElement>(null)
@@ -36,6 +36,7 @@ export function Mais({ dados }: { dados: Dados }) {
       <h1>{t('Mais')}</h1>
       <CartaoIdioma idioma={dados.idioma} />
       <CartaoUnidade unidade={dados.unidade} />
+      <CartaoBarra barraKg={dados.barraKg} unidade={dados.unidade} />
       <PerfilCartao dados={dados} />
 
       <div className="cartao">

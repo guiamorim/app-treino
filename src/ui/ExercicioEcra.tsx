@@ -7,6 +7,7 @@ import { estadoExercicio, historicoExercicio, registoDe } from '../domain/sessao
 import { NOMES_AREAS, NOMES_GRUPOS, type Plano, type Serie } from '../domain/types'
 import { lerVideo, pesquisaYoutube } from '../domain/video'
 import { abrirSessao, alterarRegisto, sessaoAberta } from './acoes'
+import { mesmaForma, nomeTipoCarga, rotuloCarga, tipoCarga, tiposCarga, totalComBarra, type TipoCarga } from '../domain/carga'
 import { RESERVAS, reservaAlvo, rotuloReserva, textoReserva } from '../domain/reserva'
 import { decimal, deUnidade, paraCampo, paraUnidade, peso, unidadePeso } from '../domain/unidades'
 import { agoraIso, catalogo, type Dados } from './dados'
@@ -23,8 +24,10 @@ const textoRir = (n: number) => (n === 0 ? t('0 (falha)') : n === 5 ? '5+' : Str
 
 /** Valida os campos de uma série (F22.9: a carga escreve-se na unidade escolhida e guarda-se em quilos). Devolve a série ou a mensagem de erro. */
 /** O esforço é o RIR, ou a reserva em segundos nos exercícios por tempo (F23.1). */
-function lerSerie(carga: string, reps: string, esforco: number | undefined, semCarga: boolean, emSegundos: boolean): Serie | string {
-  const c = semCarga ? 0 : deUnidade(numero(carga))
+/** F24.4: com `barraKg`, a carga escrita são os discos de cada lado e guarda-se o total com a barra. */
+function lerSerie(carga: string, reps: string, esforco: number | undefined, semCarga: boolean, emSegundos: boolean, barraKg?: number): Serie | string {
+  const escrita = deUnidade(numero(carga))
+  const c = semCarga ? 0 : barraKg === undefined ? escrita : escrita >= 0 ? totalComBarra(barraKg, escrita) : NaN
   const r = numero(reps)
   if (!(r > 0 && r <= 1000 && Number.isInteger(r))) return emSegundos ? t('Indica os segundos.') : t('Indica as repetições.')
   if (!(c >= 0 && c <= 1000)) return t('Indica a carga em {u}.', { u: unidadePeso() })
@@ -54,18 +57,22 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
   const reg = sessao ? registoDe(sessao, p.id) : undefined
   const series = reg?.series ?? []
   const estado = estadoExercicio(reg, ef)
-  const historico = historicoExercicio(dados.sessoes, ex.id, sessao?.id)
+  // F24: como se conta o peso; a sugestão só compara sessões contadas da mesma forma.
+  const tipos = tiposCarga(ex)
+  const tipo = tipoCarga(ex, dados.tiposCarga)
+  const historico = mesmaForma(historicoExercicio(dados.sessoes, ex.id, sessao?.id), ex, tipo)
   const descarga = estadoBloco(plano, semanaAtual).fase === 'descarga'
-  const sugestao = sugerir({ prescricao: ef, exercicio: ex, historico, readaptacao: plano.readaptacao, descarga })
+  const sugestao = sugerir({ prescricao: ef, exercicio: tipo === 'corporal' ? { ...ex, incrementoKg: 0 } : ex, historico, readaptacao: plano.readaptacao, descarga })
   const ultima = historico.at(-1)
   const emSegundos = ex.medida === 'segundos'
-  const semCarga = ex.incrementoKg === 0
+  const semCarga = ex.incrementoKg === 0 || tipo === 'corporal'
 
   const ultimaSerie = series.at(-1)
   const cargaInicial = ultimaSerie?.carga ?? sugestao.carga
   const [carga, setCarga] = useState(cargaInicial === null ? '' : paraCampo(cargaInicial))
   const [reps, setReps] = useState(String(ultimaSerie?.reps ?? sugestao.reps))
   const [esforco, setEsforco] = useState<number | undefined>(undefined)
+  const [porLado, setPorLado] = useState(false)
   const [verVideo, setVerVideo] = useState(false)
   const [trocar, setTrocar] = useState(false)
   const [erro, setErro] = useState('')
@@ -108,10 +115,11 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
     return gravarSerie()
   }
   const gravarSerie = () => umaVez(async () => {
-    const serie = lerSerie(carga, reps, esforco, semCarga, emSegundos)
+    const serie = lerSerie(carga, reps, esforco, semCarga, emSegundos, porLado && tipo === 'total' ? dados.barraKg : undefined)
     if (typeof serie === 'string') return void setErro(serie)
     setErro('')
-    await alterar((x) => ({ ...x, series: [...x.series, serie] }))
+    await alterar((x) => ({ ...x, ...(tipo ? { tipoCarga: tipo } : {}), series: [...x.series, serie] }))
+    if (porLado) setCarga(String(Math.round(paraUnidade((serie.carga - dados.barraKg) / 2) * 10) / 10))
     setEsforco(undefined)
     setApagada(null)
     if (series.length + 1 < ef.series) iniciarDescanso(ef.descansoSeg)
@@ -138,6 +146,24 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
     setDor(valor)
     void alterar((x) => ({ ...x, dor: valor }))
   }
+
+  /** F24.2: a escolha fica para as sessões seguintes; o registo aberto passa a contar da mesma forma. */
+  async function mudarTipo(novo: TipoCarga) {
+    await db.gravar('tiposCarga', { ...dados.tiposCarga, [ex.id]: novo })
+    if (reg) await alterar((x) => ({ ...x, tipoCarga: novo }))
+    if (novo !== 'total') setPorLado(false)
+  }
+
+  /** F24.4: troca entre o total e os discos de cada lado, convertendo o que está escrito. */
+  function mudarPorLado(ligar: boolean) {
+    const escrita = deUnidade(numero(carga))
+    if (carga.trim() !== '' && escrita >= 0) {
+      const novo = ligar ? (escrita - dados.barraKg) / 2 : totalComBarra(dados.barraKg, escrita)
+      setCarga(novo >= 0 ? paraCampo(novo) : '')
+    }
+    setPorLado(ligar)
+  }
+  const ladoKg = deUnidade(numero(carga))
 
   async function mudarVideo() {
     const novo = prompt(t('Cola o link do vídeo (YouTube ou Vimeo). Deixa vazio para repor o original.'), dados.videos[ex.id] ?? '')
@@ -210,7 +236,7 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
             <strong>#</strong><strong>{semCarga ? '' : unidadePeso()}</strong><strong>{unidade}</strong><strong>{emSegundos ? t('Reserva') : 'RIR'}</strong><span />
             {series.map((s, i) =>
               aCorrigir === i ? (
-                <CorrigirSerie key={i} n={i + 1} s={s} semCarga={semCarga} emSegundos={emSegundos} ocupado={aGravar} guardar={(nova) => corrigir(i, nova)} cancelar={() => setACorrigir(null)} />
+                <CorrigirSerie key={i} n={i + 1} s={s} tipo={tipo} semCarga={semCarga} emSegundos={emSegundos} ocupado={aGravar} guardar={(nova) => corrigir(i, nova)} cancelar={() => setACorrigir(null)} />
               ) : (
                 <Linha key={i} n={i + 1} s={s} semCarga={semCarga} emSegundos={emSegundos} ocupado={aGravar} corrigir={() => setACorrigir(i)} apagar={() => apagar(i)} />
               ),
@@ -245,12 +271,28 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
       ) : (
         <div className="cartao">
           <h3>{t('Série {n} de {total}', { n: series.length + 1, total: ef.series })}</h3>
-          <div className="linha">
+          {tipos.length > 1 && (
+            <>
+              <label htmlFor="tipo-carga">{t('Como contas o peso?')}</label>
+              <select id="tipo-carga" value={tipo} onChange={(e) => void mudarTipo(e.target.value as TipoCarga)}>
+                {tipos.map((x) => <option key={x} value={x}>{nomeTipoCarga(x)}</option>)}
+              </select>
+            </>
+          )}
+          <div className="linha" style={{ alignItems: 'flex-end' }}>
             {!semCarga && (
-              <div><label htmlFor="carga">{t('Carga ({u})', { u: unidadePeso() })}</label><input id="carga" inputMode="decimal" value={carga} onChange={(e) => setCarga(e.target.value)} /></div>
+              <div><label htmlFor="carga">{porLado ? t('Discos por lado ({u})', { u: unidadePeso() }) : rotuloCarga(tipo)}</label><input id="carga" inputMode="decimal" value={carga} onChange={(e) => setCarga(e.target.value)} /></div>
             )}
             <div><label htmlFor="reps">{emSegundos ? t('Segundos') : t('Repetições')}</label><input id="reps" inputMode="numeric" value={reps} onChange={(e) => setReps(e.target.value)} /></div>
           </div>
+          {tipo === 'total' && (
+            <label className="escolha-lado">
+              <input type="checkbox" checked={porLado} onChange={(e) => mudarPorLado(e.target.checked)} /> {t('Escrever discos por lado')}
+            </label>
+          )}
+          {porLado && tipo === 'total' && carga.trim() !== '' && ladoKg >= 0 && (
+            <p className="secundario" role="status">{t('{barra} barra + 2 × {lado} = {total}', { barra: peso(dados.barraKg), lado: peso(ladoKg), total: peso(totalComBarra(dados.barraKg, ladoKg)) })}</p>
+          )}
           <label id="titulo-esforco">{emSegundos ? t('Reserva (opcional)') : t('RIR (opcional)')}</label>
           <div className="linha escolha-esforco" role="radiogroup" aria-labelledby="titulo-esforco">
             {(emSegundos ? RESERVAS : RIRS).map((n) => (
@@ -312,7 +354,7 @@ function Linha({ n, s, semCarga, emSegundos, ocupado, corrigir, apagar }: { n: n
 }
 
 /** F22.10: a linha da série passa a campos, validados como ao registar. */
-function CorrigirSerie({ n, s, semCarga, emSegundos, ocupado, guardar, cancelar }: { n: number; s: Serie; semCarga: boolean; emSegundos: boolean; ocupado: boolean; guardar: (s: Serie) => void; cancelar: () => void }) {
+function CorrigirSerie({ n, s, tipo, semCarga, emSegundos, ocupado, guardar, cancelar }: { n: number; s: Serie; tipo: TipoCarga | undefined; semCarga: boolean; emSegundos: boolean; ocupado: boolean; guardar: (s: Serie) => void; cancelar: () => void }) {
   const [carga, setCarga] = useState(paraCampo(s.carga))
   const [reps, setReps] = useState(String(s.reps))
   const inicial = emSegundos ? s.reservaSeg : s.rir
@@ -328,7 +370,7 @@ function CorrigirSerie({ n, s, semCarga, emSegundos, ocupado, guardar, cancelar 
   return (
     <form className="corrigir-serie" onSubmit={submeter} noValidate aria-label={t('Corrigir série {n}', { n })}>
       <div className="linha">
-        {!semCarga && <div><label htmlFor={`carga-${n}`}>{t('Carga ({u})', { u: unidadePeso() })}</label><input id={`carga-${n}`} inputMode="decimal" value={carga} onChange={(e) => setCarga(e.target.value)} /></div>}
+        {!semCarga && <div><label htmlFor={`carga-${n}`}>{rotuloCarga(tipo)}</label><input id={`carga-${n}`} inputMode="decimal" value={carga} onChange={(e) => setCarga(e.target.value)} /></div>}
         <div><label htmlFor={`reps-${n}`}>{emSegundos ? t('Segundos') : t('Repetições')}</label><input id={`reps-${n}`} inputMode="numeric" value={reps} onChange={(e) => setReps(e.target.value)} /></div>
         <div>
           <label htmlFor={`esforco-${n}`}>{emSegundos ? t('Reserva') : 'RIR'}</label>

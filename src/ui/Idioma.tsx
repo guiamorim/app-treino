@@ -1,5 +1,6 @@
 import { db } from '../data/db'
-import { UNIDADES, type UnidadePeso } from '../domain/unidades'
+import { barrasKg } from '../domain/carga'
+import { peso, UNIDADES, type UnidadePeso } from '../domain/unidades'
 import { IDIOMAS, NOMES_IDIOMAS, t, type Idioma } from '../i18n'
 
 /** F21: idioma da app; fica guardado só neste dispositivo. */
@@ -27,6 +28,23 @@ export function CartaoUnidade({ unidade }: { unidade: UnidadePeso }) {
         {UNIDADES.map((u) => (
           <button key={u} role="radio" aria-checked={unidade === u} className={unidade === u ? 'primario' : undefined} onClick={() => db.gravar('unidade', u)}>
             {u === 'kg' ? t('Quilos (kg)') : t('Libras (lb)')}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+/** F24.4: peso da barra para «Discos por lado» (guardado em quilos). */
+export function CartaoBarra({ barraKg, unidade }: { barraKg: number; unidade: UnidadePeso }) {
+  return (
+    <div className="cartao">
+      <h3 id="titulo-barra">{t('Peso da barra')}</h3>
+      <p className="secundario">{t('Usado quando escreves os discos de cada lado.')}</p>
+      <div className="linha" role="radiogroup" aria-labelledby="titulo-barra">
+        {barrasKg(unidade).map((b) => (
+          <button key={b} role="radio" aria-checked={Math.abs(barraKg - b) < 0.01} className={Math.abs(barraKg - b) < 0.01 ? 'primario' : undefined} onClick={() => db.gravar('barraKg', b)}>
+            {peso(b, unidade)}
           </button>
         ))}
       </div>

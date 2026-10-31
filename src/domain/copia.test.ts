@@ -36,6 +36,8 @@ describe('F10 cópia de segurança', () => {
     ['F16 nome com mais de 40 caracteres', { ...copia, perfil: { nome: 'x'.repeat(41) } }],
     ['campo inesperado', { ...copia, extra: '<script>' }],
     ['F23.1 reserva acima de 600 s', { ...copia, sessoes: [{ ...copia.sessoes[0], exercicios: [{ ...copia.sessoes[0]!.exercicios[0], series: [{ carga: 0, reps: 40, reservaSeg: 601 }] }] }] }],
+    ['F24.5 forma de contar desconhecida', { ...copia, sessoes: [{ ...copia.sessoes[0], exercicios: [{ ...copia.sessoes[0]!.exercicios[0], tipoCarga: 'por-disco' }] }] }],
+    ['F24.5 barra fora do intervalo', { ...copia, carga: { barraKg: 50 } }],
     ['nada', null],
   ])('F10.2 rejeita ficheiro inválido: %s', (_, dados) => {
     expect(() => lerCopia(dados)).toThrow()
@@ -44,8 +46,8 @@ describe('F10 cópia de segurança', () => {
   it('CSV do histórico: uma linha por série, com cabeçalho e aspas escapadas', () => {
     const csv = paraCsv(copia.sessoes, catalogo)
     expect(csv.split('\n')).toEqual([
-      'data,treino,exercicio,serie,carga_kg,reps,rir,dor,reserva_s',
-      '2026-10-20T10:00:00.000Z,superior-a,"Supino com halteres, pega neutra",1,20,10,2,1,',
+      'data,treino,exercicio,serie,carga_kg,reps,rir,dor,reserva_s,tipo_carga',
+      '2026-10-20T10:00:00.000Z,superior-a,"Supino com halteres, pega neutra",1,20,10,2,1,,',
     ])
   })
 
@@ -53,6 +55,16 @@ describe('F10 cópia de segurança', () => {
     const prancha = { prescricaoId: 'x', exercicioId: 'prancha', series: [{ carga: 0, reps: 40, reservaSeg: 30 }, { carga: 0, reps: 35, reservaSeg: 61 }] }
     const comReserva = { ...copia, sessoes: [{ ...copia.sessoes[0]!, exercicios: [prancha] }] }
     expect(lerCopia(JSON.parse(JSON.stringify(comReserva)))).toEqual(comReserva)
-    expect(paraCsv(comReserva.sessoes, catalogo).split('\n').slice(1).map((l) => l.split(',').at(-1))).toEqual(['30', '61'])
+    expect(paraCsv(comReserva.sessoes, catalogo).split('\n').slice(1).map((l) => l.split(',').at(-2))).toEqual(['30', '61'])
+  })
+
+  it('F24.5 a forma de contar, as escolhas e o peso da barra entram na cópia e no CSV', () => {
+    const comForma: Copia = {
+      ...copia,
+      sessoes: [{ ...copia.sessoes[0]!, exercicios: [{ ...copia.sessoes[0]!.exercicios[0]!, tipoCarga: 'halter' }] }],
+      carga: { barraKg: 15, tipos: { 'gemeos-pe': 'halter' } },
+    }
+    expect(lerCopia(JSON.parse(JSON.stringify(comForma)))).toEqual(comForma)
+    expect(paraCsv(comForma.sessoes, catalogo).split('\n')[1]!.split(',').at(-1)).toBe('halter')
   })
 })

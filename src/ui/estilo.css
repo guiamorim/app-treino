@@ -187,3 +187,5 @@ figure.frase figcaption::before { content: '— '; }
   .temporizador .numero { font-size: 1.4rem; }
   body:has(.temporizador) #root { padding-bottom: calc(150px + env(safe-area-inset-bottom)); }
 }
+/* F24.4: caixa «Escrever discos por lado», com a área de toque da linha inteira. */
+.escolha-lado { display: flex; align-items: center; gap: 10px; min-height: 44px; font-weight: 400; }

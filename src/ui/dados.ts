@@ -6,6 +6,7 @@ import { carregarAlongamentos, traduzirAlongamentos, type CatalogoAlongamentos }
 import { carregarCatalogo, traduzirCatalogo, type Catalogo } from '../domain/catalogo'
 import { planoNoCatalogo, planoNoIdioma } from '../domain/plano'
 import type { Anamnese, FotoAvaliacao, Medicao, Perfil, Plano, Sessao } from '../domain/types'
+import { barrasKg, type TipoCarga } from '../domain/carga'
 import { definirUnidade, UNIDADES, unidadeDoDispositivo, type UnidadePeso } from '../domain/unidades'
 import { carregarIdioma, definirIdioma, IDIOMAS, idiomaDoDispositivo, locale, type Idioma } from '../i18n'
 
@@ -54,6 +55,10 @@ export interface Dados {
   idioma: Idioma
   /** F22.9: quilos ou libras (os dados ficam sempre em quilos). */
   unidade: UnidadePeso
+  /** F24.2: forma de contar o peso escolhida por exercício. */
+  tiposCarga: Record<string, TipoCarga>
+  /** F24.4: peso da barra, em quilos. */
+  barraKg: number
 }
 
 export function useDados(): Dados | undefined {
@@ -70,11 +75,14 @@ export function useDados(): Dados | undefined {
       numFotos: await db.fotos.count(),
       perfil: (await db.ler<Perfil>('perfil')) ?? {},
       versaoVista: await db.ler<string>('versaoVista'),
+      tiposCarga: (await db.ler<Record<string, TipoCarga>>('tiposCarga')) ?? {},
     }
+    const barraKg = await db.ler<number>('barraKg')
     // O idioma carrega-se depois das leituras: uma promessa de fora do Dexie a meio deixaria de fora da observação o que se lê a seguir.
     await aplicarIdioma(idioma)
     definirUnidade(unidade)
-    return { idioma, unidade, anamnese, plano: plano && planoNoCatalogo(planoNoIdioma(plano, anamnese, catalogo), catalogo), ...resto }
+    // F24.4: sem escolha, a barra olímpica na unidade (20 kg ou 45 lb).
+    return { idioma, unidade, barraKg: barraKg ?? barrasKg(unidade)[0]!, anamnese, plano: plano && planoNoCatalogo(planoNoIdioma(plano, anamnese, catalogo), catalogo), ...resto }
   })
 }
 

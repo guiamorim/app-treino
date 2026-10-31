@@ -14,7 +14,7 @@ test('capturas', async ({ page }) => {
   await page.getByRole('button', { name: 'Gerar o meu plano' }).click()
   await page.getByText('Supino com halteres, pega neutra').click()
   await page.screenshot({ path: `${process.env.CAPTURAS}/8-musculos.png` })
-  await page.getByLabel('Carga (kg)').fill('16')
+  await page.getByLabel('Carga (kg por halter)').fill('16')
   await page.getByLabel('Repetições').fill('10')
   await page.getByRole('radio', { name: '3' }).click()
   await page.getByRole('button', { name: 'Concluir série' }).click()

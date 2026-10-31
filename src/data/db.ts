@@ -1,9 +1,10 @@
 import Dexie, { type EntityTable } from 'dexie'
 import type { Anamnese, FotoAvaliacao, Medicao, Perfil, Plano, Sessao } from '../domain/types'
 import { lerCopia, type Copia } from '../domain/copia'
+import type { TipoCarga } from '../domain/carga'
 
 interface Valor {
-  chave: 'anamnese' | 'plano' | 'videos' | 'ultimaExportacao' | 'perfil' | 'versaoVista' | 'idioma' | 'unidade'
+  chave: 'anamnese' | 'plano' | 'videos' | 'ultimaExportacao' | 'perfil' | 'versaoVista' | 'idioma' | 'unidade' | 'tiposCarga' | 'barraKg'
   valor: unknown
 }
 
@@ -43,6 +44,7 @@ export class BaseDados extends Dexie {
       videos: (await this.ler<Record<string, string>>('videos')) ?? {},
       fotos: await this.fotos.orderBy('data').toArray(),
       perfil: (await this.ler<Perfil>('perfil')) ?? {},
+      carga: { barraKg: await this.ler<number>('barraKg'), tipos: (await this.ler<Record<string, TipoCarga>>('tiposCarga')) ?? {} },
     }
     await this.gravar('ultimaExportacao', agora)
     return copia
@@ -60,6 +62,8 @@ export class BaseDados extends Dexie {
       await this.medicoes.bulkPut(c.medicoes)
       await this.fotos.bulkPut(c.fotos ?? [])
       if (c.perfil) await this.gravar('perfil', c.perfil)
+      if (c.carga?.barraKg !== undefined) await this.gravar('barraKg', c.carga.barraKg)
+      if (c.carga?.tipos) await this.gravar('tiposCarga', c.carga.tipos)
     })
   }
 }

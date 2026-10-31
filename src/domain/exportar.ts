@@ -15,18 +15,26 @@ import {
   type Perfil,
   type Plano,
   type Pose,
+  type RegistoExercicio,
   type Sessao,
   type Serie,
 } from './types'
 import { gerarXlsx, type Folha } from './xlsx'
 import { paraUnidade, unidadePeso } from './unidades'
 import { MAIS_DE_60, reservaAlvo, textoReserva } from './reserva'
+import { nomeTipoCarga, tipoPadrao } from './carga'
 
 /** F23.1: a ficha pede reserva em segundos nos exercícios por tempo, RIR nos restantes. */
 const alvoEsforco = (p: { rir: [number, number] }, emSegundos: boolean) => {
   if (!emSegundos) return `RIR ${p.rir[0]}–${p.rir[1]}`
   const [a, b] = reservaAlvo(p.rir)
   return t('reserva +{a}–{b} s', { a, b })
+}
+/** F24.5: forma de contar o peso de um registo (os anteriores à v1.12 contam como a forma por omissão). */
+const formaDe = (e: RegistoExercicio, catalogo: Catalogo) => {
+  const ex = catalogo.get(e.exercicioId)
+  const tipo = e.tipoCarga ?? (ex && tipoPadrao(ex))
+  return tipo && tipo !== 'corporal' ? nomeTipoCarga(tipo) : undefined
 }
 const esforcoSerie = (x: Serie) => (x.reservaSeg !== undefined ? ` (${textoReserva(x.reservaSeg)})` : x.rir !== undefined ? ` (RIR ${x.rir})` : '')
 
@@ -68,10 +76,10 @@ export function folhaFicha(plano: Plano, catalogo: Catalogo, agora: string): Fol
 export function folhaHistorico(sessoes: Sessao[], plano: Plano | null, catalogo: Catalogo): Folha {
   const linhas = sessoesPorData(sessoes).flatMap((s) =>
     s.exercicios.flatMap((e) =>
-      e.series.map((x, i) => [s.inicio.slice(0, 10), nomeTreino(plano, s.treinoId), catalogo.get(e.exercicioId)?.nome ?? e.exercicioId, i + 1, pesoCelula(x.carga), x.reps, x.rir, e.dor, x.reservaSeg === MAIS_DE_60 ? '> 60' : x.reservaSeg]),
+      e.series.map((x, i) => [s.inicio.slice(0, 10), nomeTreino(plano, s.treinoId), catalogo.get(e.exercicioId)?.nome ?? e.exercicioId, i + 1, pesoCelula(x.carga), x.reps, x.rir, e.dor, x.reservaSeg === MAIS_DE_60 ? '> 60' : x.reservaSeg, formaDe(e, catalogo)]),
     ),
   )
-  return { nome: t('Histórico'), cabecalho: [t('Data'), t('Treino'), t('Exercício'), t('Série'), t('Carga ({u})', { u: unidadePeso() }), 'Reps', 'RIR', t('Dor (0–10)'), t('Reserva (s)')], linhas }
+  return { nome: t('Histórico'), cabecalho: [t('Data'), t('Treino'), t('Exercício'), t('Série'), t('Carga ({u})', { u: unidadePeso() }), 'Reps', 'RIR', t('Dor (0–10)'), t('Reserva (s)'), t('Como se conta')], linhas }
 }
 
 export function folhaMedicoes(medicoes: Medicao[]): Folha {

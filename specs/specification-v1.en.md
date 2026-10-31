@@ -2,7 +2,7 @@
 
 **English** · [Português](especificacao-v1.md)
 
-Date: 2026-10-20 · Version 1.11 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.11)
+Date: 2026-10-20 · Version 1.12 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.12)
 
 The Portuguese version is the reference used for the domain names in the code. Both versions must stay in sync.
 
@@ -228,6 +228,14 @@ First phase of the 2026-10-31 study.
 - **F23.3 Visible rest timer.** The rest timer and the stretching timer sit fixed at the bottom of the screen, above the bottom bar, instead of under the iPhone status bar. The content gets extra space at the bottom so nothing is covered.
 - **F23.4 Portrait and landscape.** The installed app rotates with the phone. In landscape the content and the bottom bar respect the notch margins, the video fits the screen height and buttons keep their touch size.
 
+### F24. Load type (v1.12)
+Second phase of the 2026-10-31 study. Each exercise says how its weight is counted, and the load field's label says so.
+- **F24.1 How it is counted.** By the catalogue equipment: dumbbells "per dumbbell" (label "Load (kg per dumbbell)"); barbell "total, including the bar" ("Total load (kg)"); machine and cable "what the machine shows" ("Load (kg on the machine)"); bodyweight has no load. The progression increments (section 4) already followed this convention and do not change.
+- **F24.2 Exercises with more than one piece of equipment.** When the exercise allows more than one way of counting (e.g. dumbbells or machine), the exercise screen shows "How do you count the weight?". The choice is saved for that exercise and applies to later sessions. Without a choice, the first equipment in the catalogue applies.
+- **F24.3 Records keep the way.** Each exercise logged in a session keeps how its weight was counted. The load suggestion only compares sessions counted the same way. Records from before v1.12 count as the exercise's default way (for dumbbells, the weight of one dumbbell).
+- **F24.4 Plates per side.** On barbell exercises, "Enter plates per side" swaps the field for "Plates per side". The app adds the bar and shows, for example, "20 kg bar + 2 × 15 kg = 50 kg". The total is always what is stored, so progression and records compare like with like. The bar weight is chosen in "More": 20, 15 or 10 kg (45, 35 or 25 lb in pounds); 20 kg by default.
+- **F24.5 Exports and backup.** The Excel history and the CSV have a column for the way of counting. The backup carries the per-exercise choices and the bar weight; older backups stay valid.
+
 ### F14. Blocks and next change (v1.2, rules in section 3.7)
 - On Home and on Today's workout: current phase (re-adaptation, week N of M of the block, or deload) and the next change with its date: end of re-adaptation (full sets), deload week (half the sets), or new block (isolation exercises rotate, listing what changes).
 
@@ -327,7 +335,7 @@ For each Prescription with range [min, max]:
 - Personal data never enters the repository: the anamnesis is filled in on the phone and tests use a fictitious profile. That is why the repository can be public.
 
 ## 7. Out of scope for v1
-Cross-device sync, notifications and reminders (on iPhone they need a server; no reminders by user decision), ad blocking, Apple Health, multiple users, AI, social features, plate calculator.
+Cross-device sync, notifications and reminders (on iPhone they need a server; no reminders by user decision), ad blocking, Apple Health, multiple users, AI, social features.
 
 ## 8. Technical structure
 ```
