@@ -961,9 +961,12 @@ test('F33: registo no topo do exercício, 5 separadores e conquistas resumidas',
 test.describe('F34: reportar ou sugerir', () => {
   test('F34.1–F34.4: do exercício, envia só os campos previstos, confirma e espera 60 s', async ({ page }) => {
     const enviados: Record<string, string>[] = []
+    // O pedido é de outra origem: o WebKit faz a verificação CORS (e a pré-verificação) mesmo com a resposta simulada.
+    const cors = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Content-Type, Accept', 'Access-Control-Allow-Methods': 'POST, OPTIONS' }
     await page.route('https://api.web3forms.com/submit', async (r) => {
+      if (r.request().method() === 'OPTIONS') return r.fulfill({ status: 204, headers: cors })
       enviados.push(r.request().postDataJSON())
-      await r.fulfill({ status: 200, contentType: 'application/json', body: '{"success":true}' })
+      await r.fulfill({ status: 200, contentType: 'application/json', headers: cors, body: '{"success":true}' })
     })
     await preencherAnamnese(page)
     await page.getByText('Supino com halteres, pega neutra').click()
@@ -999,7 +1002,8 @@ test.describe('F34: reportar ou sugerir', () => {
     await page.route('https://api.web3forms.com/submit', (r) => r.fulfill({ status: 500, body: '' }))
     await preencherAnamnese(page)
     await page.getByRole('button', { name: 'Reportar um problema neste treino' }).click()
-    await expect(page.getByText('Superior A')).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Reportar ou sugerir' })).toBeVisible()
+    await expect(page.locator('main p').filter({ hasText: 'Superior A' })).toBeVisible()
     await expect(page.getByLabel('Duração ou volume desadequado')).toBeVisible()
     await page.getByLabel('Duração ou volume desadequado').check()
     await page.getByLabel('Descrição (opcional)').fill('Demora mais de uma hora.')
