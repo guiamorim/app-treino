@@ -181,6 +181,15 @@ figure.frase figcaption::before { content: '— '; }
 .musculo { fill: color-mix(in srgb, var(--texto-2) 28%, var(--fundo)); }
 .musculo.principal { fill: var(--acento); }
 .musculo.secundario { fill: color-mix(in srgb, var(--acento) 55%, var(--fundo)); }
+.musculo.terciario { fill: color-mix(in srgb, var(--acento) 25%, var(--fundo)); }
+/* F31.3: legenda dos três níveis, com as mesmas cores do desenho. */
+.legenda-musculos { display: flex; justify-content: center; flex-wrap: wrap; gap: 4px 12px; margin: 0 0 8px; font-size: 0.8rem; color: var(--texto-2); }
+.legenda-musculos span { display: inline-flex; align-items: center; gap: 4px; }
+.legenda-musculos i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: var(--acento); }
+.legenda-musculos i.secundario { background: color-mix(in srgb, var(--acento) 55%, var(--fundo)); }
+.legenda-musculos i.terciario { background: color-mix(in srgb, var(--acento) 25%, var(--fundo)); }
+/* F31.7: aviso de responsabilidade em letra pequena. */
+.letra-pequena { font-size: 0.72rem; line-height: 1.35; color: var(--texto-2); margin: 16px 0 8px; }
 .grelha-medidas { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }
 .corpo-musculos.compacto { gap: 4px; margin: 4px 0; }
 .corpo-musculos.compacto svg { width: 60px; height: 120px; }

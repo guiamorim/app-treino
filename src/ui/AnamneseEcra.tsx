@@ -1,8 +1,9 @@
 import { useState, type FormEvent } from 'react'
+import { AvisoResponsabilidade } from './AvisoResponsabilidade'
 import { db } from '../data/db'
 import { MODELOS_ESCOLHA } from '../domain/modelos'
 import { divisoesPossiveis, EQUIPAMENTOS_ESCOLHA, equipamentoDisponivel, gerarPlano, resumoEquipamento } from '../domain/plano'
-import { AREAS, DIAS_POR_SEMANA, type Anamnese, type DiasPorSemana, type DivisaoTreino, type Enfase, type Gravidez, type Area, type Equipamento, type Restricao } from '../domain/types'
+import { AREAS, DIAS_POR_SEMANA, type Anamnese, type DiasPorSemana, type DivisaoTreino, type Enfase, type Estilo, type Gravidez, type Area, type Equipamento, type Restricao } from '../domain/types'
 import { agoraIso, catalogo, novoId, type Dados } from './dados'
 import { ir } from './rota'
 import { locale, m, t, traduzido } from '../i18n'
@@ -61,7 +62,10 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
     enfase: a?.enfase ?? 'equilibrado',
     gravidez: a?.gravidez ?? 'nao',
     divisao: a?.divisao ?? 'automatico',
+    estilo: a?.estilo ?? 'musculacao',
+    competencias: a?.competencias ?? false,
   })
+  const calistenia = f.estilo === 'calistenia'
   // F28.1: lista de equipamento; uma anamnese antiga abre com a lista que valia (F28.3).
   const [equipamentos, setEquipamentos] = useState<Equipamento[]>(a ? equipamentoDisponivel(a).filter((q) => q !== 'peso-corporal') : [...EQUIPAMENTOS_ESCOLHA])
   const [restricoes, setRestricoes] = useState<Restricao[]>(a?.restricoes ?? [])
@@ -123,6 +127,7 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
       parq: parq as boolean[],
       enfase: f.enfase as Enfase,
       ...(divisao !== 'automatico' ? { divisao } : {}),
+      ...(calistenia ? { estilo: 'calistenia' as const, competencias: f.competencias } : {}),
       ...(f.sexo === 'feminino' ? { gravidez: f.gravidez as Gravidez } : {}),
       ...(diasTreino.length ? { diasTreino } : {}),
     }
@@ -176,12 +181,27 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
         <option value="forca">{t('Ganhar força')}</option>
         <option value="saude">{t('Saúde geral')}</option>
       </select>
-      <label htmlFor="enfase">{t('Ênfase')}</label>
-      <select id="enfase" {...campo('enfase')}>
-        <option value="equilibrado">{t('Equilibrado')}</option>
-        <option value="inferior">{t('Mais pernas e glúteos')}</option>
-        <option value="superior">{t('Mais tronco (peito, costas, ombros, braços)')}</option>
+      <label htmlFor="estilo">{t('Tipo de treino')}</label>
+      <select id="estilo" value={f.estilo} onChange={(e) => setF({ ...f, estilo: e.target.value as Estilo })}>
+        <option value="musculacao">{t('Musculação (ginásio ou casa)')}</option>
+        <option value="calistenia">{t('Calistenia (peso do corpo, por degraus)')}</option>
       </select>
+      {calistenia ? (
+        <>
+          <p className="secundario">{t('Cada exercício é um degrau de uma escada: começas num degrau de base (ou intermédio, se treinas há mais de 1 ano) e a app propõe subir quando estiveres pronto.')}</p>
+          <label className="opcao"><input type="checkbox" checked={f.competencias} onChange={(e) => setF({ ...f, competencias: e.target.checked })} /> {t('Incluir competências (pino, front lever, planche)')}</label>
+          <AvisoResponsabilidade />
+        </>
+      ) : (
+        <>
+          <label htmlFor="enfase">{t('Ênfase')}</label>
+          <select id="enfase" {...campo('enfase')}>
+            <option value="equilibrado">{t('Equilibrado')}</option>
+            <option value="inferior">{t('Mais pernas e glúteos')}</option>
+            <option value="superior">{t('Mais tronco (peito, costas, ombros, braços)')}</option>
+          </select>
+        </>
+      )}
       <div className="linha">
         <div><label htmlFor="dias">{t('Dias por semana')}</label>
           <select id="dias" {...campo('diasPorSemana')}>{DIAS_POR_SEMANA.map((d) => <option key={d} value={d}>{d}</option>)}</select>
@@ -197,11 +217,13 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
         ))}
       </div>
       <p className="secundario">{t('Com os dias escolhidos, o calendário mostra os próximos treinos.')}</p>
+      {!calistenia && <>
       <label htmlFor="divisao">{t('Modelo de treino')}</label>
       <select id="divisao" value={divisao} onChange={(e) => setF({ ...f, divisao: e.target.value as DivisaoTreino })}>
         {possiveis.map((d) => <option key={d} value={d}>{NOMES_DIVISOES[d]}</option>)}
       </select>
-      {divisao === 'automatico' ? (
+      </>}
+      {calistenia ? null : divisao === 'automatico' ? (
         <p className="secundario">{DICA_DIAS[dias]}</p>
       ) : MODELOS_ESCOLHA[divisao].umaVezPorSemana(dias) ? (
         <p className="secundario">{t('Com este modelo, cada grupo muscular é treinado cerca de 1×/semana. A evidência favorece 2×/semana; o automático garante-o.')}</p>

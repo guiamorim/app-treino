@@ -47,6 +47,7 @@ export function Mais({ dados }: { dados: Dados }) {
         {dados.plano?.proprio && <p className="secundario">{t('Estás a usar um plano criado por ti.')}</p>}
         <button className="largo" onClick={() => ir('/meu-plano')} disabled={!dados.plano}>{dados.plano?.proprio ? t('Editar o meu plano') : t('Criar o meu plano')}</button>
         <button className="largo" style={{ marginTop: 8 }} onClick={() => ir('/anamnese')}>{t('Editar anamnese e gerar novo plano')}</button>
+        <button className="largo" style={{ marginTop: 8 }} onClick={() => ir('/calistenia')}>{t('Calistenia: exercícios por nível')}</button>
       </div>
       <CartaoFerias dados={dados} />
       <CartaoProprios dados={dados} />

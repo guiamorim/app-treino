@@ -256,7 +256,7 @@ test('v1.5: modelo por grupo muscular, músculos do exercício, medidas extra e 
   // F18: desenho do corpo com o grupo principal.
   await expect(page.getByRole('heading', { name: 'Peito e tríceps' })).toBeVisible()
   await page.getByText('Supino reto com barra').click()
-  await expect(page.getByRole('img', { name: 'Músculos trabalhados: Peito; secundários: Tríceps, Ombros.' })).toBeVisible()
+  await expect(page.getByRole('img', { name: 'Músculos trabalhados: Peito. Auxiliares 1: Tríceps, Ombros.' })).toBeVisible()
   await expect(page.locator('.musculo.principal[data-grupo="peito"]')).toHaveCount(1)
   await expect(page.locator('.corpo-musculos')).toHaveAttribute('data-corpo', 'masculino')
 
@@ -781,12 +781,12 @@ test('F30: escada de variações nas flexões, mudança de degrau guardada e pes
 
   await page.getByText('Flexões de braços').first().click()
   await expect(page.getByRole('heading', { name: 'Flexões de braços' })).toBeVisible()
-  await expect(page.getByText('Escada «Flexões»: degrau 2 de 4')).toBeVisible()
+  await expect(page.getByText('Escada «Flexões»: degrau 4 de 9')).toBeVisible()
   await expect(page.getByText(/Primeira vez nesta variação: faz a 1.ª série aqui/)).toBeVisible()
   await page.getByRole('button', { name: 'Mais difícil: Flexões declinadas (pés elevados)' }).click()
 
   await expect(page.getByRole('heading', { name: 'Flexões declinadas (pés elevados)' })).toBeVisible()
-  await expect(page.getByText('Escada «Flexões»: degrau 3 de 4')).toBeVisible()
+  await expect(page.getByText('Escada «Flexões»: degrau 5 de 9')).toBeVisible()
   await expect(page.getByText('Variação atual (o plano tinha «Flexões de braços»).')).toBeVisible()
 
   // F30.6: peso extra, com campo de carga próprio.
@@ -798,4 +798,38 @@ test('F30: escada de variações nas flexões, mudança de degrau guardada e pes
   await page.getByRole('link', { name: 'Hoje' }).click()
   await expect(page.getByText('Flexões declinadas (pés elevados)').first()).toBeVisible()
   await expect(page.getByText('Flexões de braços')).toHaveCount(0)
+})
+
+test('F31: plano de calistenia com competências, níveis, músculos em três tons e aviso', async ({ page }) => {
+  await page.goto('./')
+  await expect(page.getByRole('heading', { name: 'Bem-vindo' })).toBeVisible()
+  await page.getByLabel('Idade').fill('45')
+  await page.getByLabel('Altura (cm)').fill('175')
+  await page.getByLabel('Peso (kg)').fill('85')
+  await page.getByLabel('Tipo de treino').selectOption('calistenia')
+  await expect(page.getByLabel('Ênfase')).toHaveCount(0)
+  await expect(page.getByLabel('Modelo de treino')).toHaveCount(0)
+  await expect(page.getByText(/não substituem a orientação de um profissional qualificado/)).toBeVisible()
+  await page.getByLabel('Incluir competências (pino, front lever, planche)').check()
+  await page.getByRole('button', { name: 'Só o peso do corpo' }).click()
+  await page.getByLabel('Barra fixa (elevações)').check()
+  await page.getByLabel('Nenhuma').check()
+  for (let i = 0; i < 7; i++) await page.locator(`input[name="parq-${i}"]`).nth(1).check()
+  await page.getByRole('button', { name: 'Gerar o meu plano' }).click()
+
+  await expect(page.getByRole('heading', { name: 'Calistenia A' })).toBeVisible()
+  await page.getByText('Pino de costas para a parede').click()
+  await expect(page.getByText('Nível: Intermédio')).toBeVisible()
+  await expect(page.getByRole('img', { name: 'Músculos trabalhados: Ombros. Auxiliares 1: Tríceps. Auxiliares 2: Core.' })).toBeVisible()
+  await expect(page.locator('.musculo.terciario[data-grupo="core"]').first()).toBeAttached()
+  await expect(page.getByText('Auxiliar 2', { exact: true })).toBeVisible()
+  await expect(page.getByText('Escada «Pino»: degrau 1 de 3')).toBeVisible()
+  await expect(page.locator('.letra-pequena')).toContainText('O programador e os responsáveis pela app não assumem responsabilidade')
+
+  await page.getByRole('link', { name: 'Mais' }).click()
+  await page.getByRole('button', { name: 'Calistenia: exercícios por nível' }).click()
+  await expect(page.getByRole('heading', { name: 'Competência' })).toBeVisible()
+  await page.getByText('Planche', { exact: true }).click()
+  await expect(page.getByText('Planche, degrau 5 de 5')).toBeVisible()
+  await expect(page.locator('.letra-pequena')).toBeVisible()
 })

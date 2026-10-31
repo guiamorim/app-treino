@@ -4,7 +4,8 @@ import { estadoBloco } from '../domain/blocos'
 import { equipamentoDisponivel, motivoIncompatibilidade, prescricaoEfetiva, semanaDoPlano } from '../domain/plano'
 import { sugerir } from '../domain/progressao'
 import { estadoExercicio, historicoExercicio, registoDe } from '../domain/sessao'
-import { NOMES_AREAS, NOMES_GRUPOS, type Plano, type Serie } from '../domain/types'
+import { NOMES_AREAS, NOMES_GRUPOS, NOMES_NIVEIS, type Plano, type Serie } from '../domain/types'
+import { AvisoResponsabilidade } from './AvisoResponsabilidade'
 import { lerVideo, pesquisaYoutube } from '../domain/video'
 import { abrirSessao, alterarRegisto, sessaoAberta } from './acoes'
 import { admitePesoExtra, incrementoDaForma, mesmaForma, nomeTipoCarga, rotuloCarga, semCarga as semCargaDe, tipoCarga, tiposCarga, totalComBarra, type TipoCarga } from '../domain/carga'
@@ -223,6 +224,7 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
       <p>
         <span className="chip">{NOMES_GRUPOS[ex.grupoPrincipal]}</span>{' '}
         <span className="secundario">{ex.gruposSecundarios.map((g) => NOMES_GRUPOS[g]).join(' · ')}</span>
+        {ex.nivel && <>{' '}<span className="chip">{t('Nível: {nivel}', { nivel: NOMES_NIVEIS[ex.nivel] })}</span></>}
       </p>
       <Corpo ex={ex} sexo={dados.anamnese?.sexo} />
       {ex.objetivo && <p>{ex.objetivo}</p>}
@@ -377,6 +379,7 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
           )}
         </div>
       )}
+      <AvisoResponsabilidade />
     </>
   )
 }

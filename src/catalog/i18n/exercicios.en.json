@@ -781,5 +781,464 @@
    "Push the heel towards the ceiling with the knee at 90°",
    "Do not arch the lower back; stop when the thigh is in line with the torso"
   ]
+ },
+ "flexoes-parede": {
+  "nome": "Wall push-ups",
+  "objetivo": "The first rung of pushing: learn the push-up position with little weight on the hands.",
+  "pontosChave": [
+   "Hands on the wall at chest height, slightly wider than the shoulders",
+   "Body in a straight line, heels raised",
+   "The further your feet are from the wall, the harder it gets"
+  ]
+ },
+ "flexoes-joelhos": {
+  "nome": "Knee push-ups",
+  "objetivo": "A push-up with half the weight: builds chest and triceps before the full push-up.",
+  "pontosChave": [
+   "Knees on the floor, body straight from knees to head",
+   "Hands under the shoulders, elbows at ~45° from the torso",
+   "Chest almost touching the floor on every rep"
+  ]
+ },
+ "flexoes-arqueiro": {
+  "nome": "Archer push-ups",
+  "objetivo": "The road to the one-arm push-up: one arm does almost all the work and the other only helps, stretched to the side.",
+  "pontosChave": [
+   "Hands wide apart, twice shoulder width",
+   "Lower towards one side, with the other arm straight",
+   "Count the reps on each side"
+  ]
+ },
+ "flexoes-pseudo-planche": {
+  "nome": "Pseudo-planche push-ups",
+  "objetivo": "A push-up with the shoulders far in front of the hands: prepares shoulders and wrists for the planche.",
+  "pontosChave": [
+   "Hands beside the waist, fingers turned out or back",
+   "Lean forward until the shoulders pass the hands",
+   "Arms almost straight at the top, keeping the lean"
+  ]
+ },
+ "flexoes-um-braco": {
+  "nome": "One-arm push-ups",
+  "objetivo": "A pushing strength skill: the whole body has to resist rotating.",
+  "pontosChave": [
+   "Feet wide apart for balance",
+   "Hand under the shoulder, elbow close to the torso",
+   "Hips and shoulders parallel to the floor; start with the hand on a bench"
+  ]
+ },
+ "flexoes-pike-elevadas": {
+  "nome": "Feet-elevated pike push-ups",
+  "objetivo": "More weight on the shoulders than the pike push-up: the step before handstand push-ups.",
+  "pontosChave": [
+   "Feet on a chair or sofa, hips over the shoulders",
+   "Head lowers in front of the hands, forming a triangle",
+   "Elbows go back, not out to the sides"
+  ]
+ },
+ "flexoes-pino-negativas": {
+  "nome": "Wall handstand push-up negatives",
+  "objetivo": "Only the lowering of the handstand push-up, slowly: builds strength for the way up.",
+  "pontosChave": [
+   "In a handstand facing or with your back to the wall",
+   "Lower in 3 to 5 s until the head touches a cushion",
+   "Come down and kick up again; do not press up until you control the lowering"
+  ]
+ },
+ "flexoes-pino-parede": {
+  "nome": "Wall handstand push-ups",
+  "objetivo": "The full vertical push with body weight, using the wall for balance.",
+  "pontosChave": [
+   "Hands a hand-span from the wall, shoulder-width apart",
+   "Head and hands form a triangle at the bottom",
+   "Body tight, without arching the lower back"
+  ]
+ },
+ "mergulhos-negativos": {
+  "nome": "Negative dips on parallel bars",
+  "objetivo": "Only the lowering of the dip, slowly: the step between bench and parallel bars.",
+  "pontosChave": [
+   "Start at the top, arms straight",
+   "Lower in 3 to 5 s until the shoulders reach elbow height",
+   "Get back up with help from your feet"
+  ]
+ },
+ "suspensao-ativa": {
+  "nome": "Active hang on the bar",
+  "objetivo": "The first rung of pulling: hold your body hanging, with active shoulders.",
+  "pontosChave": [
+   "Hang with straight arms",
+   "Pull the shoulders down, away from the ears, without bending the elbows",
+   "Legs together and still"
+  ]
+ },
+ "elevacoes-negativas": {
+  "nome": "Negative pull-ups",
+  "objetivo": "Only the lowering of the pull-up, slowly: the most direct way to your first pull-up.",
+  "pontosChave": [
+   "Jump or step up on a chair until the chin is over the bar",
+   "Lower in 3 to 5 s to straight arms",
+   "Stop if the lowering gets fast"
+  ]
+ },
+ "elevacoes-peito": {
+  "nome": "Chest-to-bar pull-ups",
+  "objetivo": "A higher pull-up, chest touching the bar: more strength at the top of the movement, the base of the muscle-up.",
+  "pontosChave": [
+   "Pull the elbows down and back",
+   "Chest to the bar, body leaning slightly back",
+   "Lower to straight arms"
+  ]
+ },
+ "elevacoes-arqueiro": {
+  "nome": "Archer pull-ups",
+  "objetivo": "The road to the one-arm pull-up: one arm pulls and the other helps, straight along the bar.",
+  "pontosChave": [
+   "Very wide grip",
+   "Pull up towards one arm, with the other straight",
+   "Count the reps on each side"
+  ]
+ },
+ "muscle-up": {
+  "nome": "Bar muscle-up",
+  "objetivo": "A skill that combines an explosive pull-up with a dip over the bar.",
+  "pontosChave": [
+   "Grip slightly narrower than for pull-ups, thumbs over the bar",
+   "Pull hard to the waist and get the chest over the bar",
+   "Finish with a dip to straight arms"
+  ]
+ },
+ "elevacoes-um-braco": {
+  "nome": "One-arm pull-ups",
+  "objetivo": "A pulling skill: the whole body goes up on one arm.",
+  "pontosChave": [
+   "Start with the other hand on the wrist or on a towel, helping",
+   "Active shoulder, not hanging on the joint",
+   "Count the reps on each side"
+  ]
+ },
+ "remada-invertida-alta": {
+  "nome": "High inverted row (body more upright)",
+  "objetivo": "A row with the body almost upright, on a bar at chest height: the easiest rung of horizontal pulling.",
+  "pontosChave": [
+   "Bar at chest height, feet in front of it",
+   "Body straight, leaning back",
+   "Chest to the bar, shoulder blades together"
+  ]
+ },
+ "remada-invertida-pes-elevados": {
+  "nome": "Feet-elevated inverted row",
+  "objetivo": "An inverted row with the body horizontal: more weight for the back.",
+  "pontosChave": [
+   "Feet on a chair or box, body parallel to the floor",
+   "Hips in line with the shoulders",
+   "Chest to the bar, lower slowly"
+  ]
+ },
+ "remada-arqueiro": {
+  "nome": "Archer inverted row",
+  "objetivo": "A row in which one arm does almost all the work: prepares the one-arm pull-up.",
+  "pontosChave": [
+   "Wide grip, body under the bar",
+   "Pull towards one side, with the other arm straight",
+   "Count the reps on each side"
+  ]
+ },
+ "afundo-recuado": {
+  "nome": "Reverse lunge (body weight)",
+  "objetivo": "One leg at a time, without load: stepping back is kinder to the knee than the forward lunge.",
+  "pontosChave": [
+   "Take a big step back",
+   "Back knee lowers almost to the floor; front knee stays over the foot",
+   "Push through the front heel to come back"
+  ]
+ },
+ "pistol-assistido": {
+  "nome": "Assisted pistol squat",
+  "objetivo": "A single-leg squat holding a door frame or post: learns the range and the balance.",
+  "pontosChave": [
+   "Hold a door frame or post in front of you",
+   "The other leg straight in front, off the floor",
+   "Lower as far as the heel stays down; use the arms only as needed"
+  ]
+ },
+ "pistol-caixa": {
+  "nome": "Pistol squat to a box",
+  "objetivo": "A pistol without hand support down to a box or chair: the last step before the full pistol.",
+  "pontosChave": [
+   "Back to a chair or box",
+   "Lower on one leg until you touch lightly, without dropping",
+   "Lower the box height over time"
+  ]
+ },
+ "pistol": {
+  "nome": "Pistol squat",
+  "objetivo": "A full squat on one leg: strength, ankle mobility and balance.",
+  "pontosChave": [
+   "Arms in front for balance",
+   "Lower all the way with the heel down",
+   "Stand up without letting the knee cave in"
+  ]
+ },
+ "agachamento-camarao": {
+  "nome": "Shrimp squat",
+  "objetivo": "A single-leg squat with the other leg bent behind: lots of quadriceps work with the knee well forward.",
+  "pontosChave": [
+   "Hold the back foot with the hand on the same side",
+   "Lower until the back knee touches the floor",
+   "Start with a cushion under the knee"
+  ]
+ },
+ "hip-thrust-unilateral": {
+  "nome": "Single-leg hip thrust (shoulders on a sofa)",
+  "objetivo": "A single-leg bridge with more range: with the shoulders on a sofa or bench, the hips can drop lower.",
+  "pontosChave": [
+   "Upper back on the sofa, one foot on the floor",
+   "Raise the hips until the torso is in line with the thigh",
+   "Squeeze the glute for 1 s at the top"
+  ]
+ },
+ "nordico-negativo": {
+  "nome": "Nordic curl negative",
+  "objetivo": "Only the lowering of the nordic curl: the equipment-free exercise that strengthens the hamstrings the most.",
+  "pontosChave": [
+   "Kneel on a cushion, heels anchored under a sofa or held by someone",
+   "Body straight from knees to head; lower as slowly as you can",
+   "Catch yourself with your hands and push back up with them"
+  ]
+ },
+ "nordico": {
+  "nome": "Full nordic curl",
+  "objetivo": "Lower and come back up using only the hamstrings: maximum eccentric and concentric strength.",
+  "pontosChave": [
+   "Heels firmly anchored",
+   "Lower slowly with the body straight",
+   "Come up without pushing with the hands; help only at the bottom if needed"
+  ]
+ },
+ "hollow-fletido": {
+  "nome": "Tuck hollow hold",
+  "objetivo": "The base position of gymnastics, easier: lower back pressed to the floor with the torso and legs in the air.",
+  "pontosChave": [
+   "Lying on your back, knees bent over the hips",
+   "Shoulders off the floor and arms along the body",
+   "Lower back always pressed to the floor"
+  ]
+ },
+ "hollow": {
+  "nome": "Hollow body hold",
+  "objetivo": "The body shape of almost every skill: abs braced and lower back pressed to the floor.",
+  "pontosChave": [
+   "Legs straight and together, a few hand-spans off the floor",
+   "Arms straight behind the head",
+   "If the lower back lifts, raise or bend the legs"
+  ]
+ },
+ "l-sit-encolhido": {
+  "nome": "Tuck L-sit",
+  "objetivo": "Hold your body on your hands with the knees to the chest: abs, shoulders and triceps at once.",
+  "pontosChave": [
+   "Hands on the floor, on two books or on parallel bars",
+   "Arms straight and shoulders down",
+   "Knees to the chest, feet off the floor"
+  ]
+ },
+ "l-sit": {
+  "nome": "L-sit",
+  "objetivo": "Legs straight in front at hip height, with the body supported on the hands.",
+  "pontosChave": [
+   "Start tucked and straighten one leg at a time",
+   "Legs together and straight, toes pointed",
+   "Shoulders down, neck long"
+  ]
+ },
+ "v-sit": {
+  "nome": "V-sit",
+  "objetivo": "A compression skill: the legs rise above the hips, in a V, with the body on the hands.",
+  "pontosChave": [
+   "Start from the L-sit",
+   "Push the floor away and lean the shoulders back",
+   "Raise the legs without bending the knees"
+  ]
+ },
+ "elevacao-joelhos-barra": {
+  "nome": "Hanging knee raises",
+  "objetivo": "A hanging ab exercise: bring the knees to the chest without swinging.",
+  "pontosChave": [
+   "Hanging, shoulders active",
+   "Raise the knees and curl the pelvis",
+   "Lower slowly, without swinging"
+  ]
+ },
+ "elevacao-pernas-barra": {
+  "nome": "Hanging straight-leg raises",
+  "objetivo": "Straight legs raised to horizontal or higher, while hanging: a longer lever than the knees.",
+  "pontosChave": [
+   "Legs together and straight",
+   "Raise them at least to horizontal",
+   "Control the lowering to avoid swinging"
+  ]
+ },
+ "pes-a-barra": {
+  "nome": "Toes to bar",
+  "objetivo": "Raise straight legs until the feet touch the bar: compression and straight-arm back strength.",
+  "pontosChave": [
+   "Push the bar down with straight arms",
+   "Legs together until the feet touch the bar",
+   "Lower slowly"
+  ]
+ },
+ "dragon-flag-negativo": {
+  "nome": "Dragon flag negative",
+  "objetivo": "Only the lowering of the dragon flag: the straight body lowers, supported only on the shoulders.",
+  "pontosChave": [
+   "Lying on a bench, holding on behind your head",
+   "Raise the straight body to vertical, resting on the shoulders",
+   "Lower in 3 to 5 s without bending at the hips"
+  ]
+ },
+ "dragon-flag": {
+  "nome": "Dragon flag",
+  "objetivo": "A core skill: lower and raise the straight body, supported only on the shoulders.",
+  "pontosChave": [
+   "Body straight from shoulders to feet",
+   "Lower almost to horizontal and come back up",
+   "Stop when the hips start to bend"
+  ]
+ },
+ "pino-parede-costas": {
+  "nome": "Back-to-wall handstand",
+  "objetivo": "The first handstand: kick up with your back to the wall and hold upside down.",
+  "pontosChave": [
+   "Hands a hand-span from the wall, fingers spread",
+   "Kick up with one leg; heels against the wall",
+   "Arms straight, push the floor; come down by turning to the side"
+  ]
+ },
+ "pino-parede-frente": {
+  "nome": "Chest-to-wall handstand",
+  "objetivo": "A handstand facing the wall: a more aligned body, as in the freestanding handstand.",
+  "pontosChave": [
+   "Walk your feet up the wall, belly facing it",
+   "Hands two hand-spans from the wall, body straight",
+   "Look at your hands; walk back down"
+  ]
+ },
+ "pino-livre": {
+  "nome": "Freestanding handstand",
+  "objetivo": "A balance skill: hold the handstand without a wall, correcting with the fingers.",
+  "pontosChave": [
+   "Practise in a clear space with a soft floor",
+   "Correct balance with pressure from the fingers and palm",
+   "Learn to bail out by turning before trying to hold"
+  ]
+ },
+ "front-lever-encolhido": {
+  "nome": "Tuck front lever",
+  "objetivo": "The first rung of the front lever: body horizontal under the bar, knees to the chest.",
+  "pontosChave": [
+   "Arms straight, pull the bar down",
+   "Back parallel to the floor, knees against the chest",
+   "Shoulders back, not shrugged"
+  ]
+ },
+ "front-lever-encolhido-avancado": {
+  "nome": "Advanced tuck front lever",
+  "objetivo": "A front lever with a flat back and the knees further from the chest: a longer lever.",
+  "pontosChave": [
+   "Back flat, not rounded",
+   "Hips open, thighs at 90° to the torso",
+   "Arms straight the whole time"
+  ]
+ },
+ "front-lever-uma-perna": {
+  "nome": "One-leg front lever",
+  "objetivo": "One leg straight and the other tucked: the step before the full front lever.",
+  "pontosChave": [
+   "Body horizontal, one leg straight",
+   "The other leg bent, knee to the chest",
+   "Switch legs every set"
+  ]
+ },
+ "front-lever": {
+  "nome": "Front lever",
+  "objetivo": "A skill: the whole body straight and horizontal, hanging with straight arms.",
+  "pontosChave": [
+   "Body straight from shoulders to feet",
+   "Glutes and legs tight, legs together",
+   "Arms straight, pull the bar towards the hips"
+  ]
+ },
+ "skin-the-cat": {
+  "nome": "Skin the cat",
+  "objetivo": "Rotate the body under the bar and back: shoulder mobility for the back lever.",
+  "pontosChave": [
+   "Hanging, bring the knees to the chest and pass the legs between the arms",
+   "Lower only as far as the shoulder stretches without pain",
+   "Come back slowly the same way"
+  ]
+ },
+ "back-lever-encolhido": {
+  "nome": "Tuck back lever",
+  "objetivo": "Body horizontal facing down, behind the bar, with the knees to the chest.",
+  "pontosChave": [
+   "Enter through skin the cat",
+   "Back parallel to the floor, knees to the chest",
+   "Arms straight, elbows not bending"
+  ]
+ },
+ "back-lever": {
+  "nome": "Back lever",
+  "objetivo": "A skill: the whole body straight, horizontal and facing down, behind the bar.",
+  "pontosChave": [
+   "Body straight, glutes tight",
+   "Lower slowly from an inverted hang",
+   "Arms straight; stop if the elbow hurts"
+  ]
+ },
+ "planche-lean": {
+  "nome": "Planche lean",
+  "objetivo": "In push-up position, lean the body forward: the first rung of the planche.",
+  "pontosChave": [
+   "Fingers turned out or back",
+   "Arms straight, shoulders moving in front of the hands",
+   "Upper back slightly rounded, shoulder blades apart"
+  ]
+ },
+ "planche-encolhida": {
+  "nome": "Tuck planche",
+  "objetivo": "Body in the air, on the hands only, with the knees tucked: the first planche without the feet on the floor.",
+  "pontosChave": [
+   "Arms straight, lean until the feet leave the floor",
+   "Knees to the chest, back rounded",
+   "Start with the hands on low parallettes or books"
+  ]
+ },
+ "planche-encolhida-avancada": {
+  "nome": "Advanced tuck planche",
+  "objetivo": "A planche with a flat back and the knees further from the chest.",
+  "pontosChave": [
+   "Back flat, parallel to the floor",
+   "Hips open, knees bent under the body",
+   "Arms always straight"
+  ]
+ },
+ "planche-afastada": {
+  "nome": "Straddle planche",
+  "objetivo": "A planche with the legs straight and apart: a shorter lever than the full planche.",
+  "pontosChave": [
+   "Legs straight and wide apart",
+   "Body horizontal, at shoulder height",
+   "Glutes tight, arms straight"
+  ]
+ },
+ "planche": {
+  "nome": "Planche",
+  "objetivo": "A skill: the whole body straight and horizontal, supported only on the hands.",
+  "pontosChave": [
+   "Legs together and straight",
+   "Body straight at shoulder height",
+   "Years of training: progress through the rungs, without rushing"
+  ]
  }
 }

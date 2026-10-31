@@ -12,11 +12,21 @@ export interface Escada {
 }
 
 const ESCADAS_PT: readonly Escada[] = [
-  { id: 'flexoes', nome: m('Flexões'), degraus: ['flexoes-inclinadas', 'flexoes', 'flexoes-declinadas', 'flexoes-diamante'] },
-  { id: 'mergulhos', nome: m('Mergulhos'), degraus: ['fundos-banco', 'paralelas'] },
-  { id: 'puxar', nome: m('Puxar'), degraus: ['remada-invertida', 'elevacoes'] },
-  { id: 'joelho', nome: m('Pernas, joelho'), degraus: ['agachamento-peso-corporal', 'afundos', 'agachamento-bulgaro'] },
-  { id: 'anca', nome: m('Pernas, anca'), degraus: ['ponte-gluteos', 'ponte-gluteos-unilateral'] },
+  { id: 'flexoes', nome: m('Flexões'), degraus: ['flexoes-parede', 'flexoes-inclinadas', 'flexoes-joelhos', 'flexoes', 'flexoes-declinadas', 'flexoes-diamante', 'flexoes-arqueiro', 'flexoes-pseudo-planche', 'flexoes-um-braco'] },
+  { id: 'empurrar-vertical', nome: m('Empurrar na vertical'), degraus: ['flexoes-pike', 'flexoes-pike-elevadas', 'flexoes-pino-negativas', 'flexoes-pino-parede'] },
+  { id: 'mergulhos', nome: m('Mergulhos'), degraus: ['fundos-banco', 'mergulhos-negativos', 'paralelas'] },
+  { id: 'puxar-vertical', nome: m('Puxar na vertical'), degraus: ['suspensao-ativa', 'elevacoes-negativas', 'elevacoes', 'elevacoes-peito', 'elevacoes-arqueiro', 'muscle-up', 'elevacoes-um-braco'] },
+  { id: 'puxar-horizontal', nome: m('Puxar na horizontal'), degraus: ['remada-invertida-alta', 'remada-invertida', 'remada-invertida-pes-elevados', 'remada-arqueiro'] },
+  { id: 'joelho', nome: m('Pernas, joelho'), degraus: ['agachamento-peso-corporal', 'afundo-recuado', 'agachamento-bulgaro', 'pistol-assistido', 'pistol-caixa', 'pistol', 'agachamento-camarao'] },
+  { id: 'anca', nome: m('Pernas, anca'), degraus: ['ponte-gluteos', 'ponte-gluteos-unilateral', 'hip-thrust-unilateral'] },
+  { id: 'posteriores', nome: m('Posteriores'), degraus: ['curl-deslizante', 'nordico-negativo', 'nordico'] },
+  { id: 'core', nome: m('Core'), degraus: ['dead-bug', 'hollow-fletido', 'hollow', 'l-sit-encolhido', 'l-sit', 'v-sit'] },
+  { id: 'core-barra', nome: m('Core na barra'), degraus: ['elevacao-joelhos-barra', 'elevacao-pernas-barra', 'pes-a-barra'] },
+  { id: 'dragon-flag', nome: m('Dragon flag'), degraus: ['elevacao-pernas', 'dragon-flag-negativo', 'dragon-flag'] },
+  { id: 'pino', nome: m('Pino'), degraus: ['pino-parede-costas', 'pino-parede-frente', 'pino-livre'] },
+  { id: 'front-lever', nome: m('Front lever'), degraus: ['front-lever-encolhido', 'front-lever-encolhido-avancado', 'front-lever-uma-perna', 'front-lever'] },
+  { id: 'back-lever', nome: m('Back lever'), degraus: ['skin-the-cat', 'back-lever-encolhido', 'back-lever'] },
+  { id: 'planche', nome: m('Planche'), degraus: ['planche-lean', 'planche-encolhida', 'planche-encolhida-avancada', 'planche-afastada', 'planche'] },
 ]
 
 /** As escadas com o nome no idioma atual. */

@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import type { Catalogo } from './catalogo'
-import { AREAS, DIAS_POR_SEMANA, EQUIPAMENTOS, DIVISOES_TREINO, ENFASES, GRAVIDEZ, INFO_MEDIDAS, MEDIDAS_CM, POSES, type MedidaCm } from './types'
+import { AREAS, DIAS_POR_SEMANA, EQUIPAMENTOS, DIVISOES_TREINO, ENFASES, ESTILOS, GRAVIDEZ, INFO_MEDIDAS, MEDIDAS_CM, POSES, type MedidaCm } from './types'
 import { TIPOS_CARGA, type TipoCarga } from './carga'
 import type { Degraus } from './escadas'
 import type { Anamnese, FotoAvaliacao, Medicao, Perfil, Plano, Sessao } from './types'
@@ -51,6 +51,8 @@ const anamnese = z.strictObject({
   diasTreino: z.array(inteiro(0, 6)).max(7).optional(),
   equipamentos: z.array(z.enum(EQUIPAMENTOS)).max(EQUIPAMENTOS.length).optional(),
   halteresMaxKg: z.number().min(0.5).max(200).optional(),
+  estilo: z.enum(ESTILOS).optional(),
+  competencias: z.boolean().optional(),
 })
 
 const faixa = z.tuple([z.number().int().min(0), z.number().int().min(0)])

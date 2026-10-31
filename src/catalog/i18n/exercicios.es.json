@@ -781,5 +781,464 @@
    "Empuja el talón hacia el techo con la rodilla a 90°",
    "Sin arquear la zona lumbar; para cuando el muslo queda alineado con el tronco"
   ]
+ },
+ "flexoes-parede": {
+  "nome": "Flexiones en la pared",
+  "objetivo": "El primer peldaño del empuje: aprender la posición de la flexión con poco peso en las manos.",
+  "pontosChave": [
+   "Manos en la pared a la altura del pecho, algo más separadas que los hombros",
+   "Cuerpo en línea recta, talones levantados",
+   "Cuanto más lejos de la pared estén los pies, más difícil"
+  ]
+ },
+ "flexoes-joelhos": {
+  "nome": "Flexiones de rodillas",
+  "objetivo": "Flexión con la mitad del peso: fortalece pecho y tríceps antes de la flexión completa.",
+  "pontosChave": [
+   "Rodillas en el suelo, cuerpo recto de las rodillas a la cabeza",
+   "Manos bajo los hombros, codos a ~45° del tronco",
+   "Pecho casi tocando el suelo en cada repetición"
+  ]
+ },
+ "flexoes-arqueiro": {
+  "nome": "Flexiones arquero",
+  "objetivo": "El camino a la flexión a un brazo: un brazo hace casi todo el trabajo y el otro solo ayuda, estirado a un lado.",
+  "pontosChave": [
+   "Manos muy separadas, el doble del ancho de los hombros",
+   "Baja hacia un lado, con el otro brazo estirado",
+   "Cuenta las repeticiones de cada lado"
+  ]
+ },
+ "flexoes-pseudo-planche": {
+  "nome": "Flexiones pseudo-plancha",
+  "objetivo": "Flexión con los hombros muy por delante de las manos: prepara hombros y muñecas para la plancha.",
+  "pontosChave": [
+   "Manos junto a la cintura, dedos hacia fuera o hacia atrás",
+   "Inclina el cuerpo hacia delante hasta que los hombros pasen las manos",
+   "Brazos casi rectos arriba, sin perder la inclinación"
+  ]
+ },
+ "flexoes-um-braco": {
+  "nome": "Flexiones a un brazo",
+  "objetivo": "Habilidad de fuerza de empuje: todo el cuerpo tiene que resistir la rotación.",
+  "pontosChave": [
+   "Pies separados para ganar equilibrio",
+   "Mano bajo el hombro, codo pegado al tronco",
+   "Caderas y hombros paralelos al suelo; empieza con la mano en un banco"
+  ]
+ },
+ "flexoes-pike-elevadas": {
+  "nome": "Flexiones pike con pies elevados",
+  "objetivo": "Más peso en los hombros que la flexión pike: el paso antes de las flexiones en pino.",
+  "pontosChave": [
+   "Pies en una silla o sofá, cadera sobre los hombros",
+   "La cabeza baja por delante de las manos, formando un triángulo",
+   "Codos hacia atrás, no hacia los lados"
+  ]
+ },
+ "flexoes-pino-negativas": {
+  "nome": "Negativas de flexión en pino en la pared",
+  "objetivo": "Solo la bajada de la flexión en pino, despacio: construye la fuerza para la subida.",
+  "pontosChave": [
+   "En pino de cara o de espaldas a la pared",
+   "Baja en 3 a 5 s hasta que la cabeza toque un cojín",
+   "Baja del pino y vuelve a subir; no empujes hasta dominar la bajada"
+  ]
+ },
+ "flexoes-pino-parede": {
+  "nome": "Flexiones en pino en la pared",
+  "objetivo": "El empuje vertical completo con el peso del cuerpo, con la pared para el equilibrio.",
+  "pontosChave": [
+   "Manos a un palmo de la pared, al ancho de los hombros",
+   "Cabeza y manos forman un triángulo abajo",
+   "Cuerpo firme, sin arquear la zona lumbar"
+  ]
+ },
+ "mergulhos-negativos": {
+  "nome": "Fondos negativos en paralelas",
+  "objetivo": "Solo la bajada de los fondos, despacio: el paso entre el banco y las paralelas.",
+  "pontosChave": [
+   "Empieza arriba, brazos rectos",
+   "Baja en 3 a 5 s hasta que los hombros lleguen a la altura de los codos",
+   "Sube con ayuda de los pies"
+  ]
+ },
+ "suspensao-ativa": {
+  "nome": "Suspensión activa en la barra",
+  "objetivo": "El primer peldaño del tirón: aguantar el cuerpo colgado, con los hombros activos.",
+  "pontosChave": [
+   "Colgado con los brazos rectos",
+   "Lleva los hombros hacia abajo, lejos de las orejas, sin doblar los codos",
+   "Piernas juntas y quietas"
+  ]
+ },
+ "elevacoes-negativas": {
+  "nome": "Dominadas negativas",
+  "objetivo": "Solo la bajada de la dominada, despacio: la forma más directa de llegar a la primera dominada.",
+  "pontosChave": [
+   "Sube con un salto o una silla hasta tener la barbilla sobre la barra",
+   "Baja en 3 a 5 s hasta los brazos rectos",
+   "Para si la bajada se vuelve rápida"
+  ]
+ },
+ "elevacoes-peito": {
+  "nome": "Dominadas al pecho",
+  "objetivo": "Dominada más alta, con el pecho tocando la barra: más fuerza al final del movimiento, la base del muscle-up.",
+  "pontosChave": [
+   "Lleva los codos hacia abajo y atrás",
+   "Pecho a la barra, con el cuerpo un poco inclinado hacia atrás",
+   "Baja hasta los brazos rectos"
+  ]
+ },
+ "elevacoes-arqueiro": {
+  "nome": "Dominadas arquero",
+  "objetivo": "El camino a la dominada a un brazo: un brazo tira y el otro ayuda, estirado sobre la barra.",
+  "pontosChave": [
+   "Agarre muy ancho",
+   "Sube hacia un brazo, con el otro estirado",
+   "Cuenta las repeticiones de cada lado"
+  ]
+ },
+ "muscle-up": {
+  "nome": "Muscle-up en barra",
+  "objetivo": "Habilidad que une una dominada explosiva y un fondo por encima de la barra.",
+  "pontosChave": [
+   "Agarre algo más estrecho que en las dominadas, pulgares por encima",
+   "Tira con fuerza hasta la cintura y pasa el pecho por encima de la barra",
+   "Termina con un fondo hasta los brazos rectos"
+  ]
+ },
+ "elevacoes-um-braco": {
+  "nome": "Dominadas a un brazo",
+  "objetivo": "Habilidad de tirón: todo el cuerpo sube con un solo brazo.",
+  "pontosChave": [
+   "Empieza con la otra mano en la muñeca o en una toalla, ayudando",
+   "Hombro activo, sin colgar de la articulación",
+   "Cuenta las repeticiones de cada lado"
+  ]
+ },
+ "remada-invertida-alta": {
+  "nome": "Remo invertido alto (cuerpo más vertical)",
+  "objetivo": "Remo con el cuerpo casi de pie, en una barra a la altura del pecho: el peldaño más fácil del tirón horizontal.",
+  "pontosChave": [
+   "Barra a la altura del pecho, pies por delante",
+   "Cuerpo recto, inclinado hacia atrás",
+   "Pecho a la barra, escápulas juntas"
+  ]
+ },
+ "remada-invertida-pes-elevados": {
+  "nome": "Remo invertido con pies elevados",
+  "objetivo": "Remo invertido con el cuerpo en horizontal: más peso para la espalda.",
+  "pontosChave": [
+   "Pies en una silla o caja, cuerpo paralelo al suelo",
+   "Caderas en línea con los hombros",
+   "Pecho a la barra, baja despacio"
+  ]
+ },
+ "remada-arqueiro": {
+  "nome": "Remo invertido arquero",
+  "objetivo": "Remo en el que un brazo hace casi todo el trabajo: prepara la dominada a un brazo.",
+  "pontosChave": [
+   "Agarre ancho, cuerpo bajo la barra",
+   "Tira hacia un lado, con el otro brazo estirado",
+   "Cuenta las repeticiones de cada lado"
+  ]
+ },
+ "afundo-recuado": {
+  "nome": "Zancada hacia atrás (peso corporal)",
+  "objetivo": "Pierna a pierna, sin carga: el paso hacia atrás protege más la rodilla que la zancada hacia delante.",
+  "pontosChave": [
+   "Da un paso largo hacia atrás",
+   "La rodilla de atrás baja casi al suelo; la de delante queda sobre el pie",
+   "Empuja con el talón de delante para volver"
+  ]
+ },
+ "pistol-assistido": {
+  "nome": "Pistol con apoyo",
+  "objetivo": "Sentadilla a una pierna sujetándose a una puerta o poste: aprende el recorrido y el equilibrio.",
+  "pontosChave": [
+   "Sujeta el marco de una puerta o un poste delante",
+   "La otra pierna estirada al frente, sin tocar el suelo",
+   "Baja hasta donde el talón siga en el suelo; usa los brazos solo lo necesario"
+  ]
+ },
+ "pistol-caixa": {
+  "nome": "Pistol a una caja",
+  "objetivo": "Pistol sin ayuda de las manos hasta sentarse en una caja o silla: el último paso antes del pistol completo.",
+  "pontosChave": [
+   "De espaldas a una silla o caja",
+   "Baja en una pierna hasta tocar suavemente, sin dejarte caer",
+   "Ve bajando la altura de la caja"
+  ]
+ },
+ "pistol": {
+  "nome": "Pistol (sentadilla a una pierna)",
+  "objetivo": "Sentadilla completa a una pierna: fuerza, movilidad del tobillo y equilibrio.",
+  "pontosChave": [
+   "Brazos al frente para equilibrar",
+   "Baja hasta el fondo con el talón en el suelo",
+   "Sube sin dejar que la rodilla se vaya hacia dentro"
+  ]
+ },
+ "agachamento-camarao": {
+  "nome": "Sentadilla gamba",
+  "objetivo": "Sentadilla a una pierna con la otra doblada detrás: mucho trabajo de cuádriceps con la rodilla adelantada.",
+  "pontosChave": [
+   "Sujeta el pie de atrás con la mano del mismo lado",
+   "Baja hasta que la rodilla de atrás toque el suelo",
+   "Empieza con un cojín bajo la rodilla"
+  ]
+ },
+ "hip-thrust-unilateral": {
+  "nome": "Hip thrust a una pierna (hombros en el sofá)",
+  "objetivo": "Puente a una pierna con más recorrido: con los hombros en un sofá o banco, la cadera baja más.",
+  "pontosChave": [
+   "Parte alta de la espalda en el sofá, un pie en el suelo",
+   "Sube la cadera hasta que el tronco quede en línea con el muslo",
+   "Aprieta el glúteo 1 s arriba"
+  ]
+ },
+ "nordico-negativo": {
+  "nome": "Nórdico negativo",
+  "objetivo": "Solo la bajada del nórdico: el ejercicio sin equipo que más fortalece los isquiotibiales.",
+  "pontosChave": [
+   "De rodillas sobre un cojín, talones sujetos bajo un sofá o por otra persona",
+   "Cuerpo recto de las rodillas a la cabeza; baja lo más despacio posible",
+   "Frena con las manos y vuelve a subir con su ayuda"
+  ]
+ },
+ "nordico": {
+  "nome": "Nórdico completo",
+  "objetivo": "Bajar y volver a subir solo con los isquiotibiales: fuerza excéntrica y concéntrica máxima.",
+  "pontosChave": [
+   "Talones bien sujetos",
+   "Baja despacio con el cuerpo recto",
+   "Sube sin empujar con las manos; ayúdate solo abajo si hace falta"
+  ]
+ },
+ "hollow-fletido": {
+  "nome": "Hollow con piernas flexionadas",
+  "objetivo": "La posición base de la gimnasia, más fácil: zona lumbar pegada al suelo con el tronco y las piernas en el aire.",
+  "pontosChave": [
+   "Tumbado boca arriba, rodillas dobladas sobre la cadera",
+   "Hombros fuera del suelo y brazos a lo largo del cuerpo",
+   "Zona lumbar siempre pegada al suelo"
+  ]
+ },
+ "hollow": {
+  "nome": "Hollow (cuerpo en canoa)",
+  "objetivo": "La forma del cuerpo de casi todas las habilidades: abdomen contraído y zona lumbar pegada al suelo.",
+  "pontosChave": [
+   "Piernas rectas y juntas, a unos palmos del suelo",
+   "Brazos rectos detrás de la cabeza",
+   "Si la zona lumbar se despega, sube o dobla las piernas"
+  ]
+ },
+ "l-sit-encolhido": {
+  "nome": "L-sit encogido",
+  "objetivo": "Aguantar el cuerpo con las manos con las rodillas al pecho: abdomen, hombros y tríceps a la vez.",
+  "pontosChave": [
+   "Manos en el suelo, sobre dos libros o en las paralelas",
+   "Brazos rectos y hombros hacia abajo",
+   "Rodillas al pecho, pies en el aire"
+  ]
+ },
+ "l-sit": {
+  "nome": "L-sit",
+  "objetivo": "Piernas rectas al frente, a la altura de la cadera, con el cuerpo apoyado en las manos.",
+  "pontosChave": [
+   "Empieza encogido y estira una pierna cada vez",
+   "Piernas juntas y rectas, puntas de los pies estiradas",
+   "Hombros hacia abajo, sin encoger el cuello"
+  ]
+ },
+ "v-sit": {
+  "nome": "V-sit",
+  "objetivo": "Habilidad de compresión: las piernas suben por encima de la cadera, en V, con el cuerpo sobre las manos.",
+  "pontosChave": [
+   "Parte del L-sit",
+   "Empuja el suelo e inclina los hombros hacia atrás",
+   "Sube las piernas sin doblar las rodillas"
+  ]
+ },
+ "elevacao-joelhos-barra": {
+  "nome": "Elevación de rodillas en la barra",
+  "objetivo": "Abdominal colgado: llevar las rodillas al pecho sin balancearse.",
+  "pontosChave": [
+   "Colgado, hombros activos",
+   "Sube las rodillas y enrolla la pelvis",
+   "Baja despacio, sin balancearte"
+  ]
+ },
+ "elevacao-pernas-barra": {
+  "nome": "Elevación de piernas rectas en la barra",
+  "objetivo": "Piernas rectas hasta la horizontal o más, colgado: más palanca que las rodillas.",
+  "pontosChave": [
+   "Piernas juntas y rectas",
+   "Súbelas al menos hasta la horizontal",
+   "Controla la bajada para no balancearte"
+  ]
+ },
+ "pes-a-barra": {
+  "nome": "Pies a la barra",
+  "objetivo": "Subir las piernas rectas hasta que los pies toquen la barra: compresión y fuerza de espalda con brazos rectos.",
+  "pontosChave": [
+   "Empuja la barra hacia abajo con los brazos rectos",
+   "Piernas juntas hasta que los pies toquen la barra",
+   "Baja despacio"
+  ]
+ },
+ "dragon-flag-negativo": {
+  "nome": "Dragon flag negativo",
+  "objetivo": "Solo la bajada del dragon flag: el cuerpo baja recto, apoyado solo en los hombros.",
+  "pontosChave": [
+   "Tumbado en un banco, agarrado detrás de la cabeza",
+   "Sube el cuerpo recto hasta la vertical, apoyado en los hombros",
+   "Baja en 3 a 5 s sin doblar la cadera"
+  ]
+ },
+ "dragon-flag": {
+  "nome": "Dragon flag",
+  "objetivo": "Habilidad de core: bajar y subir el cuerpo recto, apoyado solo en los hombros.",
+  "pontosChave": [
+   "Cuerpo recto de los hombros a los pies",
+   "Baja casi hasta la horizontal y vuelve a subir",
+   "Para cuando la cadera empiece a doblarse"
+  ]
+ },
+ "pino-parede-costas": {
+  "nome": "Pino de espaldas a la pared",
+  "objetivo": "El primer pino: subir de espaldas a la pared y aguantar boca abajo.",
+  "pontosChave": [
+   "Manos a un palmo de la pared, dedos abiertos",
+   "Sube con un impulso de una pierna; talones apoyados",
+   "Brazos rectos, empuja el suelo; sal girando hacia un lado"
+  ]
+ },
+ "pino-parede-frente": {
+  "nome": "Pino de cara a la pared",
+  "objetivo": "Pino con el pecho hacia la pared: cuerpo más alineado, como en el pino libre.",
+  "pontosChave": [
+   "Sube caminando con los pies por la pared, de cara a ella",
+   "Manos a dos palmos de la pared, cuerpo recto",
+   "Mira las manos; baja caminando al revés"
+  ]
+ },
+ "pino-livre": {
+  "nome": "Pino libre",
+  "objetivo": "Habilidad de equilibrio: aguantar el pino sin pared, corrigiendo con los dedos.",
+  "pontosChave": [
+   "Entrena en un sitio con espacio y suelo blando",
+   "Corrige el equilibrio con la presión de los dedos y la palma",
+   "Aprende a salir girando antes de intentar aguantar"
+  ]
+ },
+ "front-lever-encolhido": {
+  "nome": "Front lever encogido",
+  "objetivo": "El primer peldaño del front lever: cuerpo horizontal bajo la barra, rodillas al pecho.",
+  "pontosChave": [
+   "Brazos rectos, tira de la barra hacia abajo",
+   "Espalda paralela al suelo, rodillas pegadas al pecho",
+   "Hombros hacia atrás, sin encoger"
+  ]
+ },
+ "front-lever-encolhido-avancado": {
+  "nome": "Front lever encogido avanzado",
+  "objetivo": "Front lever con la espalda recta y las rodillas más lejos del pecho: palanca mayor.",
+  "pontosChave": [
+   "Espalda recta, no redondeada",
+   "Cadera abierta, muslos a 90° del tronco",
+   "Brazos rectos todo el tiempo"
+  ]
+ },
+ "front-lever-uma-perna": {
+  "nome": "Front lever a una pierna",
+  "objetivo": "Una pierna estirada y la otra encogida: el paso antes del front lever completo.",
+  "pontosChave": [
+   "Cuerpo horizontal, una pierna estirada",
+   "La otra pierna doblada, rodilla al pecho",
+   "Cambia de pierna en cada serie"
+  ]
+ },
+ "front-lever": {
+  "nome": "Front lever",
+  "objetivo": "Habilidad: todo el cuerpo recto y horizontal, colgado con los brazos rectos.",
+  "pontosChave": [
+   "Cuerpo recto de los hombros a los pies",
+   "Glúteos y piernas apretados, piernas juntas",
+   "Brazos rectos, tira de la barra hacia la cadera"
+  ]
+ },
+ "skin-the-cat": {
+  "nome": "Skin the cat",
+  "objetivo": "Girar el cuerpo por debajo de la barra y volver: movilidad del hombro para el back lever.",
+  "pontosChave": [
+   "Colgado, lleva las rodillas al pecho y pasa las piernas entre los brazos",
+   "Baja solo hasta donde el hombro se estire sin dolor",
+   "Vuelve despacio por el mismo camino"
+  ]
+ },
+ "back-lever-encolhido": {
+  "nome": "Back lever encogido",
+  "objetivo": "Cuerpo horizontal boca abajo, por detrás de la barra, con las rodillas al pecho.",
+  "pontosChave": [
+   "Entra por el skin the cat",
+   "Espalda paralela al suelo, rodillas al pecho",
+   "Brazos rectos, sin doblar los codos"
+  ]
+ },
+ "back-lever": {
+  "nome": "Back lever",
+  "objetivo": "Habilidad: todo el cuerpo recto, horizontal y boca abajo, por detrás de la barra.",
+  "pontosChave": [
+   "Cuerpo recto, glúteos apretados",
+   "Baja despacio desde la posición invertida en la barra",
+   "Brazos rectos; para si duele el codo"
+  ]
+ },
+ "planche-lean": {
+  "nome": "Inclinación de plancha",
+  "objetivo": "En posición de flexión, inclinar el cuerpo hacia delante: el primer peldaño de la plancha.",
+  "pontosChave": [
+   "Dedos hacia fuera o hacia atrás",
+   "Brazos rectos, hombros por delante de las manos",
+   "Espalda alta un poco redondeada, escápulas separadas"
+  ]
+ },
+ "planche-encolhida": {
+  "nome": "Plancha encogida",
+  "objetivo": "Cuerpo en el aire, solo sobre las manos, con las rodillas encogidas: la primera plancha sin los pies en el suelo.",
+  "pontosChave": [
+   "Brazos rectos, inclínate hasta que los pies dejen el suelo",
+   "Rodillas al pecho, espalda redondeada",
+   "Empieza con las manos en paralelas bajas o libros"
+  ]
+ },
+ "planche-encolhida-avancada": {
+  "nome": "Plancha encogida avanzada",
+  "objetivo": "Plancha con la espalda recta y las rodillas más lejos del pecho.",
+  "pontosChave": [
+   "Espalda recta, paralela al suelo",
+   "Cadera abierta, rodillas dobladas bajo el cuerpo",
+   "Brazos siempre rectos"
+  ]
+ },
+ "planche-afastada": {
+  "nome": "Plancha con piernas abiertas",
+  "objetivo": "Plancha con las piernas rectas y abiertas: palanca más corta que la plancha completa.",
+  "pontosChave": [
+   "Piernas rectas y bien abiertas",
+   "Cuerpo horizontal, a la altura de los hombros",
+   "Glúteos apretados, brazos rectos"
+  ]
+ },
+ "planche": {
+  "nome": "Plancha",
+  "objetivo": "Habilidad: todo el cuerpo recto y horizontal, apoyado solo en las manos.",
+  "pontosChave": [
+   "Piernas juntas y rectas",
+   "Cuerpo recto a la altura de los hombros",
+   "Años de entrenamiento: avanza por los peldaños, sin prisa"
+  ]
  }
 }

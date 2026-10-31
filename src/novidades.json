@@ -1,6 +1,34 @@
 {
   "versoes": [
     {
+      "versao": "1.20.0",
+      "data": "2026-10-31",
+      "itens": [
+        "Calistenia: na anamnese, em «Tipo de treino», podes escolher um plano só com o peso do corpo, organizado por degraus. Começas num degrau de base ou intermédio, conforme a tua experiência.",
+        "51 exercícios novos, das flexões na parede às competências (pino, front lever, back lever, planche, muscle-up), em 15 escadas. Em «Mais», «Calistenia: exercícios por nível» mostra-os todos por nível: Base, Intermédio, Avançado e Competência.",
+        "O desenho do corpo mostra três tons: o músculo principal, os auxiliares 1 e os auxiliares 2.",
+        "As competências entram no plano só se ligares a opção. No fim do ecrã de cada exercício há um aviso, em letra pequena, sobre o carácter geral destas sugestões."
+      ],
+      "traducoes": {
+        "en": {
+          "itens": [
+            "Calisthenics: in the anamnesis, under “Type of training”, you can choose a body-weight-only plan organised in rungs. You start on a base or intermediate rung, depending on your experience.",
+            "51 new exercises, from wall push-ups to skills (handstand, front lever, back lever, planche, muscle-up), on 15 ladders. In “More”, “Calisthenics: exercises by level” lists them all by level: Base, Intermediate, Advanced and Skill.",
+            "The body drawing shows three shades: the main muscle, auxiliary 1 and auxiliary 2.",
+            "Skills only enter the plan if you turn the option on. At the end of each exercise screen there is a small-print notice about the general nature of these suggestions."
+          ]
+        },
+        "es": {
+          "itens": [
+            "Calistenia: en la anamnesis, en «Tipo de entrenamiento», puedes elegir un plan solo con el peso del cuerpo, organizado por peldaños. Empiezas en un peldaño base o intermedio, según tu experiencia.",
+            "51 ejercicios nuevos, de las flexiones en la pared a las habilidades (pino, front lever, back lever, plancha, muscle-up), en 15 escaleras. En «Más», «Calistenia: ejercicios por nivel» los muestra todos por nivel: Base, Intermedio, Avanzado y Habilidad.",
+            "El dibujo del cuerpo muestra tres tonos: el músculo principal, los auxiliares 1 y los auxiliares 2.",
+            "Las habilidades solo entran en el plan si activas la opción. Al final de la pantalla de cada ejercicio hay un aviso, en letra pequeña, sobre el carácter general de estas sugerencias."
+          ]
+        }
+      }
+    },
+    {
       "versao": "1.19.0",
       "data": "2026-10-31",
       "itens": [
