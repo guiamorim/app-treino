@@ -7,6 +7,13 @@ updates:
     groups:
       dependencias:
         patterns: ['*']
+    ignore:
+      # O WebKit do Playwright 1.64 regista erros de CSP de estilos que a app não cria (PR #20).
+      # Retirar quando se perceber a causa e o teste F1–F4 passar em WebKit.
+      - dependency-name: '@playwright/test'
+      # Os tipos acompanham a versão do Node usada no CI e na publicação (22).
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
   - package-ecosystem: github-actions
     directory: /
     schedule:
