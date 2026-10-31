@@ -4,17 +4,20 @@
       "versao": "1.21.1",
       "data": "2026-10-31",
       "itens": [
-        "Correções de ecrã em telemóveis pequenos: os separadores dos Relatórios e a escolha da pose nas Fotos já não ficam cortados, e os campos de data cabem nos cartões no iPhone."
+        "Correções de ecrã em telemóveis pequenos: os separadores dos Relatórios e a escolha da pose nas Fotos já não ficam cortados, e os campos de data cabem nos cartões no iPhone.",
+        "Em inglês, o separador «Medições» passa a chamar-se «Body», para a barra de baixo caber nos iPhones mais estreitos."
       ],
       "traducoes": {
         "en": {
           "itens": [
-            "Screen fixes on small phones: the Reports tabs and the pose choice in Photos are no longer cut off, and date fields fit inside their cards on the iPhone."
+            "Screen fixes on small phones: the Reports tabs and the pose choice in Photos are no longer cut off, and date fields fit inside their cards on the iPhone.",
+            "The Measurements tab is now called “Body”, so the bottom bar fits on the narrowest iPhones."
           ]
         },
         "es": {
           "itens": [
-            "Correcciones de pantalla en móviles pequeños: las pestañas de Informes y la elección de la pose en Fotos ya no quedan cortadas, y los campos de fecha caben en las tarjetas en el iPhone."
+            "Correcciones de pantalla en móviles pequeños: las pestañas de Informes y la elección de la pose en Fotos ya no quedan cortadas, y los campos de fecha caben en las tarjetas en el iPhone.",
+            "En inglés, la pestaña de mediciones pasa a llamarse «Body», para que la barra inferior quepa en los iPhone más estrechos."
           ]
         }
       }

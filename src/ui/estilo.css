@@ -117,7 +117,7 @@ textarea { resize: vertical; line-height: 1.4; }
   position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: center;
   background: var(--cartao); border-top: 1px solid var(--linha); padding-bottom: env(safe-area-inset-bottom); z-index: 10;
 }
-.navegacao a { flex: 1; max-width: 160px; text-align: center; padding: 10px 4px 12px; text-decoration: none; color: var(--texto-2); font-size: 0.75rem; min-height: 70px; }
+.navegacao a { flex: 1; max-width: 160px; text-align: center; padding: 10px 2px 12px; text-decoration: none; color: var(--texto-2); font-size: 0.75rem; min-height: 70px; }
 .navegacao a[aria-current='page'] { color: var(--acento); font-weight: 700; }
 .navegacao .icone { display: block; width: 24px; height: 24px; margin: 2px auto 3px; }
 dialog.modal { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; border: 0; color: inherit; background: rgb(0 0 0 / 0.85); padding: 16px; }
