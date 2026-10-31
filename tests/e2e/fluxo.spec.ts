@@ -36,7 +36,7 @@ test('F1–F4: anamnese gera o plano e registo um exercício', async ({ page }) 
   await expect(page.getByRole('heading', { name: 'Supino com halteres, pega neutra' })).toBeVisible()
   await expect(page.getByText(/Hoje: 2 × 6–10 reps · RIR 3–4/)).toBeVisible()
   await expect(page.getByText('Primeira vez')).toBeVisible()
-  await page.getByLabel('Carga (kg)').fill('16')
+  await page.getByLabel('Carga (kg por halter)').fill('16')
   await page.getByLabel('Repetições').fill('10')
   await page.getByRole('radio', { name: '3' }).click()
   await page.getByRole('button', { name: 'Concluir série' }).click()
@@ -285,7 +285,7 @@ test('F19: lembrete de alongamento no fim do treino, alongamento do treino e por
   await preencherAnamnese(page)
   for (const [nome, carga] of [['Supino com halteres, pega neutra', '16'], ['Remada sentada no cabo (triângulo)', '30']] as const) {
     await page.getByText(nome, { exact: true }).click()
-    await page.getByLabel('Carga (kg)').fill(carga)
+    await page.getByLabel(/^Carga \(kg/).fill(carga)
     await page.getByLabel('Repetições').fill('10')
     await page.getByRole('button', { name: 'Concluir série' }).click()
     await page.getByRole('button', { name: /‹ Superior A/ }).click()
@@ -423,7 +423,7 @@ const alterarNaBase = (page: Page, loja: string, chave: string, codigo: string) 
 test('F22: toque duplo grava uma série, o descanso continua noutros ecrãs, exercício desconhecido e ecrã de erro', async ({ page }) => {
   await preencherAnamnese(page)
   await page.getByText('Supino com halteres, pega neutra').click()
-  await page.getByLabel('Carga (kg)').fill('16')
+  await page.getByLabel('Carga (kg por halter)').fill('16')
 
   // F22.2: um toque duplo em «Concluir série» grava uma só série.
   await page.getByRole('button', { name: 'Concluir série' }).dblclick()
@@ -469,7 +469,7 @@ test('F22.9–F22.13: libras, corrigir e desfazer séries, ícones desenhados', 
   await expect(page.getByRole('radio', { name: 'Libras (lb)' })).toHaveAttribute('aria-checked', 'true')
   await page.getByRole('link', { name: 'Hoje' }).click()
   await page.getByText('Supino com halteres, pega neutra').click()
-  await page.getByLabel('Carga (lb)').fill('35')
+  await page.getByLabel('Carga (lb por halter)').fill('35')
   await page.getByLabel('Repetições').fill('10')
   await page.getByRole('button', { name: 'Concluir série' }).click()
   await page.getByRole('timer').getByRole('button', { name: 'Saltar' }).click()
@@ -521,7 +521,7 @@ test('F23: reserva em segundos na prancha, RIR 0 como falha, descanso à vista e
   await expect(page.getByText('0 = até à falha')).toBeVisible()
 
   // F23.3: o descanso fica fixo em baixo, dentro do ecrã e acima da navegação, mesmo depois de deslizar.
-  await page.getByLabel('Carga (kg)').fill('16')
+  await page.getByLabel('Carga (kg por halter)').fill('16')
   await page.getByRole('button', { name: 'Concluir série' }).click()
   const temporizador = page.getByRole('timer')
   await expect(temporizador).toBeInViewport()
@@ -549,4 +549,33 @@ test('F23: reserva em segundos na prancha, RIR 0 como falha, descanso à vista e
   await expect(page.getByRole('button', { name: 'Concluir série' })).toBeVisible()
   const largura = (await page.evaluate('document.documentElement.scrollWidth')) as number
   expect(largura).toBeLessThanOrEqual(844)
+})
+
+test('F24: rótulo da carga por equipamento, escolha da forma de contar e discos por lado', async ({ page }) => {
+  await preencherAnamnese(page)
+
+  // F24.2: gémeos em pé admitem máquina ou halteres; a escolha fica guardada.
+  await page.getByLabel('Fazer outro treino').selectOption({ label: 'Inferior A' })
+  await page.getByText('Gémeos em pé', { exact: true }).click()
+  await expect(page.getByLabel('Carga (kg na máquina)')).toBeVisible()
+  await page.getByLabel('Como contas o peso?').selectOption({ label: 'Por halter' })
+  await expect(page.getByLabel('Carga (kg por halter)')).toBeVisible()
+  await page.reload()
+  await expect(page.getByLabel('Como contas o peso?')).toHaveValue('halter')
+
+  // F24.4: na barra, escrevem-se os discos de cada lado e guarda-se o total.
+  await page.getByRole('link', { name: 'Mais' }).click()
+  await page.getByRole('radio', { name: '15 kg' }).click()
+  await expect(page.getByRole('radio', { name: '15 kg' })).toHaveAttribute('aria-checked', 'true')
+  await page.getByRole('link', { name: 'Hoje' }).click()
+  // O treino aberto (Inferior A) continua a ser o de hoje.
+  await page.getByText('Peso morto romeno com barra', { exact: true }).click()
+  await expect(page.getByLabel('Carga total (kg)')).toBeVisible()
+  await page.getByLabel('Escrever discos por lado').check()
+  await page.getByLabel('Discos por lado (kg)').fill('10')
+  await expect(page.getByText('15 kg barra + 2 × 10 kg = 35 kg')).toBeVisible()
+  await page.getByRole('button', { name: 'Concluir série' }).click()
+  await expect(page.locator('.series').locator(':scope > span').nth(2)).toHaveText('35')
+  // Depois da série, o campo continua em discos por lado.
+  await expect(page.getByLabel('Discos por lado (kg)')).toHaveValue('10')
 })

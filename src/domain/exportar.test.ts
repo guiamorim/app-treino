@@ -78,8 +78,8 @@ describe('F17 exportar ficha e histórico', () => {
 
   it('o histórico tem uma linha por série e as medições incluem as medidas novas', () => {
     expect(folhaHistorico([sessao], plano, catalogo).linhas).toEqual([
-      ['2026-10-20', plano.treinos[0]!.nome, catalogo.get(sessao.exercicios[0]!.exercicioId)!.nome, 1, 20, 10, 2, 5, undefined],
-      ['2026-10-20', plano.treinos[0]!.nome, catalogo.get(sessao.exercicios[0]!.exercicioId)!.nome, 2, 20, 9, undefined, 5, undefined],
+      ['2026-10-20', plano.treinos[0]!.nome, catalogo.get(sessao.exercicios[0]!.exercicioId)!.nome, 1, 20, 10, 2, 5, undefined, 'Por halter'],
+      ['2026-10-20', plano.treinos[0]!.nome, catalogo.get(sessao.exercicios[0]!.exercicioId)!.nome, 2, 20, 9, undefined, 5, undefined, 'Por halter'],
     ])
     const m = folhaMedicoes([dados.medicoes[1]!, dados.medicoes[0]!])
     expect(m.cabecalho).toEqual(['Data', 'Peso (kg)', 'Cintura (cm)', 'Peito (cm)', 'Braço (cm)', 'Anca (cm)', 'Coxa (cm)'])
@@ -103,7 +103,7 @@ describe('F17 exportar ficha e histórico', () => {
     const leve = { ...comPrancha, treinos: [{ ...comPrancha.treinos[0]!, prescricoes: [{ ...tempo, rir: [3, 4] as [number, number] }] }] }
     expect(folhaFicha(leve, catalogo, AGORA).linhas[0]![7]).toBe('reserva +30–45 s')
     const s: Sessao = { ...sessao, exercicios: [{ prescricaoId: tempo.id, exercicioId: 'prancha', series: [{ carga: 0, reps: 40, reservaSeg: 15 }, { carga: 0, reps: 30, reservaSeg: 61 }], dor: 0 }] }
-    expect(folhaHistorico([s], comPrancha, catalogo).linhas.map((l) => l.at(-1))).toEqual([15, '> 60'])
+    expect(folhaHistorico([s], comPrancha, catalogo).linhas.map((l) => l.at(-2))).toEqual([15, '> 60'])
     const pdf = texto(pdfHistorico({ ...dados, plano: comPrancha, sessoes: [s] }, catalogo, AGORA))
     expect(pdf).toContain('\\(+15 s\\)')
     expect(pdf).toContain('\\(> 60 s\\)')

@@ -2,7 +2,7 @@
 
 [English](specification-v1.en.md) · **Português**
 
-Data: 2026-10-20 · Versão 1.11 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.11)
+Data: 2026-10-20 · Versão 1.12 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.12)
 
 ## 0. Decisões fechadas
 
@@ -224,6 +224,14 @@ Primeira fase do estudo de 2026-10-31.
 - **F23.3 Descanso visível.** O temporizador de descanso e o do alongamento ficam fixos no fundo do ecrã, por cima da barra de baixo, e não por baixo da barra de estado do iPhone. O conteúdo ganha espaço em baixo para nada ficar tapado.
 - **F23.4 Vertical e horizontal.** A app instalada roda com o telemóvel. Na horizontal, o conteúdo e a barra de baixo respeitam as margens do entalhe, o vídeo cabe na altura do ecrã e os botões mantêm o tamanho de toque.
 
+### F24. Tipo de carga (v1.12)
+Segunda fase do estudo de 2026-10-31. Cada exercício diz como se conta o peso, e o campo da carga di-lo no rótulo.
+- **F24.1 Como se conta.** Pelo equipamento do catálogo: halteres «por halter» (rótulo «Carga (kg por halter)»); barra «total, com a barra» («Carga total (kg)»); máquina e cabo «o que marca a máquina» («Carga (kg na máquina)»); peso corporal sem carga. Os incrementos da progressão (secção 4) já seguiam esta convenção e não mudam.
+- **F24.2 Exercícios com mais de um equipamento.** Quando o exercício admite mais de uma forma de contar (ex.: halteres ou máquina), o ecrã do exercício mostra «Como contas o peso?». A escolha fica guardada para esse exercício e vale nas sessões seguintes. Sem escolha, vale o primeiro equipamento do catálogo.
+- **F24.3 Registos guardam a forma.** Cada exercício registado numa sessão guarda como se contou o peso. A sugestão de carga só compara sessões contadas da mesma forma. Os registos anteriores à v1.12 contam como a forma por omissão do exercício (nos halteres, o peso de um halter).
+- **F24.4 Discos por lado.** Nos exercícios com barra, «Escrever discos por lado» troca o campo por «Discos por lado». A app soma a barra e mostra, por exemplo, «20 kg barra + 2 × 15 kg = 50 kg». Guarda-se sempre o total, para a progressão e os recordes compararem valores iguais. O peso da barra escolhe-se em «Mais»: 20, 15 ou 10 kg (45, 35 ou 25 lb em libras); 20 kg por omissão.
+- **F24.5 Exportações e cópia.** O histórico em Excel e o CSV têm a coluna da forma de contar. A cópia de segurança leva as escolhas por exercício e o peso da barra; as cópias anteriores continuam válidas.
+
 ### F14. Blocos e próxima mudança (v1.2, regras na secção 3.7)
 - No Início e no Treino de hoje: fase atual (readaptação, semana N de M do bloco, ou descarga) e a próxima mudança com data: fim da readaptação (séries completas), semana de descarga (metade das séries), ou novo bloco (troca dos exercícios isolados, com a lista do que muda).
 
@@ -323,7 +331,7 @@ Para cada Prescrição com faixa [mín, máx]:
 - Dados pessoais nunca entram no repositório: a anamnese é preenchida no telemóvel e os testes usam um perfil fictício. Por isso o repositório pode ser público.
 
 ## 7. Fora da v1
-Sincronização entre dispositivos, notificações e lembretes (no iPhone exigem servidor; sem lembretes por decisão do utilizador), bloqueio de anúncios, Apple Health, vários utilizadores, IA, social, calculadora de discos.
+Sincronização entre dispositivos, notificações e lembretes (no iPhone exigem servidor; sem lembretes por decisão do utilizador), bloqueio de anúncios, Apple Health, vários utilizadores, IA, social.
 
 ## 8. Estrutura técnica
 ```

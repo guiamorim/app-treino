@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import type { Catalogo } from './catalogo'
 import { AREAS, DIAS_POR_SEMANA, DIVISOES_TREINO, ENFASES, GRAVIDEZ, INFO_MEDIDAS, MEDIDAS_CM, POSES, type MedidaCm } from './types'
+import { TIPOS_CARGA, type TipoCarga } from './carga'
 import type { Anamnese, FotoAvaliacao, Medicao, Perfil, Plano, Sessao } from './types'
 import { lerVideo } from './video'
 
@@ -14,6 +15,7 @@ const registo = z.strictObject({
   exercicioId: id,
   series: z.array(serie).max(50),
   dor: inteiro(0, 10).optional(),
+  tipoCarga: z.enum(TIPOS_CARGA).optional(),
   concluido: z.boolean().optional(),
   saltado: z.boolean().optional(),
 })
@@ -88,6 +90,7 @@ const esquemaCopia = z.strictObject({
   videos: z.record(id, z.string().refine((u) => lerVideo(u) !== null, 'Link de vídeo não permitido')),
   fotos: z.array(foto).max(2000).optional(),
   perfil: perfil.optional(),
+  carga: z.strictObject({ barraKg: z.number().min(5).max(30).optional(), tipos: z.record(id, z.enum(TIPOS_CARGA)).optional() }).optional(),
 })
 
 export interface Copia {
@@ -103,6 +106,8 @@ export interface Copia {
   /** v1.4; cópias antigas não têm. */
   fotos?: FotoAvaliacao[]
   perfil?: Perfil
+  /** F24 (v1.12): peso da barra e forma de contar escolhida por exercício. */
+  carga?: { barraKg?: number; tipos?: Record<string, TipoCarga> }
 }
 
 /** F10.2: valida um ficheiro importado; lança erro se não for uma cópia válida. */
@@ -116,12 +121,12 @@ const csvCampo = (v: string | number | undefined) => {
 }
 
 export function paraCsv(sessoes: Sessao[], catalogo: Catalogo): string {
-  const linhas = ['data,treino,exercicio,serie,carga_kg,reps,rir,dor,reserva_s']
+  const linhas = ['data,treino,exercicio,serie,carga_kg,reps,rir,dor,reserva_s,tipo_carga']
   for (const s of [...sessoes].sort((a, b) => a.inicio.localeCompare(b.inicio)))
     for (const e of s.exercicios)
       e.series.forEach((x, i) => {
         const nome = catalogo.get(e.exercicioId)?.nome ?? e.exercicioId
-        linhas.push([s.inicio, s.treinoId, nome, i + 1, x.carga, x.reps, x.rir, e.dor, x.reservaSeg].map(csvCampo).join(','))
+        linhas.push([s.inicio, s.treinoId, nome, i + 1, x.carga, x.reps, x.rir, e.dor, x.reservaSeg, e.tipoCarga].map(csvCampo).join(','))
       })
   return linhas.join('\n')
 }

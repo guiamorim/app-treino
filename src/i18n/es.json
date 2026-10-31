@@ -565,5 +565,19 @@
   "RIR = repetições que ainda conseguias fazer no fim da série. 0 = até à falha.": "RIR = repeticiones que aún podías hacer al final de la serie. 0 = hasta el fallo.",
   "Reserva": "Reserva",
   "Reserva (opcional)": "Reserva (opcional)",
-  "falha": "fallo"
+  "falha": "fallo",
+  "Por halter": "Por mancuerna",
+  "Total, com a barra": "Total, con la barra",
+  "O que marca a máquina": "Lo que marca la máquina",
+  "Só o corpo": "Solo el cuerpo",
+  "Carga ({u} por halter)": "Carga ({u} por mancuerna)",
+  "Carga total ({u})": "Carga total ({u})",
+  "Carga ({u} na máquina)": "Carga ({u} en la máquina)",
+  "Como se conta": "Cómo se cuenta",
+  "Como contas o peso?": "¿Cómo cuentas el peso?",
+  "Discos por lado ({u})": "Discos por lado ({u})",
+  "Escrever discos por lado": "Escribir discos por lado",
+  "{barra} barra + 2 × {lado} = {total}": "{barra} barra + 2 × {lado} = {total}",
+  "Peso da barra": "Peso de la barra",
+  "Usado quando escreves os discos de cada lado.": "Se usa cuando escribes los discos de cada lado."
 }

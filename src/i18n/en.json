@@ -565,5 +565,19 @@
   "RIR = repetições que ainda conseguias fazer no fim da série. 0 = até à falha.": "RIR = reps you could still have done at the end of the set. 0 = to failure.",
   "Reserva": "Reserve",
   "Reserva (opcional)": "Reserve (optional)",
-  "falha": "failure"
+  "falha": "failure",
+  "Por halter": "Per dumbbell",
+  "Total, com a barra": "Total, including the bar",
+  "O que marca a máquina": "What the machine shows",
+  "Só o corpo": "Bodyweight only",
+  "Carga ({u} por halter)": "Load ({u} per dumbbell)",
+  "Carga total ({u})": "Total load ({u})",
+  "Carga ({u} na máquina)": "Load ({u} on the machine)",
+  "Como se conta": "How it is counted",
+  "Como contas o peso?": "How do you count the weight?",
+  "Discos por lado ({u})": "Plates per side ({u})",
+  "Escrever discos por lado": "Enter plates per side",
+  "{barra} barra + 2 × {lado} = {total}": "{barra} bar + 2 × {lado} = {total}",
+  "Peso da barra": "Bar weight",
+  "Usado quando escreves os discos de cada lado.": "Used when you enter the plates on each side."
 }
