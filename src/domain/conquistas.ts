@@ -106,3 +106,9 @@ function maiorSequencia(sessoes: Sessao[], meta: number): number {
   })
   return melhor
 }
+
+/** F33.3: no Início, as conquistas obtidas e as {n} seguintes por obter (pela ordem da lista). */
+export function conquistasVisiveis(lista: readonly Conquista[], n = 3): Set<string> {
+  const porObter = lista.filter((c) => !c.obtida).slice(0, n)
+  return new Set([...lista.filter((c) => c.obtida), ...porObter].map((c) => c.id))
+}

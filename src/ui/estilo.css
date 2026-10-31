@@ -74,6 +74,8 @@ button.perigo { color: var(--perigo); }
 .largo { width: 100%; }
 .linha { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 .linha > * { flex: 1; }
+/* Botões com texto curto: não partem a palavra; se não couberem lado a lado, passam para a linha de baixo. */
+.linha.sem-quebra > * { flex: 1 1 auto; white-space: nowrap; }
 label { display: block; margin: 12px 0 4px; font-weight: 600; font-size: 0.95rem; }
 input, select, textarea {
   font: inherit; width: 100%; min-height: 48px; padding: 8px 12px; border-radius: 10px; border: 1px solid var(--borda-campo);
@@ -143,6 +145,8 @@ dialog.modal::backdrop { background: transparent; }
 .abas button { flex: 1; min-width: 0; padding-left: 2px; padding-right: 2px; font-size: 0.85rem; }
 /* 5: em ecrãs estreitos (iPhone SE, 320 px) quatro separadores não cabem numa linha: passam a duas. */
 @media (max-width: 359px) { .abas { display: grid; grid-template-columns: 1fr 1fr; } }
+.abas a { flex: 1; min-width: 0; padding-left: 2px; padding-right: 2px; font-size: 0.85rem; }
+.abas a[aria-current='page'] { background: var(--acento); color: var(--acento-texto); border-color: var(--acento); }
 .abas button[aria-selected='true'] { background: var(--acento); color: var(--acento-texto); border-color: var(--acento); }
 details > summary { cursor: pointer; min-height: 40px; display: flex; align-items: center; font-weight: 600; }
 .visualmente-oculto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }

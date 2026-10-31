@@ -28,7 +28,6 @@ const SEPARADORES = [
   { rota: 'hoje', nome: m('Hoje') },
   { rota: 'relatorios', nome: m('Relatórios') },
   { rota: 'medicoes', nome: m('Medições') },
-  { rota: 'fotos', nome: m('Fotos') },
   { rota: 'mais', nome: m('Mais') },
 ] as const
 
@@ -45,7 +44,7 @@ export function App() {
   if (!dados) return <p className="secundario">{t('A carregar…')}</p>
   if (!dados.anamnese || !dados.plano || rota.ecra === 'anamnese') return <AnamneseEcra dados={dados} />
 
-  const ativo = rota.ecra === 'exercicio' ? 'hoje' : rota.ecra === 'meu-exercicio' || rota.ecra === 'meu-plano' || rota.ecra === 'calistenia' || rota.ecra === 'nivelamento' ? 'mais' : rota.ecra
+  const ativo = rota.ecra === 'exercicio' ? 'hoje' : rota.ecra === 'fotos' ? 'medicoes' : rota.ecra === 'meu-exercicio' || rota.ecra === 'meu-plano' || rota.ecra === 'calistenia' || rota.ecra === 'nivelamento' ? 'mais' : rota.ecra
   return (
     <>
       <main>

@@ -367,7 +367,6 @@
   "Indica a carga em {u}.": "Enter the load in {u}.",
   "Cola o link do vídeo (YouTube ou Vimeo). Deixa vazio para repor o original.": "Paste the video link (YouTube or Vimeo). Leave empty to restore the original.",
   "Já registaste séries neste exercício. Trocar apaga-as. Continuar?": "You've already logged sets for this exercise. Swapping deletes them. Continue?",
-  "Como fazer": "How to do it",
   "Cuidado se tiveres dor em: {zonas}.": "Take care if you have pain in: {zonas}.",
   "Hoje:": "Today:",
   "Sugestão:": "Suggestion:",
@@ -818,5 +817,10 @@
   "Registar": "Log",
   "Opcional, 10–15 minutos: põe cada padrão de movimento no degrau certo. Sem ele, o plano começa em degraus conservadores e ajusta-se nas primeiras sessões.": "Optional, 10–15 minutes: puts each movement pattern on the right rung. Without it, the plan starts on conservative rungs and adjusts in the first sessions.",
   "Fazer o teste": "Take the test",
-  "Degraus": "Rungs"
+  "Degraus": "Rungs",
+  "Músculos, técnica e vídeo": "Muscles, technique and video",
+  "Ver menos": "Show less",
+  "Ver todas ({n})": "See all ({n})",
+  "Medições e fotos": "Measurements and photos",
+  "Medidas": "Measurements"
 }

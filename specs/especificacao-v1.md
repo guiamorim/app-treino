@@ -2,7 +2,7 @@
 
 [English](specification-v1.en.md) · **Português**
 
-Data: 2026-10-20 · Versão 1.21 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.21)
+Data: 2026-10-20 · Versão 1.22 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.22)
 
 ## 0. Decisões fechadas
 
@@ -313,6 +313,12 @@ Quinta fase do estudo de viabilidade de calistenia e treino em casa (2026-10-31)
 - **F32.5 Fase por padrão.** Em «Relatórios» › «Degraus», um cartão com os seis padrões: o exercício atual, o nível (F31.1), «degrau n de total» e o que falta para o seguinte (topo da faixa em todas as séries em 2 sessões seguidas e pelo menos 14 dias no degrau, com os dias que faltam). O nível geral é o do padrão mais fraco (nível mais baixo; em empate, o que está mais abaixo na escada), assinalado como prioridade. O nível é uma orientação, não um diagnóstico.
 - **F32.6 Linha temporal de degraus.** No mesmo separador, para cada padrão com treinos registados, um gráfico com o degrau mais alto feito em cada sessão e a lista das mudanças de degrau, com a data.
 - **F32.7 Repetir o teste.** Quando passou um bloco (F14) desde o último teste, o cartão da fase e o ecrã «Hoje» (com calistenia) propõem repeti-lo. A cópia de segurança guarda o último teste.
+
+### F33. Revisão de UI (v1.22)
+
+- **F33.1 Ecrã do exercício.** Logo a seguir ao nome vêm a sugestão de hoje, as séries registadas e o cartão «Série n de m», para registar sem deslizar. O desenho dos músculos, o objetivo, os pontos-chave, os cuidados e o vídeo ficam em «Músculos, técnica e vídeo», que vem aberto enquanto não há registos do exercício e fechado depois. A escada (F30.2) fica antes desse bloco.
+- **F33.2 Barra de baixo com 5 separadores.** «Fotos» deixa de ter separador próprio e passa para dentro de «Medições», com dois botões no topo: «Medidas» e «Fotos». O endereço das fotos mantém-se. Em inglês, o separador chama-se «Body» e, em espanhol, «Cuerpo», para não repetir o nome do botão «Medidas».
+- **F33.3 Conquistas no Início.** Aparecem as conquistas obtidas e as 3 seguintes por obter; as restantes ficam em «Ver todas (n)».
 
 ### F14. Blocos e próxima mudança (v1.2, regras na secção 3.7)
 - No Início e no Treino de hoje: fase atual (readaptação, semana N de M do bloco, ou descarga) e a próxima mudança com data: fim da readaptação (séries completas), semana de descarga (metade das séries), ou novo bloco (troca dos exercícios isolados, com a lista do que muda).
