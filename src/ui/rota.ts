@@ -11,6 +11,8 @@ export type Rota =
   | { ecra: 'mais' }
   | { ecra: 'anamnese' }
   | { ecra: 'alongamento'; grupo?: GrupoMuscular }
+  /** F26: `novo` ou o id de um exercício próprio. */
+  | { ecra: 'meu-exercicio'; id: string }
 
 export function lerRota(hash: string): Rota {
   const [ecra, arg] = hash.replace(/^#\/?/, '').split('/')
@@ -19,6 +21,8 @@ export function lerRota(hash: string): Rota {
       return arg ? { ecra: 'exercicio', prescricaoId: decodeURIComponent(arg) } : { ecra: 'hoje' }
     case 'alongamento':
       return (GRUPOS_MUSCULARES as readonly string[]).includes(arg ?? '') ? { ecra: 'alongamento', grupo: arg as GrupoMuscular } : { ecra: 'alongamento' }
+    case 'meu-exercicio':
+      return arg ? { ecra: 'meu-exercicio', id: decodeURIComponent(arg) } : { ecra: 'mais' }
     case 'hoje':
     case 'relatorios':
     case 'medicoes':

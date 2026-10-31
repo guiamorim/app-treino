@@ -10,6 +10,7 @@ import { CartaoAtualizacoes } from './Atualizacao'
 import { t } from '../i18n'
 import { BotoesPdfPlano } from './Calendario'
 import { CartaoBarra, CartaoIdioma, CartaoUnidade } from './Idioma'
+import { CartaoProprios } from './ExerciciosProprios'
 
 export function Mais({ dados }: { dados: Dados }) {
   const ficheiro = useRef<HTMLInputElement>(null)
@@ -44,6 +45,7 @@ export function Mais({ dados }: { dados: Dados }) {
         <h3>{t('O teu plano')}</h3>
         <button className="largo" onClick={() => ir('/anamnese')}>{t('Editar anamnese e gerar novo plano')}</button>
       </div>
+      <CartaoProprios dados={dados} />
 
       <div className="cartao">
         <h3>{t('Exportar')}</h3>

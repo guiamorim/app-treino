@@ -2,7 +2,7 @@
 
 [English](specification-v1.en.md) · **Português**
 
-Data: 2026-10-20 · Versão 1.13 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.13)
+Data: 2026-10-20 · Versão 1.14 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.14)
 
 ## 0. Decisões fechadas
 
@@ -244,6 +244,18 @@ Terceira fase do estudo de 2026-10-31.
   - Dia: o treino de hoje (ou o próximo), com séries × faixa, RIR ou reserva, descanso, a sugestão de carga, a última vez e espaços em branco para escrever carga e repetições à mão.
   - Semana: os próximos 7 dias com datas (com dias escolhidos) ou os próximos treinos da rotação (sem dias), com espaços para escrever. Só o primeiro treino de cada exercício leva sugestão de carga, porque as seguintes dependem do que fizer.
   - Mês: 4 semanas a partir desta, com a fase de cada uma (readaptação, bloco e semana, descarga), os treinos e os exercícios, e as trocas de exercício quando começa um bloco novo. Sem cargas.
+
+### F26. Exercícios personalizados (v1.14)
+Quarta fase do estudo de 2026-10-31 (entrega A do plano próprio).
+- **F26.1 Criar e editar.** Em «Mais», «Os meus exercícios» lista os exercícios que criei e tem «Novo exercício». Cada exercício tem:
+  - obrigatórios: nome, medida (repetições ou segundos), como se conta o peso (por halter, total com a barra, o que marca a máquina, ou só o corpo) e grupo muscular principal;
+  - opcionais: grupos secundários, incremento de carga, «Como fazer» (um ponto por linha) e link do vídeo (YouTube ou Vimeo, como na F22).
+  - O incremento por omissão vem da forma de contar: 2 kg por halter, 2,5 kg no total ou na máquina, nenhum só com o corpo.
+  - Não são traduzidos: ficam como os escrevi, em qualquer idioma da app.
+- **F26.2 Onde entram.** Juntam-se ao catálogo: o ecrã do exercício, a sugestão de carga (secção 4), o volume semanal (o grupo principal conta 1 série, os secundários 0,5), o desenho dos músculos, os alongamentos do treino, o histórico e as exportações tratam-nos como os do catálogo. O plano gerado pelas regras (secção 3) nunca os escolhe.
+- **F26.3 Usar no treino.** Em «Substituir exercício» aparecem também os meus exercícios com o mesmo grupo principal e a mesma medida. O editor de plano (fase 5) vai permitir pô-los no plano.
+- **F26.4 Apagar.** Um exercício sem registos é apagado. Um exercício com registos é arquivado, depois de confirmar: sai da lista e de «Substituir exercício», mas o histórico, os relatórios e as exportações continuam a mostrar o nome. Se já tiver registos, a medida não pode mudar, para não misturar repetições com segundos.
+- **F26.5 Cópia.** Os exercícios personalizados entram na cópia de segurança (F10). As cópias anteriores continuam válidas.
 
 ### F14. Blocos e próxima mudança (v1.2, regras na secção 3.7)
 - No Início e no Treino de hoje: fase atual (readaptação, semana N de M do bloco, ou descarga) e a próxima mudança com data: fim da readaptação (séries completas), semana de descarga (metade das séries), ou novo bloco (troca dos exercícios isolados, com a lista do que muda).
