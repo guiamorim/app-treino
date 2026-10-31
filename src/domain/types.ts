@@ -180,7 +180,7 @@ export interface RegistoExercicio {
   series: Serie[]
   dor?: number
   /** F24.3: como se contou o peso nesta sessão (sem campo nos registos anteriores à v1.12). */
-  tipoCarga?: 'halter' | 'total' | 'maquina' | 'corporal'
+  tipoCarga?: 'halter' | 'total' | 'maquina' | 'corporal' | 'peso-extra'
   concluido?: boolean
   saltado?: boolean
 }

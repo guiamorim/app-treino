@@ -766,3 +766,36 @@ test('F29: modo férias adapta o treino de hoje e termina sem mudar o plano', as
   await page.getByRole('link', { name: 'Hoje' }).click()
   await expect(page.getByText('Supino com halteres, pega neutra')).toBeVisible()
 })
+
+test('F30: escada de variações nas flexões, mudança de degrau guardada e peso extra', async ({ page }) => {
+  await page.goto('./')
+  await expect(page.getByRole('heading', { name: 'Bem-vindo' })).toBeVisible()
+  await page.getByLabel('Idade').fill('45')
+  await page.getByLabel('Altura (cm)').fill('175')
+  await page.getByLabel('Peso (kg)').fill('85')
+  await page.getByLabel('Dias por semana').selectOption('4')
+  await page.getByRole('button', { name: 'Só o peso do corpo' }).click()
+  await page.getByLabel('Nenhuma').check()
+  for (let i = 0; i < 7; i++) await page.locator(`input[name="parq-${i}"]`).nth(1).check()
+  await page.getByRole('button', { name: 'Gerar o meu plano' }).click()
+
+  await page.getByText('Flexões de braços').first().click()
+  await expect(page.getByRole('heading', { name: 'Flexões de braços' })).toBeVisible()
+  await expect(page.getByText('Escada «Flexões»: degrau 2 de 4')).toBeVisible()
+  await expect(page.getByText(/Primeira vez nesta variação: faz a 1.ª série aqui/)).toBeVisible()
+  await page.getByRole('button', { name: 'Mais difícil: Flexões declinadas (pés elevados)' }).click()
+
+  await expect(page.getByRole('heading', { name: 'Flexões declinadas (pés elevados)' })).toBeVisible()
+  await expect(page.getByText('Escada «Flexões»: degrau 3 de 4')).toBeVisible()
+  await expect(page.getByText('Variação atual (o plano tinha «Flexões de braços»).')).toBeVisible()
+
+  // F30.6: peso extra, com campo de carga próprio.
+  await expect(page.getByLabel('Peso extra (kg)')).toHaveCount(0)
+  await page.getByLabel('Como contas o peso?').selectOption('peso-extra')
+  await expect(page.getByLabel('Peso extra (kg)')).toBeVisible()
+
+  // A mudança fica guardada: o treino de hoje já mostra a variação nova.
+  await page.getByRole('link', { name: 'Hoje' }).click()
+  await expect(page.getByText('Flexões declinadas (pés elevados)').first()).toBeVisible()
+  await expect(page.getByText('Flexões de braços')).toHaveCount(0)
+})

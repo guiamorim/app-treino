@@ -23,7 +23,7 @@ import {
 import { gerarXlsx, type Folha } from './xlsx'
 import { paraUnidade, unidadePeso } from './unidades'
 import { MAIS_DE_60, reservaAlvo, textoReserva } from './reserva'
-import { mesmaForma, nomeTipoCarga, tipoCarga, tipoPadrao, type TipoCarga } from './carga'
+import { incrementoDaForma, mesmaForma, nomeTipoCarga, semCarga as semCargaDe, tipoCarga, tipoPadrao, type TipoCarga } from './carga'
 import { estadoBloco, trocasDoBloco } from './blocos'
 import { diaLocal, meioDia, previsao, proximosTreinos, segundaDaSemana, somarDias } from './calendario'
 import { sugerir } from './progressao'
@@ -132,7 +132,7 @@ export function pdfHistorico(d: DadosExportacao, catalogo: Catalogo, agora: stri
       .filter((e) => e.series.length > 0)
       .map((e) => {
         const ex = catalogo.get(e.exercicioId)
-        const semCarga = ex?.incrementoKg === 0
+        const semCarga = semCargaDe(ex, e.tipoCarga)
         const series = e.series.map((x) => `${semCarga ? '' : `${pesoTxt(x.carga)} × `}${x.reps}${esforcoSerie(x)}`).join(', ')
         return `${ex?.nome ?? e.exercicioId}: ${series}${e.dor ? ` · ${t('dor')} ${e.dor}/10` : ''}`
       }),
@@ -225,11 +225,11 @@ function linhasTreino(tr: TreinoModelo, d: DadosExportacao, catalogo: Catalogo, 
     const linhas = [`${i + 1}. ${ex?.nome ?? p.exercicioId}: ${p.series} × ${p.faixa[0]}–${p.faixa[1]} ${unidade} · ${alvoEsforco(p, emSegundos)} · ${t('descanso {s} s', { s: p.descansoSeg })}`]
     if (!ex) return linhas
     const tipo = tipoCarga(ex, d.tiposCarga ?? {})
-    const semCarga = ex.incrementoKg === 0 || tipo === 'corporal'
+    const semCarga = semCargaDe(ex, tipo)
     if (opts.sugeridos && !opts.sugeridos.has(ex.id)) {
       opts.sugeridos.add(ex.id)
       const historico = mesmaForma(historicoExercicio(d.sessoes, ex.id), ex, tipo)
-      const s = sugerir({ prescricao: p, exercicio: semCarga ? { ...ex, incrementoKg: 0 } : ex, historico, readaptacao: plano.readaptacao, descarga, ...(tipo === 'halter' && d.anamnese?.halteresMaxKg ? { cargaMaxKg: d.anamnese.halteresMaxKg } : {}) })
+      const s = sugerir({ prescricao: p, exercicio: { ...ex, incrementoKg: incrementoDaForma(ex, tipo) }, historico, readaptacao: plano.readaptacao, descarga, ...(tipo === 'halter' && d.anamnese?.halteresMaxKg ? { cargaMaxKg: d.anamnese.halteresMaxKg } : {}) })
       const ultima = historico.at(-1)
       const sugestao = `${t('Sugestão:')} ${s.carga !== null && !semCarga ? `${pesoTxt(s.carga)} × ` : ''}${s.reps} ${unidade}`
       const antes = ultima ? ` · ${t('Última vez:')} ${semCarga ? '' : `${pesoTxt(ultima.series[0]!.carga)} × `}${ultima.series.map((x) => x.reps).join(', ')}` : ''

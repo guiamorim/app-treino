@@ -2,6 +2,7 @@ import { z } from 'zod'
 import type { Catalogo } from './catalogo'
 import { AREAS, DIAS_POR_SEMANA, EQUIPAMENTOS, DIVISOES_TREINO, ENFASES, GRAVIDEZ, INFO_MEDIDAS, MEDIDAS_CM, POSES, type MedidaCm } from './types'
 import { TIPOS_CARGA, type TipoCarga } from './carga'
+import type { Degraus } from './escadas'
 import type { Anamnese, FotoAvaliacao, Medicao, Perfil, Plano, Sessao } from './types'
 import { lerVideo } from './video'
 import { esquemaProprios, type ExercicioProprio } from './proprios'
@@ -102,6 +103,7 @@ const esquemaCopia = z.strictObject({
   carga: z.strictObject({ barraKg: z.number().min(5).max(30).optional(), tipos: z.record(id, z.enum(TIPOS_CARGA)).optional() }).optional(),
   exerciciosProprios: esquemaProprios.optional(),
   ferias: z.strictObject({ inicio: dia, fim: dia, equipamentos: z.array(z.enum(EQUIPAMENTOS)).max(EQUIPAMENTOS.length) }).optional(),
+  degraus: z.record(id, z.strictObject({ exercicioId: id, desde: dia })).optional(),
 })
 
 export interface Copia {
@@ -123,6 +125,8 @@ export interface Copia {
   exerciciosProprios?: ExercicioProprio[]
   /** F29 (v1.18): modo férias. */
   ferias?: Ferias
+  /** F30 (v1.19): variação atual de cada exercício do plano. */
+  degraus?: Degraus
 }
 
 /** F10.2: valida um ficheiro importado; lança erro se não for uma cópia válida. */

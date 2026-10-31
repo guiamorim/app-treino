@@ -1,6 +1,34 @@
 {
   "versoes": [
     {
+      "versao": "1.19.0",
+      "data": "2026-10-31",
+      "itens": [
+        "Progressão por variação nos exercícios de peso corporal: flexões, mergulhos, puxar e pernas têm uma escada, da variação mais fácil à mais difícil, e o ecrã do exercício mostra em que degrau estás.",
+        "Quando fazes o topo das repetições em 2 treinos seguidos e já tens 2 semanas no degrau, a app propõe passar ao seguinte; se ficares abaixo do mínimo 2 vezes, propõe voltar ao anterior. Nada muda sem tocares no botão.",
+        "No último degrau podes juntar peso extra (colete ou mochila) e a carga passa a subir como nos halteres.",
+        "Nos exercícios que dão para fazer com ou sem halteres, a app parte do equipamento que tens."
+      ],
+      "traducoes": {
+        "en": {
+          "itens": [
+            "Progression by variation in body-weight exercises: push-ups, dips, pulling and legs have a ladder, from the easiest variation to the hardest, and the exercise screen shows which rung you are on.",
+            "When you hit the top of the rep range in 2 workouts in a row and have spent 2 weeks on the rung, the app suggests moving to the next one; if you fall below the minimum twice, it suggests going back. Nothing changes until you tap the button.",
+            "On the last rung you can add extra weight (vest or backpack), and the load then goes up as with dumbbells.",
+            "For exercises you can do with or without dumbbells, the app starts from the equipment you have."
+          ]
+        },
+        "es": {
+          "itens": [
+            "Progresión por variantes en los ejercicios de peso corporal: flexiones, fondos, tirones y piernas tienen una escalera, de la variante más fácil a la más difícil, y la pantalla del ejercicio muestra en qué peldaño estás.",
+            "Cuando haces el máximo de repeticiones en 2 entrenamientos seguidos y llevas 2 semanas en el peldaño, la app propone pasar al siguiente; si te quedas por debajo del mínimo 2 veces, propone volver al anterior. Nada cambia sin que toques el botón.",
+            "En el último peldaño puedes añadir peso extra (chaleco o mochila) y la carga pasa a subir como con las mancuernas.",
+            "En los ejercicios que se pueden hacer con o sin mancuernas, la app parte del equipo que tienes."
+          ]
+        }
+      }
+    },
+    {
       "versao": "1.18.0",
       "data": "2026-10-31",
       "itens": [

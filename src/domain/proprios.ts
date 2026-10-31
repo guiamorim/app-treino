@@ -1,7 +1,7 @@
 // F26: exercícios criados pelo utilizador. Juntam-se ao catálogo com a mesma forma de um exercício do catálogo.
 import { z } from 'zod'
 import type { Catalogo } from './catalogo'
-import { TIPOS_CARGA, type TipoCarga } from './carga'
+import { TIPOS_CARGA_PROPRIOS, type TipoCargaProprio } from './carga'
 import { GRUPOS_MUSCULARES, type Equipamento, type Exercicio, type GrupoMuscular, type Medida, type Sessao } from './types'
 import { lerVideo } from './video'
 
@@ -10,7 +10,7 @@ export interface ExercicioProprio {
   id: string
   nome: string
   medida: Medida
-  tipoCarga: TipoCarga
+  tipoCarga: TipoCargaProprio
   grupoPrincipal: GrupoMuscular
   gruposSecundarios: GrupoMuscular[]
   /** Sem valor, vem da forma de contar (F26.1). */
@@ -27,9 +27,9 @@ export const novoIdProprio = (uuid: string) => `${PREFIXO}${uuid.toLowerCase()}`
 export const eProprio = (id: string) => id.startsWith(PREFIXO)
 
 /** F26.1: 2 kg por halter, 2,5 kg no total ou na máquina, nada só com o corpo. */
-export const incrementoPadrao = (tipo: TipoCarga): number => (tipo === 'halter' ? 2 : tipo === 'corporal' ? 0 : 2.5)
+export const incrementoPadrao = (tipo: TipoCargaProprio): number => (tipo === 'halter' ? 2 : tipo === 'corporal' ? 0 : 2.5)
 
-const EQUIPAMENTO: Record<TipoCarga, Equipamento> = { halter: 'halteres', total: 'barra', maquina: 'maquina', corporal: 'peso-corporal' }
+const EQUIPAMENTO: Record<TipoCargaProprio, Equipamento> = { halter: 'halteres', total: 'barra', maquina: 'maquina', corporal: 'peso-corporal' }
 
 export function paraExercicio(p: ExercicioProprio): Exercicio {
   return {
@@ -62,7 +62,7 @@ export const esquemaProprio = z.strictObject({
   id: z.string().regex(/^proprio-[a-z0-9-]{1,80}$/),
   nome: z.string().trim().min(1).max(80),
   medida: z.enum(['reps', 'segundos']),
-  tipoCarga: z.enum(TIPOS_CARGA),
+  tipoCarga: z.enum(TIPOS_CARGA_PROPRIOS),
   grupoPrincipal: grupo,
   gruposSecundarios: z.array(grupo).max(GRUPOS_MUSCULARES.length),
   incrementoKg: z.number().min(0.25).max(50).optional(),

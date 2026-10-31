@@ -1,5 +1,6 @@
 import { locale, t } from '../i18n'
-import type { Exercicio, Prescricao, RegistoExercicio } from './types'
+import { DIAS_MIN_DEGRAU } from './escadas'
+import type { Exercicio, Prescricao, RegistoExercicio, Serie } from './types'
 import { deUnidade, KG_POR_LB, paraUnidade, peso, unidadePeso, type UnidadePeso } from './unidades'
 
 export interface Sugestao {
@@ -9,6 +10,18 @@ export interface Sugestao {
   motivo: string
   subiu: boolean
   alerta?: 'substituir' | 'parar'
+  /** F30.3/F30.5: variação para onde a regra 8 manda passar. */
+  variacao?: { exercicioId: string; nome: string; sentido: 'subir' | 'descer' }
+}
+
+/** F30: posição numa escada de variações, só quando o exercício é feito sem carga. */
+export interface NaEscada {
+  anterior?: Pick<Exercicio, 'id' | 'nome'>
+  seguinte?: Pick<Exercicio, 'id' | 'nome'>
+  /** Dias desde que está nesta variação (sem valor: ainda não há registo). */
+  diasNoDegrau?: number
+  /** F30.6: o exercício admite peso extra. */
+  pesoExtra: boolean
 }
 
 export interface Entrada {
@@ -21,6 +34,8 @@ export interface Entrada {
   descarga?: boolean
   /** F28.2: carga mais alta que a pessoa tem (halter mais pesado), em kg. */
   cargaMaxKg?: number
+  /** F30 (v1.19): escada de variações; ignorada quando o exercício tem carga. */
+  escada?: NaEscada
 }
 
 const PASSO_SEGUNDOS = 5
@@ -45,7 +60,30 @@ function incremento(incrementoKg: number, carga: number, u: UnidadePeso): { valo
 }
 
 /** Especificação, secção 4 (dupla progressão). */
-export function sugerir({ prescricao, exercicio, historico, readaptacao, descarga, cargaMaxKg }: Entrada): Sugestao {
+/** Regra 8 da secção 4: todas as séries no topo e sem falha. */
+const topoSemFalha = (series: Serie[], max: number) => series.length > 0 && series.every((s) => s.reps >= max) && series.every((s) => s.rir === undefined || s.rir >= 1)
+
+/** Regra 8: subir de degrau (ou passar a peso extra no último), quando o topo se repete e o degrau já tem dias. */
+function subirDegrau(escada: NaEscada, comSeries: RegistoExercicio[], carga: number, max: number, unidade: string): Sugestao {
+  const base = { carga, reps: max, subiu: false }
+  const { seguinte } = escada
+  if (!seguinte) {
+    return { ...base, motivo: escada.pesoExtra ? t('Chegaste ao último degrau da escada: acrescenta peso extra (colete ou mochila) e escolhe «Peso extra» em «Como contas o peso?».') : t('Chegaste ao último degrau da escada: em vez de mais {unidade}, desce em 3 s em cada repetição ou faz uma pausa a meio.', { unidade }) }
+  }
+  const anterior = comSeries.at(-2)
+  if (!anterior || !topoSemFalha(anterior.series, max)) {
+    return { ...base, motivo: t('Chegaste a {max} {unidade} em todas as séries. Mais uma sessão assim e passas para «{nome}».', { max, unidade, nome: seguinte.nome }) }
+  }
+  const faltam = DIAS_MIN_DEGRAU - (escada.diasNoDegrau ?? 0)
+  if (faltam > 0) {
+    return { ...base, motivo: t('Pronto para «{nome}» daqui a {n} dia(s): tendões e articulações adaptam-se mais devagar do que o músculo. Até lá, desce em 3 s em cada repetição.', { nome: seguinte.nome, n: faltam }) }
+  }
+  return { ...base, variacao: { exercicioId: seguinte.id, nome: seguinte.nome, sentido: 'subir' }, motivo: t('Chegaste a {max} {unidade} em todas as séries em 2 sessões seguidas: passa para «{nome}».', { max, unidade, nome: seguinte.nome }) }
+}
+
+export function sugerir({ prescricao, exercicio, historico, readaptacao, descarga, cargaMaxKg, escada: escadaEntrada }: Entrada): Sugestao {
+  // F30: a escada só conta quando o exercício é feito sem carga.
+  const escada = exercicio.incrementoKg === 0 ? escadaEntrada : undefined
   const u = unidadePeso()
   const [min, max] = prescricao.faixa
   const comSeries = historico.filter((h) => h.series.length > 0)
@@ -53,6 +91,9 @@ export function sugerir({ prescricao, exercicio, historico, readaptacao, descarg
   const unidade = exercicio.medida === 'segundos' ? 's' : 'reps'
 
   if (!ultima) {
+    if (escada?.anterior) {
+      return { carga: null, reps: min, subiu: false, motivo: t('Primeira vez nesta variação: faz a 1.ª série aqui e, se não chegares a {min} {unidade}, faz as restantes em «{nome}».', { min, unidade, nome: escada.anterior.nome }) }
+    }
     return {
       carga: null,
       reps: min,
@@ -83,7 +124,11 @@ export function sugerir({ prescricao, exercicio, historico, readaptacao, descarg
     return { carga, reps: min, subiu: false, motivo: carga > 0 ? t('Semana de descarga: mantém {carga}, faz menos séries e para longe da falha (RIR {a}–{b}).', { carga: peso(carga), a: prescricao.rir[0], b: prescricao.rir[1] }) : t('Semana de descarga: faz menos séries e para longe da falha (RIR {a}–{b}).', { a: prescricao.rir[0], b: prescricao.rir[1] }) }
   }
 
+  const naSubida = () => readaptacao && comSeries.length < 2 ? undefined : escada && subirDegrau(escada, comSeries, carga, max, unidade)
+
   if (exercicio.medida === 'segundos') {
+    const subir = maisBaixa >= max && dor < DOR_SEM_SUBIDA ? naSubida() : undefined
+    if (subir) return subir
     if (maisBaixa >= max) return { carga, reps: max, subiu: false, motivo: t('Chegaste a {max} s: aumenta a dificuldade (ex.: variação mais difícil) em vez do tempo.', { max }) }
     return { carga, reps: Math.min(maisBaixa + PASSO_SEGUNDOS, max), subiu: false, motivo: t('Tenta +{n} s.', { n: PASSO_SEGUNDOS }) }
   }
@@ -102,6 +147,12 @@ export function sugerir({ prescricao, exercicio, historico, readaptacao, descarg
   }
 
   const duasAbaixo = comSeries.length >= 2 && comSeries.slice(-2).every((h) => h.series.some((s) => s.reps < min))
+  if (duasAbaixo && escada?.anterior) {
+    return { carga, reps: min, subiu: false, variacao: { exercicioId: escada.anterior.id, nome: escada.anterior.nome, sentido: 'descer' }, motivo: t('Ficaste abaixo de {min} {unidade} em 2 sessões seguidas: volta a «{nome}» por agora.', { min, unidade, nome: escada.anterior.nome }) }
+  }
+  if (duasAbaixo && exercicio.incrementoKg === 0) {
+    return { carga, reps: min, subiu: false, motivo: t('Ficaste abaixo de {min} {unidade} em 2 sessões seguidas: usa uma variação mais fácil ou faz menos amplitude até voltares à faixa.', { min, unidade }) }
+  }
   if (duasAbaixo) {
     return { carga: arredondar(carga * 0.9, u), reps: min, subiu: false, motivo: t('Ficaste abaixo de {min} {unidade} em 2 sessões seguidas: baixa a carga 10%.', { min, unidade }) }
   }
@@ -110,6 +161,7 @@ export function sugerir({ prescricao, exercicio, historico, readaptacao, descarg
     if (readaptacao && comSeries.length < 2) {
       return { carga, reps: max, subiu: false, motivo: t('Fase de readaptação: mantém a carga mais uma sessão antes de subir.') }
     }
+    if (escada) return subirDegrau(escada, comSeries, carga, max, unidade)
     if (exercicio.incrementoKg === 0) {
       return { carga, reps: max, subiu: false, motivo: t('Chegaste a {max} reps em todas as séries: aumenta a dificuldade (ex.: variação mais difícil ou mochila com peso).', { max }) }
     }
