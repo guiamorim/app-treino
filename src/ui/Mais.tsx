@@ -11,6 +11,7 @@ import { t } from '../i18n'
 import { BotoesPdfPlano } from './Calendario'
 import { CartaoBarra, CartaoIdioma, CartaoUnidade } from './Idioma'
 import { CartaoProprios } from './ExerciciosProprios'
+import { CartaoFerias } from './Ferias'
 
 export function Mais({ dados }: { dados: Dados }) {
   const ficheiro = useRef<HTMLInputElement>(null)
@@ -47,6 +48,7 @@ export function Mais({ dados }: { dados: Dados }) {
         <button className="largo" onClick={() => ir('/meu-plano')} disabled={!dados.plano}>{dados.plano?.proprio ? t('Editar o meu plano') : t('Criar o meu plano')}</button>
         <button className="largo" style={{ marginTop: 8 }} onClick={() => ir('/anamnese')}>{t('Editar anamnese e gerar novo plano')}</button>
       </div>
+      <CartaoFerias dados={dados} />
       <CartaoProprios dados={dados} />
 
       <div className="cartao">

@@ -739,3 +739,30 @@ test('F28: lista de equipamento, só barra fixa e halteres até 20 kg', async ({
   await expect(page.getByLabel('Polias (cabos)')).not.toBeChecked()
   await expect(page.getByLabel(/Halter mais pesado/)).toHaveValue('20')
 })
+
+test('F29: modo férias adapta o treino de hoje e termina sem mudar o plano', async ({ page }) => {
+  await preencherAnamnese(page)
+  await expect(page.getByText('Supino com halteres, pega neutra')).toBeVisible()
+
+  await page.getByRole('link', { name: 'Mais' }).click()
+  await page.getByRole('button', { name: 'Marcar férias' }).click()
+  const ferias = page.getByRole('group', { name: 'Que equipamento vais ter' })
+  await ferias.getByRole('button', { name: 'Só o peso do corpo' }).click()
+  await ferias.getByLabel('Barra fixa (elevações)').check()
+  await page.getByRole('button', { name: 'Ativar modo férias' }).click()
+  await expect(page.getByText(/Ativo até .*Barra fixa \(elevações\)/)).toBeVisible()
+
+  await page.getByRole('link', { name: 'Hoje' }).click()
+  await expect(page.getByText('Flexões de braços')).toBeVisible()
+  await expect(page.getByText('Supino com halteres, pega neutra')).toHaveCount(0)
+  // A barra fixa serve a remada invertida; as elevações ficam de fora por causa do ombro.
+  await expect(page.getByText('Remada invertida (corpo sob uma barra baixa)')).toBeVisible()
+  await expect(page.getByText('Elevações na barra')).toHaveCount(0)
+
+  page.on('dialog', (d) => void d.accept())
+  await page.getByRole('link', { name: 'Mais' }).click()
+  await page.getByRole('button', { name: 'Terminar férias' }).click()
+  await expect(page.getByRole('button', { name: 'Marcar férias' })).toBeVisible()
+  await page.getByRole('link', { name: 'Hoje' }).click()
+  await expect(page.getByText('Supino com halteres, pega neutra')).toBeVisible()
+})

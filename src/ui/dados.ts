@@ -4,7 +4,8 @@ import dadosAlongamentos from '../catalog/alongamentos.json'
 import dadosCatalogo from '../catalog/exercicios.json'
 import { carregarAlongamentos, traduzirAlongamentos, type CatalogoAlongamentos } from '../domain/alongamentos'
 import { carregarCatalogo, traduzirCatalogo, type Catalogo } from '../domain/catalogo'
-import { planoNoCatalogo, planoNoIdioma } from '../domain/plano'
+import { planoNoCatalogo, planoNoIdioma, semanaDoPlano } from '../domain/plano'
+import { feriasAtivas, planoEmFerias, type Ferias } from '../domain/ferias'
 import { juntarProprios, lerProprios, type ExercicioProprio } from '../domain/proprios'
 import type { Anamnese, FotoAvaliacao, Medicao, Perfil, Plano, Sessao } from '../domain/types'
 import { barrasKg, type TipoCarga } from '../domain/carga'
@@ -63,6 +64,10 @@ export interface Dados {
   barraKg: number
   /** F26: exercícios criados pelo utilizador, incluindo os arquivados. */
   proprios: ExercicioProprio[]
+  /** F29: modo férias marcado (ativo ou por começar). */
+  ferias?: Ferias
+  /** F29: o plano sem a adaptação das férias (para editar o plano próprio). */
+  planoBase?: Plano
 }
 
 export function useDados(): Dados | undefined {
@@ -81,13 +86,19 @@ export function useDados(): Dados | undefined {
       versaoVista: await db.ler<string>('versaoVista'),
       tiposCarga: (await db.ler<Record<string, TipoCarga>>('tiposCarga')) ?? {},
       proprios: lerProprios(await db.ler('exerciciosProprios')),
+      ferias: await db.ler<Ferias>('ferias'),
     }
     const barraKg = await db.ler<number>('barraKg')
     // O idioma carrega-se depois das leituras: uma promessa de fora do Dexie a meio deixaria de fora da observação o que se lê a seguir.
     await aplicarIdioma(idioma, resto.proprios)
     definirUnidade(unidade)
     // F24.4: sem escolha, a barra olímpica na unidade (20 kg ou 45 lb).
-    return { idioma, unidade, barraKg: barraKg ?? barrasKg(unidade)[0]!, anamnese, plano: plano && planoNoCatalogo(planoNoIdioma(plano, anamnese, catalogo), catalogo), ...resto }
+    const planoBase = plano && planoNoCatalogo(planoNoIdioma(plano, anamnese, catalogo), catalogo)
+    // F29.2: durante as férias, o plano mostrado tem os exercícios adaptados; o guardado não muda.
+    const emFerias = planoBase && anamnese && feriasAtivas(resto.ferias, hojeIso())
+      ? planoEmFerias(planoBase, anamnese, resto.ferias!, catalogo, semanaDoPlano(planoBase, agoraIso()))
+      : planoBase
+    return { idioma, unidade, barraKg: barraKg ?? barrasKg(unidade)[0]!, anamnese, plano: emFerias, planoBase, ...resto }
   })
 }
 

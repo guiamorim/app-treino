@@ -5,9 +5,11 @@ import { TIPOS_CARGA, type TipoCarga } from './carga'
 import type { Anamnese, FotoAvaliacao, Medicao, Perfil, Plano, Sessao } from './types'
 import { lerVideo } from './video'
 import { esquemaProprios, type ExercicioProprio } from './proprios'
+import type { Ferias } from './ferias'
 
 const inteiro = (min: number, max: number) => z.number().int().min(min).max(max)
 const data = z.string().min(10).max(40)
+const dia = z.string().regex(/^\d{4}-\d{2}-\d{2}$/)
 const id = z.string().min(1).max(100)
 
 const serie = z.strictObject({ carga: z.number().min(0).max(1000), reps: inteiro(0, 1000), rir: inteiro(0, 10).optional(), reservaSeg: inteiro(0, 600).optional() })
@@ -99,6 +101,7 @@ const esquemaCopia = z.strictObject({
   perfil: perfil.optional(),
   carga: z.strictObject({ barraKg: z.number().min(5).max(30).optional(), tipos: z.record(id, z.enum(TIPOS_CARGA)).optional() }).optional(),
   exerciciosProprios: esquemaProprios.optional(),
+  ferias: z.strictObject({ inicio: dia, fim: dia, equipamentos: z.array(z.enum(EQUIPAMENTOS)).max(EQUIPAMENTOS.length) }).optional(),
 })
 
 export interface Copia {
@@ -118,6 +121,8 @@ export interface Copia {
   carga?: { barraKg?: number; tipos?: Record<string, TipoCarga> }
   /** F26 (v1.14): exercícios criados por ti. */
   exerciciosProprios?: ExercicioProprio[]
+  /** F29 (v1.18): modo férias. */
+  ferias?: Ferias
 }
 
 /** F10.2: valida um ficheiro importado; lança erro se não for uma cópia válida. */

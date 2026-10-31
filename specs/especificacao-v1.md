@@ -2,7 +2,7 @@
 
 [English](specification-v1.en.md) · **Português**
 
-Data: 2026-10-20 · Versão 1.17 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.17)
+Data: 2026-10-20 · Versão 1.18 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.18)
 
 ## 0. Decisões fechadas
 
@@ -274,6 +274,13 @@ Segunda fase do estudo de viabilidade de calistenia e treino em casa (2026-10-31
 - **F28.4 Plano.** O plano usa só exercícios com pelo menos um equipamento marcado ou o peso do corpo (secção 3.4). Entram exercícios com elásticos (puxada, face pull, curl de bíceps) e com caneleiras (abdução da anca deitado de lado, coice de glúteo de quatro apoios), como últimos substitutos dos de ginásio. Com caneleiras e elásticos não se regista carga: progride-se pelas repetições e, no topo da faixa, com uma caneleira ou um elástico mais forte.
 - **F28.5 Avisos.** Sem barra fixa, halteres, elásticos nem polias: aviso de costas e bíceps (secção 3.9). Sem barra com discos nem máquinas e com objetivo força: aviso de força.
 - **F28.6 Cópia.** A cópia de segurança guarda a lista e o halter mais pesado; equipamento desconhecido é rejeitado.
+
+### F29. Modo férias (v1.18)
+Terceira fase do estudo de viabilidade de calistenia e treino em casa (2026-10-31): manter o treino fora do ginásio, em casa ou ao ar livre, sem perder o plano.
+- **F29.1 Marcar.** Em «Mais», «Modo férias» › «Marcar férias»: data de início (hoje ou depois), data de fim (igual ou posterior) e o equipamento que vou ter, com a mesma lista da F28 (por omissão, só o peso do corpo). Dura no máximo 8 semanas; para mais tempo, a app sugere gerar um plano novo. Fica ativo do início ao fim, inclusive.
+- **F29.2 Adaptar.** Enquanto está ativo, cada exercício do treino (já com a rotação do bloco atual) que não se pode fazer com o equipamento das férias passa ao primeiro compatível: substitutos do catálogo, depois exercícios do mesmo grupo e tipo, depois do mesmo grupo, sem repetir no treino e com as mesmas regras de restrições e gravidez. As séries e o RIR mantêm-se; um exercício trocado (ou que deixa de ter carga) usa a faixa de peso corporal (secção 3.9) ou a do catálogo, e a nota diz «Férias: substitui «…»». Uma posição sem alternativa sai do treino, com aviso. O plano guardado não muda: os registos ficam na mesma posição do treino, com o exercício que se fez, e a progressão de cada exercício continua pelo seu histórico.
+- **F29.3 Durante.** «Hoje», «Início», o calendário, os PDF e «Substituir exercício» usam o plano adaptado. O primeiro aviso do plano diz até quando dura. Editar o plano próprio (F27) parte sempre do plano guardado.
+- **F29.4 Terminar.** No fim da data, ou com «Terminar férias» (ou «Cancelar férias», se ainda não começou), o plano volta ao normal. A cópia de segurança guarda as férias marcadas.
 
 ### F14. Blocos e próxima mudança (v1.2, regras na secção 3.7)
 - No Início e no Treino de hoje: fase atual (readaptação, semana N de M do bloco, ou descarga) e a próxima mudança com data: fim da readaptação (séries completas), semana de descarga (metade das séries), ou novo bloco (troca dos exercícios isolados, com a lista do que muda).

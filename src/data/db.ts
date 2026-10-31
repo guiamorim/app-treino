@@ -3,9 +3,10 @@ import type { Anamnese, FotoAvaliacao, Medicao, Perfil, Plano, Sessao } from '..
 import { lerCopia, type Copia } from '../domain/copia'
 import type { TipoCarga } from '../domain/carga'
 import { lerProprios } from '../domain/proprios'
+import type { Ferias } from '../domain/ferias'
 
 interface Valor {
-  chave: 'anamnese' | 'plano' | 'videos' | 'ultimaExportacao' | 'perfil' | 'versaoVista' | 'idioma' | 'unidade' | 'tiposCarga' | 'barraKg' | 'exerciciosProprios'
+  chave: 'anamnese' | 'plano' | 'videos' | 'ultimaExportacao' | 'perfil' | 'versaoVista' | 'idioma' | 'unidade' | 'tiposCarga' | 'barraKg' | 'exerciciosProprios' | 'ferias'
   valor: unknown
 }
 
@@ -34,6 +35,7 @@ export class BaseDados extends Dexie {
   }
 
   async exportar(agora: string): Promise<Copia> {
+    const ferias = await this.ler<Ferias>('ferias')
     const copia: Copia = {
       formato: 'app-treino',
       versao: 1,
@@ -47,6 +49,7 @@ export class BaseDados extends Dexie {
       perfil: (await this.ler<Perfil>('perfil')) ?? {},
       carga: { barraKg: await this.ler<number>('barraKg'), tipos: (await this.ler<Record<string, TipoCarga>>('tiposCarga')) ?? {} },
       exerciciosProprios: lerProprios(await this.ler('exerciciosProprios')),
+      ...(ferias ? { ferias } : {}),
     }
     await this.gravar('ultimaExportacao', agora)
     return copia
@@ -67,6 +70,7 @@ export class BaseDados extends Dexie {
       if (c.carga?.barraKg !== undefined) await this.gravar('barraKg', c.carga.barraKg)
       if (c.carga?.tipos) await this.gravar('tiposCarga', c.carga.tipos)
       if (c.exerciciosProprios) await this.gravar('exerciciosProprios', c.exerciciosProprios)
+      if (c.ferias) await this.gravar('ferias', c.ferias)
     })
   }
 }
