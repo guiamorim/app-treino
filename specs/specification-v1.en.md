@@ -2,7 +2,7 @@
 
 **English** · [Português](especificacao-v1.md)
 
-Date: 2026-10-20 · Version 1.15 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.15)
+Date: 2026-10-20 · Version 1.16 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.16)
 
 The Portuguese version is the reference used for the domain names in the code. Both versions must stay in sync.
 
@@ -60,6 +60,7 @@ RIR = reps in reserve: how many more reps you could still have done at the end o
 - **Given** a shoulder restriction, **then** no exercise contraindicated for the shoulder appears; the first compatible substitute is used.
 - **Then** each Workout template fits the declared duration (estimate in section 3.5).
 - **Then** each Prescription shows a short reason (e.g. "replaces barbell bench press because of the shoulder").
+- (v1.16) **Given** the equipment "At home, no equipment", **then** each workout has at least 4 exercises and the week trains chest, back, quadriceps, hamstrings and glutes (rules in section 3.9).
 
 ### F3. Today's workout
 - The app proposes the next Workout template in the sequence (rotation, not weekday). I can pick another one.
@@ -340,6 +341,13 @@ Target frequency: each major group 2×/week.
 - More legs and glutes: quadriceps, hamstring and glute compounds get 1 more set (max 5); upper-body and arm isolation exercises lose 1 set (min 2).
 - More upper body: the reverse (chest and back compounds +1 set; leg and calf isolation −1 set).
 - The duration adjustment (section 3.5) is applied afterwards.
+
+### 3.9 Training at home (v1.16)
+First phase of the calisthenics and home-training feasibility study (2026-10-31). Before, the "home" equipment produced workouts with 1 or 2 exercises, because the catalogue's substitutes were almost all gym exercises.
+- **Equipment.** "Barra" is the barbell with plates. Pull-ups need a pull-up bar (`barra-fixa`), parallel-bar dips need parallel bars (`paralelas`) and the inverted row needs a pull-up bar or a bar in a rack. The gym has everything; "Dumbbells only" and "At home, no equipment" have none of these (the equipment list comes in the next phase).
+- **Home exercises.** Added to the catalogue: decline push-ups, diamond push-ups, pike push-ups, one-arm backpack row, prone Y raise, sliding leg curl (towel) and wall sit. The single-leg Romanian deadlift can now be done without a dumbbell. Gym exercises get these as their last substitutes, so the choice at the gym does not change.
+- **Body-weight range.** An exercise done with body weight only (no load possible, or the loaded equipment is not available) uses 8–20 reps for compounds and 12–25 for isolation exercises, for any goal, because with little load the stimulus comes from getting close to failure (Schoenfeld et al., 2017). The catalogue's own range still wins (e.g. plank 30–60 s, pike push-ups 6–15).
+- **Warnings.** At home without equipment: back and biceps get little work, and a pull-up bar or dumbbells make the biggest difference. Without a gym and with the strength goal: the goal is limited without heavy loads.
 
 ## 4. Progression rules (double progression)
 

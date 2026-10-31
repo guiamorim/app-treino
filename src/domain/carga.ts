@@ -6,7 +6,7 @@ import { KG_POR_LB, unidadePeso, type UnidadePeso } from './unidades'
 export const TIPOS_CARGA = ['halter', 'total', 'maquina', 'corporal'] as const
 export type TipoCarga = (typeof TIPOS_CARGA)[number]
 
-const DO_EQUIPAMENTO: Record<Equipamento, TipoCarga> = { halteres: 'halter', barra: 'total', maquina: 'maquina', cabo: 'maquina', 'peso-corporal': 'corporal' }
+const DO_EQUIPAMENTO: Record<Equipamento, TipoCarga> = { halteres: 'halter', barra: 'total', maquina: 'maquina', cabo: 'maquina', 'peso-corporal': 'corporal', 'barra-fixa': 'corporal', paralelas: 'corporal' }
 
 const NOMES: Record<TipoCarga, string> = {
   halter: m('Por halter'),

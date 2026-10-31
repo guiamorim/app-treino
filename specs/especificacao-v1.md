@@ -2,7 +2,7 @@
 
 [English](specification-v1.en.md) · **Português**
 
-Data: 2026-10-20 · Versão 1.15 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.15)
+Data: 2026-10-20 · Versão 1.16 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.16)
 
 ## 0. Decisões fechadas
 
@@ -56,6 +56,7 @@ Estes nomes são usados iguais na especificação, no código e na interface.
 - **Dado** uma restrição de ombro, **então** nenhum exercício com contraindicação de ombro aparece; é usado o primeiro substituto compatível.
 - **Então** cada Treino-modelo cabe na duração declarada (estimativa da secção 3.5).
 - **Então** cada Prescrição mostra o motivo resumido (ex.: "substitui supino com barra por causa do ombro").
+- (v1.16) **Dado** o equipamento «Em casa, sem equipamento», **então** cada treino tem pelo menos 4 exercícios e a semana treina peito, costas, quadríceps, posteriores e glúteos (regras na secção 3.9).
 
 ### F3. Treino de hoje
 - A app propõe o próximo Treino-modelo da sequência (rotação, não dia da semana). Posso escolher outro.
@@ -336,6 +337,13 @@ Frequência alvo: cada grupo principal 2×/semana.
 - Mais pernas e glúteos: compostos de quadríceps, posteriores e glúteos ganham 1 série (máximo 5); isolados de tronco e braços perdem 1 série (mínimo 2).
 - Mais tronco: o inverso (compostos de peito e costas +1 série; isolados de pernas e gémeos −1 série).
 - Depois aplica-se o ajuste de duração (secção 3.5).
+
+### 3.9 Treino em casa (v1.16)
+Primeira fase do estudo de viabilidade de calistenia e treino em casa (2026-10-31). Antes, o equipamento «casa» gerava treinos com 1 ou 2 exercícios, porque os substitutos do catálogo eram quase todos de ginásio.
+- **Equipamento.** «Barra» é a barra com discos. As elevações pedem barra fixa (`barra-fixa`), os mergulhos nas paralelas pedem paralelas (`paralelas`) e a remada invertida pede barra fixa ou barra num suporte. O ginásio tem tudo; «Só halteres» e «Em casa, sem equipamento» não têm nenhum destes (a lista de equipamento vem na fase seguinte).
+- **Exercícios de casa.** Entram no catálogo: flexões declinadas, flexões diamante, flexões pike, remada unilateral com mochila, elevação em Y deitado de barriga, curl de pernas deslizante (toalha) e cadeira na parede. O peso morto romeno unilateral passa a poder fazer-se sem halter. Os exercícios de ginásio ganham estes como últimos substitutos, por isso a escolha no ginásio não muda.
+- **Faixa de peso corporal.** Um exercício feito só com o peso do corpo (sem carga possível, ou sem o equipamento de carga disponível) usa 8–20 reps nos compostos e 12–25 nos isolados, em qualquer objetivo, porque com pouca carga o estímulo vem de chegar perto da falha (Schoenfeld et al., 2017). A faixa própria do catálogo continua a mandar (ex.: prancha 30–60 s, flexões pike 6–15).
+- **Avisos.** Em casa sem equipamento: costas e bíceps ficam com pouco trabalho, e uma barra fixa ou halteres fazem a maior diferença. Sem ginásio e com objetivo força: o objetivo fica limitado sem cargas pesadas.
 
 ## 4. Regras de progressão (dupla progressão)
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { divisoesPossiveis, gerarPlano, planoNoCatalogo, prescricaoEfetiva, semanaDoPlano } from './plano'
+import { divisoesPossiveis, FAIXA_CORPORAL, gerarPlano, planoNoCatalogo, prescricaoEfetiva, semanaDoPlano } from './plano'
 import { catalogo, perfilExemplo } from './fixtures'
 import type { Anamnese, GrupoMuscular, Plano } from './types'
 import { GRUPOS_GRANDES } from './types'
@@ -107,7 +107,44 @@ describe('F2 geração do plano', () => {
 
   it('3.4 avisa quando um grupo fica sem exercício compatível', () => {
     const p = gerar({ equipamento: 'casa' })
-    expect(p.avisos.some((a) => a.includes('Costas'))).toBe(true)
+    expect(p.avisos.some((a) => a.includes('Bíceps'))).toBe(true)
+  })
+
+  it('3.9 em casa cada treino tem pelo menos 4 exercícios e treina empurrar, puxar e pernas na semana', () => {
+    for (const diasPorSemana of [2, 3, 4, 5] as const) {
+      const p = gerar({ equipamento: 'casa', restricoes: [], diasPorSemana })
+      for (const t of p.treinos) expect(t.prescricoes.length, `${diasPorSemana} ${t.nome}`).toBeGreaterThanOrEqual(4)
+      const grupos = new Set(exercicios(p).map((e) => e.grupoPrincipal))
+      for (const g of ['peito', 'costas', 'quadriceps', 'posteriores', 'gluteos'] as const) expect(grupos.has(g), `${diasPorSemana} ${g}`).toBe(true)
+    }
+  })
+
+  it('3.9 elevações, paralelas e remada invertida só aparecem com barra fixa, paralelas ou barra', () => {
+    for (const equipamento of ['casa', 'halteres'] as const) {
+      const ids = exercicios(gerar({ equipamento, restricoes: [], diasPorSemana: 6 })).map((e) => e.id)
+      expect(ids).not.toContain('elevacoes')
+      expect(ids).not.toContain('paralelas')
+      expect(ids).not.toContain('remada-invertida')
+    }
+  })
+
+  it('3.9 exercícios feitos só com o peso do corpo usam a faixa de peso corporal', () => {
+    const p = gerar({ equipamento: 'casa', restricoes: [], diasPorSemana: 3 })
+    const corpoA = p.treinos[0]!.prescricoes
+    expect(corpoA.find((x) => x.exercicioId === 'flexoes')?.faixa).toEqual(FAIXA_CORPORAL.composto)
+    // O búlgaro também se faz com halteres: em casa é sem carga, com halteres segue o objetivo.
+    expect(corpoA.find((x) => x.exercicioId === 'agachamento-bulgaro')?.faixa).toEqual(FAIXA_CORPORAL.composto)
+    const comHalteres = gerar({ equipamento: 'halteres', restricoes: [], diasPorSemana: 3 }).treinos[2]!.prescricoes
+    expect(comHalteres.find((x) => x.exercicioId === 'agachamento-bulgaro')?.faixa).toEqual([6, 10])
+    // A faixa própria do catálogo continua a mandar (prancha em segundos).
+    expect(corpoA.find((x) => x.exercicioId === 'prancha')?.faixa).toEqual([30, 60])
+  })
+
+  it('3.9 avisa dos limites do treino sem carga', () => {
+    expect(gerar({ equipamento: 'casa' }).avisos.some((a) => a.includes('barra fixa'))).toBe(true)
+    expect(gerar({ equipamento: 'halteres' }).avisos.some((a) => a.includes('barra fixa'))).toBe(false)
+    expect(gerar({ equipamento: 'halteres', objetivo: 'forca' }).avisos.some((a) => a.includes('força fica limitado'))).toBe(true)
+    expect(gerar({ objetivo: 'forca' }).avisos.some((a) => a.includes('força fica limitado'))).toBe(false)
   })
 
   it('F2.3 cada treino cabe na duração declarada', () => {

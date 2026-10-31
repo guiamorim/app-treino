@@ -360,8 +360,8 @@
   ]
  },
  "remada-invertida": {
-  "nome": "Remo invertido (cuerpo bajo una barra o mesa)",
-  "objetivo": "Espalda con el peso del cuerpo; en casa se puede hacer debajo de una mesa robusta.",
+  "nome": "Remo invertido (cuerpo bajo una barra baja)",
+  "objetivo": "Espalda con el peso del cuerpo, en una barra baja (barra fija a tu alcance o barra en un soporte).",
   "pontosChave": [
    "Cuerpo en línea recta",
    "Tirar del pecho hasta la barra",
@@ -672,6 +672,69 @@
    "Mancuernas pesadas a los lados del cuerpo",
    "Tronco recto, hombros hacia atrás",
    "Pasos cortos y controlados"
+  ]
+ },
+ "flexoes-declinadas": {
+  "nome": "Flexiones declinadas (pies elevados)",
+  "objetivo": "Pecho superior y hombros sin equipo: con los pies en una silla o sofá, las manos cargan más peso del cuerpo.",
+  "pontosChave": [
+   "Pies en una silla, sofá o escalón estable",
+   "Cuerpo en línea recta, sin dejar caer la cadera",
+   "Codos a ~45° del tronco"
+  ]
+ },
+ "flexoes-diamante": {
+  "nome": "Flexiones diamante (manos juntas)",
+  "objetivo": "Tríceps sin equipo: con las manos juntas, los codos se flexionan más y el tríceps trabaja más.",
+  "pontosChave": [
+   "Pulgares e índices forman un rombo bajo el pecho",
+   "Codos pegados al tronco",
+   "Si es difícil, hazlas con las manos en un banco"
+  ]
+ },
+ "flexoes-pike": {
+  "nome": "Flexiones pike (cadera alta)",
+  "objetivo": "Hombros sin equipo: con la cadera alta, el empuje se vuelve vertical, parecido al press militar.",
+  "pontosChave": [
+   "Cuerpo en V invertida, cadera alta",
+   "Baja la cabeza entre las manos, un poco por delante",
+   "Para hacerlo más difícil, pies en un escalón"
+  ]
+ },
+ "remada-mochila": {
+  "nome": "Remo a una mano con mochila",
+  "objetivo": "Espalda en casa sin mancuernas: una mochila con libros o botellas de agua hace de peso. Cuando sea fácil, añade más peso a la mochila.",
+  "pontosChave": [
+   "Mano y rodilla apoyadas en una silla, espalda neutra",
+   "Tira de la mochila hacia la cadera, codo pegado al cuerpo",
+   "Mochila bien cerrada y asas firmes"
+  ]
+ },
+ "elevacao-y": {
+  "nome": "Elevación en Y boca abajo",
+  "objetivo": "Parte posterior del hombro y zona media de la espalda sin equipo, para equilibrar todo el empuje de los entrenamientos en casa.",
+  "pontosChave": [
+   "Boca abajo, brazos en Y por encima de la cabeza, pulgares hacia arriba",
+   "Levanta los brazos del suelo juntando las escápulas",
+   "Pausa de 1 s arriba, sin arquear la zona lumbar"
+  ]
+ },
+ "curl-deslizante": {
+  "nome": "Curl de piernas deslizante (toalla)",
+  "objetivo": "Isquiotibiales sin máquina: los pies se deslizan sobre una toalla o calcetines en suelo liso.",
+  "pontosChave": [
+   "Tumbado boca arriba, talones sobre una toalla, cadera elevada",
+   "Lleva los talones hacia los glúteos sin dejar caer la cadera",
+   "Vuelve despacio; a una pierna, más adelante"
+  ]
+ },
+ "cadeira-isometrica": {
+  "nome": "Sentadilla isométrica en la pared",
+  "objetivo": "Cuádriceps sin equipo ni impacto: siéntate en una silla imaginaria con la espalda contra la pared.",
+  "pontosChave": [
+   "Espalda contra la pared, rodillas a ~90°",
+   "Rodillas por encima de los tobillos",
+   "Respira con normalidad; para si te duele la rodilla"
   ]
  }
 }
