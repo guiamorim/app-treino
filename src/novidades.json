@@ -1,6 +1,34 @@
 {
   "versoes": [
     {
+      "versao": "1.22.0",
+      "data": "2026-10-31",
+      "itens": [
+        "No ecrã do exercício, a sugestão e o registo da série aparecem logo a seguir ao nome. Os músculos, a técnica e o vídeo ficam num bloco que se abre, aberto na primeira vez que fazes o exercício.",
+        "A barra de baixo tem agora 5 separadores: as Fotos passaram para dentro de Medições.",
+        "No Início, as conquistas mostram as que já tens e as 3 seguintes; as outras estão em «Ver todas».",
+        "Em inglês e espanhol, os nomes e as instruções das medidas (cintura, anca, braço…) já aparecem traduzidos. Em espanhol, o separador «Medições» passa a chamar-se «Cuerpo»."
+      ],
+      "traducoes": {
+        "en": {
+          "itens": [
+            "On the exercise screen, the suggestion and the set log now come right after the name. Muscles, technique and video sit in a block you can open, which is open the first time you do the exercise.",
+            "The bottom bar now has 5 tabs: Photos moved inside Body.",
+            "On Home, achievements show the ones you have and the next 3; the others are under “See all”.",
+            "In English and Spanish, the names and instructions of the measurements (waist, hips, arm…) are now translated. In Spanish, the measurements tab is now called “Cuerpo”."
+          ]
+        },
+        "es": {
+          "itens": [
+            "En la pantalla del ejercicio, la sugerencia y el registro de la serie aparecen justo después del nombre. Los músculos, la técnica y el vídeo quedan en un bloque que se abre, abierto la primera vez que haces el ejercicio.",
+            "La barra inferior tiene ahora 5 pestañas: las Fotos pasaron a estar dentro de Cuerpo.",
+            "En Inicio, los logros muestran los que ya tienes y los 3 siguientes; los demás están en «Ver todas».",
+            "En inglés y español, los nombres y las instrucciones de las medidas (cintura, cadera, brazo…) ya aparecen traducidos. En español, la pestaña de mediciones pasa a llamarse «Cuerpo»."
+          ]
+        }
+      }
+    },
+    {
       "versao": "1.21.1",
       "data": "2026-10-31",
       "itens": [

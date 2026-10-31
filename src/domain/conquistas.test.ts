@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { conquistas, recordesPessoais, semanasRecordeVolume, sequenciaSemanal, volumeSessao } from './conquistas'
+import { conquistas, conquistasVisiveis, recordesPessoais, semanasRecordeVolume, sequenciaSemanal, volumeSessao } from './conquistas'
 import { gerarPlano } from './plano'
 import { catalogo, perfilExemplo } from './fixtures'
 import type { Sessao } from './types'
@@ -74,5 +74,11 @@ describe('F12 conquistas', () => {
     const depois = new Date('2026-11-10T12:00:00.000Z')
     expect(conquistas(semanas.map((d) => sessao(d)), plano, 2, depois).find((x) => x.id === 'bloco-completo')?.obtida).toBe(true)
     expect(conquistas(semanas.slice(0, 4).map((d) => sessao(d)), plano, 2, depois).find((x) => x.id === 'bloco-completo')?.obtida).toBe(false)
+  })
+
+  it('F33.3 no Início aparecem as obtidas e as 3 seguintes por obter', () => {
+    const c = (id: string, obtida: boolean) => ({ id, nome: id, descricao: id, icone: '', obtida })
+    expect([...conquistasVisiveis([c('a', true), c('b', false), c('c', true), c('d', false), c('e', false), c('f', false)])]).toEqual(['a', 'c', 'b', 'd', 'e'])
+    expect(conquistasVisiveis([c('a', false), c('b', false)]).size).toBe(2)
   })
 })

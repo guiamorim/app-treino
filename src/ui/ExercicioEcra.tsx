@@ -226,25 +226,7 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
         <span className="secundario">{ex.gruposSecundarios.map((g) => NOMES_GRUPOS[g]).join(' · ')}</span>
         {ex.nivel && <>{' '}<span className="chip">{t('Nível: {nivel}', { nivel: NOMES_NIVEIS[ex.nivel] })}</span></>}
       </p>
-      <Corpo ex={ex} sexo={dados.anamnese?.sexo} />
-      {ex.objetivo && <p>{ex.objetivo}</p>}
       {ef.nota && ex.id === ef.exercicioId && <p className="secundario">{ef.nota}</p>}
-
-      <div className="linha">
-        {video ? (
-          <button onClick={() => setVerVideo(true)}>▶ {t('Ver vídeo')}</button>
-        ) : (
-          <a className="botao" href={pesquisaYoutube(ex.nome)} target="_blank" rel="noopener noreferrer">{t('Procurar no YouTube')}</a>
-        )}
-        <button onClick={mudarVideo}>{t('Mudar vídeo')}</button>
-      </div>
-      {verVideo && video && <VideoModal video={video} titulo={ex.nome} fechar={() => setVerVideo(false)} />}
-
-      {(ex.pontosChave.length > 0 || ex.contraindicacoes.length > 0) && <details className="cartao">
-        <summary>{t('Como fazer')}</summary>
-        <ul>{ex.pontosChave.map((k) => <li key={k}>{k}</li>)}</ul>
-        {ex.contraindicacoes.length > 0 && <p className="secundario">{t('Cuidado se tiveres dor em: {zonas}.', { zonas: ex.contraindicacoes.map((a) => NOMES_AREAS[a]).join(', ') })}</p>}
-      </details>}
 
       <div className={`cartao ${sugestao.alerta === 'parar' ? 'perigo-borda' : sugestao.alerta ? 'aviso' : ''}`}>
         <h3>{t('Hoje:')} {ef.series} × {ef.faixa[0]}–{ef.faixa[1]} {unidade} · {emSegundos ? t('reserva +{a}–{b} s', { a: reservaAlvo(ef.rir)[0], b: reservaAlvo(ef.rir)[1] }) : `RIR ${ef.rir[0]}–${ef.rir[1]}`}</h3>
@@ -264,16 +246,6 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
         )}
         <p className="secundario">{emSegundos ? t('Reserva = segundos que ainda aguentavas no fim da série.') : t('RIR = repetições que ainda conseguias fazer no fim da série. 0 = até à falha.')}</p>
       </div>
-
-      {posicao && posicao.total > 1 && (
-        <div className="cartao">
-          <p className="secundario">{t('Escada «{nome}»: degrau {n} de {total}', { nome: posicao.escada.nome, n: posicao.degrau, total: posicao.total })}</p>
-          <div className="linha">
-            {posicao.anterior && <button disabled={aGravar} onClick={() => void mudarVariacao(posicao.anterior!.id)}>{t('Mais fácil: {nome}', { nome: posicao.anterior.nome })}</button>}
-            {posicao.seguinte && <button disabled={aGravar} onClick={() => void mudarVariacao(posicao.seguinte!.id)}>{t('Mais difícil: {nome}', { nome: posicao.seguinte.nome })}</button>}
-          </div>
-        </div>
-      )}
 
       {series.length > 0 && (
         <div className="cartao">
@@ -362,6 +334,34 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
         {dor >= 7 && <p role="alert" style={{ color: 'var(--perigo)' }}>{t('Dor forte: para este exercício hoje e procura avaliação de um profissional de saúde.')}</p>}
         {dor >= 4 && dor < 7 && <p className="secundario">{t('Dor moderada: não subas a carga; considera trocar de exercício.')}</p>}
       </div>
+
+      {posicao && posicao.total > 1 && (
+        <div className="cartao">
+          <p className="secundario">{t('Escada «{nome}»: degrau {n} de {total}', { nome: posicao.escada.nome, n: posicao.degrau, total: posicao.total })}</p>
+          <div className="linha">
+            {posicao.anterior && <button disabled={aGravar} onClick={() => void mudarVariacao(posicao.anterior!.id)}>{t('Mais fácil: {nome}', { nome: posicao.anterior.nome })}</button>}
+            {posicao.seguinte && <button disabled={aGravar} onClick={() => void mudarVariacao(posicao.seguinte!.id)}>{t('Mais difícil: {nome}', { nome: posicao.seguinte.nome })}</button>}
+          </div>
+        </div>
+      )}
+
+      {/* F33.1: o registo vem primeiro; os músculos, a técnica e o vídeo abrem-se à parte (abertos na primeira vez). */}
+      <details className="cartao" open={!ultima}>
+        <summary>{t('Músculos, técnica e vídeo')}</summary>
+        <Corpo ex={ex} sexo={dados.anamnese?.sexo} />
+        {ex.objetivo && <p>{ex.objetivo}</p>}
+        {ex.pontosChave.length > 0 && <ul>{ex.pontosChave.map((k) => <li key={k}>{k}</li>)}</ul>}
+        {ex.contraindicacoes.length > 0 && <p className="secundario">{t('Cuidado se tiveres dor em: {zonas}.', { zonas: ex.contraindicacoes.map((a) => NOMES_AREAS[a]).join(', ') })}</p>}
+        <div className="linha sem-quebra">
+          {video ? (
+            <button onClick={() => setVerVideo(true)}>▶ {t('Ver vídeo')}</button>
+          ) : (
+            <a className="botao" href={pesquisaYoutube(ex.nome)} target="_blank" rel="noopener noreferrer">{t('Procurar no YouTube')}</a>
+          )}
+          <button onClick={mudarVideo}>{t('Mudar vídeo')}</button>
+        </div>
+      </details>
+      {verVideo && video && <VideoModal video={video} titulo={ex.nome} fechar={() => setVerVideo(false)} />}
 
       <button className="largo" onClick={() => setTrocar(!trocar)}>{t('Substituir exercício')}</button>
       {trocar && (

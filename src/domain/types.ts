@@ -246,7 +246,7 @@ const MEDIDAS_PT: Record<MedidaCm, { nome: string; min: number; max: number; ond
 
 /** Nome e instruções de cada medida, no idioma atual (F21). */
 export const INFO_MEDIDAS = Object.fromEntries(
-  MEDIDAS_CM.map((k) => [k, { ...traduzido({ nome: MEDIDAS_PT[k].nome, onde: MEDIDAS_PT[k].onde }), min: MEDIDAS_PT[k].min, max: MEDIDAS_PT[k].max }]),
+  MEDIDAS_CM.map((k) => [k, Object.assign(traduzido({ nome: MEDIDAS_PT[k].nome, onde: MEDIDAS_PT[k].onde }), { min: MEDIDAS_PT[k].min, max: MEDIDAS_PT[k].max })]),
 ) as typeof MEDIDAS_PT
 
 export interface Medicao extends Partial<Record<MedidaCm, number>> {
