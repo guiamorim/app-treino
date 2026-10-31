@@ -1,6 +1,31 @@
 {
   "versoes": [
     {
+      "versao": "1.16.0",
+      "data": "2026-10-31",
+      "itens": [
+        "O plano «Em casa, sem equipamento» ficou completo: cada treino tem pelo menos 4 exercícios e a semana treina peito, costas, pernas e glúteos.",
+        "Sete exercícios novos para casa, entre eles flexões pike, remada com mochila e curl de pernas com toalha.",
+        "Os exercícios só com o peso do corpo usam faixas de repetições mais altas, e as elevações e os mergulhos nas paralelas só aparecem a quem tem barra fixa ou paralelas."
+      ],
+      "traducoes": {
+        "en": {
+          "itens": [
+            "The “At home, no equipment” plan is now complete: each workout has at least 4 exercises and the week trains chest, back, legs and glutes.",
+            "Seven new home exercises, including pike push-ups, backpack rows and towel leg curls.",
+            "Body-weight-only exercises use higher rep ranges, and pull-ups and parallel-bar dips only appear for people with a pull-up bar or parallel bars."
+          ]
+        },
+        "es": {
+          "itens": [
+            "El plan «En casa, sin equipo» está completo: cada entrenamiento tiene al menos 4 ejercicios y la semana trabaja pecho, espalda, piernas y glúteos.",
+            "Siete ejercicios nuevos para casa, entre ellos flexiones pike, remo con mochila y curl de piernas con toalla.",
+            "Los ejercicios solo con el peso del cuerpo usan rangos de repeticiones más altos, y las dominadas y los fondos en paralelas solo aparecen a quien tiene barra fija o paralelas."
+          ]
+        }
+      }
+    },
+    {
       "versao": "1.15.0",
       "data": "2026-10-31",
       "itens": [

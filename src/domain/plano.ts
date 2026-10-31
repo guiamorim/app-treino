@@ -38,10 +38,21 @@ export const PARAMETROS: Record<Objetivo, Record<TipoExercicio, Parametros>> = {
   },
 }
 
+/** Secção 3.9 (v1.16): faixas dos exercícios feitos só com o peso do corpo. */
+export const FAIXA_CORPORAL: Record<TipoExercicio, [number, number]> = { composto: [8, 20], isolado: [12, 25] }
+
 const EQUIPAMENTO_DISPONIVEL: Record<AcessoEquipamento, Equipamento[]> = {
-  ginasio: ['barra', 'halteres', 'maquina', 'cabo', 'peso-corporal'],
+  ginasio: ['barra', 'halteres', 'maquina', 'cabo', 'peso-corporal', 'barra-fixa', 'paralelas'],
   halteres: ['halteres', 'peso-corporal'],
   casa: ['peso-corporal'],
+}
+
+/** Secção 3.9: o exercício vai ser feito no chão, só com o peso do corpo (sem carga disponível). */
+export function soPesoCorporal(ex: Exercicio, a: Anamnese): boolean {
+  if (!ex.equipamento.includes('peso-corporal')) return false
+  if (ex.incrementoKg === 0) return true
+  const disponivel = EQUIPAMENTO_DISPONIVEL[a.equipamento]
+  return ex.equipamento.every((q) => q === 'peso-corporal' || !disponivel.includes(q))
 }
 
 /** A resposta de gravidez só conta com sexo feminino (secção 3.4.1). */
@@ -143,7 +154,7 @@ function gerarTreino(m: Modelo, a: Anamnese, catalogo: Catalogo, conservador: bo
       id,
       exercicioId: ex.id,
       series: leve ? 2 : pos.principal && ex.tipo === 'composto' ? 4 : 3,
-      faixa: ex.faixaFixa ?? param.faixa,
+      faixa: ex.faixaFixa ?? (soPesoCorporal(ex, a) ? FAIXA_CORPORAL[ex.tipo] : param.faixa),
       rir: conservador || leve ? [3, 4] : param.rir,
       descansoSeg: param.descansoSeg,
       ...(nota ? { nota } : {}),
@@ -200,6 +211,18 @@ export function avisosAnamnese(a: Anamnese, proprio = false): string[] {
   return avisos
 }
 
+/** Secção 3.9 (v1.16): limites honestos do treino sem carga. */
+function avisosEquipamento(a: Anamnese): string[] {
+  const avisos: string[] = []
+  if (a.equipamento === 'casa') {
+    avisos.push(t('Em casa sem equipamento, costas e bíceps ficam com pouco trabalho: sem barra fixa nem halteres não há forma segura de puxar com carga suficiente. Uma barra fixa ou um par de halteres é o que faz mais diferença.'))
+  }
+  if (a.equipamento !== 'ginasio' && a.objetivo === 'forca') {
+    avisos.push(t('Sem barra com discos nem máquinas, o objetivo força fica limitado: os exercícios de peso corporal usam faixas de repetições mais altas, e a força máxima sobe menos do que com cargas pesadas.'))
+  }
+  return avisos
+}
+
 export function gerarPlano(a: Anamnese, catalogo: Catalogo, opts: { id: string; agora: string }): Plano {
   const avisos = avisosAnamnese(a)
   const conservador = a.parq.some(Boolean) || gravidezAtiva(a) !== 'nao'
@@ -217,6 +240,7 @@ export function gerarPlano(a: Anamnese, catalogo: Catalogo, opts: { id: string; 
     }
   }
   const treinos = ids.map((id) => gerarTreino(MODELOS[id]!, a, catalogo, conservador, avisos))
+  avisos.push(...avisosEquipamento(a))
   return {
     id: opts.id,
     criadoEm: opts.agora,

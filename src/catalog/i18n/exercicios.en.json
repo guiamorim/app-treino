@@ -360,8 +360,8 @@
   ]
  },
  "remada-invertida": {
-  "nome": "Inverted row (body under a bar or table)",
-  "objetivo": "Back with body weight; at home it can be done under a sturdy table.",
+  "nome": "Inverted row (body under a low bar)",
+  "objetivo": "Back training with body weight, on a low bar (a reachable pull-up bar or a bar in a rack).",
   "pontosChave": [
    "Body in a straight line",
    "Pull your chest to the bar",
@@ -672,6 +672,69 @@
    "Heavy dumbbells at your sides",
    "Torso upright, shoulders back",
    "Short, controlled steps"
+  ]
+ },
+ "flexoes-declinadas": {
+  "nome": "Decline push-ups (feet elevated)",
+  "objetivo": "Upper chest and shoulders without equipment: with your feet on a chair or sofa, your hands carry more of your body weight.",
+  "pontosChave": [
+   "Feet on a stable chair, sofa or step",
+   "Body in a straight line, hips not sagging",
+   "Elbows at ~45° from the torso"
+  ]
+ },
+ "flexoes-diamante": {
+  "nome": "Diamond push-ups (hands together)",
+  "objetivo": "Triceps without equipment: with the hands together, the elbows bend more and the triceps do more of the work.",
+  "pontosChave": [
+   "Thumbs and index fingers form a diamond under the chest",
+   "Elbows close to the torso",
+   "If too hard, do them with your hands on a bench"
+  ]
+ },
+ "flexoes-pike": {
+  "nome": "Pike push-ups (hips high)",
+  "objetivo": "Shoulders without equipment: with the hips high, the push becomes vertical, similar to an overhead press.",
+  "pontosChave": [
+   "Body in an inverted V, hips high",
+   "Lower your head between and slightly in front of your hands",
+   "To make it harder, put your feet on a step"
+  ]
+ },
+ "remada-mochila": {
+  "nome": "One-arm backpack row",
+  "objetivo": "Back training at home without dumbbells: a backpack with books or water bottles is the weight. When it gets easy, add more to the backpack.",
+  "pontosChave": [
+   "Hand and knee resting on a chair, neutral back",
+   "Pull the backpack towards your hip, elbow close to the body",
+   "Backpack well closed, straps firm"
+  ]
+ },
+ "elevacao-y": {
+  "nome": "Prone Y raise",
+  "objetivo": "Rear shoulders and mid-back without equipment, to balance all the pushing in home workouts.",
+  "pontosChave": [
+   "Lying face down, arms in a Y above your head, thumbs up",
+   "Lift the arms off the floor by squeezing the shoulder blades",
+   "Pause 1 s at the top, without arching the lower back"
+  ]
+ },
+ "curl-deslizante": {
+  "nome": "Sliding leg curl (towel)",
+  "objetivo": "Hamstrings without a machine: the feet slide on a towel or socks on a smooth floor.",
+  "pontosChave": [
+   "Lying on your back, heels on a towel, hips raised",
+   "Pull your heels towards your glutes without letting your hips drop",
+   "Return slowly; single-leg comes later"
+  ]
+ },
+ "cadeira-isometrica": {
+  "nome": "Wall sit (isometric)",
+  "objetivo": "Quadriceps without equipment or impact: sit on an imaginary chair with your back against the wall.",
+  "pontosChave": [
+   "Back against the wall, knees at ~90°",
+   "Knees above the ankles",
+   "Breathe normally; stop if your knee hurts"
   ]
  }
 }

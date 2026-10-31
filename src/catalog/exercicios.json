@@ -43,7 +43,7 @@
     "objetivo": "Peito com trajetória guiada; permite progredir a carga com pouco risco.",
     "pontosChave": ["Ajustar o banco para as pegas ficarem à altura do meio do peito", "Costas e omoplatas apoiadas", "Não bloquear os cotovelos no fim"],
     "contraindicacoes": [],
-    "substitutos": ["supino-halteres-neutro", "flexoes"],
+    "substitutos": ["supino-halteres-neutro", "flexoes", "flexoes-inclinadas", "flexoes-declinadas"],
     "video": "https://www.youtube.com/watch?v=k5nJ53kU-W8"
   },
   {
@@ -58,7 +58,7 @@
     "objetivo": "Ênfase na parte superior do peito.",
     "pontosChave": ["Banco a 30°", "Barra desce à parte alta do peito", "Omoplatas juntas"],
     "contraindicacoes": ["ombro"],
-    "substitutos": ["supino-maquina", "supino-inclinado-halteres", "flexoes"],
+    "substitutos": ["supino-maquina", "supino-inclinado-halteres", "flexoes", "flexoes-declinadas"],
     "video": "https://www.youtube.com/watch?v=7lm16JD0S08"
   },
   {
@@ -73,7 +73,7 @@
     "objetivo": "Parte superior do peito com menos tensão no ombro.",
     "pontosChave": ["Banco a 30°", "Palmas viradas uma para a outra", "Descida controlada"],
     "contraindicacoes": [],
-    "substitutos": ["supino-maquina", "flexoes"],
+    "substitutos": ["supino-maquina", "flexoes", "flexoes-declinadas"],
     "video": "https://www.youtube.com/watch?v=LnmXtE0mrnM"
   },
   {
@@ -88,7 +88,7 @@
     "objetivo": "Peito e tríceps sem equipamento; o ombro move-se livremente porque as omoplatas não estão presas.",
     "pontosChave": ["Corpo em linha reta da cabeça aos pés", "Cotovelos a ~45° do tronco", "Se for difícil, apoiar as mãos num banco"],
     "contraindicacoes": ["punho"],
-    "substitutos": [],
+    "substitutos": ["flexoes-inclinadas"],
     "video": "https://www.youtube.com/watch?v=xgqFpfoQEEs"
   },
   {
@@ -103,7 +103,7 @@
     "objetivo": "Espessura das costas e postura: puxar na horizontal equilibra o trabalho de peito.",
     "pontosChave": ["Tronco direito, sem balançar", "Puxar o triângulo até ao abdómen", "Juntar as omoplatas no fim"],
     "contraindicacoes": [],
-    "substitutos": ["remada-halter-unilateral"],
+    "substitutos": ["remada-halter-unilateral", "remada-invertida", "remada-mochila"],
     "video": "https://www.youtube.com/watch?v=IwU0vhQ_lJg"
   },
   {
@@ -118,7 +118,7 @@
     "objetivo": "Costas com apoio no banco, o que protege a lombar e permite corrigir diferenças entre lados.",
     "pontosChave": ["Mão e joelho apoiados no banco, costas neutras", "Puxar o halter em direção à anca", "Descer até alongar bem"],
     "contraindicacoes": [],
-    "substitutos": ["remada-cabo-sentado", "remada-invertida"],
+    "substitutos": ["remada-cabo-sentado", "remada-invertida", "remada-mochila"],
     "video": "https://www.youtube.com/watch?v=EUisRaNkCd4"
   },
   {
@@ -133,7 +133,7 @@
     "objetivo": "Largura das costas (grande dorsal) com movimento vertical.",
     "pontosChave": ["Pega à largura dos ombros ou um pouco mais", "Puxar a barra até ao topo do peito", "Não puxar para trás da nuca"],
     "contraindicacoes": [],
-    "substitutos": ["puxada-neutra", "remada-halter-unilateral"],
+    "substitutos": ["puxada-neutra", "remada-halter-unilateral", "elevacoes", "remada-invertida"],
     "video": "https://www.youtube.com/watch?v=BOW9my4J_ek"
   },
   {
@@ -148,7 +148,7 @@
     "objetivo": "Grande dorsal com pega neutra, geralmente mais confortável para ombros e cotovelos.",
     "pontosChave": ["Peito ligeiramente para cima", "Puxar até ao queixo/peito", "Subida controlada"],
     "contraindicacoes": [],
-    "substitutos": ["puxada-frente", "remada-halter-unilateral"],
+    "substitutos": ["puxada-frente", "remada-halter-unilateral", "elevacoes", "remada-invertida"],
     "video": "https://www.youtube.com/watch?v=4nKSS0bS-_A"
   },
   {
@@ -163,7 +163,7 @@
     "objetivo": "Deltoide lateral (largura dos ombros) com carga leve.",
     "pontosChave": ["Carga leve, sem balanço", "Subir até à altura dos ombros, não acima", "Braços ligeiramente à frente do corpo"],
     "contraindicacoes": [],
-    "substitutos": ["elevacao-lateral-cabo"],
+    "substitutos": ["elevacao-lateral-cabo", "flexoes-pike"],
     "video": "https://www.youtube.com/watch?v=3Vly4-xCvGg"
   },
   {
@@ -178,7 +178,7 @@
     "objetivo": "Deltoide posterior e rotadores externos: ajuda a equilibrar o ombro de quem faz muito supino.",
     "pontosChave": ["Polia à altura da cara", "Puxar a corda em direção aos olhos, separando as mãos", "Cotovelos altos, rodar os braços para fora no fim"],
     "contraindicacoes": [],
-    "substitutos": ["crucifixo-invertido"],
+    "substitutos": ["crucifixo-invertido", "elevacao-y"],
     "video": "https://www.youtube.com/watch?v=YxQivR_kljk"
   },
   {
@@ -193,7 +193,7 @@
     "objetivo": "Deltoide posterior e parte alta das costas.",
     "pontosChave": ["Tronco inclinado à frente, costas neutras", "Abrir os braços com cotovelos ligeiramente fletidos", "Carga leve"],
     "contraindicacoes": [],
-    "substitutos": [],
+    "substitutos": ["elevacao-y"],
     "video": "https://www.youtube.com/watch?v=bCZ5a6WQyt0"
   },
   {
@@ -238,7 +238,7 @@
     "objetivo": "Tríceps.",
     "pontosChave": ["Cotovelos colados ao tronco", "Separar as pontas da corda no fim", "Só o antebraço se move"],
     "contraindicacoes": [],
-    "substitutos": ["triceps-polia", "triceps-halteres-deitado"],
+    "substitutos": ["triceps-polia", "triceps-halteres-deitado", "flexoes-diamante", "fundos-banco"],
     "video": "https://www.youtube.com/watch?v=M-DTY40JG9M"
   },
   {
@@ -253,7 +253,7 @@
     "objetivo": "Tríceps com carga mais alta que a corda.",
     "pontosChave": ["Cotovelos fixos ao lado do corpo", "Estender por completo", "Subida controlada"],
     "contraindicacoes": [],
-    "substitutos": ["triceps-corda", "triceps-halteres-deitado"],
+    "substitutos": ["triceps-corda", "triceps-halteres-deitado", "flexoes-diamante", "fundos-banco"],
     "video": "https://www.youtube.com/watch?v=afkbiAZbGxM"
   },
   {
@@ -268,7 +268,7 @@
     "objetivo": "Tríceps com halteres, deitado no banco.",
     "pontosChave": ["Braços na vertical", "Dobrar só os cotovelos, halteres ao lado da cabeça", "Carga moderada"],
     "contraindicacoes": ["cotovelo"],
-    "substitutos": [],
+    "substitutos": ["flexoes-diamante", "fundos-banco"],
     "deitado": "costas",
     "video": "https://www.youtube.com/watch?v=emY8deCFVRo"
   },
@@ -284,7 +284,7 @@
     "objetivo": "Força e massa das pernas com a coluna apoiada.",
     "pontosChave": ["Lombar sempre encostada ao banco", "Joelhos na direção dos pés", "Não bloquear os joelhos em cima"],
     "contraindicacoes": [],
-    "substitutos": ["agachamento-goblet"],
+    "substitutos": ["agachamento-goblet", "agachamento-bulgaro", "agachamento-peso-corporal"],
     "video": "https://www.youtube.com/watch?v=waAxlYvtCcI"
   },
   {
@@ -299,7 +299,7 @@
     "objetivo": "Agachamento com o peso à frente: facilita manter o tronco direito e aprender o padrão.",
     "pontosChave": ["Halter junto ao peito", "Descer entre as pernas, tronco direito", "Joelhos acompanham a direção dos pés"],
     "contraindicacoes": [],
-    "substitutos": ["leg-press", "agachamento-peso-corporal"],
+    "substitutos": ["leg-press", "agachamento-peso-corporal", "afundos"],
     "video": "https://www.youtube.com/watch?v=ge1vdJRP0UA"
   },
   {
@@ -344,7 +344,7 @@
     "objetivo": "Posteriores da coxa e glúteos através da dobradiça da anca.",
     "pontosChave": ["Costas neutras do início ao fim", "Empurrar a anca para trás, joelhos ligeiramente fletidos", "Barra sempre junto às pernas"],
     "contraindicacoes": ["lombar"],
-    "substitutos": ["peso-morto-romeno-halteres", "leg-curl-deitado"],
+    "substitutos": ["peso-morto-romeno-halteres", "leg-curl-deitado", "peso-morto-unilateral", "curl-deslizante"],
     "video": "https://www.youtube.com/watch?v=svMQLdOIRwc"
   },
   {
@@ -359,7 +359,7 @@
     "objetivo": "Posteriores e glúteos com halteres.",
     "pontosChave": ["Costas neutras", "Anca para trás", "Halteres junto às pernas"],
     "contraindicacoes": ["lombar"],
-    "substitutos": ["leg-curl-deitado", "ponte-gluteos"],
+    "substitutos": ["leg-curl-deitado", "ponte-gluteos", "peso-morto-unilateral", "curl-deslizante"],
     "video": "https://www.youtube.com/watch?v=VivMQCl5Rwc"
   },
   {
@@ -374,7 +374,7 @@
     "objetivo": "Isolar os posteriores da coxa.",
     "pontosChave": ["Anca colada ao banco", "Fletir os joelhos até ao fim", "Descida lenta"],
     "contraindicacoes": [],
-    "substitutos": ["leg-curl-sentado"],
+    "substitutos": ["leg-curl-sentado", "curl-deslizante"],
     "deitado": "barriga",
     "video": "https://www.youtube.com/watch?v=8Nat6GRiEoc"
   },
@@ -390,7 +390,7 @@
     "objetivo": "Posteriores da coxa em posição alongada (sentado).",
     "pontosChave": ["Joelho alinhado com o eixo", "Prender bem as coxas", "Descida controlada"],
     "contraindicacoes": [],
-    "substitutos": ["leg-curl-deitado"],
+    "substitutos": ["leg-curl-deitado", "curl-deslizante"],
     "video": "https://www.youtube.com/watch?v=_TDeIBSoKzk"
   },
   {
@@ -405,7 +405,7 @@
     "objetivo": "Glúteos com carga elevada e pouca exigência para a lombar.",
     "pontosChave": ["Omoplatas apoiadas no banco", "Queixo para baixo, subir até a anca ficar alinhada", "Pausa de 1 s em cima"],
     "contraindicacoes": [],
-    "substitutos": ["ponte-gluteos"],
+    "substitutos": ["ponte-gluteos", "ponte-gluteos-unilateral"],
     "video": "https://www.youtube.com/watch?v=kvmT_ZlgVI0"
   },
   {
@@ -420,7 +420,7 @@
     "objetivo": "Glúteos no chão, sem equipamento.",
     "pontosChave": ["Pés perto dos glúteos", "Subir a anca contraindo os glúteos", "Não arquear a lombar"],
     "contraindicacoes": [],
-    "substitutos": [],
+    "substitutos": ["ponte-gluteos-unilateral"],
     "deitado": "costas",
     "video": "https://www.youtube.com/watch?v=6jS6aH-78w4"
   },
@@ -535,7 +535,7 @@
     "grupoPrincipal": "peito",
     "gruposSecundarios": ["triceps", "ombros"],
     "tipo": "composto",
-    "equipamento": ["peso-corporal"],
+    "equipamento": ["paralelas"],
     "medida": "reps",
     "incrementoKg": 0,
     "objetivo": "Peito inferior e tríceps com o peso do corpo.",
@@ -591,27 +591,27 @@
     "grupoPrincipal": "costas",
     "gruposSecundarios": ["biceps"],
     "tipo": "composto",
-    "equipamento": ["peso-corporal"],
+    "equipamento": ["barra-fixa"],
     "medida": "reps",
     "incrementoKg": 0,
     "objetivo": "Puxada vertical com o peso do corpo; ótimo indicador de força relativa.",
     "pontosChave": ["Pega à largura dos ombros ou pouco mais", "Começar com braços estendidos e omoplatas para baixo", "Queixo acima da barra sem balançar"],
     "contraindicacoes": ["ombro"],
-    "substitutos": ["puxada-frente", "puxada-neutra"]
+    "substitutos": ["puxada-frente", "puxada-neutra", "remada-invertida", "remada-mochila"]
   },
   {
     "id": "remada-invertida",
-    "nome": "Remada invertida (corpo sob uma barra ou mesa)",
+    "nome": "Remada invertida (corpo sob uma barra baixa)",
     "grupoPrincipal": "costas",
     "gruposSecundarios": ["biceps", "core"],
     "tipo": "composto",
-    "equipamento": ["peso-corporal"],
+    "equipamento": ["barra-fixa", "barra"],
     "medida": "reps",
     "incrementoKg": 0,
-    "objetivo": "Costas com o peso do corpo; em casa pode ser feita debaixo de uma mesa robusta.",
+    "objetivo": "Costas com o peso do corpo, numa barra baixa (barra fixa ao alcance ou barra num suporte).",
     "pontosChave": ["Corpo em linha reta", "Puxar o peito até à barra", "Quanto mais horizontal o corpo, mais difícil"],
     "contraindicacoes": [],
-    "substitutos": ["remada-halter-unilateral"]
+    "substitutos": ["remada-halter-unilateral", "remada-mochila"]
   },
   {
     "id": "pullover-cabo",
@@ -667,7 +667,7 @@
     "objetivo": "Força e massa dos ombros com movimento acima da cabeça.",
     "pontosChave": ["Encosto quase vertical", "Halteres ao nível das orelhas, cotovelos ligeiramente à frente", "Empurrar sem arquear a lombar"],
     "contraindicacoes": ["ombro"],
-    "substitutos": ["press-landmine", "elevacao-lateral"]
+    "substitutos": ["press-landmine", "elevacao-lateral", "flexoes-pike"]
   },
   {
     "id": "desenvolvimento-maquina",
@@ -793,7 +793,7 @@
     "objetivo": "Cabeça longa do tríceps em posição alongada.",
     "pontosChave": ["Halter seguro com as duas mãos", "Cotovelos apontados para a frente", "Descer atrás da cabeça só até onde for confortável"],
     "contraindicacoes": ["ombro", "cotovelo"],
-    "substitutos": ["triceps-corda"]
+    "substitutos": ["triceps-corda", "flexoes-diamante", "fundos-banco"]
   },
   {
     "id": "triceps-corda-acima",
@@ -906,7 +906,8 @@
     "objetivo": "Pernas em casa, sem equipamento.",
     "pontosChave": ["Pés à largura dos ombros", "Descer como para sentar numa cadeira", "Peso nos calcanhares e no meio do pé"],
     "contraindicacoes": [],
-    "substitutos": []
+    "substitutos": ["cadeira-isometrica"],
+    "faixaFixa": [12, 25]
   },
   {
     "id": "peso-morto-barra",
@@ -928,7 +929,7 @@
     "grupoPrincipal": "posteriores",
     "gruposSecundarios": ["gluteos", "core"],
     "tipo": "composto",
-    "equipamento": ["halteres"],
+    "equipamento": ["halteres", "peso-corporal"],
     "medida": "reps",
     "incrementoKg": 2,
     "objetivo": "Posteriores e glúteos com menos carga e mais equilíbrio.",
@@ -977,7 +978,8 @@
     "pontosChave": ["Deitado de costas, um pé no chão e outra perna esticada", "Subir a anca até alinhar o tronco", "Pausa de 1 s em cima"],
     "contraindicacoes": [],
     "substitutos": ["ponte-gluteos"],
-    "deitado": "costas"
+    "deitado": "costas",
+    "faixaFixa": [10, 20]
   },
   {
     "id": "gemeos-sentado",
@@ -1093,5 +1095,118 @@
     "pontosChave": ["Halteres pesados ao lado do corpo", "Tronco direito, ombros para trás", "Passos curtos e controlados"],
     "contraindicacoes": [],
     "substitutos": ["prancha"]
+  },
+  {
+    "id": "flexoes-declinadas",
+    "nome": "Flexões declinadas (pés elevados)",
+    "grupoPrincipal": "peito",
+    "gruposSecundarios": ["ombros", "triceps", "core"],
+    "tipo": "composto",
+    "equipamento": ["peso-corporal"],
+    "medida": "reps",
+    "incrementoKg": 0,
+    "objetivo": "Peito superior e ombros sem equipamento: com os pés numa cadeira ou sofá, o corpo carrega mais peso nas mãos.",
+    "pontosChave": ["Pés numa cadeira, sofá ou degrau estável", "Corpo em linha reta, sem deixar a anca cair", "Cotovelos a ~45° do tronco"],
+    "contraindicacoes": ["punho", "ombro"],
+    "substitutos": ["flexoes"],
+    "video": "https://www.youtube.com/watch?v=5QFjmotLfW4"
+  },
+  {
+    "id": "flexoes-diamante",
+    "nome": "Flexões diamante (mãos juntas)",
+    "grupoPrincipal": "triceps",
+    "gruposSecundarios": ["peito", "ombros"],
+    "tipo": "composto",
+    "equipamento": ["peso-corporal"],
+    "medida": "reps",
+    "faixaFixa": [6, 20],
+    "incrementoKg": 0,
+    "objetivo": "Tríceps sem equipamento: com as mãos juntas, os cotovelos dobram mais e o tríceps faz mais trabalho.",
+    "pontosChave": ["Polegares e indicadores a formar um losango por baixo do peito", "Cotovelos junto ao tronco", "Se for difícil, fazer com as mãos num banco"],
+    "contraindicacoes": ["punho", "cotovelo"],
+    "substitutos": ["fundos-banco"],
+    "video": "https://www.youtube.com/watch?v=_4EGPVJuqfA"
+  },
+  {
+    "id": "flexoes-pike",
+    "nome": "Flexões pike (anca alta)",
+    "grupoPrincipal": "ombros",
+    "gruposSecundarios": ["triceps", "core"],
+    "tipo": "composto",
+    "equipamento": ["peso-corporal"],
+    "medida": "reps",
+    "faixaFixa": [6, 15],
+    "incrementoKg": 0,
+    "objetivo": "Ombros sem equipamento: com a anca alta, o empurrar fica vertical, parecido com o desenvolvimento.",
+    "pontosChave": ["Corpo em V invertido, anca alta", "Descer a cabeça entre as mãos, à frente delas", "Para ficar mais difícil, pés num degrau"],
+    "contraindicacoes": ["ombro", "punho"],
+    "substitutos": ["flexoes"],
+    "video": "https://www.youtube.com/watch?v=3r3tvRF1tVA"
+  },
+  {
+    "id": "remada-mochila",
+    "nome": "Remada unilateral com mochila",
+    "grupoPrincipal": "costas",
+    "gruposSecundarios": ["biceps", "ombros"],
+    "tipo": "composto",
+    "equipamento": ["peso-corporal"],
+    "medida": "reps",
+    "faixaFixa": [10, 20],
+    "incrementoKg": 0,
+    "objetivo": "Costas em casa sem halteres: uma mochila com livros ou garrafas de água faz de peso. Quando ficar fácil, junta mais peso à mochila.",
+    "pontosChave": ["Mão e joelho apoiados numa cadeira, costas neutras", "Puxar a mochila em direção à anca, cotovelo junto ao corpo", "Mochila bem fechada e alças firmes"],
+    "contraindicacoes": ["lombar"],
+    "substitutos": [],
+    "video": "https://www.youtube.com/watch?v=puaKVJOY8eg"
+  },
+  {
+    "id": "elevacao-y",
+    "nome": "Elevação em Y deitado de barriga",
+    "grupoPrincipal": "ombros",
+    "gruposSecundarios": ["costas"],
+    "tipo": "isolado",
+    "equipamento": ["peso-corporal"],
+    "medida": "reps",
+    "faixaFixa": [10, 20],
+    "incrementoKg": 0,
+    "objetivo": "Parte de trás do ombro e meio das costas sem equipamento, para equilibrar o muito empurrar dos treinos em casa.",
+    "pontosChave": ["Deitado de barriga, braços em Y acima da cabeça, polegares para cima", "Levantar os braços do chão juntando as omoplatas", "Pausa de 1 s em cima, sem arquear a lombar"],
+    "contraindicacoes": [],
+    "substitutos": [],
+    "deitado": "barriga",
+    "video": "https://www.youtube.com/watch?v=DQFTp5n0uh0"
+  },
+  {
+    "id": "curl-deslizante",
+    "nome": "Curl de pernas deslizante (toalha)",
+    "grupoPrincipal": "posteriores",
+    "gruposSecundarios": ["gluteos"],
+    "tipo": "isolado",
+    "equipamento": ["peso-corporal"],
+    "medida": "reps",
+    "faixaFixa": [8, 15],
+    "incrementoKg": 0,
+    "objetivo": "Posteriores da coxa sem máquina: os pés deslizam numa toalha ou em meias sobre chão liso.",
+    "pontosChave": ["Deitado de costas, calcanhares numa toalha, anca levantada", "Puxar os calcanhares para o rabo sem deixar a anca cair", "Voltar devagar; se for difícil, uma perna de cada vez fica para depois"],
+    "contraindicacoes": ["joelho"],
+    "substitutos": ["ponte-gluteos-unilateral"],
+    "deitado": "costas",
+    "video": "https://www.youtube.com/watch?v=Beb0_rycJCU"
+  },
+  {
+    "id": "cadeira-isometrica",
+    "nome": "Cadeira na parede (isometria)",
+    "grupoPrincipal": "quadriceps",
+    "gruposSecundarios": ["gluteos"],
+    "tipo": "isolado",
+    "equipamento": ["peso-corporal"],
+    "medida": "segundos",
+    "faixaFixa": [30, 60],
+    "incrementoKg": 0,
+    "objetivo": "Quadríceps sem equipamento e sem impacto: ficar sentado numa cadeira imaginária, encostado à parede.",
+    "pontosChave": ["Costas encostadas à parede, joelhos a ~90°", "Joelhos por cima dos tornozelos", "Respirar normalmente; parar se doer o joelho"],
+    "contraindicacoes": ["joelho"],
+    "substitutos": ["agachamento-peso-corporal"],
+    "video": "https://www.youtube.com/watch?v=JaZNYM3zAP0"
   }
 ]

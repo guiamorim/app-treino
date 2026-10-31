@@ -42,7 +42,8 @@ export const NOMES_AREAS: Record<Area, string> = traduzido({
   cotovelo: m('cotovelo'),
 })
 
-export const EQUIPAMENTOS = ['barra', 'halteres', 'maquina', 'cabo', 'peso-corporal'] as const
+/** «barra» é a barra com discos; «barra-fixa» e «paralelas» (v1.16) são os apoios de peso corporal. */
+export const EQUIPAMENTOS = ['barra', 'halteres', 'maquina', 'cabo', 'peso-corporal', 'barra-fixa', 'paralelas'] as const
 export type Equipamento = (typeof EQUIPAMENTOS)[number]
 
 export type TipoExercicio = 'composto' | 'isolado'
