@@ -133,7 +133,7 @@
     "objetivo": "Largura das costas (grande dorsal) com movimento vertical.",
     "pontosChave": ["Pega à largura dos ombros ou um pouco mais", "Puxar a barra até ao topo do peito", "Não puxar para trás da nuca"],
     "contraindicacoes": [],
-    "substitutos": ["puxada-neutra", "remada-halter-unilateral", "elevacoes", "remada-invertida"],
+    "substitutos": ["puxada-neutra", "remada-halter-unilateral", "elevacoes", "remada-invertida", "puxada-elastico"],
     "video": "https://www.youtube.com/watch?v=BOW9my4J_ek"
   },
   {
@@ -148,7 +148,7 @@
     "objetivo": "Grande dorsal com pega neutra, geralmente mais confortável para ombros e cotovelos.",
     "pontosChave": ["Peito ligeiramente para cima", "Puxar até ao queixo/peito", "Subida controlada"],
     "contraindicacoes": [],
-    "substitutos": ["puxada-frente", "remada-halter-unilateral", "elevacoes", "remada-invertida"],
+    "substitutos": ["puxada-frente", "remada-halter-unilateral", "elevacoes", "remada-invertida", "puxada-elastico"],
     "video": "https://www.youtube.com/watch?v=4nKSS0bS-_A"
   },
   {
@@ -178,7 +178,7 @@
     "objetivo": "Deltoide posterior e rotadores externos: ajuda a equilibrar o ombro de quem faz muito supino.",
     "pontosChave": ["Polia à altura da cara", "Puxar a corda em direção aos olhos, separando as mãos", "Cotovelos altos, rodar os braços para fora no fim"],
     "contraindicacoes": [],
-    "substitutos": ["crucifixo-invertido", "elevacao-y"],
+    "substitutos": ["crucifixo-invertido", "face-pull-elastico", "elevacao-y"],
     "video": "https://www.youtube.com/watch?v=YxQivR_kljk"
   },
   {
@@ -193,7 +193,7 @@
     "objetivo": "Deltoide posterior e parte alta das costas.",
     "pontosChave": ["Tronco inclinado à frente, costas neutras", "Abrir os braços com cotovelos ligeiramente fletidos", "Carga leve"],
     "contraindicacoes": [],
-    "substitutos": ["elevacao-y"],
+    "substitutos": ["face-pull-elastico", "elevacao-y"],
     "video": "https://www.youtube.com/watch?v=bCZ5a6WQyt0"
   },
   {
@@ -208,7 +208,7 @@
     "objetivo": "Bíceps.",
     "pontosChave": ["Cotovelos junto ao tronco", "Rodar a palma para cima ao subir", "Descer devagar"],
     "contraindicacoes": [],
-    "substitutos": ["curl-martelo"],
+    "substitutos": ["curl-martelo", "curl-elastico"],
     "video": "https://www.youtube.com/watch?v=pdzDa9CwJ2Y"
   },
   {
@@ -223,7 +223,7 @@
     "objetivo": "Bíceps e braquial, com pega neutra mais amiga do punho.",
     "pontosChave": ["Palmas viradas uma para a outra", "Cotovelos fixos", "Sem balançar o tronco"],
     "contraindicacoes": [],
-    "substitutos": ["curl-halteres"],
+    "substitutos": ["curl-halteres", "curl-elastico"],
     "video": "https://www.youtube.com/watch?v=2Z4gQju0CFI"
   },
   {
@@ -597,7 +597,7 @@
     "objetivo": "Puxada vertical com o peso do corpo; ótimo indicador de força relativa.",
     "pontosChave": ["Pega à largura dos ombros ou pouco mais", "Começar com braços estendidos e omoplatas para baixo", "Queixo acima da barra sem balançar"],
     "contraindicacoes": ["ombro"],
-    "substitutos": ["puxada-frente", "puxada-neutra", "remada-invertida", "remada-mochila"]
+    "substitutos": ["puxada-frente", "puxada-neutra", "remada-invertida", "remada-mochila", "puxada-elastico"]
   },
   {
     "id": "remada-invertida",
@@ -737,7 +737,7 @@
     "objetivo": "Bíceps com carga elevada.",
     "pontosChave": ["Cotovelos junto ao tronco", "Subir sem balançar", "Barra EZ se o punho incomodar"],
     "contraindicacoes": ["punho"],
-    "substitutos": ["curl-halteres", "curl-cabo"]
+    "substitutos": ["curl-halteres", "curl-cabo", "curl-elastico"]
   },
   {
     "id": "curl-cabo",
@@ -751,7 +751,7 @@
     "objetivo": "Bíceps com tensão constante.",
     "pontosChave": ["Cotovelos fixos", "Subir até à contração máxima", "Descer em 2 s"],
     "contraindicacoes": [],
-    "substitutos": ["curl-halteres"]
+    "substitutos": ["curl-halteres", "curl-elastico"]
   },
   {
     "id": "curl-concentrado",
@@ -765,7 +765,7 @@
     "objetivo": "Bíceps isolado, sem possibilidade de balanço.",
     "pontosChave": ["Sentado, cotovelo apoiado na parte interna da coxa", "Subir devagar", "Estender por completo em baixo"],
     "contraindicacoes": [],
-    "substitutos": ["curl-halteres"]
+    "substitutos": ["curl-halteres", "curl-elastico"]
   },
   {
     "id": "curl-inclinado",
@@ -779,7 +779,7 @@
     "objetivo": "Bíceps em posição alongada.",
     "pontosChave": ["Banco a ~60°", "Braços pendurados atrás do tronco", "Não avançar os cotovelos"],
     "contraindicacoes": ["ombro"],
-    "substitutos": ["curl-halteres"]
+    "substitutos": ["curl-halteres", "curl-elastico"]
   },
   {
     "id": "triceps-frances",
@@ -949,7 +949,7 @@
     "objetivo": "Glúteo médio, importante para a estabilidade da anca e do joelho.",
     "pontosChave": ["Costas encostadas", "Abrir as pernas de forma controlada", "Pausa de 1 s aberto"],
     "contraindicacoes": [],
-    "substitutos": []
+    "substitutos": ["abducao-caneleira"]
   },
   {
     "id": "kickback-cabo",
@@ -963,7 +963,7 @@
     "objetivo": "Isolar o glúteo máximo.",
     "pontosChave": ["Tornozeleira na polia baixa", "Levar a perna para trás sem arquear a lombar", "Apertar o glúteo no fim"],
     "contraindicacoes": ["lombar"],
-    "substitutos": ["ponte-gluteos"]
+    "substitutos": ["ponte-gluteos", "coice-gluteo"]
   },
   {
     "id": "ponte-gluteos-unilateral",
@@ -1208,5 +1208,85 @@
     "contraindicacoes": ["joelho"],
     "substitutos": ["agachamento-peso-corporal"],
     "video": "https://www.youtube.com/watch?v=JaZNYM3zAP0"
+  },
+  {
+    "id": "puxada-elastico",
+    "nome": "Puxada com elástico",
+    "grupoPrincipal": "costas",
+    "gruposSecundarios": ["biceps"],
+    "tipo": "composto",
+    "equipamento": ["elasticos"],
+    "medida": "reps",
+    "faixaFixa": [10, 20],
+    "incrementoKg": 0,
+    "objetivo": "Puxada vertical em casa: o elástico preso no alto de uma porta (com âncora própria) faz de polia.",
+    "pontosChave": ["Elástico bem preso no alto da porta, com a porta fechada e a abrir para o lado contrário", "Puxar os cotovelos para baixo e para trás, peito para cima", "Para ficar mais difícil, elástico mais forte ou afastar-se da porta"],
+    "contraindicacoes": ["ombro"],
+    "substitutos": [],
+    "video": "https://www.youtube.com/watch?v=VxCt-KKvzBQ"
+  },
+  {
+    "id": "face-pull-elastico",
+    "nome": "Face pull com elástico",
+    "grupoPrincipal": "ombros",
+    "gruposSecundarios": ["costas"],
+    "tipo": "isolado",
+    "equipamento": ["elasticos"],
+    "medida": "reps",
+    "faixaFixa": [12, 20],
+    "incrementoKg": 0,
+    "objetivo": "Parte de trás do ombro e rotadores com elástico, para equilibrar o empurrar e proteger o ombro.",
+    "pontosChave": ["Elástico preso à altura da cara", "Puxar para a cara, mãos a separar e cotovelos altos", "Pausa de 1 s atrás, sem encolher os ombros"],
+    "contraindicacoes": [],
+    "substitutos": [],
+    "video": "https://www.youtube.com/watch?v=PYj77in44ms"
+  },
+  {
+    "id": "curl-elastico",
+    "nome": "Curl de bíceps com elástico",
+    "grupoPrincipal": "biceps",
+    "gruposSecundarios": [],
+    "tipo": "isolado",
+    "equipamento": ["elasticos"],
+    "medida": "reps",
+    "faixaFixa": [12, 20],
+    "incrementoKg": 0,
+    "objetivo": "Bíceps em casa sem halteres: o elástico fica mais duro no topo do movimento.",
+    "pontosChave": ["Pisar o elástico com os dois pés", "Cotovelos junto ao tronco", "Descer devagar, sem balançar o corpo"],
+    "contraindicacoes": [],
+    "substitutos": [],
+    "video": "https://www.youtube.com/watch?v=PXLF19Oqe3M"
+  },
+  {
+    "id": "abducao-caneleira",
+    "nome": "Abdução da anca deitado de lado (caneleira)",
+    "grupoPrincipal": "gluteos",
+    "gruposSecundarios": [],
+    "tipo": "isolado",
+    "equipamento": ["caneleiras", "peso-corporal"],
+    "medida": "reps",
+    "faixaFixa": [12, 25],
+    "incrementoKg": 0,
+    "objetivo": "Glúteo médio, que estabiliza a anca e o joelho. A caneleira torna o exercício mais difícil.",
+    "pontosChave": ["Deitado de lado, corpo em linha reta", "Subir a perna de cima um pouco para trás, com o pé paralelo ao chão", "Sem rodar a anca para trás; quando chegares ao topo da faixa, caneleira mais pesada"],
+    "contraindicacoes": ["anca"],
+    "substitutos": [],
+    "video": "https://www.youtube.com/watch?v=LV1ocAcAvsQ"
+  },
+  {
+    "id": "coice-gluteo",
+    "nome": "Coice de glúteo de quatro apoios (caneleira)",
+    "grupoPrincipal": "gluteos",
+    "gruposSecundarios": ["posteriores"],
+    "tipo": "isolado",
+    "equipamento": ["caneleiras", "peso-corporal"],
+    "medida": "reps",
+    "faixaFixa": [12, 25],
+    "incrementoKg": 0,
+    "objetivo": "Glúteo máximo isolado, em casa. A caneleira torna o exercício mais difícil.",
+    "pontosChave": ["De quatro apoios, mãos debaixo dos ombros", "Empurrar o calcanhar para o teto com o joelho a 90°", "Sem arquear a lombar; parar quando a coxa fica alinhada com o tronco"],
+    "contraindicacoes": ["lombar"],
+    "substitutos": ["ponte-gluteos-unilateral"],
+    "video": "https://www.youtube.com/watch?v=8MmD_5rVNhg"
   }
 ]

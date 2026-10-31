@@ -229,7 +229,7 @@ function linhasTreino(tr: TreinoModelo, d: DadosExportacao, catalogo: Catalogo, 
     if (opts.sugeridos && !opts.sugeridos.has(ex.id)) {
       opts.sugeridos.add(ex.id)
       const historico = mesmaForma(historicoExercicio(d.sessoes, ex.id), ex, tipo)
-      const s = sugerir({ prescricao: p, exercicio: semCarga ? { ...ex, incrementoKg: 0 } : ex, historico, readaptacao: plano.readaptacao, descarga })
+      const s = sugerir({ prescricao: p, exercicio: semCarga ? { ...ex, incrementoKg: 0 } : ex, historico, readaptacao: plano.readaptacao, descarga, ...(tipo === 'halter' && d.anamnese?.halteresMaxKg ? { cargaMaxKg: d.anamnese.halteresMaxKg } : {}) })
       const ultima = historico.at(-1)
       const sugestao = `${t('Sugestão:')} ${s.carga !== null && !semCarga ? `${pesoTxt(s.carga)} × ` : ''}${s.reps} ${unidade}`
       const antes = ultima ? ` · ${t('Última vez:')} ${semCarga ? '' : `${pesoTxt(ultima.series[0]!.carga)} × `}${ultima.series.map((x) => x.reps).join(', ')}` : ''

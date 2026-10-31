@@ -216,3 +216,6 @@ figure.frase figcaption::before { content: '— '; }
 .cal-dia.hoje { border: 2px solid var(--acento); }
 .cal-dia.escolhido { background: var(--acento); color: var(--acento-texto); }
 .cal-dia.escolhido small { color: inherit; }
+/* F28.1: lista de equipamento na anamnese, sem a moldura do fieldset. */
+fieldset.equipamento { border: 0; padding: 0; margin: 12px 0 0; min-width: 0; }
+fieldset.equipamento legend { padding: 0; font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; }

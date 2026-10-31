@@ -63,7 +63,7 @@ function Registo({ dados, plano, treinoId, prescricaoId, exercicioId }: { dados:
   const tipo = tipoCarga(ex, dados.tiposCarga)
   const historico = mesmaForma(historicoExercicio(dados.sessoes, ex.id, sessao?.id), ex, tipo)
   const descarga = estadoBloco(plano, semanaAtual).fase === 'descarga'
-  const sugestao = sugerir({ prescricao: ef, exercicio: tipo === 'corporal' ? { ...ex, incrementoKg: 0 } : ex, historico, readaptacao: plano.readaptacao, descarga })
+  const sugestao = sugerir({ prescricao: ef, exercicio: tipo === 'corporal' ? { ...ex, incrementoKg: 0 } : ex, historico, readaptacao: plano.readaptacao, descarga, ...(tipo === 'halter' && dados.anamnese?.halteresMaxKg ? { cargaMaxKg: dados.anamnese.halteresMaxKg } : {}) })
   const ultima = historico.at(-1)
   const emSegundos = ex.medida === 'segundos'
   const semCarga = ex.incrementoKg === 0 || tipo === 'corporal'

@@ -1,6 +1,31 @@
 {
   "versoes": [
     {
+      "versao": "1.17.0",
+      "data": "2026-10-31",
+      "itens": [
+        "Na anamnese, «Que equipamento tens» passou a ser uma lista: barra com discos, halteres, barra fixa, paralelas, máquinas, polias, elásticos e caneleiras. O plano usa só o que marcares.",
+        "Podes indicar o halter mais pesado que tens; quando chegares a ele, a app sugere outras formas de progredir em vez de subir a carga.",
+        "Cinco exercícios novos com elásticos e caneleiras, entre eles puxada e curl de bíceps com elástico."
+      ],
+      "traducoes": {
+        "en": {
+          "itens": [
+            "In the anamnesis, “What equipment do you have” is now a list: barbell, dumbbells, pull-up bar, parallel bars, machines, pulleys, bands and ankle weights. The plan only uses what you tick.",
+            "You can enter your heaviest dumbbell; when you reach it, the app suggests other ways to progress instead of adding load.",
+            "Five new exercises with bands and ankle weights, including band pulldowns and band biceps curls."
+          ]
+        },
+        "es": {
+          "itens": [
+            "En la anamnesis, «Qué equipo tienes» es ahora una lista: barra con discos, mancuernas, barra fija, paralelas, máquinas, poleas, bandas y tobilleras. El plan usa solo lo que marques.",
+            "Puedes indicar la mancuerna más pesada que tienes; cuando llegues a ella, la app sugiere otras formas de progresar en lugar de subir la carga.",
+            "Cinco ejercicios nuevos con bandas y tobilleras, entre ellos jalón y curl de bíceps con banda."
+          ]
+        }
+      }
+    },
+    {
       "versao": "1.16.0",
       "data": "2026-10-31",
       "itens": [

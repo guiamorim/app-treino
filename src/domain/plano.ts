@@ -41,17 +41,32 @@ export const PARAMETROS: Record<Objetivo, Record<TipoExercicio, Parametros>> = {
 /** Secção 3.9 (v1.16): faixas dos exercícios feitos só com o peso do corpo. */
 export const FAIXA_CORPORAL: Record<TipoExercicio, [number, number]> = { composto: [8, 20], isolado: [12, 25] }
 
-const EQUIPAMENTO_DISPONIVEL: Record<AcessoEquipamento, Equipamento[]> = {
-  ginasio: ['barra', 'halteres', 'maquina', 'cabo', 'peso-corporal', 'barra-fixa', 'paralelas'],
-  halteres: ['halteres', 'peso-corporal'],
-  casa: ['peso-corporal'],
+/** F28.1: equipamento que se pode marcar (o peso do corpo conta sempre). */
+export const EQUIPAMENTOS_ESCOLHA: readonly Exclude<Equipamento, 'peso-corporal'>[] = ['barra', 'halteres', 'barra-fixa', 'paralelas', 'maquina', 'cabo', 'elasticos', 'caneleiras']
+
+/** F28.3: o que valia cada resposta antiga. */
+export const EQUIPAMENTO_LEGADO: Record<AcessoEquipamento, Equipamento[]> = {
+  ginasio: [...EQUIPAMENTOS_ESCOLHA],
+  halteres: ['halteres'],
+  casa: [],
+}
+
+/** F28: equipamento disponível, com o peso do corpo. */
+export function equipamentoDisponivel(a: Pick<Anamnese, 'equipamento' | 'equipamentos'>): Equipamento[] {
+  return ['peso-corporal', ...(a.equipamentos ?? EQUIPAMENTO_LEGADO[a.equipamento])]
+}
+
+/** F28.3: resumo guardado em `equipamento`, para quem lê a anamnese sem a lista. */
+export function resumoEquipamento(lista: readonly Equipamento[]): AcessoEquipamento {
+  if (lista.includes('maquina') || lista.includes('cabo')) return 'ginasio'
+  return lista.includes('halteres') ? 'halteres' : 'casa'
 }
 
 /** Secção 3.9: o exercício vai ser feito no chão, só com o peso do corpo (sem carga disponível). */
 export function soPesoCorporal(ex: Exercicio, a: Anamnese): boolean {
   if (!ex.equipamento.includes('peso-corporal')) return false
   if (ex.incrementoKg === 0) return true
-  const disponivel = EQUIPAMENTO_DISPONIVEL[a.equipamento]
+  const disponivel = equipamentoDisponivel(a)
   return ex.equipamento.every((q) => q === 'peso-corporal' || !disponivel.includes(q))
 }
 
@@ -75,7 +90,7 @@ export function motivoIncompatibilidade(ex: Exercicio, a: Anamnese): string | nu
   const area = ex.contraindicacoes.find((c) => a.restricoes.some((r) => r.area === c))
   if (area) return t('por causa do {area}', { area: NOMES_AREAS[area] })
   if (ex.deitado && gravidezAtiva(a) === 'gravida-2t3t') return t('por causa da gravidez')
-  const disponivel = EQUIPAMENTO_DISPONIVEL[a.equipamento]
+  const disponivel = equipamentoDisponivel(a)
   if (!ex.equipamento.some((q) => disponivel.includes(q))) return t('por falta de equipamento')
   return null
 }
@@ -214,10 +229,11 @@ export function avisosAnamnese(a: Anamnese, proprio = false): string[] {
 /** Secção 3.9 (v1.16): limites honestos do treino sem carga. */
 function avisosEquipamento(a: Anamnese): string[] {
   const avisos: string[] = []
-  if (a.equipamento === 'casa') {
+  const tem = (q: Equipamento) => equipamentoDisponivel(a).includes(q)
+  if (!tem('barra-fixa') && !tem('halteres') && !tem('elasticos') && !tem('cabo')) {
     avisos.push(t('Em casa sem equipamento, costas e bíceps ficam com pouco trabalho: sem barra fixa nem halteres não há forma segura de puxar com carga suficiente. Uma barra fixa ou um par de halteres é o que faz mais diferença.'))
   }
-  if (a.equipamento !== 'ginasio' && a.objetivo === 'forca') {
+  if (!tem('barra') && !tem('maquina') && a.objetivo === 'forca') {
     avisos.push(t('Sem barra com discos nem máquinas, o objetivo força fica limitado: os exercícios de peso corporal usam faixas de repetições mais altas, e a força máxima sobe menos do que com cargas pesadas.'))
   }
   return avisos

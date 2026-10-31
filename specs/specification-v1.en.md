@@ -2,7 +2,7 @@
 
 **English** · [Português](especificacao-v1.md)
 
-Date: 2026-10-20 · Version 1.16 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.16)
+Date: 2026-10-20 · Version 1.17 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.17)
 
 The Portuguese version is the reference used for the domain names in the code. Both versions must stay in sync.
 
@@ -47,7 +47,7 @@ RIR = reps in reserve: how many more reps you could still have done at the end o
 ## 2. Features and acceptance criteria
 
 ### F1. Anamnesis
-- Fields: age, height, weight, waist, sex, goal (body recomposition, hypertrophy, strength, general health), days per week (2–7), session length (45/60/75 min), experience (beginner, returning after a break, intermediate), equipment (full gym, dumbbells only, home), restrictions (painful areas, or "None"), accepts cardio (yes/no), PAR-Q+ (7 general questions). (v1.3) Plan emphasis (balanced, more legs and glutes, more upper body), for any sex. If sex is female: pregnancy or postpartum (no; pregnant, 1st trimester; pregnant, 2nd or 3rd trimester; postpartum, less than 12 months).
+- Fields: age, height, weight, waist, sex, goal (body recomposition, hypertrophy, strength, general health), days per week (2–7), session length (45/60/75 min), experience (beginner, returning after a break, intermediate), equipment (full gym, dumbbells only, home; since v1.17, a list, see F28), restrictions (painful areas, or "None"), accepts cardio (yes/no), PAR-Q+ (7 general questions). (v1.3) Plan emphasis (balanced, more legs and glutes, more upper body), for any sex. If sex is female: pregnancy or postpartum (no; pregnant, 1st trimester; pregnant, 2nd or 3rd trimester; postpartum, less than 12 months).
 - **Given** I answer "yes" to any PAR-Q+ question, **when** I save, **then** I see a warning recommending medical clearance before training, and the plan is generated at conservative intensity and flagged as such.
 - **Given** I report a restriction that has not been professionally assessed, **then** the app recommends an assessment, without blocking.
 - (v1.3) **Given** I report pregnancy or postpartum, **then** the plan is conservative and a warning recommends follow-up with a doctor or obstetrician (and, postpartum, a pelvic floor assessment by a physiotherapist). In the 2nd and 3rd trimesters no exercise lying on the back or on the stomach appears.
@@ -270,6 +270,15 @@ Fifth phase of the 2026-10-31 study (delivery B).
 - **F27.4 Differences from the generated plan.** Exercises are not swapped between blocks. Names stay as I wrote them, in any language. The questionnaire warnings (PAR-Q+, pregnancy, pain never assessed) remain, without saying the plan is conservative. When I add an exercise the rules would avoid (pain, pregnancy, equipment), the editor shows the reason but lets me choose it. Generating a new plan from the questionnaire replaces the own plan, after confirming.
 - **F27.5 Own exercises in the plan.** Deleting an own exercise that is in the plan archives it (F26.4), so the plan keeps working.
 
+### F28. Equipment list (v1.17)
+Second phase of the calisthenics and home-training feasibility study (2026-10-31).
+- **F28.1 List.** In the anamnesis, "What equipment do you have" is a list: barbell with plates and rack, dumbbells, pull-up bar, parallel bars or rings, weight machines, cable pulleys, resistance bands and ankle weights. Body weight always counts. The shortcuts "Full gym" and "Body weight only" tick and untick everything. A new anamnesis starts with everything ticked.
+- **F28.2 Heaviest dumbbell.** With dumbbells, I can enter my heaviest dumbbell (optional, in the chosen unit). When the suggestion (section 4) would raise the load above it, it keeps the load and suggests taking 3 s to lower each rep or doing the exercise one leg or one arm at a time.
+- **F28.3 Old answers.** An anamnesis without the list counts as: full gym = everything; dumbbells only = dumbbells; home = nothing. The generated plan is the same before and after the conversion, and the anamnesis opens with the list ticked. The old field is still saved as a summary (machines or pulleys = gym; otherwise dumbbells = dumbbells; otherwise home).
+- **F28.4 Plan.** The plan only uses exercises with at least one ticked item or body weight (section 3.4). New exercises with bands (pulldown, face pull, biceps curl) and ankle weights (side-lying hip abduction, quadruped glute kickback) are added as the last substitutes of gym exercises. Bands and ankle weights have no logged load: progress is by reps and, at the top of the range, a heavier ankle weight or stronger band.
+- **F28.5 Warnings.** Without a pull-up bar, dumbbells, bands or pulleys: back and biceps warning (section 3.9). Without a barbell or machines and with the strength goal: strength warning.
+- **F28.6 Backup.** The backup keeps the list and the heaviest dumbbell; unknown equipment is rejected.
+
 ### F14. Blocks and next change (v1.2, rules in section 3.7)
 - On Home and on Today's workout: current phase (re-adaptation, week N of M of the block, or deload) and the next change with its date: end of re-adaptation (full sets), deload week (half the sets), or new block (isolation exercises rotate, listing what changes).
 
@@ -344,7 +353,7 @@ Target frequency: each major group 2×/week.
 
 ### 3.9 Training at home (v1.16)
 First phase of the calisthenics and home-training feasibility study (2026-10-31). Before, the "home" equipment produced workouts with 1 or 2 exercises, because the catalogue's substitutes were almost all gym exercises.
-- **Equipment.** "Barra" is the barbell with plates. Pull-ups need a pull-up bar (`barra-fixa`), parallel-bar dips need parallel bars (`paralelas`) and the inverted row needs a pull-up bar or a bar in a rack. The gym has everything; "Dumbbells only" and "At home, no equipment" have none of these (the equipment list comes in the next phase).
+- **Equipment.** "Barra" is the barbell with plates. Pull-ups need a pull-up bar (`barra-fixa`), parallel-bar dips need parallel bars (`paralelas`) and the inverted row needs a pull-up bar or a bar in a rack. The gym has everything; "Dumbbells only" and "At home, no equipment" have none of these. Since v1.17, each person ticks what they have (F28).
 - **Home exercises.** Added to the catalogue: decline push-ups, diamond push-ups, pike push-ups, one-arm backpack row, prone Y raise, sliding leg curl (towel) and wall sit. The single-leg Romanian deadlift can now be done without a dumbbell. Gym exercises get these as their last substitutes, so the choice at the gym does not change.
 - **Body-weight range.** An exercise done with body weight only (no load possible, or the loaded equipment is not available) uses 8–20 reps for compounds and 12–25 for isolation exercises, for any goal, because with little load the stimulus comes from getting close to failure (Schoenfeld et al., 2017). The catalogue's own range still wins (e.g. plank 30–60 s, pike push-ups 6–15).
 - **Warnings.** At home without equipment: back and biceps get little work, and a pull-up bar or dumbbells make the biggest difference. Without a gym and with the strength goal: the goal is limited without heavy loads.
@@ -358,6 +367,7 @@ For each Prescription with range [min, max]:
 4. Pain ≥ 4: no load increase and a substitute is suggested. Pain ≥ 7: recommends stopping the exercise today and shows a warning to get assessed.
 5. Re-adaptation phase: no load increase in the first 2 sessions of each exercise.
 6. (v1.2) Deload week: keep the last session's load, no increase.
+7. (v1.17) With dumbbells and the heaviest dumbbell entered (F28.2), the load does not go above it.
 
 ## 5. Non-functional requirements
 - Works offline after the first visit.

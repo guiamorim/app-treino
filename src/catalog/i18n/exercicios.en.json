@@ -736,5 +736,50 @@
    "Knees above the ankles",
    "Breathe normally; stop if your knee hurts"
   ]
+ },
+ "puxada-elastico": {
+  "nome": "Band lat pulldown",
+  "objetivo": "Vertical pull at home: a band anchored high on a door (with a proper door anchor) works like a pulley.",
+  "pontosChave": [
+   "Band firmly anchored high on the door, door closed and opening away from you",
+   "Pull the elbows down and back, chest up",
+   "To make it harder, use a stronger band or step further from the door"
+  ]
+ },
+ "face-pull-elastico": {
+  "nome": "Band face pull",
+  "objetivo": "Rear shoulders and rotator cuff with a band, to balance pushing and protect the shoulder.",
+  "pontosChave": [
+   "Band anchored at face height",
+   "Pull towards your face, hands apart and elbows high",
+   "Pause 1 s at the back, without shrugging"
+  ]
+ },
+ "curl-elastico": {
+  "nome": "Band biceps curl",
+  "objetivo": "Biceps at home without dumbbells: the band gets harder at the top of the movement.",
+  "pontosChave": [
+   "Stand on the band with both feet",
+   "Elbows close to the torso",
+   "Lower slowly, without swinging"
+  ]
+ },
+ "abducao-caneleira": {
+  "nome": "Side-lying hip abduction (ankle weight)",
+  "objetivo": "Gluteus medius, which stabilises the hip and knee. The ankle weight makes it harder.",
+  "pontosChave": [
+   "Lying on your side, body in a straight line",
+   "Lift the top leg slightly backwards, foot parallel to the floor",
+   "Do not roll the hip back; at the top of the range, use a heavier ankle weight"
+  ]
+ },
+ "coice-gluteo": {
+  "nome": "Quadruped glute kickback (ankle weight)",
+  "objetivo": "Isolated gluteus maximus at home. The ankle weight makes it harder.",
+  "pontosChave": [
+   "On all fours, hands under shoulders",
+   "Push the heel towards the ceiling with the knee at 90°",
+   "Do not arch the lower back; stop when the thigh is in line with the torso"
+  ]
  }
 }

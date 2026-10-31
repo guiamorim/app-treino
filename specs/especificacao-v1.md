@@ -2,7 +2,7 @@
 
 [English](specification-v1.en.md) · **Português**
 
-Data: 2026-10-20 · Versão 1.16 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.16)
+Data: 2026-10-20 · Versão 1.17 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.17)
 
 ## 0. Decisões fechadas
 
@@ -43,7 +43,7 @@ Estes nomes são usados iguais na especificação, no código e na interface.
 ## 2. Funcionalidades e critérios de aceitação
 
 ### F1. Anamnese
-- Campos: idade, altura, peso, cintura, sexo, objetivo (recomposição, hipertrofia, força, saúde geral), dias por semana (2–7), duração da sessão (45/60/75 min), experiência (iniciante, regresso após paragem, intermédio), equipamento (ginásio completo, halteres, casa), restrições (zonas com dor, ou «Nenhuma»), aceita cardio (sim/não), PAR-Q+ (7 perguntas gerais). (v1.3) Ênfase do plano (equilibrado, mais pernas e glúteos, mais tronco), para qualquer sexo. Se o sexo for feminino: gravidez ou pós-parto (não; grávida no 1.º trimestre; grávida no 2.º ou 3.º trimestre; pós-parto há menos de 12 meses).
+- Campos: idade, altura, peso, cintura, sexo, objetivo (recomposição, hipertrofia, força, saúde geral), dias por semana (2–7), duração da sessão (45/60/75 min), experiência (iniciante, regresso após paragem, intermédio), equipamento (ginásio completo, halteres, casa; desde a v1.17, uma lista, ver F28), restrições (zonas com dor, ou «Nenhuma»), aceita cardio (sim/não), PAR-Q+ (7 perguntas gerais). (v1.3) Ênfase do plano (equilibrado, mais pernas e glúteos, mais tronco), para qualquer sexo. Se o sexo for feminino: gravidez ou pós-parto (não; grávida no 1.º trimestre; grávida no 2.º ou 3.º trimestre; pós-parto há menos de 12 meses).
 - **Dado** que respondo "sim" a alguma pergunta do PAR-Q+, **quando** guardo, **então** vejo um aviso a recomendar avaliação médica antes de treinar, e o plano é gerado com intensidade conservadora e marcado como tal.
 - **Dado** que indico uma restrição sem avaliação profissional, **então** a app mostra uma recomendação para avaliação, sem bloquear.
 - (v1.3) **Dado** que indico gravidez ou pós-parto, **então** o plano é conservador e aparece um aviso a recomendar acompanhamento do médico ou obstetra (e, no pós-parto, avaliação do pavimento pélvico por fisioterapeuta). No 2.º e 3.º trimestres não aparecem exercícios deitado de costas ou de barriga para baixo.
@@ -266,6 +266,15 @@ Quinta fase do estudo de 2026-10-31 (entrega B).
 - **F27.4 Diferenças em relação ao plano gerado.** Não há troca de exercícios entre blocos. Os nomes ficam como os escrevi, em qualquer idioma. Os avisos da anamnese (PAR-Q+, gravidez, dor nunca avaliada) continuam, sem dizer que o plano é conservador. Ao juntar um exercício que as regras evitariam (dor, gravidez, equipamento), o editor mostra o motivo, mas deixa escolher. Gerar um plano novo a partir da anamnese substitui o plano próprio, depois de confirmar.
 - **F27.5 Exercícios próprios no plano.** Apagar um exercício próprio que está no plano arquiva-o (F26.4), para o plano continuar a funcionar.
 
+### F28. Lista de equipamento (v1.17)
+Segunda fase do estudo de viabilidade de calistenia e treino em casa (2026-10-31).
+- **F28.1 Lista.** Na anamnese, «Que equipamento tens» é uma lista: barra com discos e suporte, halteres, barra fixa, paralelas ou argolas, máquinas de musculação, polias (cabos), elásticos de resistência e caneleiras. O peso do corpo conta sempre. Os atalhos «Ginásio completo» e «Só o peso do corpo» marcam e desmarcam tudo. Numa anamnese nova vem tudo marcado.
+- **F28.2 Halter mais pesado.** Com halteres, posso indicar o halter mais pesado que tenho (opcional, na unidade escolhida). Quando a sugestão (secção 4) subiria a carga acima dele, mantém a carga e sugere descer em 3 s em cada repetição ou fazer o exercício com uma perna ou um braço de cada vez.
+- **F28.3 Respostas antigas.** Uma anamnese sem lista vale: ginásio completo = tudo; só halteres = halteres; casa = nada. O plano gerado é o mesmo antes e depois da conversão, e a anamnese abre com a lista marcada. O campo antigo continua a ser guardado como resumo (máquinas ou polias = ginásio; senão halteres = halteres; senão casa).
+- **F28.4 Plano.** O plano usa só exercícios com pelo menos um equipamento marcado ou o peso do corpo (secção 3.4). Entram exercícios com elásticos (puxada, face pull, curl de bíceps) e com caneleiras (abdução da anca deitado de lado, coice de glúteo de quatro apoios), como últimos substitutos dos de ginásio. Com caneleiras e elásticos não se regista carga: progride-se pelas repetições e, no topo da faixa, com uma caneleira ou um elástico mais forte.
+- **F28.5 Avisos.** Sem barra fixa, halteres, elásticos nem polias: aviso de costas e bíceps (secção 3.9). Sem barra com discos nem máquinas e com objetivo força: aviso de força.
+- **F28.6 Cópia.** A cópia de segurança guarda a lista e o halter mais pesado; equipamento desconhecido é rejeitado.
+
 ### F14. Blocos e próxima mudança (v1.2, regras na secção 3.7)
 - No Início e no Treino de hoje: fase atual (readaptação, semana N de M do bloco, ou descarga) e a próxima mudança com data: fim da readaptação (séries completas), semana de descarga (metade das séries), ou novo bloco (troca dos exercícios isolados, com a lista do que muda).
 
@@ -340,7 +349,7 @@ Frequência alvo: cada grupo principal 2×/semana.
 
 ### 3.9 Treino em casa (v1.16)
 Primeira fase do estudo de viabilidade de calistenia e treino em casa (2026-10-31). Antes, o equipamento «casa» gerava treinos com 1 ou 2 exercícios, porque os substitutos do catálogo eram quase todos de ginásio.
-- **Equipamento.** «Barra» é a barra com discos. As elevações pedem barra fixa (`barra-fixa`), os mergulhos nas paralelas pedem paralelas (`paralelas`) e a remada invertida pede barra fixa ou barra num suporte. O ginásio tem tudo; «Só halteres» e «Em casa, sem equipamento» não têm nenhum destes (a lista de equipamento vem na fase seguinte).
+- **Equipamento.** «Barra» é a barra com discos. As elevações pedem barra fixa (`barra-fixa`), os mergulhos nas paralelas pedem paralelas (`paralelas`) e a remada invertida pede barra fixa ou barra num suporte. O ginásio tem tudo; «Só halteres» e «Em casa, sem equipamento» não têm nenhum destes. Desde a v1.17, cada pessoa marca o que tem (F28).
 - **Exercícios de casa.** Entram no catálogo: flexões declinadas, flexões diamante, flexões pike, remada unilateral com mochila, elevação em Y deitado de barriga, curl de pernas deslizante (toalha) e cadeira na parede. O peso morto romeno unilateral passa a poder fazer-se sem halter. Os exercícios de ginásio ganham estes como últimos substitutos, por isso a escolha no ginásio não muda.
 - **Faixa de peso corporal.** Um exercício feito só com o peso do corpo (sem carga possível, ou sem o equipamento de carga disponível) usa 8–20 reps nos compostos e 12–25 nos isolados, em qualquer objetivo, porque com pouca carga o estímulo vem de chegar perto da falha (Schoenfeld et al., 2017). A faixa própria do catálogo continua a mandar (ex.: prancha 30–60 s, flexões pike 6–15).
 - **Avisos.** Em casa sem equipamento: costas e bíceps ficam com pouco trabalho, e uma barra fixa ou halteres fazem a maior diferença. Sem ginásio e com objetivo força: o objetivo fica limitado sem cargas pesadas.
@@ -354,6 +363,7 @@ Para cada Prescrição com faixa [mín, máx]:
 4. Dor ≥ 4: não sobe a carga e sugere substituto. Dor ≥ 7: recomenda parar o exercício hoje e mostra aviso para avaliação.
 5. Fase de readaptação: sem subida de carga nas primeiras 2 sessões de cada exercício.
 6. (v1.2) Semana de descarga: mantém a carga da última sessão, sem subida.
+7. (v1.17) Com halteres e o halter mais pesado indicado (F28.2), a carga não sobe acima dele.
 
 ## 5. Requisitos não funcionais
 - Funciona offline depois da primeira abertura.
