@@ -1,6 +1,31 @@
 {
   "versoes": [
     {
+      "versao": "1.26.0",
+      "data": "2026-11-01",
+      "itens": [
+        "Programas de cardio em Mais: começar a caminhar, baixo impacto, correr 5 km, intervalos e emagrecer, cada um com progressão semana a semana.",
+        "Podes criar o teu próprio programa de cardio, com os dias, a modalidade, os minutos, o esforço e quanto sobe por semana.",
+        "O programa mostra a próxima sessão no Início e no Treino de hoje. Com «Só cardio», fica em primeiro lugar, com a recomendação de manter 2 sessões curtas de força por semana."
+      ],
+      "traducoes": {
+        "en": {
+          "itens": [
+            "Cardio programmes in More: start walking, low impact, run 5 km, intervals and lose weight, each building up week by week.",
+            "You can create your own cardio programme, with the days, activity, minutes, effort and how much it goes up each week.",
+            "The programme shows the next session on Home and Today. With “Cardio only”, it comes first, with the recommendation to keep 2 short strength sessions a week."
+          ]
+        },
+        "es": {
+          "itens": [
+            "Programas de cardio en Más: empezar a caminar, bajo impacto, correr 5 km, intervalos y adelgazar, cada uno con progresión semana a semana.",
+            "Puedes crear tu propio programa de cardio, con los días, la modalidad, los minutos, el esfuerzo y cuánto sube cada semana.",
+            "El programa muestra la próxima sesión en Inicio y en Hoy. Con «Solo cardio», va en primer lugar, con la recomendación de mantener 2 sesiones cortas de fuerza por semana."
+          ]
+        }
+      }
+    },
+    {
       "versao": "1.25.0",
       "data": "2026-11-01",
       "itens": [
@@ -652,19 +677,19 @@
     }
   ],
   "emPreparacao": [
-    "Programas de cardio (caminhar, baixo impacto, correr 5 km, intervalos, emagrecer e um personalizado) e um plano para o pós-parto.",
+    "Um plano para o pós-parto, por fases.",
     "Conta com sessão iniciada e cópia na nuvem: em estudo, ainda sem decisão. Enquanto não houver, os dados continuam só no teu telemóvel."
   ],
   "traducoes": {
     "en": {
       "emPreparacao": [
-        "Cardio programmes (walking, low impact, run 5 km, intervals, weight loss and a custom one) and a postpartum plan.",
+        "A postpartum plan, in phases.",
         "Account sign-in and cloud backup: under study, no decision yet. Until then, your data stays only on your phone."
       ]
     },
     "es": {
       "emPreparacao": [
-        "Programas de cardio (caminar, bajo impacto, correr 5 km, intervalos, adelgazar y uno personalizado) y un plan para el posparto.",
+        "Un plan para el posparto, por fases.",
         "Cuenta con inicio de sesión y copia en la nube: en estudio, todavía sin decisión. Mientras tanto, tus datos siguen solo en tu móvil."
       ]
     }

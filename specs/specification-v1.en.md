@@ -2,7 +2,7 @@
 
 **English** · [Português](especificacao-v1.md)
 
-Date: 2026-10-20 · Version 1.25 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.25)
+Date: 2026-10-20 · Version 1.26 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.26)
 
 The Portuguese version is the reference used for the domain names in the code. Both versions must stay in sync.
 
@@ -347,6 +347,21 @@ Fifth phase of the calisthenics and home training feasibility study (2026-10-31)
 - **F36.5 Backup and export.** Cardio goes into the backup (F10), with the same validation, and into the history Excel file, in a "Cardio" sheet that only appears when there are entries. Older backups without cardio are still valid.
 - **F36.6 Calendar.** Days with cardio show ♥ in the calendar (F25.3), and the day detail lists each entry.
 - Cardio does not count towards the week's workouts, adherence, streak or achievements (F11, F12), which remain about strength workouts.
+
+### F37. Cardio programmes (v1.26)
+
+- **F37.1 Set programmes.** In "Mais" (more), "Programas de cardio" (cardio programmes), five programmes with weekly progression:
+  - **Start walking (8 weeks):** brisk walking at effort 5–6, from 3 × 20 min up to 5 × 45 min.
+  - **Low impact (8 weeks):** cycling, elliptical or swimming at effort 5–6, from 3 × 25 min up to 4 × 45 min.
+  - **Run 5 km (9 weeks, 3 sessions a week):** 5 min walking before and after, alternating running and walking: 8 × (1 + 1.5 min), 6 × (2 + 1.5), 5 × (3 + 1.5), 4 × (5 + 2), 3 × (8 + 2), 2 × (12 + 2), then 20, 25 and 30 min non-stop, at effort 6–7.
+  - **Intervals for people who already train (6 weeks):** 2 sessions a week of 3 × 4 min (weeks 1–2) then 4 × 4 min at effort 8, with 3 easy minutes in between and 7 min warm-up and cool-down (Wewege et al., 2017), plus 1–2 moderate sessions of 30–35 min.
+  - **Lose weight with cardio (12 weeks):** 5 moderate sessions a week, from 150 up to 250 min a week (Donnelly et al., 2009), with the warning that without changing what you eat, cardio alone leads to little weight loss.
+  Weekly volume never goes down from one week to the next; in running, what goes up is the time running non-stop.
+- **F37.2 Custom programme.** You choose the days (1 to 7) and, for each, the activity, minutes (5–180) and effort; the weeks (2–16) and the weekly increase (0–10%). Each session's minutes go up by that percentage each week, rounded to the minute. If the last week exceeds 300 min of vigorous cardio (effort 7 or more), a warning appears.
+- **F37.3 Safety.** Run 5 km and intervals are locked, with the reason, if the PAR-Q+ has any "yes" or there is pregnancy or postpartum; run 5 km is also locked with knee or hip pain.
+- **F37.4 Progress.** Programme weeks count from the day it starts. Each cardio entry (F36) in that week counts as a session done. A card shows the programme, the week, the sessions done and the next session, with "Registar esta sessão" (log this session), which opens the log with the session's activity, minutes and effort. When the week is done, it says when the next one starts; after the last week, it says the programme is finished. The card appears on Home (after the next workout) and on Today (after the list).
+- **F37.5 Cardio only.** With a programme active, the "Só cardio" (cardio only) option puts the programme card first on Home and Today, and always shows the recommendation of 2 short strength sessions a week to keep muscle. The strength workout stays available.
+- **F37.6 Switching and ending.** Switching or ending a programme asks for confirmation; cardio entries stay. The active programme goes into the backup (F10).
 
 ### F14. Blocks and next change (v1.2, rules in section 3.7)
 - On Home and on Today's workout: current phase (re-adaptation, week N of M of the block, or deload) and the next change with its date: end of re-adaptation (full sets), deload week (half the sets), or new block (isolation exercises rotate, listing what changes).

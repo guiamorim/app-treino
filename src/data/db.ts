@@ -7,9 +7,10 @@ import type { Ferias } from '../domain/ferias'
 import type { Nivelamento } from '../domain/nivelamento'
 import type { Degraus } from '../domain/escadas'
 import type { RegistoCardio } from '../domain/cardio'
+import type { ProgramaAtivo } from '../domain/programasCardio'
 
 interface Valor {
-  chave: 'anamnese' | 'plano' | 'videos' | 'ultimaExportacao' | 'perfil' | 'versaoVista' | 'idioma' | 'unidade' | 'tiposCarga' | 'barraKg' | 'exerciciosProprios' | 'ferias' | 'degraus' | 'nivelamento' | 'parabens' | 'instalacaoVista'
+  chave: 'anamnese' | 'plano' | 'videos' | 'ultimaExportacao' | 'perfil' | 'versaoVista' | 'idioma' | 'unidade' | 'tiposCarga' | 'barraKg' | 'exerciciosProprios' | 'ferias' | 'degraus' | 'nivelamento' | 'parabens' | 'instalacaoVista' | 'programaCardio'
   valor: unknown
 }
 
@@ -44,6 +45,7 @@ export class BaseDados extends Dexie {
     const ferias = await this.ler<Ferias>('ferias')
     const degraus = await this.ler<Degraus>('degraus')
     const nivelamento = await this.ler<Nivelamento>('nivelamento')
+    const programaCardio = await this.ler<ProgramaAtivo>('programaCardio')
     const copia: Copia = {
       formato: 'app-treino',
       versao: 1,
@@ -61,6 +63,7 @@ export class BaseDados extends Dexie {
       ...(ferias ? { ferias } : {}),
       ...(degraus && Object.keys(degraus).length > 0 ? { degraus } : {}),
       ...(nivelamento ? { nivelamento } : {}),
+      ...(programaCardio ? { programaCardio } : {}),
     }
     await this.gravar('ultimaExportacao', agora)
     return copia
@@ -85,6 +88,7 @@ export class BaseDados extends Dexie {
       if (c.ferias) await this.gravar('ferias', c.ferias)
       if (c.degraus) await this.gravar('degraus', c.degraus)
       if (c.nivelamento) await this.gravar('nivelamento', c.nivelamento)
+      if (c.programaCardio) await this.gravar('programaCardio', c.programaCardio)
     })
   }
 }

@@ -2,7 +2,7 @@
 
 [English](specification-v1.en.md) · **Português**
 
-Data: 2026-10-20 · Versão 1.25 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.25)
+Data: 2026-10-20 · Versão 1.26 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.26)
 
 ## 0. Decisões fechadas
 
@@ -343,6 +343,21 @@ Quinta fase do estudo de viabilidade de calistenia e treino em casa (2026-10-31)
 - **F36.5 Cópia e exportação.** O cardio entra na cópia de segurança (F10), com a mesma validação, e no Excel do histórico, numa folha «Cardio» que só aparece quando há registos. Cópias antigas sem cardio continuam válidas.
 - **F36.6 Calendário.** Os dias com cardio têm ♥ no calendário (F25.3), e o detalhe do dia lista cada registo.
 - O cardio não conta para os treinos da semana, a aderência, a sequência nem as conquistas (F11, F12), que continuam a ser dos treinos de força.
+
+### F37. Programas de cardio (v1.26)
+
+- **F37.1 Programas definidos.** Em «Mais», «Programas de cardio», cinco programas com progressão semanal:
+  - **Começar a caminhar (8 semanas):** caminhada rápida a esforço 5–6, de 3 × 20 min até 5 × 45 min.
+  - **Baixo impacto (8 semanas):** bicicleta, elíptica ou natação a esforço 5–6, de 3 × 25 min até 4 × 45 min.
+  - **Correr 5 km (9 semanas, 3 sessões por semana):** 5 min a andar antes e depois, e alternar correr e andar: 8 × (1 + 1,5 min), 6 × (2 + 1,5), 5 × (3 + 1,5), 4 × (5 + 2), 3 × (8 + 2), 2 × (12 + 2), e depois 20, 25 e 30 min seguidos, a esforço 6–7.
+  - **Intervalos para quem já treina (6 semanas):** 2 sessões por semana de 3 × 4 min (semanas 1–2) e depois 4 × 4 min a esforço 8, com 3 min leves entre cada e 7 min leves de aquecimento e de retorno à calma (Wewege et al., 2017), mais 1–2 sessões moderadas de 30–35 min.
+  - **Emagrecer com cardio (12 semanas):** 5 sessões moderadas por semana, de 150 até 250 min por semana (Donnelly et al., 2009), com o aviso de que sem mudar a alimentação o cardio sozinho emagrece pouco.
+  O volume semanal nunca desce de uma semana para a seguinte; na corrida, o que sobe é o tempo seguido a correr.
+- **F37.2 Programa personalizado.** Escolhem-se os dias (1 a 7) e, para cada um, a modalidade, os minutos (5–180) e o esforço; as semanas (2–16) e a subida por semana (0–10 %). Os minutos de cada sessão sobem essa percentagem por semana, arredondados ao minuto. Se a última semana passar de 300 min de cardio vigoroso (esforço 7 ou mais), aparece um aviso.
+- **F37.3 Segurança.** Correr 5 km e intervalos ficam bloqueados, com o motivo, se o PAR-Q+ tiver algum «sim» ou houver gravidez ou pós-parto; correr 5 km fica também bloqueado com dor no joelho ou na anca.
+- **F37.4 Progresso.** As semanas do programa contam a partir do dia em que começa. Cada registo de cardio (F36) dessa semana conta como uma sessão feita. Um cartão mostra o programa, a semana, as sessões feitas e a próxima sessão, com «Registar esta sessão», que abre o registo com a modalidade, os minutos e o esforço da sessão. Com a semana cumprida, diz quando começa a seguinte; depois da última semana, diz que o programa terminou. O cartão aparece no Início (depois do próximo treino) e no Treino de hoje (depois da lista).
+- **F37.5 Só cardio.** Com um programa ativo, a opção «Só cardio» põe o cartão do programa em primeiro lugar no Início e no Treino de hoje, e mostra sempre a recomendação de 2 sessões curtas de força por semana para manter o músculo. O treino de força continua disponível.
+- **F37.6 Trocar e terminar.** Trocar de programa ou terminá-lo pede confirmação; os registos de cardio ficam. O programa ativo entra na cópia de segurança (F10).
 
 ### F14. Blocos e próxima mudança (v1.2, regras na secção 3.7)
 - No Início e no Treino de hoje: fase atual (readaptação, semana N de M do bloco, ou descarga) e a próxima mudança com data: fim da readaptação (séries completas), semana de descarga (metade das séries), ou novo bloco (troca dos exercícios isolados, com a lista do que muda).

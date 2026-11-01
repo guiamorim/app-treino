@@ -10,6 +10,7 @@ import { planoComDegraus, type Degraus } from '../domain/escadas'
 import type { Nivelamento } from '../domain/nivelamento'
 import { juntarProprios, lerProprios, type ExercicioProprio } from '../domain/proprios'
 import type { RegistoCardio } from '../domain/cardio'
+import type { ProgramaAtivo } from '../domain/programasCardio'
 import type { Anamnese, FotoAvaliacao, Medicao, Perfil, Plano, Sessao } from '../domain/types'
 import { barrasKg, type TipoCarga } from '../domain/carga'
 import { definirUnidade, UNIDADES, unidadeDoDispositivo, type UnidadePeso } from '../domain/unidades'
@@ -77,6 +78,8 @@ export interface Dados {
   degraus: Degraus
   /** F32: o último teste de nivelamento. */
   nivelamento?: Nivelamento
+  /** F37: programa de cardio escolhido. */
+  programaCardio?: ProgramaAtivo
   /** F35.4: mensagem de parabéns ao terminar o treino (ligada por omissão; fica só no dispositivo). */
   parabens: boolean
   /** F35.2: a sugestão de instalar no ecrã principal já foi fechada (fica só no dispositivo). */
@@ -103,6 +106,7 @@ export function useDados(): Dados | undefined {
       ferias: await db.ler<Ferias>('ferias'),
       degraus: (await db.ler<Degraus>('degraus')) ?? {},
       nivelamento: await db.ler<Nivelamento>('nivelamento'),
+      programaCardio: (await db.ler<ProgramaAtivo>('programaCardio')) ?? undefined,
       parabens: (await db.ler<boolean>('parabens')) ?? true,
       instalacaoVista: (await db.ler<boolean>('instalacaoVista')) ?? false,
     }

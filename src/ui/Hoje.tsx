@@ -11,6 +11,7 @@ import { textoFase } from './Fase'
 import { ir } from './rota'
 import { BotaoReportar } from './Reportar'
 import { BotaoCardio, textoCardio } from './Cardio'
+import { CartaoProgramaCardio } from './ProgramasCardio'
 import { JanelaParabens } from './Parabens'
 import { instalada, SugestaoInstalar } from './Instalar'
 import { m, t, traduzido } from '../i18n'
@@ -58,6 +59,8 @@ export function Hoje({ dados, plano, anamnese }: { dados: Dados; plano: Plano; a
     <>
       <LembreteAlongamento dados={dados} anamnese={anamnese} />
       <CartaoNivelamento dados={dados} plano={dados.planoBase ?? plano} anamnese={anamnese} />
+      {/* F37.5: num plano só de cardio, o programa vem primeiro; o treino de força fica como recomendação. */}
+      {dados.programaCardio?.soCardio && <CartaoProgramaCardio dados={dados} />}
       <h1>{treino.nome}</h1>
       <p className="secundario">~{treino.duracaoEstimadaMin} min · {textoFase(plano, semana)}</p>
       {treino.sintese && <p>{treino.sintese}</p>}
@@ -117,6 +120,7 @@ export function Hoje({ dados, plano, anamnese }: { dados: Dados; plano: Plano; a
         </ul>
       </div>
 
+      {dados.programaCardio && !dados.programaCardio.soCardio && <CartaoProgramaCardio dados={dados} />}
       {/* F35.2: no Treino de hoje, depois da lista, para não empurrar o treino para fora do ecrã. */}
       {!dados.instalacaoVista && !instalada() && <SugestaoInstalar />}
       {sessao && !estado?.completa && <button className="largo" onClick={terminar}>{t('Terminar treino')}</button>}

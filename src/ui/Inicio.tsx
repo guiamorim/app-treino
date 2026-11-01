@@ -14,6 +14,7 @@ import { NovidadesInicio } from './Atualizacao'
 import { textoFase, TrocasProximoBloco } from './Fase'
 import { ir } from './rota'
 import { BotaoCardio } from './Cardio'
+import { CartaoProgramaCardio } from './ProgramasCardio'
 import { t } from '../i18n'
 
 const somaDias = (d: Date, n: number) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n)
@@ -69,12 +70,15 @@ export function Inicio({ dados, plano, anamnese }: { dados: Dados; plano: Plano;
 
       <NovidadesInicio dados={dados} />
       <LembreteAlongamento dados={dados} anamnese={anamnese} />
+      {/* F37.5: num plano só de cardio, o programa vem antes do treino de força. */}
+      {dados.programaCardio?.soCardio && <CartaoProgramaCardio dados={dados} />}
       <button className="cartao proximo" onClick={() => ir('/hoje')}>
         <span className="secundario">{t('Próximo treino')}</span>
         <span className="titulo">{proximo.nome} · ~{proximo.duracaoEstimadaMin} min</span>
         <span className="secundario">{textoFase(plano, semana)}</span>
       </button>
       <TrocasProximoBloco plano={plano} semana={semana} />
+      {dados.programaCardio && !dados.programaCardio.soCardio && <CartaoProgramaCardio dados={dados} />}
       <div className="linha">
         <button onClick={() => ir('/alongamento')}>🧘 {t('Alongamentos')}</button>
         <BotaoCardio largo={false} />
