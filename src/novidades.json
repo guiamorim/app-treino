@@ -1,6 +1,31 @@
 {
   "versoes": [
     {
+      "versao": "1.25.0",
+      "data": "2026-11-01",
+      "itens": [
+        "Podes registar cardio: no fim do treino do dia ou em qualquer outro dia, com a modalidade, os minutos e o esforço. A distância e a frequência cardíaca são opcionais.",
+        "Nos Relatórios, na Semana, vês os minutos de cardio comparados com os 150–300 minutos recomendados pela OMS.",
+        "O cardio aparece no calendário, na cópia de segurança e no Excel do histórico."
+      ],
+      "traducoes": {
+        "en": {
+          "itens": [
+            "You can log cardio: at the end of the day's workout or on any other day, with the activity, minutes and effort. Distance and heart rate are optional.",
+            "In Reports, under Week, you see your cardio minutes compared with the 150–300 minutes recommended by the WHO.",
+            "Cardio shows up in the calendar, the backup and the history Excel file."
+          ]
+        },
+        "es": {
+          "itens": [
+            "Puedes registrar cardio: al final del entrenamiento del día o cualquier otro día, con la modalidad, los minutos y el esfuerzo. La distancia y la frecuencia cardíaca son opcionales.",
+            "En Informes, en Semana, ves los minutos de cardio comparados con los 150–300 minutos que recomienda la OMS.",
+            "El cardio aparece en el calendario, en la copia de seguridad y en el Excel del historial."
+          ]
+        }
+      }
+    },
+    {
       "versao": "1.24.0",
       "data": "2026-10-31",
       "itens": [
@@ -627,16 +652,19 @@
     }
   ],
   "emPreparacao": [
+    "Programas de cardio (caminhar, baixo impacto, correr 5 km, intervalos, emagrecer e um personalizado) e um plano para o pós-parto.",
     "Conta com sessão iniciada e cópia na nuvem: em estudo, ainda sem decisão. Enquanto não houver, os dados continuam só no teu telemóvel."
   ],
   "traducoes": {
     "en": {
       "emPreparacao": [
+        "Cardio programmes (walking, low impact, run 5 km, intervals, weight loss and a custom one) and a postpartum plan.",
         "Account sign-in and cloud backup: under study, no decision yet. Until then, your data stays only on your phone."
       ]
     },
     "es": {
       "emPreparacao": [
+        "Programas de cardio (caminar, bajo impacto, correr 5 km, intervalos, adelgazar y uno personalizado) y un plan para el posparto.",
         "Cuenta con inicio de sesión y copia en la nube: en estudio, todavía sin decisión. Mientras tanto, tus datos siguen solo en tu móvil."
       ]
     }

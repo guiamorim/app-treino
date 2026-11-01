@@ -10,6 +10,7 @@ import { CartaoNivelamento } from './Nivelamento'
 import { textoFase } from './Fase'
 import { ir } from './rota'
 import { BotaoReportar } from './Reportar'
+import { BotaoCardio, textoCardio } from './Cardio'
 import { JanelaParabens } from './Parabens'
 import { instalada, SugestaoInstalar } from './Instalar'
 import { m, t, traduzido } from '../i18n'
@@ -27,6 +28,13 @@ export function Hoje({ dados, plano, anamnese }: { dados: Dados; plano: Plano; a
   const sessao = sessaoAberta(dados.sessoes, plano, treino.id)
   const estado = sessao ? estadoSessao(sessao, treino) : undefined
   const ultimaTerminada = dados.sessoes.filter((s) => s.fim).at(-1)
+
+  const cardioFeito = sessao ? dados.cardio.filter((c) => c.sessaoId === sessao.id) : []
+
+  async function abrirCardio() {
+    const s = await abrirSessao(dados.sessoes, plano, treino.id)
+    ir(`/cardio/${encodeURIComponent(s.id)}`)
+  }
 
   async function abrir(prescricaoId: string) {
     await abrirSessao(dados.sessoes, plano, treino.id)
@@ -94,12 +102,16 @@ export function Hoje({ dados, plano, anamnese }: { dados: Dados; plano: Plano; a
             )
           })}
           {treino.cardioMin && (
-            <li className="item" style={{ cursor: 'default' }}>
-              <span className="estado" aria-hidden="true">♥</span>
-              <span className="corpo">
-                <span className="titulo">{t('Cardio {min} min', { min: treino.cardioMin })}</span><br />
-                <span className="secundario">{t('Intensidade moderada: consegues falar frases curtas.')}</span>
-              </span>
+            <li>
+              {/* F36.1: o cardio do plano abre o registo, com os minutos já preenchidos. */}
+              <button className="item" onClick={() => abrirCardio()}>
+                <span className={`estado ${cardioFeito.length ? 'feito' : 'por-fazer'}`} aria-label={cardioFeito.length ? NOMES_ESTADO.feito : NOMES_ESTADO['por-fazer']}>{cardioFeito.length ? '✓' : '♥'}</span>
+                <span className="corpo">
+                  <span className="titulo">{t('Cardio {min} min', { min: treino.cardioMin })}</span><br />
+                  <span className="secundario">{cardioFeito.length ? cardioFeito.map(textoCardio).join('; ') : t('Intensidade moderada: consegues falar frases curtas.')}</span>
+                </span>
+                <span aria-hidden="true">›</span>
+              </button>
             </li>
           )}
         </ul>
@@ -108,7 +120,10 @@ export function Hoje({ dados, plano, anamnese }: { dados: Dados; plano: Plano; a
       {/* F35.2: no Treino de hoje, depois da lista, para não empurrar o treino para fora do ecrã. */}
       {!dados.instalacaoVista && !instalada() && <SugestaoInstalar />}
       {sessao && !estado?.completa && <button className="largo" onClick={terminar}>{t('Terminar treino')}</button>}
-      <button className="largo" style={{ marginTop: 8 }} onClick={() => ir('/alongamento')}>🧘 {t('Alongamentos')}</button>
+      <div className="linha" style={{ marginTop: 8 }}>
+        <button onClick={() => ir('/alongamento')}>🧘 {t('Alongamentos')}</button>
+        <BotaoCardio sessaoId={sessao?.id} texto={sessao ? t('Acrescentar cardio') : undefined} largo={false} />
+      </div>
 
       <label htmlFor="treino">{t('Fazer outro treino')}</label>
       <select id="treino" value={treino.id} onChange={(e) => setEscolhido(e.target.value)}>

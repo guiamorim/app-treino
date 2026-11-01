@@ -22,12 +22,16 @@ export type Rota =
   | { ecra: 'nivelamento' }
   /** F34.1: reportar ou sugerir, com o exercício ou o treino quando vem do botão desse ecrã. */
   | { ecra: 'reportar'; tipo: TipoReporte; id?: string }
+  /** F36.1: registar cardio; com a sessão quando é complemento do treino do dia. */
+  | { ecra: 'cardio'; sessaoId?: string }
 
 export function lerRota(hash: string): Rota {
   const [ecra, arg, arg2] = hash.replace(/^#\/?/, '').split('/')
   switch (ecra) {
     case 'reportar':
       return (arg === 'exercicio' || arg === 'treino') && arg2 ? { ecra, tipo: arg, id: decodeURIComponent(arg2) } : { ecra, tipo: 'geral' }
+    case 'cardio':
+      return arg ? { ecra, sessaoId: decodeURIComponent(arg) } : { ecra }
     case 'exercicio':
       return arg ? { ecra: 'exercicio', prescricaoId: decodeURIComponent(arg) } : { ecra: 'hoje' }
     case 'alongamento':

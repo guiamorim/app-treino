@@ -13,6 +13,7 @@ describe('F10 exportar e importar', () => {
     await a.medicoes.put({ id: 'm1', data: '2026-10-20', pesoKg: 85 })
     await a.fotos.put({ id: 'f1', data: '2026-10-20', pose: 'lado', imagem: 'data:image/jpeg;base64,/9j/AAAA' })
     await a.gravar('perfil', { nome: 'Rui' })
+    await a.cardio.put({ id: 'c1', data: '2026-10-20T18:00:00.000Z', modalidade: 'bicicleta', minutos: 30, esforco: 6, distanciaKm: 12, sessaoId: 's1' })
     const copia = await a.exportar('2026-10-20T12:00:00.000Z')
 
     const b = new BaseDados('b')
@@ -21,6 +22,8 @@ describe('F10 exportar e importar', () => {
     expect(await b.exportar('2026-10-20T12:00:00.000Z')).toEqual(copia)
     expect(copia.fotos).toHaveLength(1)
     expect(copia.perfil).toEqual({ nome: 'Rui' })
+    // F36.5: o cardio entra na cópia.
+    expect(copia.cardio).toHaveLength(1)
   })
 
   it('F10.2 ficheiro inválido não altera os dados existentes', async () => {

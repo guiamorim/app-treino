@@ -8,6 +8,7 @@ import { lerVideo } from './video'
 import { esquemaProprios, type ExercicioProprio } from './proprios'
 import type { Ferias } from './ferias'
 import { PADROES, type Nivelamento } from './nivelamento'
+import { LIMITES, MODALIDADES, type RegistoCardio } from './cardio'
 
 const inteiro = (min: number, max: number) => z.number().int().min(min).max(max)
 const data = z.string().min(10).max(40)
@@ -30,6 +31,17 @@ const medicao = z.strictObject({
   data,
   pesoKg: z.number().min(20).max(400).optional(),
   ...(Object.fromEntries(MEDIDAS_CM.map((k) => [k, z.number().min(INFO_MEDIDAS[k].min).max(INFO_MEDIDAS[k].max).optional()])) as Record<MedidaCm, z.ZodOptional<z.ZodNumber>>),
+})
+
+const cardio = z.strictObject({
+  id,
+  data,
+  modalidade: z.enum(MODALIDADES),
+  minutos: inteiro(...LIMITES.minutos),
+  esforco: inteiro(...LIMITES.esforco),
+  distanciaKm: z.number().min(LIMITES.distanciaKm[0]).max(LIMITES.distanciaKm[1]).optional(),
+  fcMedia: inteiro(...LIMITES.fcMedia).optional(),
+  sessaoId: id.optional(),
 })
 
 const anamnese = z.strictObject({
@@ -102,6 +114,7 @@ const esquemaCopia = z.strictObject({
   medicoes: z.array(medicao).max(10_000),
   videos: z.record(id, z.string().refine((u) => lerVideo(u) !== null, 'Link de vídeo não permitido')),
   fotos: z.array(foto).max(2000).optional(),
+  cardio: z.array(cardio).max(20_000).optional(),
   perfil: perfil.optional(),
   carga: z.strictObject({ barraKg: z.number().min(5).max(30).optional(), tipos: z.record(id, z.enum(TIPOS_CARGA)).optional() }).optional(),
   exerciciosProprios: esquemaProprios.optional(),
@@ -125,6 +138,8 @@ export interface Copia {
   videos: Record<string, string>
   /** v1.4; cópias antigas não têm. */
   fotos?: FotoAvaliacao[]
+  /** F36 (v1.25): registos de cardio; cópias antigas não têm. */
+  cardio?: RegistoCardio[]
   perfil?: Perfil
   /** F24 (v1.12): peso da barra e forma de contar escolhida por exercício. */
   carga?: { barraKg?: number; tipos?: Record<string, TipoCarga> }

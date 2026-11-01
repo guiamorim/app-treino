@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { excelFichaHistorico, folhaFicha, folhaHistorico, folhaMedicoes, pdfDia, pdfFicha, pdfHistorico, pdfMes, pdfRelatorioPt, pdfSemana, type DadosExportacao } from './exportar'
+import { excelFichaHistorico, folhaCardio, folhaFicha, folhaHistorico, folhaMedicoes, pdfDia, pdfFicha, pdfHistorico, pdfMes, pdfRelatorioPt, pdfSemana, type DadosExportacao } from './exportar'
 import { catalogo, perfilExemplo } from './fixtures'
 import { gerarPdf, lerJpeg, quebrarLinha } from './pdf'
 import { gerarPlano } from './plano'
 import type { Sessao } from './types'
 import { crc32 } from './xlsx'
+import { diaLocal } from './calendario'
 import { definirUnidade } from './unidades'
 
 const AGORA = '2026-10-24T10:00:00.000Z'
@@ -94,6 +95,16 @@ describe('F17 exportar ficha e histórico', () => {
     expect(dec('xl/workbook.xml')).toContain('<sheet name="Ficha" sheetId="1" r:id="rId1"/><sheet name="Histórico" sheetId="2" r:id="rId2"/><sheet name="Medições" sheetId="3" r:id="rId3"/>')
     expect(dec('xl/worksheets/sheet2.xml')).toContain('<c r="E2"><v>20</v></c>')
     expect(dec('xl/worksheets/sheet3.xml')).toContain('<c r="B3"><v>88.5</v></c>')
+  })
+
+  it('F36.5 Excel: folha Cardio só quando há registos', () => {
+    const cardio = [{ id: 'c1', data: '2026-10-21T18:00:00.000Z', modalidade: 'bicicleta' as const, minutos: 30, esforco: 6, distanciaKm: 12.5 }]
+    const f = folhaCardio(cardio)
+    expect(f.cabecalho).toEqual(['Data', 'Modalidade', 'Minutos', 'Esforço (0–10)', 'Distância (km)', 'FC média (bpm)'])
+    expect(f.linhas).toEqual([[diaLocal(cardio[0]!.data), 'Bicicleta', 30, 6, 12.5, undefined]])
+    const dec = (z: ReturnType<typeof lerZip>) => new TextDecoder().decode(z.get('xl/workbook.xml')!.dados)
+    expect(dec(lerZip(excelFichaHistorico({ ...dados, cardio }, catalogo, AGORA)))).toContain('<sheet name="Cardio" sheetId="4" r:id="rId4"/>')
+    expect(dec(lerZip(excelFichaHistorico(dados, catalogo, AGORA)))).not.toContain('Cardio')
   })
 
   it('F23.1 exercícios por tempo: a ficha pede reserva em segundos e o histórico mostra-a', () => {

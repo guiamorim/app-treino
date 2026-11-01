@@ -927,7 +927,7 @@ test.describe('5. ecrã estreito', () => {
       }
       const encontrados: string[] = []
       const ver = async (onde: string) => { for (const x of await problemas(page)) encontrados.push(`${onde}: ${x}`) }
-      for (const rota of ['hoje', 'inicio', 'relatorios', 'medicoes', 'fotos', 'mais', 'calistenia', 'nivelamento', 'meu-plano', 'alongamento', 'anamnese', 'meu-exercicio/novo', 'reportar']) {
+      for (const rota of ['hoje', 'inicio', 'relatorios', 'medicoes', 'fotos', 'mais', 'calistenia', 'nivelamento', 'meu-plano', 'alongamento', 'anamnese', 'meu-exercicio/novo', 'reportar', 'cardio']) {
         await page.goto(`./#/${rota}`)
         await expect(page.locator('h1').first()).toBeVisible()
         await ver(rota)
@@ -1077,4 +1077,77 @@ test('F35: equipamento escolhido visível, sugestão de instalar e parabéns que
   await page.getByRole('button', { name: 'Terminar treino' }).click()
   await expect(page.getByRole('heading', { name: 'Inferior A' })).toBeVisible()
   await expect(page.getByRole('dialog', { name: 'Parabéns' })).toHaveCount(0)
+})
+
+test('F36: registar cardio avulso e como complemento, minutos da semana, calendário e apagar', async ({ page }) => {
+  await preencherAnamnese(page)
+  // F36.1: avulso, a partir do Início.
+  await page.getByRole('link', { name: 'Início' }).click()
+  await page.getByRole('button', { name: '♥ Registar cardio' }).click()
+  await expect(page.getByRole('heading', { name: 'Registar cardio' })).toBeVisible()
+  await expect(page.getByLabel('Modalidade')).toHaveValue('caminhada')
+  // F36.2: os minutos são obrigatórios; o teste da fala segue o esforço; as zonas são uma nota.
+  await page.getByRole('button', { name: 'Guardar cardio' }).click()
+  await expect(page.getByRole('alert')).toHaveText('Indica os minutos, entre 1 e 300.')
+  await page.getByLabel('Minutos').fill('40')
+  await page.getByLabel(/Esforço: \d+ de 10/).fill('6')
+  await expect(page.getByText('Moderado: consegues falar, mas não cantar.')).toBeVisible()
+  await page.getByText('Zonas de frequência cardíaca (nota)').click()
+  await expect(page.getByText(/frequência máxima estimada é 177 bpm: moderado 113–135 bpm, vigoroso 136–168 bpm/)).toBeVisible()
+  await page.getByLabel('FC média em bpm (opcional)').fill('300')
+  await page.getByRole('button', { name: 'Guardar cardio' }).click()
+  await expect(page.getByRole('alert')).toHaveText('A frequência cardíaca média tem de estar entre 30 e 230 bpm.')
+  await page.getByLabel('FC média em bpm (opcional)').fill('128')
+  await page.getByRole('button', { name: 'Guardar cardio' }).click()
+  // F36.4: confirmação com os minutos da semana.
+  const confirmacao = page.getByRole('status').filter({ hasText: 'Cardio registado:' })
+  await expect(confirmacao).toContainText('Caminhada rápida · 40 min · esforço 6/10 · 128 bpm')
+  await expect(confirmacao).toContainText('Esta semana: 40 de 150 min recomendados.')
+  await expect(confirmacao).not.toContainText('🎉')
+  // Vigoroso conta a dobrar: 40 + 2 × 60 chega aos 150 da OMS, com a mensagem de parabéns.
+  await page.getByLabel('Modalidade').selectOption('corrida')
+  await page.getByLabel('Minutos').fill('60')
+  await page.getByLabel(/Esforço: \d+ de 10/).fill('8')
+  await expect(page.getByText('Vigoroso: só consegues dizer algumas palavras de cada vez.')).toBeVisible()
+  await page.getByLabel('Distância em km (opcional)').fill('9,5')
+  await page.getByRole('button', { name: 'Guardar cardio' }).click()
+  await expect(confirmacao).toContainText('Corrida · 60 min · esforço 8/10 · 9,5 km')
+  await expect(confirmacao).toContainText('Esta semana: 160 de 150 min recomendados.')
+  await expect(confirmacao).toContainText('Chegaste aos 150 minutos semanais recomendados pela OMS.')
+
+  // F36.3: nos Relatórios, a semana com os minutos equivalentes; apagar um registo.
+  await page.getByRole('link', { name: 'Relatórios' }).click()
+  await page.getByRole('tab', { name: 'Semana' }).click()
+  const cartao = page.locator('.cartao').filter({ has: page.getByRole('heading', { name: /^Cardio/ }) })
+  await expect(cartao).toContainText('160 / 150–300')
+  await expect(cartao).toContainText('100 min no total: 40 moderados, 60 vigorosos.')
+  page.once('dialog', (d) => d.accept())
+  await cartao.getByRole('button', { name: /Apagar cardio de/ }).first().click()
+  await expect(cartao).toContainText('40 / 150–300')
+  await expect(cartao).not.toContainText('Corrida')
+
+  // F36.1: como complemento do treino do dia, a partir da linha de cardio do plano (Inferior A).
+  await page.getByRole('link', { name: 'Hoje' }).click()
+  await page.getByLabel('Fazer outro treino').selectOption({ label: 'Inferior A' })
+  await expect(page.getByRole('heading', { name: 'Inferior A' })).toBeVisible()
+  await page.getByRole('button', { name: /Cardio 10 min/ }).click()
+  await expect(page.getByText('Junta-se ao treino de hoje: Inferior A.')).toBeVisible()
+  await expect(page.getByLabel('Minutos')).toHaveValue('10')
+  await expect(page.getByLabel('Modalidade')).toHaveValue('caminhada')
+  await page.getByLabel('Modalidade').selectOption('bicicleta')
+  await page.getByRole('button', { name: 'Guardar cardio' }).click()
+  await expect(confirmacao).toContainText('Bicicleta · 10 min · esforço 5/10')
+  await confirmacao.getByRole('button', { name: 'Voltar' }).click()
+  await expect(page.getByRole('heading', { name: 'Inferior A' })).toBeVisible()
+  const linhaCardio = page.getByRole('button', { name: /Cardio 10 min/ })
+  await expect(linhaCardio).toContainText('Bicicleta · 10 min · esforço 5/10')
+  await expect(linhaCardio.locator('.estado')).toHaveText('✓')
+  await expect(page.getByRole('button', { name: '♥ Acrescentar cardio' })).toBeVisible()
+
+  // F36.6: no calendário, o dia de hoje tem ♥ e o detalhe lista o cardio.
+  await page.getByRole('link', { name: 'Relatórios' }).click()
+  await page.getByRole('tab', { name: 'Calendário' }).click()
+  await expect(page.locator('[aria-current="date"]')).toHaveAttribute('aria-label', /cardio: 50 min/)
+  await expect(page.getByText('♥ Caminhada rápida · 40 min · esforço 6/10 · 128 bpm')).toBeVisible()
+  await expect(page.getByText('♥ Bicicleta · 10 min · esforço 5/10')).toBeVisible()
 })
