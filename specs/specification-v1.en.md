@@ -2,7 +2,7 @@
 
 **English** · [Português](especificacao-v1.md)
 
-Date: 2026-10-20 · Version 1.24 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.24)
+Date: 2026-10-20 · Version 1.25 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.25)
 
 The Portuguese version is the reference used for the domain names in the code. Both versions must stay in sync.
 
@@ -338,6 +338,16 @@ Fifth phase of the calisthenics and home training feasibility study (2026-10-31)
 - **F35.3 More phrases.** The phrase-of-the-day list (F13) has at least 110 phrases, with no duplicates. The new ones with an author have their source work noted in the code.
 - **F35.4 Congratulations.** When a workout is finished, a congratulations window shows: a title that varies from workout to workout, the sets logged and the duration (if between 1 and 240 minutes), the weekly workout goal when this workout completes it, the personal records set in this workout and the achievements (F12) earned with it. It is on by default and can be turned off in "Mais" (more), "Mensagens de parabéns" (congratulation messages). A workout finished with no sets logged does not show the window. The choice stays on the device only.
 
+### F36. Cardio log (v1.25)
+
+- **F36.1 Where.** On Home and Today, "Registar cardio" (log cardio) opens the log screen, for standalone cardio on any day. With a strength workout open, Today's button is called "Acrescentar cardio" (add cardio) and the entry is linked to that session (a complement to the day's workout). In workouts with cardio in the plan (section 3.6), the cardio row opens the same screen with the minutes already filled in, and shows ✓ and the entry once done.
+- **F36.2 What is logged.** Required: the activity (brisk walking, incline treadmill, cycling, elliptical, rowing, running, jump rope, swimming, other), the minutes (whole number from 1 to 300), perceived effort from 0 to 10 and the day (up to today). Optional: distance in km (0.1–300) and average heart rate in bpm (30–230). Below the effort, the talk test is shown: 0–4 light (you can talk and even sing), 5–6 moderate (talk yes, sing no), 7–8 vigorous (only a few words at a time), 9–10 near maximum. Heart rate zones by age appear only as an optional note: maximum heart rate estimated as 208 − 0.7 × age (Tanaka et al., 2001), moderate 64–76% and vigorous 77–95% of that maximum (ACSM), with the warning that these formulas are often far off from person to person. The activity starts on the one from the last entry.
+- **F36.3 Minutes in the week.** In Reports, "Semana" (week) tab, a cardio card for the chosen week shows the minutes equivalent to moderate, compared with the WHO's 150–300 min per week (2020): one vigorous minute counts as two and light activity doesn't count. It also shows the total, the moderate and the vigorous minutes, and the week's entries, each with a button to delete it.
+- **F36.4 Confirmation.** After saving, the screen confirms the entry and that week's minutes. With congratulation messages on (F35.4), it points out when the entry brings the week to the recommended 150 min.
+- **F36.5 Backup and export.** Cardio goes into the backup (F10), with the same validation, and into the history Excel file, in a "Cardio" sheet that only appears when there are entries. Older backups without cardio are still valid.
+- **F36.6 Calendar.** Days with cardio show ♥ in the calendar (F25.3), and the day detail lists each entry.
+- Cardio does not count towards the week's workouts, adherence, streak or achievements (F11, F12), which remain about strength workouts.
+
 ### F14. Blocks and next change (v1.2, rules in section 3.7)
 - On Home and on Today's workout: current phase (re-adaptation, week N of M of the block, or deload) and the next change with its date: end of re-adaptation (full sets), deload week (half the sets), or new block (isolation exercises rotate, listing what changes).
 
@@ -397,6 +407,7 @@ Target frequency: each major group 2×/week.
 
 ### 3.6 Cardio
 - If accepted: 10–15 min at moderate intensity (able to speak short sentences) at the end of 2 sessions per week.
+- Logging cardio, whether at the end of a workout or not, is in F36 (v1.25).
 
 ### 3.7 Blocks, deload and exercise rotation (v1.2)
 - Block length by goal: strength 4 weeks (3 + deload); recomposition and hypertrophy 5 weeks (4 + deload); general health 6 weeks (5 + deload). Stored in the plan (`semanasBloco`).

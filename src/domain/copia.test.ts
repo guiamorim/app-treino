@@ -17,6 +17,7 @@ const copia: Copia = {
   videos: { 'leg-press': 'https://youtu.be/waAxlYvtCcI' },
   fotos: [{ id: 'f1', data: '2026-10-20', pose: 'frente', imagem: 'data:image/jpeg;base64,/9j/AAAA', nota: 'manhã' }],
   perfil: { nome: 'Ana', foto: 'data:image/jpeg;base64,/9j/BBBB' },
+  cardio: [{ id: 'c1', data: '2026-10-20T18:00:00.000Z', modalidade: 'corrida', minutos: 25, esforco: 7, distanciaKm: 4.2, fcMedia: 151 }],
 }
 
 describe('F10 cópia de segurança', () => {
@@ -38,6 +39,9 @@ describe('F10 cópia de segurança', () => {
     ['F23.1 reserva acima de 600 s', { ...copia, sessoes: [{ ...copia.sessoes[0], exercicios: [{ ...copia.sessoes[0]!.exercicios[0], series: [{ carga: 0, reps: 40, reservaSeg: 601 }] }] }] }],
     ['F24.5 forma de contar desconhecida', { ...copia, sessoes: [{ ...copia.sessoes[0], exercicios: [{ ...copia.sessoes[0]!.exercicios[0], tipoCarga: 'por-disco' }] }] }],
     ['F24.5 barra fora do intervalo', { ...copia, carga: { barraKg: 50 } }],
+    ['F36.5 cardio com modalidade desconhecida', { ...copia, cardio: [{ ...copia.cardio![0], modalidade: 'patins' }] }],
+    ['F36.5 cardio com mais de 300 min', { ...copia, cardio: [{ ...copia.cardio![0], minutos: 301 }] }],
+    ['F36.5 cardio com esforço fora de 0–10', { ...copia, cardio: [{ ...copia.cardio![0], esforco: 11 }] }],
     ['nada', null],
   ])('F10.2 rejeita ficheiro inválido: %s', (_, dados) => {
     expect(() => lerCopia(dados)).toThrow()

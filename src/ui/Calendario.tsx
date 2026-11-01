@@ -1,7 +1,7 @@
 // F25.3: calendário com os treinos feitos e previstos, e o detalhe de cada dia.
 import { semCarga as semCargaDe } from '../domain/carga'
 import { useState } from 'react'
-import { faseDoDia, grelhaMes, meioDia, previsao, proximosTreinos, sessoesDoDia } from '../domain/calendario'
+import { diaLocal, faseDoDia, grelhaMes, meioDia, previsao, proximosTreinos, sessoesDoDia } from '../domain/calendario'
 import { pdfDia, pdfMes, pdfSemana } from '../domain/exportar'
 import { semanaDoPlano, treinoEfetivo } from '../domain/plano'
 import { reservaAlvo, textoReserva } from '../domain/reserva'
@@ -12,6 +12,11 @@ import { locale, t } from '../i18n'
 import { agoraIso, catalogo, hojeIso, type Dados } from './dados'
 import { descarregar, paraExportacao, TIPO_PDF } from './ficheiros'
 import { ir } from './rota'
+import { textoCardio } from './Cardio'
+import type { RegistoCardio } from '../domain/cardio'
+
+/** F36.6: cardio registado no dia local. */
+const cardioDoDia = (registos: readonly RegistoCardio[], dia: string) => registos.filter((r) => diaLocal(r.data) === dia)
 
 const dataLonga = (dia: string) => new Date(meioDia(dia)).toLocaleDateString(locale(), { weekday: 'long', day: 'numeric', month: 'long' })
 const nomeMes = (ano: number, mes: number) => {
@@ -65,6 +70,8 @@ export function Calendario({ dados, plano }: { dados: Dados; plano: Plano }) {
                 if (!dia) return <span key={j} role="gridcell" />
                 const feitos = sessoesDoDia(dados.sessoes, dia)
                 const previsto = previstos.get(dia)
+                const cardio = cardioDoDia(dados.cardio, dia)
+                const minutosCardio = cardio.reduce((n, r) => n + r.minutos, 0)
                 const descarga = dia >= plano.criadoEm.slice(0, 10) && faseDoDia(plano, dia).fase === 'descarga'
                 const estado = feitos.some((s) => s.fim) ? t('treino feito: {treino}', { treino: nome(feitos[0]!.treinoId) })
                   : feitos.length ? t('treino a meio: {treino}', { treino: nome(feitos[0]!.treinoId) })
@@ -75,19 +82,19 @@ export function Calendario({ dados, plano }: { dados: Dados; plano: Plano }) {
                     role="gridcell"
                     aria-selected={dia === escolhido}
                     aria-current={dia === hoje ? 'date' : undefined}
-                    aria-label={[dataLonga(dia), estado, descarga ? t('semana de descarga') : ''].filter(Boolean).join(', ')}
+                    aria-label={[dataLonga(dia), estado, cardio.length ? t('cardio: {min} min', { min: minutosCardio }) : '', descarga ? t('semana de descarga') : ''].filter(Boolean).join(', ')}
                     className={['cal-dia', dia === hoje ? 'hoje' : '', dia === escolhido ? 'escolhido' : '', descarga ? 'descarga' : '', feitos.length ? 'feito' : ''].join(' ')}
                     onClick={() => setEscolhido(dia)}
                   >
                     <span>{Number(dia.slice(8))}</span>
-                    <small>{feitos.some((s) => s.fim) ? '✓' : feitos.length ? '…' : previsto ? nome(previsto).split(' ').map((p) => p[0]).join('') : ''}</small>
+                    <small>{feitos.some((s) => s.fim) ? '✓' : feitos.length ? '…' : previsto ? nome(previsto).split(' ').map((p) => p[0]).join('') : ''}{cardio.length ? '♥' : ''}</small>
                   </button>
                 )
               })}
             </div>
           ))}
         </div>
-        <p className="secundario">{t('✓ treino feito · letras = treino previsto · fundo = semana de descarga')}</p>
+        <p className="secundario">{t('✓ treino feito · ♥ cardio · letras = treino previsto · fundo = semana de descarga')}</p>
       </div>
 
       <DetalheDia dia={escolhido} hoje={hoje} dados={dados} plano={plano} previsto={previstos.get(escolhido) ?? (escolhido === hoje && !diasTreino?.length && !sessoesDoDia(dados.sessoes, hoje).some((s) => s.fim) ? proximosTreinos(plano, dados.sessoes, 1)[0] : undefined)} />
@@ -111,11 +118,13 @@ export function Calendario({ dados, plano }: { dados: Dados; plano: Plano }) {
 
 function DetalheDia({ dia, hoje, dados, plano, previsto }: { dia: string; hoje: string; dados: Dados; plano: Plano; previsto: string | undefined }) {
   const sessoes = sessoesDoDia(dados.sessoes, dia)
+  const cardio = cardioDoDia(dados.cardio, dia)
   const semana = semanaDoPlano(plano, meioDia(dia))
   const treino = (id: string) => plano.treinos.find((x) => x.id === id)
   return (
     <div className="cartao" aria-live="polite">
       <h3>{maiuscula(dataLonga(dia))}</h3>
+      {cardio.length > 0 && <ul className="lista-simples">{cardio.map((r) => <li key={r.id}>♥ {textoCardio(r)}</li>)}</ul>}
       {sessoes.map((s) => <SessaoFeita key={s.id} s={s} plano={plano} aMeio={!s.fim && dia === hoje} semana={semana} />)}
       {sessoes.length === 0 && previsto && treino(previsto) && dia >= hoje && (
         <>
@@ -124,7 +133,7 @@ function DetalheDia({ dia, hoje, dados, plano, previsto }: { dia: string; hoje: 
           {dia === hoje && <button className="primario largo" onClick={() => ir('/hoje')}>{t('Começar treino')}</button>}
         </>
       )}
-      {sessoes.length === 0 && !(previsto && dia >= hoje) && <p className="secundario">{t('Sem treino neste dia.')}</p>}
+      {sessoes.length === 0 && cardio.length === 0 && !(previsto && dia >= hoje) && <p className="secundario">{t('Sem treino neste dia.')}</p>}
     </div>
   )
 }

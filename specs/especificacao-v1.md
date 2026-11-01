@@ -2,7 +2,7 @@
 
 [English](specification-v1.en.md) · **Português**
 
-Data: 2026-10-20 · Versão 1.24 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.24)
+Data: 2026-10-20 · Versão 1.25 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.25)
 
 ## 0. Decisões fechadas
 
@@ -334,6 +334,16 @@ Quinta fase do estudo de viabilidade de calistenia e treino em casa (2026-10-31)
 - **F35.3 Mais frases.** A lista da frase do dia (F13) tem pelo menos 110 frases, sem repetidas. As novas com autor têm a obra de origem anotada no código.
 - **F35.4 Parabéns.** Ao terminar um treino aparece uma janela de parabéns com: um título que varia de treino para treino, as séries registadas e a duração (se for entre 1 e 240 minutos), a meta de treinos da semana quando este treino a cumpre, os recordes pessoais batidos neste treino e as conquistas (F12) obtidas com ele. Está ligada por omissão e pode ser desligada em «Mais» («Mensagens de parabéns»). Um treino terminado sem nenhuma série registada não mostra a janela. A escolha fica só no dispositivo.
 
+### F36. Registo de cardio (v1.25)
+
+- **F36.1 Onde.** No Início e no Treino de hoje, «Registar cardio» abre o ecrã de registo, para cardio avulso em qualquer dia. Com um treino de força aberto, o botão do Treino de hoje chama-se «Acrescentar cardio» e o registo fica ligado a essa sessão (complemento do treino do dia). Nos treinos com cardio no plano (secção 3.6), a linha do cardio abre o mesmo ecrã com os minutos já preenchidos e mostra ✓ e o registo quando já foi feito.
+- **F36.2 O que se regista.** Obrigatórios: a modalidade (caminhada rápida, passadeira inclinada, bicicleta, elíptica, remo, corrida, saltar à corda, natação, outro), os minutos (inteiro de 1 a 300), o esforço percebido de 0 a 10 e o dia (até hoje). Opcionais: a distância em km (0,1–300) e a frequência cardíaca média em bpm (30–230). Por baixo do esforço aparece o teste da fala: 0–4 leve (consegues falar e até cantar), 5–6 moderado (falar sim, cantar não), 7–8 vigoroso (só algumas palavras de cada vez), 9–10 quase máximo. As zonas de frequência cardíaca pela idade aparecem só como nota opcional: frequência máxima estimada por 208 − 0,7 × idade (Tanaka et al., 2001), moderado 64–76 % e vigoroso 77–95 % dessa máxima (ACSM), com o aviso de que estas fórmulas erram muito de pessoa para pessoa. A modalidade começa na do último registo.
+- **F36.3 Minutos da semana.** Nos Relatórios, separador «Semana», um cartão de cardio da semana escolhida mostra os minutos equivalentes a moderado, comparados com os 150–300 min por semana da OMS (2020): um minuto vigoroso conta como dois e o leve não conta. Mostra também o total, os minutos moderados e os vigorosos, e os registos da semana, cada um com um botão para o apagar.
+- **F36.4 Confirmação.** Depois de gravar, o ecrã confirma o registo e os minutos dessa semana. Com as mensagens de parabéns ligadas (F35.4), assinala quando o registo faz a semana chegar aos 150 min recomendados.
+- **F36.5 Cópia e exportação.** O cardio entra na cópia de segurança (F10), com a mesma validação, e no Excel do histórico, numa folha «Cardio» que só aparece quando há registos. Cópias antigas sem cardio continuam válidas.
+- **F36.6 Calendário.** Os dias com cardio têm ♥ no calendário (F25.3), e o detalhe do dia lista cada registo.
+- O cardio não conta para os treinos da semana, a aderência, a sequência nem as conquistas (F11, F12), que continuam a ser dos treinos de força.
+
 ### F14. Blocos e próxima mudança (v1.2, regras na secção 3.7)
 - No Início e no Treino de hoje: fase atual (readaptação, semana N de M do bloco, ou descarga) e a próxima mudança com data: fim da readaptação (séries completas), semana de descarga (metade das séries), ou novo bloco (troca dos exercícios isolados, com a lista do que muda).
 
@@ -393,6 +403,7 @@ Frequência alvo: cada grupo principal 2×/semana.
 
 ### 3.6 Cardio
 - Se aceite: 10–15 min de intensidade moderada (consegue falar frases curtas) no fim de 2 sessões por semana.
+- O registo do cardio, feito ou não no fim do treino, está em F36 (v1.25).
 
 ### 3.7 Blocos, descarga e rotação de exercícios (v1.2)
 - Duração do bloco por objetivo: força 4 semanas (3 + descarga); recomposição e hipertrofia 5 semanas (4 + descarga); saúde geral 6 semanas (5 + descarga). Fica guardada no plano (`semanasBloco`).

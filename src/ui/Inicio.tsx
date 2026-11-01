@@ -13,6 +13,7 @@ import { LembreteAlongamento } from './Alongamento'
 import { NovidadesInicio } from './Atualizacao'
 import { textoFase, TrocasProximoBloco } from './Fase'
 import { ir } from './rota'
+import { BotaoCardio } from './Cardio'
 import { t } from '../i18n'
 
 const somaDias = (d: Date, n: number) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n)
@@ -74,7 +75,10 @@ export function Inicio({ dados, plano, anamnese }: { dados: Dados; plano: Plano;
         <span className="secundario">{textoFase(plano, semana)}</span>
       </button>
       <TrocasProximoBloco plano={plano} semana={semana} />
-      <button className="largo" onClick={() => ir('/alongamento')}>🧘 {t('Alongamentos')}</button>
+      <div className="linha">
+        <button onClick={() => ir('/alongamento')}>🧘 {t('Alongamentos')}</button>
+        <BotaoCardio largo={false} />
+      </div>
 
       <h2>{t('Esta semana')}</h2>
       <div className="cartao indicadores">

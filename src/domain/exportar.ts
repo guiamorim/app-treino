@@ -27,6 +27,7 @@ import { incrementoDaForma, mesmaForma, nomeTipoCarga, semCarga as semCargaDe, t
 import { estadoBloco, trocasDoBloco } from './blocos'
 import { diaLocal, meioDia, previsao, proximosTreinos, segundaDaSemana, somarDias } from './calendario'
 import { sugerir } from './progressao'
+import { NOMES_MODALIDADES, type RegistoCardio } from './cardio'
 import { historicoExercicio, proximoTreino } from './sessao'
 
 /** F23.1: a ficha pede reserva em segundos nos exercícios por tempo, RIR nos restantes. */
@@ -52,6 +53,8 @@ export interface DadosExportacao {
   perfil: Perfil
   /** F24.2: forma de contar escolhida por exercício (para a sugestão nos PDF do dia e da semana). */
   tiposCarga?: Record<string, TipoCarga>
+  /** F36.5: registos de cardio. */
+  cardio?: RegistoCardio[]
 }
 
 const num = (n: number) => (Math.round(n * 10) / 10).toLocaleString(locale(), { useGrouping: false })
@@ -97,8 +100,22 @@ export function folhaMedicoes(medicoes: Medicao[]): Folha {
   }
 }
 
+/** F36.5: uma linha por registo de cardio, no dia local em que foi feito. */
+export function folhaCardio(registos: readonly RegistoCardio[]): Folha {
+  return {
+    nome: t('Cardio'),
+    cabecalho: [t('Data'), t('Modalidade'), t('Minutos'), t('Esforço (0–10)'), t('Distância (km)'), t('FC média (bpm)')],
+    linhas: [...registos].sort(porData).map((r) => [diaLocal(r.data), NOMES_MODALIDADES[r.modalidade], r.minutos, r.esforco, r.distanciaKm, r.fcMedia]),
+  }
+}
+
 export function excelFichaHistorico(d: DadosExportacao, catalogo: Catalogo, agora: string): Uint8Array<ArrayBuffer> {
-  return gerarXlsx([...(d.plano ? [folhaFicha(d.plano, catalogo, agora)] : []), folhaHistorico(d.sessoes, d.plano, catalogo), folhaMedicoes(d.medicoes)])
+  return gerarXlsx([
+    ...(d.plano ? [folhaFicha(d.plano, catalogo, agora)] : []),
+    folhaHistorico(d.sessoes, d.plano, catalogo),
+    folhaMedicoes(d.medicoes),
+    ...(d.cardio?.length ? [folhaCardio(d.cardio)] : []),
+  ])
 }
 
 const subtitulo = (d: DadosExportacao, agora: string) => `${d.perfil.nome ? `${d.perfil.nome} · ` : ''}${t('Exportado em {data}', { data: dataPt(agora) })}`

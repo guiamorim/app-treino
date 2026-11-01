@@ -6,6 +6,7 @@ import { GRUPOS_MUSCULARES, NOMES_GRUPOS } from '../domain/types'
 import { decimal, paraUnidade, peso, unidadePeso } from '../domain/unidades'
 import { catalogo, dataCurta, type Dados } from './dados'
 import { GraficoLinha } from './Grafico'
+import { CardioSemana } from './Cardio'
 import { t } from '../i18n'
 
 export function Relatorios({ dados }: { dados: Dados }) {
@@ -121,6 +122,8 @@ function Semana({ dados }: { dados: Dados }) {
         })}
         <p className="secundario">{t('Exercício principal conta 1 série; grupos secundários contam 0,5. Faixa verde = alvo semanal.')}</p>
       </div>
+
+      <CardioSemana dados={dados} inicio={inicio} fim={fim} />
 
       <div className="cartao">
         <h3>{t('Peso ({u})', { u: unidadePeso() })}</h3>

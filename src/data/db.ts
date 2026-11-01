@@ -6,6 +6,7 @@ import { lerProprios } from '../domain/proprios'
 import type { Ferias } from '../domain/ferias'
 import type { Nivelamento } from '../domain/nivelamento'
 import type { Degraus } from '../domain/escadas'
+import type { RegistoCardio } from '../domain/cardio'
 
 interface Valor {
   chave: 'anamnese' | 'plano' | 'videos' | 'ultimaExportacao' | 'perfil' | 'versaoVista' | 'idioma' | 'unidade' | 'tiposCarga' | 'barraKg' | 'exerciciosProprios' | 'ferias' | 'degraus' | 'nivelamento' | 'parabens' | 'instalacaoVista'
@@ -17,6 +18,8 @@ export class BaseDados extends Dexie {
   sessoes!: EntityTable<Sessao, 'id'>
   medicoes!: EntityTable<Medicao, 'id'>
   fotos!: EntityTable<FotoAvaliacao, 'id'>
+  /** F36 (v1.25): registos de cardio. */
+  cardio!: EntityTable<RegistoCardio, 'id'>
 
   constructor(nome = 'app-treino') {
     super(nome)
@@ -26,6 +29,7 @@ export class BaseDados extends Dexie {
       medicoes: 'id, data',
     })
     this.version(2).stores({ fotos: 'id, data' })
+    this.version(3).stores({ cardio: 'id, data' })
   }
 
   async ler<T>(chave: Valor['chave']): Promise<T | undefined> {
@@ -50,6 +54,7 @@ export class BaseDados extends Dexie {
       medicoes: await this.medicoes.orderBy('data').toArray(),
       videos: (await this.ler<Record<string, string>>('videos')) ?? {},
       fotos: await this.fotos.orderBy('data').toArray(),
+      cardio: await this.cardio.orderBy('data').toArray(),
       perfil: (await this.ler<Perfil>('perfil')) ?? {},
       carga: { barraKg: await this.ler<number>('barraKg'), tipos: (await this.ler<Record<string, TipoCarga>>('tiposCarga')) ?? {} },
       exerciciosProprios: lerProprios(await this.ler('exerciciosProprios')),
@@ -64,14 +69,15 @@ export class BaseDados extends Dexie {
   /** Substitui todos os dados pela cópia, só depois de a validar (F10.2). */
   async importar(dados: unknown) {
     const c = lerCopia(dados)
-    await this.transaction('rw', [this.valores, this.sessoes, this.medicoes, this.fotos], async () => {
-      await Promise.all([this.valores.clear(), this.sessoes.clear(), this.medicoes.clear(), this.fotos.clear()])
+    await this.transaction('rw', [this.valores, this.sessoes, this.medicoes, this.fotos, this.cardio], async () => {
+      await Promise.all([this.valores.clear(), this.sessoes.clear(), this.medicoes.clear(), this.fotos.clear(), this.cardio.clear()])
       if (c.anamnese) await this.gravar('anamnese', c.anamnese)
       if (c.plano) await this.gravar('plano', c.plano)
       await this.gravar('videos', c.videos)
       await this.sessoes.bulkPut(c.sessoes)
       await this.medicoes.bulkPut(c.medicoes)
       await this.fotos.bulkPut(c.fotos ?? [])
+      await this.cardio.bulkPut(c.cardio ?? [])
       if (c.perfil) await this.gravar('perfil', c.perfil)
       if (c.carga?.barraKg !== undefined) await this.gravar('barraKg', c.carga.barraKg)
       if (c.carga?.tipos) await this.gravar('tiposCarga', c.carga.tipos)

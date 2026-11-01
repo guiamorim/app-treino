@@ -9,6 +9,7 @@ import { feriasAtivas, planoEmFerias, type Ferias } from '../domain/ferias'
 import { planoComDegraus, type Degraus } from '../domain/escadas'
 import type { Nivelamento } from '../domain/nivelamento'
 import { juntarProprios, lerProprios, type ExercicioProprio } from '../domain/proprios'
+import type { RegistoCardio } from '../domain/cardio'
 import type { Anamnese, FotoAvaliacao, Medicao, Perfil, Plano, Sessao } from '../domain/types'
 import { barrasKg, type TipoCarga } from '../domain/carga'
 import { definirUnidade, UNIDADES, unidadeDoDispositivo, type UnidadePeso } from '../domain/unidades'
@@ -49,6 +50,8 @@ export interface Dados {
   plano?: Plano
   sessoes: Sessao[]
   medicoes: Medicao[]
+  /** F36: registos de cardio, por ordem de data. */
+  cardio: RegistoCardio[]
   videos: Record<string, string>
   ultimaExportacao?: string
   /** Só o número: as fotos são pesadas e lêem-se nos ecrãs que as mostram (useFotos). */
@@ -89,6 +92,7 @@ export function useDados(): Dados | undefined {
     const resto = {
       sessoes: await db.sessoes.orderBy('inicio').toArray(),
       medicoes: await db.medicoes.orderBy('data').toArray(),
+      cardio: await db.cardio.orderBy('data').toArray(),
       videos: (await db.ler<Record<string, string>>('videos')) ?? {},
       ultimaExportacao: await db.ler<string>('ultimaExportacao'),
       numFotos: await db.fotos.count(),
