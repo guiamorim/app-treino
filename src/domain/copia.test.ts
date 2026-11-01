@@ -17,6 +17,7 @@ const copia: Copia = {
   videos: { 'leg-press': 'https://youtu.be/waAxlYvtCcI' },
   fotos: [{ id: 'f1', data: '2026-10-20', pose: 'frente', imagem: 'data:image/jpeg;base64,/9j/AAAA', nota: 'manhã' }],
   perfil: { nome: 'Ana', foto: 'data:image/jpeg;base64,/9j/BBBB' },
+  programaCardio: { id: 'personalizado', inicio: '2026-10-19', soCardio: true, personalizado: { sessoes: [{ dia: 1, modalidade: 'remo', minutos: 30, esforco: 6 }], semanas: 6, progressaoPct: 5 } },
   cardio: [{ id: 'c1', data: '2026-10-20T18:00:00.000Z', modalidade: 'corrida', minutos: 25, esforco: 7, distanciaKm: 4.2, fcMedia: 151 }],
 }
 
@@ -42,6 +43,9 @@ describe('F10 cópia de segurança', () => {
     ['F36.5 cardio com modalidade desconhecida', { ...copia, cardio: [{ ...copia.cardio![0], modalidade: 'patins' }] }],
     ['F36.5 cardio com mais de 300 min', { ...copia, cardio: [{ ...copia.cardio![0], minutos: 301 }] }],
     ['F36.5 cardio com esforço fora de 0–10', { ...copia, cardio: [{ ...copia.cardio![0], esforco: 11 }] }],
+    ['F37.6 programa desconhecido', { ...copia, programaCardio: { id: 'maratona', inicio: '2026-10-19' } }],
+    ['F37.6 personalizado sem sessões', { ...copia, programaCardio: { id: 'personalizado', inicio: '2026-10-19' } }],
+    ['F37.6 subida acima de 10 %', { ...copia, programaCardio: { ...copia.programaCardio!, personalizado: { ...copia.programaCardio!.personalizado!, progressaoPct: 20 } } }],
     ['nada', null],
   ])('F10.2 rejeita ficheiro inválido: %s', (_, dados) => {
     expect(() => lerCopia(dados)).toThrow()

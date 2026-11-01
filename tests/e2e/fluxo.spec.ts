@@ -927,7 +927,7 @@ test.describe('5. ecrã estreito', () => {
       }
       const encontrados: string[] = []
       const ver = async (onde: string) => { for (const x of await problemas(page)) encontrados.push(`${onde}: ${x}`) }
-      for (const rota of ['hoje', 'inicio', 'relatorios', 'medicoes', 'fotos', 'mais', 'calistenia', 'nivelamento', 'meu-plano', 'alongamento', 'anamnese', 'meu-exercicio/novo', 'reportar', 'cardio']) {
+      for (const rota of ['hoje', 'inicio', 'relatorios', 'medicoes', 'fotos', 'mais', 'calistenia', 'nivelamento', 'meu-plano', 'alongamento', 'anamnese', 'meu-exercicio/novo', 'reportar', 'cardio', 'programas-cardio']) {
         await page.goto(`./#/${rota}`)
         await expect(page.locator('h1').first()).toBeVisible()
         await ver(rota)
@@ -1150,4 +1150,85 @@ test('F36: registar cardio avulso e como complemento, minutos da semana, calend�
   await expect(page.locator('[aria-current="date"]')).toHaveAttribute('aria-label', /cardio: 50 min/)
   await expect(page.getByText('♥ Caminhada rápida · 40 min · esforço 6/10 · 128 bpm')).toBeVisible()
   await expect(page.getByText('♥ Bicicleta · 10 min · esforço 5/10')).toBeVisible()
+})
+
+test('F37: programas de cardio, bloqueio, próxima sessão, personalizado e só cardio', async ({ page }) => {
+  await preencherAnamnese(page)
+  await page.getByRole('link', { name: 'Mais' }).click()
+  await page.getByRole('button', { name: '♥ Programas de cardio' }).click()
+  await expect(page.getByRole('heading', { name: 'Programas de cardio', level: 1 })).toBeVisible()
+  // F37.1 e F37.3: os cinco programas; sem «sim» no PAR-Q+ e sem dor no joelho, nada fica bloqueado.
+  for (const nome of ['Começar a caminhar', 'Baixo impacto', 'Correr 5 km', 'Intervalos para quem já treina', 'Emagrecer com cardio']) {
+    await expect(page.getByRole('region', { name: nome }).getByRole('button', { name: 'Começar' })).toBeVisible()
+  }
+  await expect(page.getByRole('region', { name: 'Emagrecer com cardio' })).toContainText('Sem mudar a alimentação')
+
+  // F37.4: começar «Correr 5 km» mostra a semana e a próxima sessão, que abre o registo já preenchido.
+  await page.getByRole('region', { name: 'Correr 5 km' }).getByRole('button', { name: 'Começar' }).click()
+  const cartao = page.getByRole('region', { name: '♥ Correr 5 km' })
+  await expect(cartao).toContainText('Semana 1 de 9 · 0 de 3 sessões feitas')
+  await expect(cartao).toContainText('Corrida · 8 × (1 min a correr + 1,5 min a andar) · com 5 min a andar antes e depois · 29 min · esforço 6–7')
+  await expect(page.getByRole('region', { name: 'Correr 5 km', exact: true }).getByRole('button', { name: 'Programa atual' })).toBeDisabled()
+  await cartao.getByRole('button', { name: 'Registar esta sessão' }).click()
+  await expect(page.getByText('Sessão do programa «Correr 5 km».')).toBeVisible()
+  await expect(page.getByLabel('Modalidade')).toHaveValue('corrida')
+  await expect(page.getByLabel('Minutos')).toHaveValue('29')
+  await expect(page.getByLabel(/Esforço: \d+ de 10/)).toHaveValue('6')
+  await page.getByRole('button', { name: 'Guardar cardio' }).click()
+  await expect(page.getByRole('status').filter({ hasText: 'Cardio registado:' })).toContainText('Corrida · 29 min')
+  await page.getByRole('link', { name: 'Início' }).click()
+  await expect(page.getByRole('region', { name: '♥ Correr 5 km' })).toContainText('1 de 3 sessões feitas')
+
+  // F37.2: personalizado com aviso de vigoroso acima de 300 min, e troca com confirmação.
+  await page.goto('./#/programas-cardio')
+  await page.getByRole('button', { name: 'Criar programa personalizado' }).click()
+  await page.getByRole('button', { name: 'Começar programa personalizado' }).click()
+  await expect(page.getByRole('alert')).toHaveText('Escolhe pelo menos um dia.')
+  const dias = page.getByRole('group', { name: 'Dias' }).getByRole('button')
+  for (const d of [0, 1, 2, 3, 4]) await dias.nth(d).click()
+  for (const d of await page.locator('.sessao-cardio').all()) {
+    await d.getByLabel('Minutos').fill('70')
+    await d.getByLabel('Esforço (0–10)').selectOption('8')
+  }
+  await page.getByLabel('Semanas').fill('2')
+  await page.getByLabel('Subida por semana').selectOption('0')
+  await expect(page.getByText(/Na última semana fazes 350 min de cardio vigoroso/)).toBeVisible()
+  page.once('dialog', (d) => d.accept())
+  await page.getByRole('button', { name: 'Começar programa personalizado' }).click()
+  await expect(page.getByRole('region', { name: '♥ Programa personalizado' })).toContainText('Semana 1 de 2')
+
+  // F37.5: só cardio põe o programa antes do treino de força, com a recomendação de força.
+  await page.getByLabel(/Só cardio/).click()
+  await expect(page.getByLabel(/Só cardio/)).toBeChecked()
+  await page.getByRole('link', { name: 'Hoje' }).click()
+  const primeiro = page.locator('main section.cartao').first()
+  await expect(primeiro).toHaveAccessibleName('♥ Programa personalizado')
+  await expect(primeiro).toContainText('Recomendamos 2 sessões curtas de força por semana')
+
+  // F37.6: terminar o programa tira o cartão; os registos de cardio ficam.
+  await page.goto('./#/programas-cardio')
+  page.once('dialog', (d) => d.accept())
+  await page.getByRole('button', { name: 'Terminar programa' }).click()
+  await expect(page.getByRole('region', { name: '♥ Programa personalizado' })).toHaveCount(0)
+  await page.getByRole('link', { name: 'Relatórios' }).click()
+  await page.getByRole('tab', { name: 'Semana' }).click()
+  await expect(page.getByText('Corrida · 29 min · esforço 6/10')).toBeVisible()
+})
+
+test.describe('F37.3: PAR-Q+ com «sim»', () => {
+  test('bloqueia correr 5 km e intervalos, com o motivo', async ({ page }) => {
+    await page.goto('./')
+    await page.getByLabel('Idade').fill('45')
+    await page.getByLabel('Altura (cm)').fill('175')
+    await page.getByLabel('Peso (kg)').fill('85')
+    await page.getByLabel('Nenhuma').check()
+    await page.locator('input[name="parq-0"]').nth(0).check()
+    for (let i = 1; i < 7; i++) await page.locator(`input[name="parq-${i}"]`).nth(1).check()
+    await page.getByRole('button', { name: 'Gerar o meu plano' }).click()
+    await expect(page.locator('ul button.item').first()).toBeVisible()
+    await page.goto('./#/programas-cardio')
+    await expect(page.getByRole('region', { name: 'Correr 5 km' })).toContainText('🔒 Respondeste «sim» no PAR-Q+')
+    await expect(page.getByRole('region', { name: 'Intervalos para quem já treina' }).getByRole('button')).toHaveCount(0)
+    await expect(page.getByRole('region', { name: 'Começar a caminhar' }).getByRole('button', { name: 'Começar' })).toBeVisible()
+  })
 })

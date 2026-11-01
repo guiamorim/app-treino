@@ -43,7 +43,7 @@ const NOMES_DIVISOES: Record<DivisaoTreino, string> = traduzido({
 const NOMES_AREAS: Record<Area, string> = traduzido({ ombro: m('Ombro'), joelho: m('Joelho'), lombar: m('Lombar'), punho: m('Punho'), anca: m('Anca'), cotovelo: m('Cotovelo') })
 
 /** Nomes curtos dos dias, de segunda a domingo, no idioma da app (2026-11-02 é segunda-feira). */
-const NOMES_DIAS = () => Array.from({ length: 7 }, (_, d) => new Date(2026, 10, 2 + d, 12).toLocaleDateString(locale(), { weekday: 'short' }).replace('.', '').slice(0, 3))
+export const NOMES_DIAS = () => Array.from({ length: 7 }, (_, d) => new Date(2026, 10, 2 + d, 12).toLocaleDateString(locale(), { weekday: 'short' }).replace('.', '').slice(0, 3))
 
 export function AnamneseEcra({ dados }: { dados: Dados }) {
   const a = dados.anamnese

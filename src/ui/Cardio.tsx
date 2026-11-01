@@ -8,6 +8,7 @@ import { decimal } from '../domain/unidades'
 import { t } from '../i18n'
 import { agoraIso, dataCurta, hojeIso, novoId, type Dados } from './dados'
 import { ir } from './rota'
+import { NOMES_PROGRAMAS, progresso } from '../domain/programasCardio'
 
 const ERROS: Record<ErroCardio, () => string> = {
   modalidade: () => t('Escolhe a modalidade.'),
@@ -38,12 +39,14 @@ export function BotaoCardio({ sessaoId, texto, largo = true }: { sessaoId?: stri
 
 export function CardioEcra({ dados, sessaoId }: { dados: Dados; sessaoId?: string }) {
   const hoje = hojeIso()
-  const sessao = sessaoId ? dados.sessoes.find((s) => s.id === sessaoId && !s.fim) : undefined
+  // F37.4: «programa» abre o registo com a próxima sessão do programa de cardio.
+  const doPrograma = sessaoId === 'programa' && dados.programaCardio ? progresso(dados.programaCardio, dados.cardio, hoje).proxima : undefined
+  const sessao = sessaoId && !doPrograma ? dados.sessoes.find((s) => s.id === sessaoId && !s.fim) : undefined
   const treino = sessao && dados.plano?.treinos.find((x) => x.id === sessao.treinoId)
   const ultimo = dados.cardio.at(-1)
-  const [modalidade, setModalidade] = useState<Modalidade>(ultimo?.modalidade ?? 'caminhada')
-  const [minutos, setMinutos] = useState(treino?.cardioMin ? String(treino.cardioMin) : '')
-  const [esforco, setEsforco] = useState(5)
+  const [modalidade, setModalidade] = useState<Modalidade>(doPrograma?.modalidade ?? ultimo?.modalidade ?? 'caminhada')
+  const [minutos, setMinutos] = useState(doPrograma ? String(doPrograma.minutos) : treino?.cardioMin ? String(treino.cardioMin) : '')
+  const [esforco, setEsforco] = useState(doPrograma ? doPrograma.esforco[0] : 5)
   const [dia, setDia] = useState(hoje)
   const [distancia, setDistancia] = useState('')
   const [fc, setFc] = useState('')
@@ -91,6 +94,7 @@ export function CardioEcra({ dados, sessaoId }: { dados: Dados; sessaoId?: strin
       <button onClick={voltar} style={{ marginTop: 12 }}>‹ {t('Voltar')}</button>
       <h1>{t('Registar cardio')}</h1>
       {treino && <p className="secundario">{t('Junta-se ao treino de hoje: {treino}.', { treino: treino.nome })}</p>}
+      {doPrograma && dados.programaCardio && <p className="secundario">{t('Sessão do programa «{programa}».', { programa: NOMES_PROGRAMAS[dados.programaCardio.id].nome })}</p>}
 
       {gravado && (
         <div className="cartao ok-borda" role="status">

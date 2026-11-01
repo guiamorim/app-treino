@@ -24,6 +24,8 @@ export type Rota =
   | { ecra: 'reportar'; tipo: TipoReporte; id?: string }
   /** F36.1: registar cardio; com a sessão quando é complemento do treino do dia. */
   | { ecra: 'cardio'; sessaoId?: string }
+  /** F37: programas de cardio. */
+  | { ecra: 'programas-cardio' }
 
 export function lerRota(hash: string): Rota {
   const [ecra, arg, arg2] = hash.replace(/^#\/?/, '').split('/')
@@ -47,6 +49,7 @@ export function lerRota(hash: string): Rota {
     case 'meu-plano':
     case 'calistenia':
     case 'nivelamento':
+    case 'programas-cardio':
       return { ecra }
     default:
       return { ecra: 'inicio' }

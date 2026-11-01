@@ -245,3 +245,6 @@ button.reportar { margin-top: 16px; min-height: 44px; font-size: 0.85rem; color:
 .modal .parabens { width: 100%; max-width: 420px; margin: 0 auto; text-align: center; max-height: calc(100dvh - 32px); overflow-y: auto; }
 .modal .parabens ul { text-align: left; }
 .lista-simples { list-style: none; padding: 0; }
+/* F37.2: uma sessão por dia no programa personalizado. */
+.sessao-cardio { border: 0; border-top: 1px solid var(--linha); margin: 12px 0 0; padding: 8px 0 0; min-width: 0; }
+.sessao-cardio legend { font-weight: 600; padding: 0; }
