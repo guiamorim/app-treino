@@ -106,12 +106,14 @@ Limitação honesta do iPhone: numa PWA, o iOS pode apagar dados de sites que n�
 - Ombro e supino: pega mais fechada que o dobro da largura dos ombros e amplitude controlada reduzem a carga no ombro (Green & Comfort, 2007). Alternativas: halteres com pega neutra, floor press, máquina convergente.
 
 - Sexo (v1.3): o plano base é igual para homens e mulheres, porque com o mesmo treino os ganhos relativos são semelhantes (Roberts et al., 2020). A ênfase (pernas e glúteos ou tronco) é escolhida por cada pessoa. Gravidez e pós-parto tornam o plano conservador e, a partir do 2.º trimestre, evitam exercícios deitados (ACOG, 2020).
+- Pós-parto (v1.27): fases pelas semanas desde o parto, com o pavimento pélvico em todas, e corrida e saltos só depois de um teste de impacto de 7 passos (Goom et al., 2019). O treino do pavimento pélvico previne e trata as perdas de urina depois do parto (Woodley et al., 2020). Sintomas, como perdas ou peso na vagina, travam a progressão.
 
 A app não substitui avaliação médica nem de fisioterapia, e deve dizê-lo.
 
 ## Referências
 
 - ACSM (2009). Progression models in resistance training for healthy adults. *Med Sci Sports Exerc*, 41(3), 687–708.
+- Goom, T., Donnelly, G., & Brockwell, E. (2019). *Returning to running postnatal: guidelines for medical, health and fitness professionals managing this population*.
 - Green, C. M., & Comfort, P. (2007). The affect of grip width on bench press performance and risk of injury. *Strength Cond J*, 29(5), 10–14.
 - Helms, E. R., et al. (2016). Application of the repetitions in reserve-based RPE scale for resistance training. *Strength Cond J*, 38(4), 42–49.
 - ACOG (2020). Physical activity and exercise during pregnancy and the postpartum period. Committee Opinion No. 804. *Obstet Gynecol*, 135(4), e178–e188.
@@ -119,4 +121,5 @@ A app não substitui avaliação médica nem de fisioterapia, e deve dizê-lo.
 - Roberts, B. M., Nuckols, G., & Krieger, J. W. (2020). Sex differences in resistance training: a systematic review and meta-analysis. *J Strength Cond Res*, 34(5), 1448–1460.
 - Schoenfeld, B. J., Ogborn, D., & Krieger, J. W. (2016). Effects of resistance training frequency on measures of muscle hypertrophy. *Sports Med*, 46(11), 1689–1697.
 - Schoenfeld, B. J., Ogborn, D., & Krieger, J. W. (2017). Dose-response relationship between weekly resistance training volume and increases in muscle mass. *J Sports Sci*, 35(11), 1073–1082.
+- Woodley, S. J., et al. (2020). Pelvic floor muscle training for preventing and treating urinary and faecal incontinence in antenatal and postnatal women. *Cochrane Database Syst Rev*, 5, CD007471.
 - Warburton, D. E. R., et al. (2011). The PAR-Q+ and ePARmed-X+. *Health Fit J Can*, 4(2), 3–23.

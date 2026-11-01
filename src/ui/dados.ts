@@ -11,6 +11,7 @@ import type { Nivelamento } from '../domain/nivelamento'
 import { juntarProprios, lerProprios, type ExercicioProprio } from '../domain/proprios'
 import type { RegistoCardio } from '../domain/cardio'
 import type { ProgramaAtivo } from '../domain/programasCardio'
+import { estadoFase, planoPosParto, posPartoAtivo, type EstadoFase, type EstadoPosParto } from '../domain/posParto'
 import type { Anamnese, FotoAvaliacao, Medicao, Perfil, Plano, Sessao } from '../domain/types'
 import { barrasKg, type TipoCarga } from '../domain/carga'
 import { definirUnidade, UNIDADES, unidadeDoDispositivo, type UnidadePeso } from '../domain/unidades'
@@ -80,6 +81,10 @@ export interface Dados {
   nivelamento?: Nivelamento
   /** F37: programa de cardio escolhido. */
   programaCardio?: ProgramaAtivo
+  /** F38: teste de impacto e autotestes da diástase. */
+  estadoPosParto: EstadoPosParto
+  /** F38.2: a fase do pós-parto, quando está ativo. */
+  fasePosParto?: EstadoFase
   /** F35.4: mensagem de parabéns ao terminar o treino (ligada por omissão; fica só no dispositivo). */
   parabens: boolean
   /** F35.2: a sugestão de instalar no ecrã principal já foi fechada (fica só no dispositivo). */
@@ -107,6 +112,7 @@ export function useDados(): Dados | undefined {
       degraus: (await db.ler<Degraus>('degraus')) ?? {},
       nivelamento: await db.ler<Nivelamento>('nivelamento'),
       programaCardio: (await db.ler<ProgramaAtivo>('programaCardio')) ?? undefined,
+      estadoPosParto: (await db.ler<EstadoPosParto>('posParto')) ?? {},
       parabens: (await db.ler<boolean>('parabens')) ?? true,
       instalacaoVista: (await db.ler<boolean>('instalacaoVista')) ?? false,
     }
@@ -118,10 +124,13 @@ export function useDados(): Dados | undefined {
     const planoBase = plano && planoNoCatalogo(planoNoIdioma(plano, anamnese, catalogo), catalogo)
     // F30.2: cada exercício do plano na variação atual; F29.2: durante as férias, adaptado ao equipamento. O guardado não muda.
     const comDegraus = planoBase && planoComDegraus(planoBase, resto.degraus, catalogo)
-    const emFerias = comDegraus && anamnese && feriasAtivas(resto.ferias, hojeIso())
-      ? planoEmFerias(comDegraus, anamnese, resto.ferias!, catalogo, semanaDoPlano(comDegraus, agoraIso()))
-      : comDegraus
-    return { idioma, unidade, barraKg: barraKg ?? barrasKg(unidade)[0]!, anamnese, plano: emFerias, planoBase, ...resto }
+    // F38.3: no pós-parto, os treinos da fase (ou o plano com o pavimento pélvico). O guardado não muda.
+    const fasePosParto = posPartoAtivo(anamnese) ? estadoFase(anamnese.posParto, hojeIso(), resto.sessoes, resto.estadoPosParto) : undefined
+    const comPosParto = comDegraus && fasePosParto && posPartoAtivo(anamnese) ? planoPosParto(comDegraus, anamnese, fasePosParto, catalogo) : comDegraus
+    const emFerias = comPosParto && anamnese && feriasAtivas(resto.ferias, hojeIso())
+      ? planoEmFerias(comPosParto, anamnese, resto.ferias!, catalogo, semanaDoPlano(comPosParto, agoraIso()))
+      : comPosParto
+    return { idioma, unidade, barraKg: barraKg ?? barrasKg(unidade)[0]!, anamnese, plano: emFerias, planoBase, fasePosParto, ...resto }
   })
 }
 

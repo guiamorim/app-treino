@@ -26,6 +26,8 @@ export type Rota =
   | { ecra: 'cardio'; sessaoId?: string }
   /** F37: programas de cardio. */
   | { ecra: 'programas-cardio' }
+  /** F38: plano pós-parto (fases, autoteste da diástase e teste de impacto). */
+  | { ecra: 'pos-parto' }
 
 export function lerRota(hash: string): Rota {
   const [ecra, arg, arg2] = hash.replace(/^#\/?/, '').split('/')
@@ -50,6 +52,7 @@ export function lerRota(hash: string): Rota {
     case 'calistenia':
     case 'nivelamento':
     case 'programas-cardio':
+    case 'pos-parto':
       return { ecra }
     default:
       return { ecra: 'inicio' }

@@ -106,12 +106,14 @@ Honest iPhone limitation: for a PWA, iOS may delete data from sites that were no
 - Shoulder and bench press: a grip narrower than twice shoulder width and a controlled range of motion reduce shoulder load (Green & Comfort, 2007). Alternatives: neutral-grip dumbbells, floor press, converging machine.
 
 - Sex (v1.3): the base plan is the same for men and women, because with the same training relative gains are similar (Roberts et al., 2020). The emphasis (legs and glutes, or upper body) is chosen by each person. Pregnancy and postpartum make the plan conservative and, from the 2nd trimester, avoid lying exercises (ACOG, 2020).
+- Postpartum (v1.27): phases by the weeks since birth, with pelvic floor work in all of them, and running and jumping only after a 7-step impact test (Goom et al., 2019). Pelvic floor muscle training prevents and treats urinary leakage after birth (Woodley et al., 2020). Symptoms such as leaking or vaginal heaviness stop the progression.
 
 The app does not replace medical or physiotherapy assessment, and must say so.
 
 ## References
 
 - ACSM (2009). Progression models in resistance training for healthy adults. *Med Sci Sports Exerc*, 41(3), 687–708.
+- Goom, T., Donnelly, G., & Brockwell, E. (2019). *Returning to running postnatal: guidelines for medical, health and fitness professionals managing this population*.
 - Green, C. M., & Comfort, P. (2007). The affect of grip width on bench press performance and risk of injury. *Strength Cond J*, 29(5), 10–14.
 - Helms, E. R., et al. (2016). Application of the repetitions in reserve-based RPE scale for resistance training. *Strength Cond J*, 38(4), 42–49.
 - ACOG (2020). Physical activity and exercise during pregnancy and the postpartum period. Committee Opinion No. 804. *Obstet Gynecol*, 135(4), e178–e188.
@@ -119,4 +121,5 @@ The app does not replace medical or physiotherapy assessment, and must say so.
 - Roberts, B. M., Nuckols, G., & Krieger, J. W. (2020). Sex differences in resistance training: a systematic review and meta-analysis. *J Strength Cond Res*, 34(5), 1448–1460.
 - Schoenfeld, B. J., Ogborn, D., & Krieger, J. W. (2016). Effects of resistance training frequency on measures of muscle hypertrophy. *Sports Med*, 46(11), 1689–1697.
 - Schoenfeld, B. J., Ogborn, D., & Krieger, J. W. (2017). Dose-response relationship between weekly resistance training volume and increases in muscle mass. *J Sports Sci*, 35(11), 1073–1082.
+- Woodley, S. J., et al. (2020). Pelvic floor muscle training for preventing and treating urinary and faecal incontinence in antenatal and postnatal women. *Cochrane Database Syst Rev*, 5, CD007471.
 - Warburton, D. E. R., et al. (2011). The PAR-Q+ and ePARmed-X+. *Health Fit J Can*, 4(2), 3–23.

@@ -162,7 +162,7 @@ export function ProgramasCardioEcra({ dados }: { dados: Dados }) {
 
       <h2>{t('Escolher um programa')}</h2>
       {PROGRAMAS.map((id) => {
-        const motivo = dados.anamnese ? bloqueio(id, dados.anamnese) : null
+        const motivo = dados.anamnese ? bloqueio(id, dados.anamnese, dados.fasePosParto?.fase === 'regresso') : null
         const atual = ativo?.id === id
         return (
           <section key={id} className="cartao" aria-labelledby={`programa-${id}`}>

@@ -1,6 +1,31 @@
 {
   "versoes": [
     {
+      "versao": "1.27.0",
+      "data": "2026-11-01",
+      "itens": [
+        "Plano pós-parto por fases: na anamnese, com «Pós-parto», indicas a data e o tipo de parto, a autorização médica e o teu objetivo. Os treinos seguem as semanas desde o parto, sem limite de tempo.",
+        "Em cada treino do pós-parto, a app pergunta se tiveste perdas, peso na vagina ou dor. Com «sim», a fase não avança.",
+        "Novo ecrã Pós-parto, em Mais: as fases, os sinais para parar, o autoteste da diástase e o teste de impacto, que desbloqueia a corrida e os intervalos."
+      ],
+      "traducoes": {
+        "en": {
+          "itens": [
+            "Postpartum plan in phases: in the questionnaire, with “Postpartum”, you enter the date and type of birth, medical clearance and your goal. Workouts follow the weeks since birth, with no time limit.",
+            "In each postpartum workout, the app asks whether you had leaks, vaginal heaviness or pain. With “yes”, the phase does not move on.",
+            "New Postpartum screen, in More: the phases, the signs to stop, the diastasis self-check and the impact test, which unlocks running and intervals."
+          ]
+        },
+        "es": {
+          "itens": [
+            "Plan posparto por fases: en la anamnesis, con «Posparto», indicas la fecha y el tipo de parto, la autorización médica y tu objetivo. Los entrenamientos siguen las semanas desde el parto, sin límite de tiempo.",
+            "En cada entrenamiento del posparto, la app pregunta si tuviste pérdidas, peso en la vagina o dolor. Con «sí», la fase no avanza.",
+            "Nueva pantalla Posparto, en Más: las fases, las señales para parar, la autoevaluación de la diástasis y la prueba de impacto, que desbloquea correr y los intervalos."
+          ]
+        }
+      }
+    },
+    {
       "versao": "1.26.0",
       "data": "2026-11-01",
       "itens": [
@@ -677,19 +702,16 @@
     }
   ],
   "emPreparacao": [
-    "Um plano para o pós-parto, por fases.",
     "Conta com sessão iniciada e cópia na nuvem: em estudo, ainda sem decisão. Enquanto não houver, os dados continuam só no teu telemóvel."
   ],
   "traducoes": {
     "en": {
       "emPreparacao": [
-        "A postpartum plan, in phases.",
         "Account sign-in and cloud backup: under study, no decision yet. Until then, your data stays only on your phone."
       ]
     },
     "es": {
       "emPreparacao": [
-        "Un plan para el posparto, por fases.",
         "Cuenta con inicio de sesión y copia en la nube: en estudio, todavía sin decisión. Mientras tanto, tus datos siguen solo en tu móvil."
       ]
     }

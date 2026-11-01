@@ -1232,3 +1232,74 @@ test.describe('F37.3: PAR-Q+ com «sim»', () => {
     await expect(page.getByRole('region', { name: 'Começar a caminhar' }).getByRole('button', { name: 'Começar' })).toBeVisible()
   })
 })
+
+/** Data local, `semanas` semanas (e mais um dia) antes de hoje. */
+function semanasAtras(semanas: number) {
+  const d = new Date()
+  d.setDate(d.getDate() - semanas * 7 - 1)
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
+
+async function anamnesePosParto(page: Page, dataParto: string, autorizacao: boolean) {
+  await page.goto('./')
+  await page.getByLabel('Idade').fill('34')
+  await page.getByLabel('Altura (cm)').fill('165')
+  await page.getByLabel('Peso (kg)').fill('68')
+  await page.getByLabel('Sexo').selectOption('feminino')
+  await page.getByLabel('Gravidez ou pós-parto').selectOption('pos-parto')
+  await page.getByLabel('Nenhuma').check()
+  for (let i = 0; i < 7; i++) await page.locator(`input[name="parq-${i}"]`).nth(1).check()
+  // F38.1: sem os dados do parto, a anamnese não avança.
+  await page.getByRole('button', { name: 'Gerar o meu plano' }).click()
+  await expect(page.getByRole('alert')).toHaveText('Indica a data do parto (não pode ser no futuro).')
+  await page.getByLabel('Data do parto').fill(dataParto)
+  await page.locator('input[name="tipo-parto"]').nth(0).check()
+  await page.locator('input[name="autorizacao"]').nth(autorizacao ? 0 : 1).check()
+  await page.locator('input[name="sintomas-pp"]').nth(1).check()
+  await page.getByRole('button', { name: 'Gerar o meu plano' }).click()
+}
+
+test.describe('F38: plano pós-parto', () => {
+  test('F38.2–F38.4: fase 2 com caminhada e a pergunta dos sintomas; sem autorização fica na fase 2', async ({ page }) => {
+    await anamnesePosParto(page, semanasAtras(8), false)
+    const cartao = page.getByRole('region', { name: 'Fase 2: reconstruir a base' })
+    await expect(cartao).toContainText('8 semanas desde o parto')
+    await expect(cartao).toContainText('Sem autorização médica, o plano fica na fase 2.')
+    await expect(page.getByRole('heading', { name: 'Base pós-parto A' })).toBeVisible()
+    await expect(page.getByText('Pavimento pélvico: contrações longas')).toBeVisible()
+    await expect(page.getByText('Cardio 15 min')).toBeVisible()
+
+    // F38.4: ao abrir o treino, a pergunta dos sintomas; o «sim» fica guardado e mostra o que fazer.
+    await page.getByText('Pavimento pélvico: contrações longas').click()
+    await page.getByRole('link', { name: 'Hoje' }).click()
+    await page.locator('input[name^="sintomas-"]').nth(0).click()
+    await expect(page.locator('input[name^="sintomas-"]').nth(0)).toBeChecked()
+    await expect(page.getByText('A fase não avança enquanto a resposta mais recente for «sim».')).toBeVisible()
+  })
+
+  test('F38.5–F38.6: autoteste da diástase e teste de impacto desbloqueiam a corrida', async ({ page }) => {
+    await anamnesePosParto(page, semanasAtras(13), true)
+    await expect(page.getByRole('region', { name: 'Fase 4: treino de força' })).toContainText('Já podes fazer o teste de impacto')
+    await expect(page.locator('ul button.item').first()).toContainText('Pavimento pélvico: contrações longas')
+
+    await page.goto('./#/programas-cardio')
+    await expect(page.getByRole('region', { name: 'Correr 5 km' })).toContainText('🔒 No pós-parto, este programa abre quando passares no teste de impacto')
+
+    await page.goto('./#/pos-parto')
+    await expect(page.getByRole('region', { name: 'Para e procura ajuda se tiveres' })).toContainText('Perdas de urina ou de fezes')
+    const diastase = page.getByRole('region', { name: 'Autoteste da diástase' })
+    await diastase.getByLabel('Dedos').fill('2,5')
+    await diastase.getByRole('button', { name: 'Guardar' }).click()
+    await expect(diastase).toContainText('Último autoteste: 2,5 dedos')
+    await expect(diastase).toContainText('Vale a pena pedir uma avaliação')
+
+    const impacto = page.getByRole('region', { name: 'Teste de impacto' })
+    for (const c of await impacto.getByRole('checkbox').all()) await c.click()
+    await impacto.getByRole('button', { name: 'Guardar o teste' }).click()
+    await expect(page.getByRole('region', { name: 'Regresso ao treino' })).toBeVisible()
+    await expect(impacto).toContainText('Passaste no teste em')
+
+    await page.goto('./#/programas-cardio')
+    await expect(page.getByRole('region', { name: 'Correr 5 km' }).getByRole('button', { name: 'Começar' })).toBeVisible()
+  })
+})

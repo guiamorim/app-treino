@@ -248,3 +248,7 @@ button.reportar { margin-top: 16px; min-height: 44px; font-size: 0.85rem; color:
 /* F37.2: uma sessão por dia no programa personalizado. */
 .sessao-cardio { border: 0; border-top: 1px solid var(--linha); margin: 12px 0 0; padding: 8px 0 0; min-width: 0; }
 .sessao-cardio legend { font-weight: 600; padding: 0; }
+/* F38: fases do pós-parto, com a atual realçada. */
+.fases-pos-parto { padding-left: 20px; margin: 0 0 8px; }
+.fases-pos-parto li { margin-bottom: 8px; }
+.fases-pos-parto li[aria-current] strong { color: var(--acento); }

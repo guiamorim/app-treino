@@ -2,7 +2,7 @@
 
 [English](specification-v1.en.md) · **Português**
 
-Data: 2026-10-20 · Versão 1.26 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.26)
+Data: 2026-10-20 · Versão 1.27 (ajustes feitos durante a implementação marcados com v1.1; novas funcionalidades marcadas com v1.2 a v1.27)
 
 ## 0. Decisões fechadas
 
@@ -43,7 +43,7 @@ Estes nomes são usados iguais na especificação, no código e na interface.
 ## 2. Funcionalidades e critérios de aceitação
 
 ### F1. Anamnese
-- Campos: idade, altura, peso, cintura, sexo, objetivo (recomposição, hipertrofia, força, saúde geral), dias por semana (2–7), duração da sessão (45/60/75 min), experiência (iniciante, regresso após paragem, intermédio), equipamento (ginásio completo, halteres, casa; desde a v1.17, uma lista, ver F28), restrições (zonas com dor, ou «Nenhuma»), aceita cardio (sim/não), PAR-Q+ (7 perguntas gerais). (v1.3) Ênfase do plano (equilibrado, mais pernas e glúteos, mais tronco), para qualquer sexo. Se o sexo for feminino: gravidez ou pós-parto (não; grávida no 1.º trimestre; grávida no 2.º ou 3.º trimestre; pós-parto há menos de 12 meses).
+- Campos: idade, altura, peso, cintura, sexo, objetivo (recomposição, hipertrofia, força, saúde geral), dias por semana (2–7), duração da sessão (45/60/75 min), experiência (iniciante, regresso após paragem, intermédio), equipamento (ginásio completo, halteres, casa; desde a v1.17, uma lista, ver F28), restrições (zonas com dor, ou «Nenhuma»), aceita cardio (sim/não), PAR-Q+ (7 perguntas gerais). (v1.3) Ênfase do plano (equilibrado, mais pernas e glúteos, mais tronco), para qualquer sexo. Se o sexo for feminino: gravidez ou pós-parto (não; grávida no 1.º trimestre; grávida no 2.º ou 3.º trimestre; pós-parto; desde a v1.27 sem limite de tempo e com os dados do parto, ver F38).
 - **Dado** que respondo "sim" a alguma pergunta do PAR-Q+, **quando** guardo, **então** vejo um aviso a recomendar avaliação médica antes de treinar, e o plano é gerado com intensidade conservadora e marcado como tal.
 - **Dado** que indico uma restrição sem avaliação profissional, **então** a app mostra uma recomendação para avaliação, sem bloquear.
 - (v1.3) **Dado** que indico gravidez ou pós-parto, **então** o plano é conservador e aparece um aviso a recomendar acompanhamento do médico ou obstetra (e, no pós-parto, avaliação do pavimento pélvico por fisioterapeuta). No 2.º e 3.º trimestres não aparecem exercícios deitado de costas ou de barriga para baixo.
@@ -354,10 +354,23 @@ Quinta fase do estudo de viabilidade de calistenia e treino em casa (2026-10-31)
   - **Emagrecer com cardio (12 semanas):** 5 sessões moderadas por semana, de 150 até 250 min por semana (Donnelly et al., 2009), com o aviso de que sem mudar a alimentação o cardio sozinho emagrece pouco.
   O volume semanal nunca desce de uma semana para a seguinte; na corrida, o que sobe é o tempo seguido a correr.
 - **F37.2 Programa personalizado.** Escolhem-se os dias (1 a 7) e, para cada um, a modalidade, os minutos (5–180) e o esforço; as semanas (2–16) e a subida por semana (0–10 %). Os minutos de cada sessão sobem essa percentagem por semana, arredondados ao minuto. Se a última semana passar de 300 min de cardio vigoroso (esforço 7 ou mais), aparece um aviso.
-- **F37.3 Segurança.** Correr 5 km e intervalos ficam bloqueados, com o motivo, se o PAR-Q+ tiver algum «sim» ou houver gravidez ou pós-parto; correr 5 km fica também bloqueado com dor no joelho ou na anca.
+- **F37.3 Segurança.** Correr 5 km e intervalos ficam bloqueados, com o motivo, se o PAR-Q+ tiver algum «sim» ou houver gravidez ou pós-parto; correr 5 km fica também bloqueado com dor no joelho ou na anca. No pós-parto, desbloqueiam-se depois de passar o teste de impacto (F38.6).
 - **F37.4 Progresso.** As semanas do programa contam a partir do dia em que começa. Cada registo de cardio (F36) dessa semana conta como uma sessão feita. Um cartão mostra o programa, a semana, as sessões feitas e a próxima sessão, com «Registar esta sessão», que abre o registo com a modalidade, os minutos e o esforço da sessão. Com a semana cumprida, diz quando começa a seguinte; depois da última semana, diz que o programa terminou. O cartão aparece no Início (depois do próximo treino) e no Treino de hoje (depois da lista).
 - **F37.5 Só cardio.** Com um programa ativo, a opção «Só cardio» põe o cartão do programa em primeiro lugar no Início e no Treino de hoje, e mostra sempre a recomendação de 2 sessões curtas de força por semana para manter o músculo. O treino de força continua disponível.
 - **F37.6 Trocar e terminar.** Trocar de programa ou terminá-lo pede confirmação; os registos de cardio ficam. O programa ativo entra na cópia de segurança (F10).
+
+### F38. Plano pós-parto por fases (v1.27)
+
+Base: guia de regresso à corrida depois do parto (Goom, Donnelly e Brockwell, 2019), revisões Cochrane sobre o treino do pavimento pélvico (Woodley et al., 2020), ACOG (2020) e OMS (2020). Os vídeos dos exercícios novos foram escolhidos pelo título e pela fonte, sem revisão de um fisioterapeuta, e a app diz isso.
+
+- **F38.1 Dados do parto.** Com sexo feminino e «Pós-parto», a anamnese pede: data do parto (obrigatória, até hoje), tipo de parto (vaginal ou cesariana), autorização do médico ou obstetra para treinar (sim/não), sintomas (perdas de urina ou fezes, peso ou arrastamento na vagina, ou dor pélvica: sim/não), objetivo (diástase e core, fortalecimento geral, recuperação, voltar ao treino que fazia antes) e, opcional, a diástase em dedos (0–10). Não há limite de tempo desde o parto. Mudar só estes dados não gera um plano novo. Anamneses anteriores sem estes dados mostram um cartão a pedir para os completar.
+- **F38.2 Fases pelo calendário.** Pelas semanas completas desde o parto: fase 1 (0–1), fase 2 (2–5), fase 3 (6–11) e fase 4 (12 em diante). Depois de uma cesariana, a fase 3 começa às 8 semanas e a fase 4 às 14. A fase atual, as semanas e o resumo aparecem num cartão no Início e no Treino de hoje, com ligação ao ecrã «Pós-parto».
+- **F38.3 Treinos de cada fase.** O plano guardado não muda; a fase decide o que se mostra. Fase 1: um treino de pavimento pélvico, respiração, core muito leve e 10 min de caminhada. Fase 2: treinos A e B com core profundo, ponte, agachamento e afundo com o peso do corpo, e 15 min de caminhada. Fase 3: A e B com mais séries, core em progressão e 20 min de caminhada. Todos com RIR 3–4; cada exercício incompatível com as restrições ou o equipamento é trocado pelo primeiro substituto compatível. Fase 4: o plano de força normal, com contrações longas do pavimento pélvico no início de cada treino. No regresso (F38.6), o plano normal, exceto com o objetivo diástase e core ou recuperação, que mantém o pavimento pélvico no início. Nos exercícios sem carga, a primeira sugestão (F5) pede as repetições com boa técnica, sem falar em carga.
+- **F38.4 Autorização e sintomas.** Sem autorização médica, a fase fica no máximo na fase 2. Em cada treino aberto, a pergunta «Durante ou depois deste treino tiveste perdas de urina, sensação de peso na vagina ou dor?» (sim/não) fica na sessão. Vale a resposta mais recente, da anamnese ou de um treino: com «sim», a fase não passa da que tinha nesse dia e a app recomenda reduzir e, se continuar, um fisioterapeuta de saúde pélvica; um «não» depois volta à fase do calendário.
+- **F38.5 Autoteste da diástase.** No ecrã «Pós-parto», os passos do autoteste em dedos, o registo com a data (um por dia) e o histórico. Com 2 dedos ou mais, ou com «cúpula» na linha do meio, recomenda uma avaliação; diz sempre que é uma estimativa.
+- **F38.6 Teste de impacto.** Na fase 4 do calendário, com autorização e sem sintomas na última resposta, os 7 testes de Goom et al. (2019): andar 30 min, equilíbrio numa perna 10 s, agachamento numa perna 10 ×, correr no sítio 1 min, saltos para a frente 10 ×, saltos numa perna 10 × e «running man» numa perna 10 ×, cada um sem perdas, peso nem dor. Passar nos 7 leva ao regresso e desbloqueia correr 5 km e intervalos (F37.3); um «sim» nos sintomas depois volta à fase 4. Sem passar, recomenda repetir daqui a 2 a 4 semanas.
+- **F38.7 Sinais de alarme.** O ecrã «Pós-parto» lista quando parar e procurar ajuda: peso ou sensação de bola na vagina, perdas de urina, fezes ou gases, dor moderada ou forte, perdas de sangue novas ou depois das 8 semanas, e barriga pendente ou afastamento visível na linha do meio.
+- **F38.8 Cópia.** Os dados do parto (na anamnese), a resposta dos sintomas (em cada sessão), o teste de impacto e os autotestes da diástase entram na cópia de segurança (F10), com validação.
 
 ### F14. Blocos e próxima mudança (v1.2, regras na secção 3.7)
 - No Início e no Treino de hoje: fase atual (readaptação, semana N de M do bloco, ou descarga) e a próxima mudança com data: fim da readaptação (séries completas), semana de descarga (metade das séries), ou novo bloco (troca dos exercícios isolados, com a lista do que muda).
@@ -411,6 +424,7 @@ Frequência alvo: cada grupo principal 2×/semana.
 ### 3.4.1 Sexo, gravidez e pós-parto (v1.3)
 - O plano base não muda com o sexo. Com o mesmo treino, homens e mulheres ganham força e massa muscular em proporção semelhante (Roberts et al., 2020); dar automaticamente mais pernas a mulheres e mais tronco a homens não tem base sólida. A diferença fica na ênfase, escolhida por cada pessoa (secção 3.8).
 - Gravidez ou pós-parto: plano conservador (RIR 3–4) e aviso (ACOG, 2020). No 2.º e 3.º trimestres, os exercícios marcados no catálogo como deitado de costas ou de barriga para baixo (`deitado`) são trocados pelo primeiro substituto compatível, com a nota «por causa da gravidez».
+- (v1.27) No pós-parto com os dados do parto, o plano segue as fases de F38.
 
 ### 3.5 Duração
 - Estimativa por série: 45 s de execução + descanso prescrito. Aquecimento: 8 min. Cardio opcional: 10–15 min no fim dos dias de inferiores.

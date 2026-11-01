@@ -4,12 +4,13 @@ import { db } from '../data/db'
 import { MODELOS_ESCOLHA } from '../domain/modelos'
 import { divisoesPossiveis, EQUIPAMENTOS_ESCOLHA, equipamentoDisponivel, gerarPlano, resumoEquipamento } from '../domain/plano'
 import { AREAS, DIAS_POR_SEMANA, type Anamnese, type DiasPorSemana, type DivisaoTreino, type Enfase, type Estilo, type Gravidez, type Area, type Equipamento, type Restricao } from '../domain/types'
-import { agoraIso, catalogo, novoId, type Dados } from './dados'
+import { agoraIso, catalogo, hojeIso, novoId, type Dados } from './dados'
 import { ir } from './rota'
 import { locale, m, t, traduzido } from '../i18n'
 import { CartaoIdioma, CartaoUnidade } from './Idioma'
 import { ListaEquipamento } from './Equipamento'
 import { deUnidade, paraCampo } from '../domain/unidades'
+import { NOMES_OBJETIVOS_POS_PARTO, OBJETIVOS_POS_PARTO, ultimosSintomas, type ObjetivoPosParto, type PosParto, type TipoParto } from '../domain/posParto'
 
 // Perguntas gerais do PAR-Q+ (versão 2023), adaptadas para português de Portugal.
 export const PERGUNTAS_PARQ = [
@@ -75,6 +76,17 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
   const [erro, setErro] = useState('')
   // F25.1: dias da semana em que treina (opcional).
   const [diasTreino, setDiasTreino] = useState<number[]>(a?.diasTreino ?? [])
+  // F38.1 (v1.27): dados do parto; os sintomas abrem com a resposta mais recente (da anamnese ou de um treino).
+  const pp = a?.posParto
+  const [parto, setParto] = useState({
+    dataParto: pp?.dataParto ?? '',
+    tipoParto: (pp?.tipoParto ?? null) as TipoParto | null,
+    autorizacaoMedica: (pp?.autorizacaoMedica ?? null) as boolean | null,
+    objetivo: (pp?.objetivo ?? 'recuperacao') as ObjetivoPosParto,
+    sintomas: (pp ? ultimosSintomas(pp, dados.sessoes).sim : null) as boolean | null,
+    diastaseDedos: pp?.diastaseDedos?.toString() ?? '',
+  })
+  const posParto = f.sexo === 'feminino' && f.gravidez === 'pos-parto'
   const alternarDia = (d: number) => setDiasTreino((x) => (x.includes(d) ? x.filter((y) => y !== d) : [...x, d].sort()))
   const dias = Number(f.diasPorSemana) as DiasPorSemana
   const possiveis = divisoesPossiveis(dias)
@@ -111,6 +123,21 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
     const halteresMaxKg = comHalteres && f.halteresMaxKg.trim() ? deUnidade(num(f.halteresMaxKg)) : undefined
     if (halteresMaxKg !== undefined && !(halteresMaxKg >= 0.5 && halteresMaxKg <= 200)) return setErro(t('Indica o halter mais pesado em {u}, ou deixa em branco.', { u: dados.unidade }))
 
+    let dadosParto: PosParto | undefined
+    if (posParto) {
+      if (!parto.dataParto || parto.dataParto > hojeIso() || parto.dataParto < '1990-01-01') return setErro(t('Indica a data do parto (não pode ser no futuro).'))
+      if (!parto.tipoParto) return setErro(t('Indica se o parto foi vaginal ou por cesariana.'))
+      if (parto.autorizacaoMedica === null) return setErro(t('Diz se já tens autorização médica para treinar.'))
+      if (parto.sintomas === null) return setErro(t('Responde à pergunta sobre perdas, peso na vagina ou dor.'))
+      const dedos = num(parto.diastaseDedos)
+      if (parto.diastaseDedos.trim() && !(dedos >= 0 && dedos <= 10)) return setErro(t('Indica a diástase em dedos, de 0 a 10, ou deixa em branco.'))
+      dadosParto = {
+        dataParto: parto.dataParto, tipoParto: parto.tipoParto, autorizacaoMedica: parto.autorizacaoMedica, objetivo: parto.objetivo, sintomas: parto.sintomas,
+        ...(parto.diastaseDedos.trim() ? { diastaseDedos: dedos } : {}),
+        atualizadoEm: agoraIso(),
+      }
+    }
+
     const nova: Anamnese = {
       idade, alturaCm, pesoKg,
       ...(f.cinturaCm ? { cinturaCm: cintura } : {}),
@@ -130,11 +157,13 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
       ...(calistenia ? { estilo: 'calistenia' as const, competencias: f.competencias } : {}),
       ...(f.sexo === 'feminino' ? { gravidez: f.gravidez as Gravidez } : {}),
       ...(diasTreino.length ? { diasTreino } : {}),
+      ...(dadosParto ? { posParto: dadosParto } : {}),
     }
     await db.gravar('anamnese', nova)
     // F1.3: alterar a anamnese pergunta antes de substituir o plano; o histórico mantém-se.
     // F25.1: mudar só os dias de treino não mexe no plano.
-    const semDias = (x: Anamnese) => JSON.stringify({ ...x, diasTreino: undefined })
+    // F38.1: os dados do parto também não mexem no plano guardado (a fase é calculada ao mostrar).
+    const semDias = (x: Anamnese) => JSON.stringify({ ...x, diasTreino: undefined, posParto: undefined })
     const soDias = !!a && semDias(a) === semDias(nova)
     const gerar = !dados.plano || (!soDias && confirm(dados.plano.proprio ? t('Gerar um novo plano com estes dados substitui o plano que criaste. O histórico de treinos mantém-se.') : t('Gerar um novo plano com estes dados? O histórico de treinos mantém-se.')))
     if (gerar) await db.gravar('plano', gerarPlano(nova, catalogo, { id: novoId(), agora: agoraIso() }))
@@ -168,8 +197,41 @@ export function AnamneseEcra({ dados }: { dados: Dados }) {
             <option value="nao">{t('Não')}</option>
             <option value="gravida-1t">{t('Grávida, 1.º trimestre')}</option>
             <option value="gravida-2t3t">{t('Grávida, 2.º ou 3.º trimestre')}</option>
-            <option value="pos-parto">{t('Pós-parto (menos de 12 meses)')}</option>
+            <option value="pos-parto">{t('Pós-parto')}</option>
           </select>
+          {posParto && (
+            <fieldset className="cartao" style={{ margin: '8px 0' }}>
+              <legend>{t('Sobre o parto')}</legend>
+              <p className="secundario">{t('Com estes dados, o plano segue fases pelas semanas desde o parto, sem limite de tempo.')}</p>
+              <label htmlFor="data-parto">{t('Data do parto')}</label>
+              <input id="data-parto" type="date" value={parto.dataParto} max={hojeIso()} onChange={(e) => setParto({ ...parto, dataParto: e.target.value })} />
+              <p id="tipo-parto" style={{ fontWeight: 600, marginBottom: 4 }}>{t('Tipo de parto')}</p>
+              <div className="linha" role="radiogroup" aria-labelledby="tipo-parto">
+                {(['vaginal', 'cesariana'] as const).map((v) => (
+                  <label key={v} className="opcao"><input type="radio" name="tipo-parto" checked={parto.tipoParto === v} onChange={() => setParto({ ...parto, tipoParto: v })} /> {v === 'vaginal' ? t('Vaginal') : t('Cesariana')}</label>
+                ))}
+              </div>
+              <p id="autorizacao" style={{ fontWeight: 600, marginBottom: 4 }}>{t('Já tens autorização do médico ou obstetra para treinar (normalmente na consulta das 6 a 8 semanas)?')}</p>
+              <div className="linha" role="radiogroup" aria-labelledby="autorizacao">
+                {[true, false].map((v) => (
+                  <label key={String(v)} className="opcao"><input type="radio" name="autorizacao" checked={parto.autorizacaoMedica === v} onChange={() => setParto({ ...parto, autorizacaoMedica: v })} /> {v ? t('Sim') : t('Não')}</label>
+                ))}
+              </div>
+              <p id="sintomas-pp" style={{ fontWeight: 600, marginBottom: 4 }}>{t('Tens perdas de urina ou fezes, sensação de peso ou arrastamento na vagina, ou dor pélvica?')}</p>
+              <div className="linha" role="radiogroup" aria-labelledby="sintomas-pp">
+                {[true, false].map((v) => (
+                  <label key={String(v)} className="opcao"><input type="radio" name="sintomas-pp" checked={parto.sintomas === v} onChange={() => setParto({ ...parto, sintomas: v })} /> {v ? t('Sim') : t('Não')}</label>
+                ))}
+              </div>
+              <label htmlFor="objetivo-pp">{t('Objetivo no pós-parto')}</label>
+              <select id="objetivo-pp" value={parto.objetivo} onChange={(e) => setParto({ ...parto, objetivo: e.target.value as ObjetivoPosParto })}>
+                {OBJETIVOS_POS_PARTO.map((o) => <option key={o} value={o}>{NOMES_OBJETIVOS_POS_PARTO[o]}</option>)}
+              </select>
+              <label htmlFor="diastase">{t('Diástase, em dedos')}</label>
+              <input id="diastase" inputMode="decimal" placeholder={t('opcional')} value={parto.diastaseDedos} onChange={(e) => setParto({ ...parto, diastaseDedos: e.target.value })} />
+              <p className="secundario">{t('Se não sabes, deixa em branco: depois podes fazer o autoteste no ecrã Pós-parto.')}</p>
+            </fieldset>
+          )}
         </>
       )}
 

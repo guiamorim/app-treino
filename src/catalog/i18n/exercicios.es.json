@@ -1240,5 +1240,84 @@
    "Cuerpo recto a la altura de los hombros",
    "Años de entrenamiento: avanza por los peldaños, sin prisa"
   ]
+ },
+ "pavimento-pelvico-longas": {
+  "nome": "Suelo pélvico: contracciones largas",
+  "objetivo": "Fuerza y resistencia de los músculos del suelo pélvico, para prevenir y tratar las pérdidas de orina después del parto.",
+  "pontosChave": [
+   "Tumbada boca arriba con las rodillas flexionadas, o sentada",
+   "Aprieta y eleva como si cortaras el pis y los gases a la vez, sin apretar los glúteos",
+   "Mantén cada contracción de 5 a 10 segundos respirando con normalidad y luego relaja del todo, tanto tiempo como la contracción; cada contracción cuenta como una repetición",
+   "Si notas dolor o peso en la vagina, para y habla con un fisioterapeuta de suelo pélvico"
+  ]
+ },
+ "pavimento-pelvico-rapidas": {
+  "nome": "Suelo pélvico: contracciones rápidas",
+  "objetivo": "Respuesta rápida del suelo pélvico, la que frena las pérdidas al toser, estornudar o levantar peso.",
+  "pontosChave": [
+   "En la misma posición que las contracciones largas",
+   "Aprieta y eleva rápido, durante 1 segundo, y relaja del todo antes de la siguiente",
+   "No aguantes la respiración ni contraigas la barriga con fuerza"
+  ]
+ },
+ "respiracao-transverso": {
+  "nome": "Respiración con activación del transverso",
+  "objetivo": "Volver a conectar el músculo más profundo del abdomen con el suelo pélvico y la respiración, el primer paso del core después del parto.",
+  "pontosChave": [
+   "Tumbada boca arriba, rodillas flexionadas, manos en las costillas",
+   "Inspira por la nariz y deja que las costillas se abran hacia los lados",
+   "Al espirar, eleva el suelo pélvico y acerca suavemente el ombligo a la columna",
+   "Una respiración completa cuenta como una repetición; sin aguantar el aire"
+  ]
+ },
+ "inclinacao-pelvica": {
+  "nome": "Inclinación pélvica tumbada",
+  "objetivo": "Movilidad de la pelvis y control de la parte baja del abdomen, con poca carga.",
+  "pontosChave": [
+   "Tumbada boca arriba, rodillas flexionadas y pies apoyados",
+   "Al espirar, bascula la pelvis para pegar la zona lumbar al suelo",
+   "Al inspirar, vuelve a la posición neutra sin arquear mucho",
+   "Movimiento pequeño y lento"
+  ]
+ },
+ "abertura-joelho-deitada": {
+  "nome": "Apertura de rodilla tumbada",
+  "objetivo": "Control del core profundo mientras la pierna se mueve: la pelvis no debe girar.",
+  "pontosChave": [
+   "Tumbada boca arriba, rodillas flexionadas, pelvis neutra",
+   "Al espirar, activa el transverso y deja caer despacio una rodilla hacia el lado",
+   "Vuelve al centro al inspirar; la pelvis se queda quieta",
+   "Alterna las piernas; cada lado cuenta una repetición"
+  ]
+ },
+ "deslizar-calcanhar": {
+  "nome": "Deslizamiento de talón",
+  "objetivo": "Progresión del core profundo: estirar la pierna sin perder la posición de la pelvis ni abombar la barriga.",
+  "pontosChave": [
+   "Tumbada boca arriba, rodillas flexionadas",
+   "Al espirar, activa el transverso y desliza un talón hasta estirar la pierna",
+   "Vuelve al inspirar; la zona lumbar no se arquea",
+   "Si la barriga hace una «cúpula» a lo largo de la línea media, acorta el movimiento"
+  ]
+ },
+ "prancha-lateral-joelhos": {
+  "nome": "Plancha lateral de rodillas",
+  "objetivo": "Fuerza lateral del core y de la cadera con menos carga que la plancha lateral completa.",
+  "pontosChave": [
+   "De lado, codo debajo del hombro, rodillas flexionadas",
+   "Eleva la cadera hasta que hombro, cadera y rodilla queden en línea",
+   "Respira con normalidad; no dejes caer la cadera",
+   "Sin peso ni pérdidas en el suelo pélvico"
+  ]
+ },
+ "conchas": {
+  "nome": "Almejas (apertura de cadera de lado)",
+  "objetivo": "Fuerza del glúteo medio, que estabiliza la pelvis al caminar y correr.",
+  "pontosChave": [
+   "Tumbada de lado, rodillas flexionadas y pies juntos",
+   "Abre la rodilla de arriba sin girar la pelvis hacia atrás",
+   "Baja despacio",
+   "Con una banda por encima de las rodillas para progresar"
+  ]
  }
 }
