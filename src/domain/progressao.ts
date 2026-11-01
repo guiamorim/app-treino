@@ -101,7 +101,10 @@ export function sugerir({ prescricao, exercicio, historico, readaptacao, descarg
       motivo:
         exercicio.medida === 'segundos'
           ? t('Primeira vez: aguenta {min} s com boa técnica.', { min })
-          : t('Primeira vez: escolhe uma carga em que terminarias com RIR {a}–{b} (ainda conseguirias fazer {a} a {b} reps).', { a: prescricao.rir[0], b: prescricao.rir[1] }),
+          // F38.3: nos exercícios sem carga (como o pavimento pélvico), a primeira sugestão não fala em carga.
+          : exercicio.incrementoKg === 0
+            ? t('Primeira vez: faz {min} a {max} reps com boa técnica e para quando ainda conseguirias fazer mais {a} a {b}.', { min, max, a: prescricao.rir[0], b: prescricao.rir[1] })
+            : t('Primeira vez: escolhe uma carga em que terminarias com RIR {a}–{b} (ainda conseguirias fazer {a} a {b} reps).', { a: prescricao.rir[0], b: prescricao.rir[1] }),
     }
   }
 

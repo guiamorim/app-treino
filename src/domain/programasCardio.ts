@@ -138,13 +138,15 @@ export function programa(a: ProgramaAtivo): Programa {
 
 /**
  * F37.3: bloqueios por segurança. Correr 5 km pede PAR-Q sem «sim», sem gravidez nem pós-parto e sem dor no
- * joelho ou na anca; intervalos pedem PAR-Q sem «sim» e sem gravidez nem pós-parto.
+ * joelho ou na anca; intervalos pedem PAR-Q sem «sim» e sem gravidez nem pós-parto. F38.6: no pós-parto,
+ * abrem depois de passar o teste de impacto (`regressoPosParto`).
  */
-export function bloqueio(id: IdPrograma, a: Anamnese): string | null {
+export function bloqueio(id: IdPrograma, a: Anamnese, regressoPosParto = false): string | null {
   const gravidez = a.sexo === 'feminino' ? (a.gravidez ?? 'nao') : 'nao'
   if (id !== 'correr-5km' && id !== 'intervalos') return null
   if (a.parq.some(Boolean)) return t('Respondeste «sim» no PAR-Q+: fala primeiro com o médico.')
-  if (gravidez !== 'nao') return t('Na gravidez e no pós-parto, este programa fica para depois (ver o aviso do teu plano).')
+  if (gravidez === 'pos-parto' && !regressoPosParto) return t('No pós-parto, este programa abre quando passares no teste de impacto (ecrã Pós-parto).')
+  if (gravidez !== 'nao' && gravidez !== 'pos-parto') return t('Na gravidez, este programa fica para depois (ver o aviso do teu plano).')
   if (id === 'correr-5km' && a.restricoes.some((r) => (r.area === 'joelho' || r.area === 'anca') && r.intensidade > 0)) return t('Com dor no joelho ou na anca, a corrida pode piorá-la: o baixo impacto é a melhor escolha.')
   return null
 }

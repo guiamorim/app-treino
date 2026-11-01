@@ -1240,5 +1240,84 @@
    "Body straight at shoulder height",
    "Years of training: progress through the rungs, without rushing"
   ]
+ },
+ "pavimento-pelvico-longas": {
+  "nome": "Pelvic floor: long holds",
+  "objetivo": "Strength and endurance of the pelvic floor muscles, to prevent and treat urine leaks after birth.",
+  "pontosChave": [
+   "Lying on your back with knees bent, or sitting",
+   "Squeeze and lift as if stopping both wee and wind at the same time, without squeezing your glutes",
+   "Hold each squeeze for 5 to 10 seconds while breathing normally, then relax fully for as long as the hold; each squeeze counts as one rep",
+   "If you feel pain or heaviness in the vagina, stop and talk to a pelvic health physiotherapist"
+  ]
+ },
+ "pavimento-pelvico-rapidas": {
+  "nome": "Pelvic floor: quick squeezes",
+  "objetivo": "Quick pelvic floor response, the one that stops leaks when you cough, sneeze or lift.",
+  "pontosChave": [
+   "Same position as the long holds",
+   "Squeeze and lift quickly for 1 second, then relax fully before the next one",
+   "Don't hold your breath or tense your tummy hard"
+  ]
+ },
+ "respiracao-transverso": {
+  "nome": "Breathing with transverse abdominis activation",
+  "objetivo": "Reconnecting the deepest tummy muscle with the pelvic floor and breathing, the first core step after birth.",
+  "pontosChave": [
+   "Lying on your back, knees bent, hands on your ribs",
+   "Breathe in through your nose and let your ribs widen to the sides",
+   "As you breathe out, lift your pelvic floor and gently draw your belly button towards your spine",
+   "One full breath counts as one rep; don't hold your breath"
+  ]
+ },
+ "inclinacao-pelvica": {
+  "nome": "Lying pelvic tilt",
+  "objetivo": "Pelvic mobility and lower-tummy control, with little load.",
+  "pontosChave": [
+   "Lying on your back, knees bent, feet flat",
+   "As you breathe out, tilt your pelvis to press your lower back into the floor",
+   "As you breathe in, return to neutral without arching much",
+   "Small, slow movement"
+  ]
+ },
+ "abertura-joelho-deitada": {
+  "nome": "Bent knee fall out",
+  "objetivo": "Deep core control while the leg moves: the pelvis must not rotate.",
+  "pontosChave": [
+   "Lying on your back, knees bent, pelvis neutral",
+   "As you breathe out, engage your transverse abdominis and let one knee slowly fall to the side",
+   "Come back to the middle as you breathe in; the pelvis stays still",
+   "Alternate legs; each side counts as one rep"
+  ]
+ },
+ "deslizar-calcanhar": {
+  "nome": "Heel slide",
+  "objetivo": "Deep core progression: straighten the leg without losing pelvic position or doming the tummy.",
+  "pontosChave": [
+   "Lying on your back, knees bent",
+   "As you breathe out, engage your transverse abdominis and slide one heel until the leg is straight",
+   "Come back as you breathe in; your lower back doesn't arch",
+   "If your tummy domes along the midline, shorten the movement"
+  ]
+ },
+ "prancha-lateral-joelhos": {
+  "nome": "Kneeling side plank",
+  "objetivo": "Side core and hip strength with less load than a full side plank.",
+  "pontosChave": [
+   "On your side, elbow under the shoulder, knees bent",
+   "Lift your hips until shoulder, hip and knee are in line",
+   "Breathe normally; don't let your hips sag",
+   "No heaviness or leaks in the pelvic floor"
+  ]
+ },
+ "conchas": {
+  "nome": "Clamshells",
+  "objetivo": "Glute medius strength, which stabilises the pelvis when walking and running.",
+  "pontosChave": [
+   "Lying on your side, knees bent and feet together",
+   "Open the top knee without rolling your pelvis back",
+   "Lower slowly",
+   "Add a band above the knees to progress"
+  ]
  }
 }

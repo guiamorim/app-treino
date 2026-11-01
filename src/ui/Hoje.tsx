@@ -12,6 +12,7 @@ import { ir } from './rota'
 import { BotaoReportar } from './Reportar'
 import { BotaoCardio, textoCardio } from './Cardio'
 import { CartaoProgramaCardio } from './ProgramasCardio'
+import { CartaoPosParto, PerguntaSintomas } from './PosParto'
 import { JanelaParabens } from './Parabens'
 import { instalada, SugestaoInstalar } from './Instalar'
 import { m, t, traduzido } from '../i18n'
@@ -61,6 +62,7 @@ export function Hoje({ dados, plano, anamnese }: { dados: Dados; plano: Plano; a
       <CartaoNivelamento dados={dados} plano={dados.planoBase ?? plano} anamnese={anamnese} />
       {/* F37.5: num plano só de cardio, o programa vem primeiro; o treino de força fica como recomendação. */}
       {dados.programaCardio?.soCardio && <CartaoProgramaCardio dados={dados} />}
+      <CartaoPosParto dados={dados} />
       <h1>{treino.nome}</h1>
       <p className="secundario">~{treino.duracaoEstimadaMin} min · {textoFase(plano, semana)}</p>
       {treino.sintese && <p>{treino.sintese}</p>}
@@ -120,6 +122,8 @@ export function Hoje({ dados, plano, anamnese }: { dados: Dados; plano: Plano; a
         </ul>
       </div>
 
+      {/* F38.4: a pergunta dos sintomas em cada treino do pós-parto. */}
+      {sessao && <PerguntaSintomas dados={dados} sessao={sessao} />}
       {dados.programaCardio && !dados.programaCardio.soCardio && <CartaoProgramaCardio dados={dados} />}
       {/* F35.2: no Treino de hoje, depois da lista, para não empurrar o treino para fora do ecrã. */}
       {!dados.instalacaoVista && !instalada() && <SugestaoInstalar />}

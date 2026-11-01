@@ -10,6 +10,7 @@ import type { Ferias } from './ferias'
 import { PADROES, type Nivelamento } from './nivelamento'
 import { LIMITES, MODALIDADES, type RegistoCardio } from './cardio'
 import { LIMITES_PERSONALIZADO, PROGRAMAS, type ProgramaAtivo } from './programasCardio'
+import { OBJETIVOS_POS_PARTO, TESTES_IMPACTO, TIPOS_PARTO, type EstadoPosParto } from './posParto'
 
 const inteiro = (min: number, max: number) => z.number().int().min(min).max(max)
 const data = z.string().min(10).max(40)
@@ -26,7 +27,7 @@ const registo = z.strictObject({
   concluido: z.boolean().optional(),
   saltado: z.boolean().optional(),
 })
-const sessao = z.strictObject({ id, planoId: id, treinoId: id, inicio: data, fim: data.optional(), exercicios: z.array(registo).max(50), alongamento: z.enum(['feito', 'dispensado']).optional() })
+const sessao = z.strictObject({ id, planoId: id, treinoId: id, inicio: data, fim: data.optional(), exercicios: z.array(registo).max(50), alongamento: z.enum(['feito', 'dispensado']).optional(), sintomasPosParto: z.boolean().optional() })
 const medicao = z.strictObject({
   id,
   data,
@@ -67,6 +68,15 @@ const anamnese = z.strictObject({
   halteresMaxKg: z.number().min(0.5).max(200).optional(),
   estilo: z.enum(ESTILOS).optional(),
   competencias: z.boolean().optional(),
+  posParto: z.strictObject({
+    dataParto: dia,
+    tipoParto: z.enum(TIPOS_PARTO),
+    autorizacaoMedica: z.boolean(),
+    objetivo: z.enum(OBJETIVOS_POS_PARTO),
+    sintomas: z.boolean(),
+    diastaseDedos: z.number().min(0).max(10).optional(),
+    atualizadoEm: data,
+  }).optional(),
 })
 
 const faixa = z.tuple([z.number().int().min(0), z.number().int().min(0)])
@@ -131,6 +141,10 @@ const esquemaCopia = z.strictObject({
       progressaoPct: inteiro(...LIMITES_PERSONALIZADO.progressaoPct),
     }).optional(),
   }).refine((p) => (p.id === 'personalizado') === !!p.personalizado, 'Programa personalizado sem sessões').optional(),
+  posParto: z.strictObject({
+    testeImpacto: z.strictObject({ data: dia, resultados: z.array(z.boolean()).length(TESTES_IMPACTO.length) }).optional(),
+    diastase: z.array(z.strictObject({ data: dia, dedos: z.number().min(0).max(10) })).max(500).optional(),
+  }).optional(),
   nivelamento: z.strictObject({
     data: dia,
     resultados: z.partialRecord(z.enum(PADROES), z.strictObject({ tentativas: z.array(z.strictObject({ exercicioId: id, valor: z.number().int().min(0).max(3600) })).max(2), exercicioId: id })),
@@ -164,6 +178,8 @@ export interface Copia {
   nivelamento?: Nivelamento
   /** F37 (v1.26): programa de cardio escolhido. */
   programaCardio?: ProgramaAtivo
+  /** F38 (v1.27): teste de impacto e autotestes da diástase do pós-parto. */
+  posParto?: EstadoPosParto
 }
 
 /** F10.2: valida um ficheiro importado; lança erro se não for uma cópia válida. */

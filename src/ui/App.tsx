@@ -9,6 +9,7 @@ import { PlanoProprio } from './PlanoProprio'
 import { ReportarEcra } from './Reportar'
 import { CardioEcra } from './Cardio'
 import { ProgramasCardioEcra } from './ProgramasCardio'
+import { PosPartoEcra } from './PosParto'
 import { instalada, SugestaoInstalar } from './Instalar'
 import { AnamneseEcra } from './AnamneseEcra'
 import { Hoje } from './Hoje'
@@ -48,7 +49,7 @@ export function App() {
   if (!dados) return <p className="secundario">{t('A carregar…')}</p>
   if (!dados.anamnese || !dados.plano || rota.ecra === 'anamnese') return <AnamneseEcra dados={dados} />
 
-  const ativo = rota.ecra === 'exercicio' || rota.ecra === 'cardio' ? 'hoje' : rota.ecra === 'fotos' ? 'medicoes' : rota.ecra === 'meu-exercicio' || rota.ecra === 'meu-plano' || rota.ecra === 'calistenia' || rota.ecra === 'nivelamento' || rota.ecra === 'reportar' || rota.ecra === 'programas-cardio' ? 'mais' : rota.ecra
+  const ativo = rota.ecra === 'exercicio' || rota.ecra === 'cardio' ? 'hoje' : rota.ecra === 'fotos' ? 'medicoes' : rota.ecra === 'meu-exercicio' || rota.ecra === 'meu-plano' || rota.ecra === 'calistenia' || rota.ecra === 'nivelamento' || rota.ecra === 'reportar' || rota.ecra === 'programas-cardio' || rota.ecra === 'pos-parto' ? 'mais' : rota.ecra
   return (
     <>
       <main>
@@ -67,6 +68,7 @@ export function App() {
         {rota.ecra === 'nivelamento' && <NivelamentoEcra dados={dados} plano={dados.planoBase ?? dados.plano} anamnese={dados.anamnese} />}
         {rota.ecra === 'reportar' && <ReportarEcra key={`${rota.tipo}-${rota.id ?? ''}`} dados={dados} tipo={rota.tipo} id={rota.id} />}
         {rota.ecra === 'programas-cardio' && <ProgramasCardioEcra dados={dados} />}
+        {rota.ecra === 'pos-parto' && <PosPartoEcra dados={dados} />}
         {rota.ecra === 'cardio' && <CardioEcra key={rota.sessaoId ?? ''} dados={dados} sessaoId={rota.sessaoId} />}
         {rota.ecra === 'meu-exercicio' && <EditorProprio key={rota.id} dados={dados} id={rota.id} />}
         {rota.ecra === 'alongamento' && <AlongamentoEcra key={rota.grupo ?? ''} dados={dados} plano={dados.plano} anamnese={dados.anamnese} grupo={rota.grupo} />}

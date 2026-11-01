@@ -1,3 +1,4 @@
+import type { PosParto } from './posParto'
 import { m, traduzido } from '../i18n'
 
 // Linguagem do domínio (especificação, secção 1). Os nomes aqui são os mesmos da interface.
@@ -140,6 +141,8 @@ export interface Anamnese {
   estilo?: Estilo
   /** F31.6: com calistenia, inclui um exercício de competência nos treinos de corpo inteiro e superior. */
   competencias?: boolean
+  /** F38.1 (v1.27): dados do parto, só com gravidez «pos-parto». */
+  posParto?: PosParto
 }
 
 export interface Prescricao {
@@ -211,6 +214,8 @@ export interface Sessao {
   exercicios: RegistoExercicio[]
   /** F19 (v1.6): resposta ao lembrete de alongamento no fim do treino. */
   alongamento?: 'feito' | 'dispensado'
+  /** F38.4 (v1.27): no pós-parto, resposta à pergunta dos sintomas (true = teve sintomas). */
+  sintomasPosParto?: boolean
 }
 
 /** F19 (v1.6): alongamento estático do catálogo. */

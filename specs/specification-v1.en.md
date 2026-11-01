@@ -2,7 +2,7 @@
 
 **English** · [Português](especificacao-v1.md)
 
-Date: 2026-10-20 · Version 1.26 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.26)
+Date: 2026-10-20 · Version 1.27 (adjustments made during implementation are marked v1.1; new features are marked v1.2 to v1.27)
 
 The Portuguese version is the reference used for the domain names in the code. Both versions must stay in sync.
 
@@ -47,7 +47,7 @@ RIR = reps in reserve: how many more reps you could still have done at the end o
 ## 2. Features and acceptance criteria
 
 ### F1. Anamnesis
-- Fields: age, height, weight, waist, sex, goal (body recomposition, hypertrophy, strength, general health), days per week (2–7), session length (45/60/75 min), experience (beginner, returning after a break, intermediate), equipment (full gym, dumbbells only, home; since v1.17, a list, see F28), restrictions (painful areas, or "None"), accepts cardio (yes/no), PAR-Q+ (7 general questions). (v1.3) Plan emphasis (balanced, more legs and glutes, more upper body), for any sex. If sex is female: pregnancy or postpartum (no; pregnant, 1st trimester; pregnant, 2nd or 3rd trimester; postpartum, less than 12 months).
+- Fields: age, height, weight, waist, sex, goal (body recomposition, hypertrophy, strength, general health), days per week (2–7), session length (45/60/75 min), experience (beginner, returning after a break, intermediate), equipment (full gym, dumbbells only, home; since v1.17, a list, see F28), restrictions (painful areas, or "None"), accepts cardio (yes/no), PAR-Q+ (7 general questions). (v1.3) Plan emphasis (balanced, more legs and glutes, more upper body), for any sex. If sex is female: pregnancy or postpartum (no; pregnant, 1st trimester; pregnant, 2nd or 3rd trimester; postpartum; since v1.27 with no time limit and with the birth details, see F38).
 - **Given** I answer "yes" to any PAR-Q+ question, **when** I save, **then** I see a warning recommending medical clearance before training, and the plan is generated at conservative intensity and flagged as such.
 - **Given** I report a restriction that has not been professionally assessed, **then** the app recommends an assessment, without blocking.
 - (v1.3) **Given** I report pregnancy or postpartum, **then** the plan is conservative and a warning recommends follow-up with a doctor or obstetrician (and, postpartum, a pelvic floor assessment by a physiotherapist). In the 2nd and 3rd trimesters no exercise lying on the back or on the stomach appears.
@@ -358,10 +358,23 @@ Fifth phase of the calisthenics and home training feasibility study (2026-10-31)
   - **Lose weight with cardio (12 weeks):** 5 moderate sessions a week, from 150 up to 250 min a week (Donnelly et al., 2009), with the warning that without changing what you eat, cardio alone leads to little weight loss.
   Weekly volume never goes down from one week to the next; in running, what goes up is the time running non-stop.
 - **F37.2 Custom programme.** You choose the days (1 to 7) and, for each, the activity, minutes (5–180) and effort; the weeks (2–16) and the weekly increase (0–10%). Each session's minutes go up by that percentage each week, rounded to the minute. If the last week exceeds 300 min of vigorous cardio (effort 7 or more), a warning appears.
-- **F37.3 Safety.** Run 5 km and intervals are locked, with the reason, if the PAR-Q+ has any "yes" or there is pregnancy or postpartum; run 5 km is also locked with knee or hip pain.
+- **F37.3 Safety.** Run 5 km and intervals are locked, with the reason, if the PAR-Q+ has any "yes" or there is pregnancy or postpartum; run 5 km is also locked with knee or hip pain. Postpartum, they unlock after passing the impact test (F38.6).
 - **F37.4 Progress.** Programme weeks count from the day it starts. Each cardio entry (F36) in that week counts as a session done. A card shows the programme, the week, the sessions done and the next session, with "Registar esta sessão" (log this session), which opens the log with the session's activity, minutes and effort. When the week is done, it says when the next one starts; after the last week, it says the programme is finished. The card appears on Home (after the next workout) and on Today (after the list).
 - **F37.5 Cardio only.** With a programme active, the "Só cardio" (cardio only) option puts the programme card first on Home and Today, and always shows the recommendation of 2 short strength sessions a week to keep muscle. The strength workout stays available.
 - **F37.6 Switching and ending.** Switching or ending a programme asks for confirmation; cardio entries stay. The active programme goes into the backup (F10).
+
+### F38. Postpartum plan in phases (v1.27)
+
+Basis: the return-to-running postnatal guideline (Goom, Donnelly and Brockwell, 2019), Cochrane reviews on pelvic floor muscle training (Woodley et al., 2020), ACOG (2020) and the WHO (2020). The videos for the new exercises were chosen by title and source, without review by a physiotherapist, and the app says so.
+
+- **F38.1 Birth details.** With female sex and "Pós-parto" (postpartum), the questionnaire asks for: date of birth (required, up to today), type of birth (vaginal or caesarean), clearance from a doctor or obstetrician to train (yes/no), symptoms (leaking urine or stool, vaginal heaviness or dragging, or pelvic pain: yes/no), goal (diastasis and core, overall strengthening, recovery, return to previous training) and, optionally, diastasis in finger widths (0–10). There is no time limit since the birth. Changing only these details does not generate a new plan. Older questionnaires without these details show a card asking to complete them.
+- **F38.2 Calendar phases.** By full weeks since birth: phase 1 (0–1), phase 2 (2–5), phase 3 (6–11) and phase 4 (12 onwards). After a caesarean, phase 3 starts at 8 weeks and phase 4 at 14. The current phase, weeks and summary appear on a card on Home and Today, linking to the "Pós-parto" (postpartum) screen.
+- **F38.3 Workouts for each phase.** The stored plan does not change; the phase decides what is shown. Phase 1: one workout of pelvic floor, breathing, very gentle core and a 10 min walk. Phase 2: workouts A and B with deep core, bridge, bodyweight squat and lunge, and a 15 min walk. Phase 3: A and B with more sets, progressing core and a 20 min walk. All at RIR 3–4; any exercise incompatible with the restrictions or equipment is replaced by the first compatible substitute. Phase 4: the normal strength plan, with long pelvic floor holds at the start of each workout. On return (F38.6), the normal plan, except with the diastasis and core or recovery goal, which keeps the pelvic floor work at the start. For exercises without load, the first suggestion (F5) asks for the reps with good form, without mentioning load.
+- **F38.4 Clearance and symptoms.** Without medical clearance, the phase stays at phase 2 at most. In each open workout, the question "During or after this workout, did you leak urine, feel heaviness in the vagina or have pain?" (yes/no) is stored in the session. The most recent answer counts, from the questionnaire or a workout: with "yes", the phase does not go beyond the one it had on that day and the app recommends easing off and, if it continues, a pelvic health physiotherapist; a later "no" returns to the calendar phase.
+- **F38.5 Diastasis self-check.** On the "Pós-parto" screen, the steps of the finger-width self-check, a dated entry (one per day) and the history. With 2 fingers or more, or doming along the midline, it recommends an assessment; it always says it is an estimate.
+- **F38.6 Impact test.** In calendar phase 4, with clearance and no symptoms in the last answer, the 7 tests from Goom et al. (2019): walk 30 min, single-leg balance 10 s, single-leg squat 10 ×, jog on the spot 1 min, forward bounds 10 ×, single-leg hops 10 × and single-leg "running man" 10 ×, each without leaking, heaviness or pain. Passing all 7 leads to the return phase and unlocks run 5 km and intervals (F37.3); a later "yes" for symptoms goes back to phase 4. Without passing, it recommends repeating in 2 to 4 weeks.
+- **F38.7 Warning signs.** The "Pós-parto" screen lists when to stop and get help: heaviness or a bulge in the vagina, leaking urine, stool or wind, moderate or severe pain, new bleeding or bleeding after 8 weeks, and a hanging belly or visible gap along the midline.
+- **F38.8 Backup.** The birth details (in the questionnaire), the symptom answer (in each session), the impact test and the diastasis self-checks are included in the backup (F10), with validation.
 
 ### F14. Blocks and next change (v1.2, rules in section 3.7)
 - On Home and on Today's workout: current phase (re-adaptation, week N of M of the block, or deload) and the next change with its date: end of re-adaptation (full sets), deload week (half the sets), or new block (isolation exercises rotate, listing what changes).
@@ -415,6 +428,7 @@ Target frequency: each major group 2×/week.
 ### 3.4.1 Sex, pregnancy and postpartum (v1.3)
 - The base plan does not change with sex. With the same training, men and women gain strength and muscle in similar proportions (Roberts et al., 2020); automatically giving women more legs and men more upper body has no solid basis. The difference lies in the emphasis, chosen by each person (section 3.8).
 - Pregnancy or postpartum: conservative plan (RIR 3–4) and a warning (ACOG, 2020). In the 2nd and 3rd trimesters, exercises marked in the catalogue as lying on the back or on the stomach (`deitado`) are replaced by the first compatible substitute, with the note "because of the pregnancy".
+- (v1.27) Postpartum with the birth details, the plan follows the phases in F38.
 
 ### 3.5 Duration
 - Estimate per set: 45 s of work + prescribed rest. Warm-up: 8 min. Optional cardio: 10–15 min at the end of lower-body days.

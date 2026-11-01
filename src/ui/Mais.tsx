@@ -52,6 +52,7 @@ export function Mais({ dados }: { dados: Dados }) {
         <button className="largo" style={{ marginTop: 8 }} onClick={() => ir('/calistenia')}>{t('Calistenia: exercícios por nível')}</button>
         <button className="largo" style={{ marginTop: 8 }} onClick={() => ir('/nivelamento')}>{t('Teste de nivelamento (opcional)')}</button>
         <button className="largo" style={{ marginTop: 8 }} onClick={() => ir('/programas-cardio')}>♥ {t('Programas de cardio')}</button>
+        {dados.anamnese?.sexo === 'feminino' && dados.anamnese.gravidez === 'pos-parto' && <button className="largo" style={{ marginTop: 8 }} onClick={() => ir('/pos-parto')}>{t('Pós-parto: fases e testes')}</button>}
       </div>
       <CartaoFerias dados={dados} />
       <CartaoProprios dados={dados} />
